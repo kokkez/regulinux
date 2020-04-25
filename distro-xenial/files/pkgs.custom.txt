@@ -9,6 +9,8 @@ debconf-utils			install
 e2fsprogs				install
 figlet					install
 gawk					install
+gcc-4.8-base			install
+gcc-4.9-base			install
 htop					install
 iftop					install
 inetutils-syslogd		install
@@ -19,15 +21,18 @@ locales					install
 logrotate				install
 lsb-release				install
 lsof					install
+lzma					install
 makedev					install
 mime-support			install
 mktemp					install
+mountall				install
 nano					install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
 original-awk			install
 perl					install
+plymouth				install
 postfix					install
 procinfo				install
 psmisc					install
@@ -44,6 +49,7 @@ systemd-sysv			install
 telnet					install
 unzip					install
 wget					install
+xz-utils				install
 
 # to purge
 bsdmainutils			purge
@@ -56,3 +62,4 @@ isc-dhcp-common			purge
 man-db					purge
 rsyslog					purge
 traceroute				purge
+
