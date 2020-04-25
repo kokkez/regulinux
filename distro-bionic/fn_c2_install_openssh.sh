@@ -21,7 +21,6 @@ install_openssh() {
 		cmd systemctl enable ssh-session-cleanup.service
 		cmd systemctl daemon-reload
 		cmd systemctl start ssh-session-cleanup.service
-		cmd systemctl restart networking
 	}
 
 	# activate on firewall & restart SSH
