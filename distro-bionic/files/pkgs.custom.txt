@@ -19,6 +19,9 @@ inetutils-syslogd		install
 initramfs-tools			install
 iotop					install
 iptables				install
+libnih-dbus1			install
+libnih1					install
+libpipeline1			install
 locales					install
 logrotate				install
 lsb-base				install
@@ -37,10 +40,6 @@ perl					install
 postfix					install
 procinfo				install
 psmisc					install
-#python					install
-#python-minimal			install
-#python3					install
-#python3-minimal			install
 quota					install
 rsync					install
 screen					install
