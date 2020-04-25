@@ -1,5 +1,6 @@
 # to install
 apt-utils				install
+bsdutils				install
 bzip2					install
 ca-certificates			install
 cron					install
@@ -17,6 +18,7 @@ iotop					install
 iptables				install
 locales					install
 logrotate				install
+lsb-base				install
 lsb-release				install
 lsof					install
 makedev					install
