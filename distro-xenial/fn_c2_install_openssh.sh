@@ -20,6 +20,7 @@ install_openssh() {
 		copy_to /etc/systemd/system ssh/ssh-user-sessions.service
 		cmd systemctl enable ssh-user-sessions.service
 		cmd systemctl daemon-reload
+		cmd systemctl start ssh-user-sessions.service
 	}
 
 	# fix a systemd bug of xenial 16.04
