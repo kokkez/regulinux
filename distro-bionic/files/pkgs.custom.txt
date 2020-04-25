@@ -11,6 +11,7 @@ debconf-utils			install
 e2fsprogs				install
 figlet					install
 gawk					install
+gcc-6-base				install
 htop					install
 iftop					install
 ifupdown				install
@@ -36,10 +37,10 @@ perl					install
 postfix					install
 procinfo				install
 psmisc					install
-python					install
-python-minimal			install
-python3					install
-python3-minimal			install
+#python					install
+#python-minimal			install
+#python3					install
+#python3-minimal			install
 quota					install
 rsync					install
 screen					install

@@ -17,19 +17,12 @@ install_openssh() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	[ -s /etc/systemd/system/ssh-session-cleanup.service ] || {
 		msg_info "Mitigating the SSH hang on reboot's problem"
-#		copy_to /etc/systemd/system ssh/ssh-user-sessions.service
-#		cmd systemctl enable ssh-user-sessions.service
-#		cmd systemctl daemon-reload
 		cp /usr/share/doc/openssh-client/examples/ssh-session-cleanup.service /etc/systemd/system/
 		cmd systemctl enable ssh-session-cleanup.service
 		cmd systemctl daemon-reload
 		cmd systemctl start ssh-session-cleanup.service
+		cmd systemctl restart networking
 	}
-
-	# fix a systemd bug of xenial 16.04
-	# https://askubuntu.com/questions/1109934/ssh-server-stops-working-after-reboot-caused-by-missing-var-run-sshd
-#	msg_info "Fixing a little systemd bug that prevent SSHd to start"
-#	sed -i 's|/var||' /usr/lib/tmpfiles.d/sshd.conf
 
 	# activate on firewall & restart SSH
 	firewall_allow "${p}"
