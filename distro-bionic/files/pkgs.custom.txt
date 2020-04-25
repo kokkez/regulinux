@@ -12,6 +12,7 @@ figlet					install
 gawk					install
 htop					install
 iftop					install
+ifupdown				install
 inetutils-syslogd		install
 initramfs-tools			install
 iotop					install
@@ -21,13 +22,15 @@ logrotate				install
 lsb-base				install
 lsb-release				install
 lsof					install
+lzma					install
 makedev					install
 mime-support			install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
 nano					install
-#original-awk			install
+net-tools				install
+original-awk			install
 perl					install
 postfix					install
 procinfo				install
