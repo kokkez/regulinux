@@ -1,0 +1,21 @@
+# Ubuntu 16.04 Xenial Xerus - Repository - SourcesList 
+# https://wiki.ubuntu-it.org/Repository/SourcesList
+
+# main repository
+deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
+
+# updates repository
+deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
+
+# backports repository
+#deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
+
+# security repository
+deb http://security.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
+#deb-src http://security.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
+
+# Canonical partner
+deb http://archive.canonical.com/ubuntu xenial partner

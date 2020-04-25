@@ -1,0 +1,83 @@
+# ------------------------------------------------------------------------------
+# install AntiSpam SMTP Proxy v1.10.1_16065 for ubuntu 16.04 with perl 5.22
+# ------------------------------------------------------------------------------
+
+install_assp() {
+	cd /home
+	local u="https://sourceforge.net/projects/assp/files"
+
+	# download & install ASSP
+	[ -s assp/assp.cfg ] || {
+		msg_info "Installing ASSP v1..."
+		# download ASSP
+		down_load "${u}/ASSP%20Installation/ASSP%201.10.X/ASSP_1.10.1_16065_install.zip" assp.zip
+		# some cleanup
+		unzip assp.zip
+		mv ASSP_*/ASSP assp
+		rm -rf *.zip ASSP_*
+		cd /home/assp
+		chmod +x assp.pl
+		rm -rf assp.cfg* addservice* resendmail virusscan
+	}
+
+	# install some required perl modules before run mod_inst.pl
+	msg_info "Installing ASSP dependencies..."
+	pkg_install perl perl-base perl-modules build-essential libssl-dev \
+		libnet-dns-perl libio-compress-perl libemail-mime-modifier-perl \
+		libemail-sender-perl libemail-valid-perl libfile-readbackwards-perl \
+		libio-socket-inet6-perl libio-socket-ssl-perl libmail-dkim-perl \
+		libmail-spf-perl libmail-srs-perl libnet-cidr-lite-perl \
+		libnet-ldap-perl libnet-smtp-ssl-perl libsys-syslog-perl \
+		libmail-checkuser-perl libtie-dbi-perl libauthen-sasl-perl \
+		libdevel-size-perl liblwp-protocol-https-perl
+	# libsys-meminfo-perl
+
+	# try unattended
+	export PERL_MM_USE_DEFAULT=1	# to respond yes
+	perl -MCPAN -e 'install CPAN'
+	perl -MCPAN -e 'reload cpan'
+	cmd cpan "Error" "Sys::MemInfo" "Crypt::CBC" "Crypt::OpenSSL::AES" "Convert::Scalar"
+	perl -MCPAN -e 'force install Mail::SPF::Query'
+
+	# run mod_inst.pl to install other perl modules
+	perl mod_inst.pl /home/assp
+
+	msg_info "Installing ASSP dependencies completed!"
+	msg_info "Remember to run twice 'perl mod_inst.pl'..."
+
+	# force unix EOLs & adjust some values
+	cd /home/assp
+	do_copy assp/assp1.cfg ./assp.cfg
+	sed -i 's|\r||g' rc/_etc_*
+	sed -i 's|srv|home|;s|assp\.pid|pid|' rc/_etc_default_assp.debian
+	sed -i assp.cfg \
+		-e "s|HOST_NICK|${HOST_NICK}|g" \
+		-e "s|LOG_PREFIX|${HOST_NICK:0:3}|g" \
+		-e "s|IP_ADDRESS|$(cmd hostname -i)|g"
+
+	# configure assp for autostart
+	cp rc/_etc_def* /etc/default/assp
+	cp rc/_etc_ini* /etc/init.d/assp
+	cmd chmod +x /etc/init.d/assp
+	cmd update-rc.d assp defaults
+
+	# systemd
+	[ -s /etc/systemd/system/assp.service ] || {
+		copy_to /etc/systemd/system assp/assp.service
+		cmd systemctl enable assp.service
+		cmd systemctl daemon-reload
+	}
+
+	# creating a new database, then load from file
+	create_database "assp" "assp" "${ASSP_ADMINPW}"
+	cmd mysql 'assp' < ${MyFILES}/assp/assp.sql
+
+	# activating ports on firewall
+	firewall_allow "smtp assp"
+
+	# courtesy symlink into ~
+	ln -nfs /home/assp ~
+
+	msg_info "Installing ASSP completed!"
+	msg_info "Check carefully every single perl module before start ASSP..."
+}	# end install_assp

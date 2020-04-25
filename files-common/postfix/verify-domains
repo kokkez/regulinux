@@ -1,0 +1,11 @@
+# ##############################################################################
+# Run the command on this-file, to map the file into a lookup table that
+# Postfix can use (it will create a file called this-file.db): 
+# cd /etc/postfix && postmap this-file
+# ------------------------------------------------------------------------------
+# format:
+# domain or sub.domain		class: permissive or restrictive
+# ##############################################################################
+italmedia.net				permissive
+arch.italmedia.net			permissive
+.italmedia.net				restrictive

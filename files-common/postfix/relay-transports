@@ -1,0 +1,175 @@
+# ##############################################################################
+# Run the command on this-file, to map the file into a lookup table that
+# Postfix can use (it will create a file called this-file.db):
+# cd /etc/postfix && postmap this-file
+# ------------------------------------------------------------------------------
+# format:
+# <domain.name>						relay:<mail.host.name>
+# @<domain.name>					relay:[<mail.host.name>]
+# <user>@<domain.name>				relay:[<mail.host.name>]:<port>
+# ##############################################################################
+## to agrimaster
+agrimaster.eu						relay:[ms.agrimaster.it]:587
+agrimaster.it						relay:[ms.agrimaster.it]:587
+
+## to dexter
+avvocatofranchi.com					relay:[dexter.rete.us]:587
+beppescienza.info					relay:[dexter.rete.us]:587
+passionedepoca.it					relay:[dexter.rete.us]:587
+piandelloro.it						relay:[dexter.rete.us]:587
+pittoricabassi.it					relay:[dexter.rete.us]:587
+villabruna.eu						relay:[dexter.rete.us]:587
+villabruna.net						relay:[dexter.rete.us]:587
+
+## to mabe
+amicoperlapelle.com					relay:[mabe.fgi.lu]:587
+ammigos.it							relay:[mabe.fgi.lu]:587
+dambra.info							relay:[mabe.fgi.lu]:587
+dermo28.asia						relay:[mabe.fgi.lu]:587
+dermo28.cn							relay:[mabe.fgi.lu]:587
+dermo28.co.uk						relay:[mabe.fgi.lu]:587
+dermo28.com							relay:[mabe.fgi.lu]:587
+dermo28.it							relay:[mabe.fgi.lu]:587
+dermo28.tw							relay:[mabe.fgi.lu]:587
+fgi.lu								relay:[mabe.fgi.lu]:587
+fginvest.lu							relay:[mabe.fgi.lu]:587
+fgpartners.it						relay:[mabe.fgi.lu]:587
+finegoldinvest.lu					relay:[mabe.fgi.lu]:587
+fondazioneluciodalla.com			relay:[mabe.fgi.lu]:587
+fondazioneluciodalla.it				relay:[mabe.fgi.lu]:587
+gavazzaassociati.it					relay:[mabe.fgi.lu]:587
+gavazzaeassociati.it				relay:[mabe.fgi.lu]:587
+luciodalla.it						relay:[mabe.fgi.lu]:587
+murad.it							relay:[mabe.fgi.lu]:587
+pressingline.it						relay:[mabe.fgi.lu]:587
+roomie.it							relay:[mabe.fgi.lu]:587
+skinfriend.it						relay:[mabe.fgi.lu]:587
+skinfriends.it						relay:[mabe.fgi.lu]:587
+tuttestetica.com					relay:[mabe.fgi.lu]:587
+tuttestetica.it						relay:[mabe.fgi.lu]:587
+
+## to mate
+cmp.mc								relay:[mate.fgi.lu]:587
+itc.mc								relay:[mate.fgi.lu]:587
+orea.mc								relay:[mate.fgi.lu]:587
+
+## to marplast
+b24service.com						relay:[imap.marplast.it]:587
+marplast.com						relay:[imap.marplast.it]:587
+marplast.it							relay:[imap.marplast.it]:587
+marplast.org						relay:[imap.marplast.it]:587
+marplasthome.it						relay:[imap.marplast.it]:587
+mpintralogistic.com					relay:[imap.marplast.it]:587
+mpintralogistic.eu					relay:[imap.marplast.it]:587
+mpintralogistic.it					relay:[imap.marplast.it]:587
+
+## to picker
+geoverdecorreggio.it				relay:[picker.rete.us]:587
+mhepowerdrives.com					relay:[picker.rete.us]:587
+philstudium.com						relay:[picker.rete.us]:587
+rsi-italia.com						relay:[picker.rete.us]:587
+window-stop.com						relay:[picker.rete.us]:587
+
+## to sp3
+barbaterre.com						relay:[mail.sp3.it]:587
+barbaterre.it						relay:[mail.sp3.it]:587
+sp3.it								relay:[mail.sp3.it]:587
+
+## to tanker
+fotoartnonsolofoto.com				relay:[tanker.rete.us]:587
+fotomaretti.com						relay:[tanker.rete.us]:587
+fotomaretti.net						relay:[tanker.rete.us]:587
+
+## to verner
+studiovernelli.com				    relay:[verner.rete.us]:587
+studiovernelli.eu				    relay:[verner.rete.us]:587
+studiovernelli.info				    relay:[verner.rete.us]:587
+studiovernelli.it				    relay:[verner.rete.us]:587
+studiovernelli.net				    relay:[verner.rete.us]:587
+studiovernelli.org				    relay:[verner.rete.us]:587
+vernelli.consulting				    relay:[verner.rete.us]:587
+vernelli.eu						    relay:[verner.rete.us]:587
+vernelli.info					    relay:[verner.rete.us]:587
+vernelli.net						relay:[verner.rete.us]:587
+vernelli.org					    relay:[verner.rete.us]:587
+vernelliconsulting.com			    relay:[verner.rete.us]:587
+vernelliconsulting.eu			    relay:[verner.rete.us]:587
+vernelliconsulting.info			    relay:[verner.rete.us]:587
+vernelliconsulting.it			    relay:[verner.rete.us]:587
+vernelliconsulting.net			    relay:[verner.rete.us]:587
+vernelliconsulting.org			    relay:[verner.rete.us]:587
+
+## to viglienzone
+margest.it							relay:[imap.margest.it]:587
+vglgroup.it							relay:[imap.margest.it]:587
+viglienzone.it						relay:[imap.margest.it]:587
+
+## to webber
+agaveweb.it							relay:[webber.rete.us]:587
+antibay.it							relay:[webber.rete.us]:587
+antiebay.it							relay:[webber.rete.us]:587
+arch.italmedia.net					relay:[webber.rete.us]:587
+arginemaestro.org					relay:[webber.rete.us]:587
+asdre.it							relay:[webber.rete.us]:587
+asilodipieve.com					relay:[webber.rete.us]:587
+autobertozzi.com					relay:[webber.rete.us]:587
+bagnolo5stelle.tk					relay:[webber.rete.us]:587
+bagnolocalcioa5.com					relay:[webber.rete.us]:587
+bagnolocalcioa5.it					relay:[webber.rete.us]:587
+baranigomme.it						relay:[webber.rete.us]:587
+emporiodelcioccolato.it				relay:[webber.rete.us]:587
+ferval.com							relay:[webber.rete.us]:587
+ferval.it							relay:[webber.rete.us]:587
+fismemiliaromagna.it				relay:[webber.rete.us]:587
+foodejoy.com						relay:[webber.rete.us]:587
+frclegno.com						relay:[webber.rete.us]:587
+gamechart.ga						relay:[webber.rete.us]:587
+giorgioconti.net					relay:[webber.rete.us]:587
+ideabw.biz							relay:[webber.rete.us]:587
+ilbisognodivivere.com				relay:[webber.rete.us]:587
+ilportobello.com					relay:[webber.rete.us]:587
+ippogrifo.info						relay:[webber.rete.us]:587
+italmedia.com						relay:[webber.rete.us]:587
+italmedia.net						relay:[webber.rete.us]:587
+k-tools.com							relay:[webber.rete.us]:587
+locandalaquercia.com				relay:[webber.rete.us]:587
+lucifero.net						relay:[webber.rete.us]:587
+natdesign.eu						relay:[webber.rete.us]:587
+natuzzibros.com						relay:[webber.rete.us]:587
+nelpiatto.com						relay:[webber.rete.us]:587
+obiettivoclima.com					relay:[webber.rete.us]:587
+olcomponents.com					relay:[webber.rete.us]:587
+olmark.com							relay:[webber.rete.us]:587
+olmark.eu							relay:[webber.rete.us]:587
+olmark.fr							relay:[webber.rete.us]:587
+olmark.info							relay:[webber.rete.us]:587
+olmark.it							relay:[webber.rete.us]:587
+olmark.net							relay:[webber.rete.us]:587
+otap.info							relay:[webber.rete.us]:587
+pacchiarini.net						relay:[webber.rete.us]:587
+paeseinfesta.com					relay:[webber.rete.us]:587
+pomomussini.com						relay:[webber.rete.us]:587
+restaurodelduomo.org				relay:[webber.rete.us]:587
+rete.us								relay:[webber.rete.us]:587
+servizi.in							relay:[webber.rete.us]:587
+sogienergy.net						relay:[webber.rete.us]:587
+studiolegalepellini.com				relay:[webber.rete.us]:587
+#studiopaglia.com					relay:[webber.rete.us]:587
+tulliocorradini.com					relay:[webber.rete.us]:587
+whyg.biz							relay:[webber.rete.us]:587
+
+## NO MAIL
+advan850.com						error: No mail for advan850.com
+advan850.it							error: No mail for advan850.it
+avipet.it							error: No mail for avipet.it
+babyloon.com						error: No mail for babyloon.com
+europorte.it						error: No mail for europorte.it
+markhip.com							error: No mail for markhip.com
+olmark.cn							error: No mail for olmark.cn
+olmark.com.cn						error: No mail for olmark.com.cn
+olmark.org							error: No mail for olmark.org
+olmarkonline.com					error: No mail for olmarkonline.com
+premiodalla.it						error: No mail for premiodalla.it
+premiofondazioneluciodalla.com		error: no mail for premiofondazioneluciodalla.com
+premiofondazioneluciodalla.it		error: no mail for premiofondazioneluciodalla.it
+premioluciodalla.it					error: no mail for premioluciodalla.it

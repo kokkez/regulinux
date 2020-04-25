@@ -1,0 +1,25 @@
+# MySQL server parameters and database name
+user = assp
+password = zeroSpam4me
+hosts = 127.0.0.1
+dbname = assp
+
+# Query logic:
+# search for an aliased transport active and with an empty prefix,
+# that match the given domain in '%s'
+#
+# valid placeholders are:
+#   %s = full search string (email address)
+#   %u = user part only, without @
+#   %d = domain part only, without @
+#
+# The SQL query template as of postfix 2.2 and later
+# skema: SELECT 1 FROM `domain` WHERE (`active` > 0 AND `domain` = '%s')
+query =
+#/*reld*/
+ SELECT d.domain
+ FROM mail_domain d
+ WHERE (d.active = 1
+ AND d.did = d.aid
+ AND d.domain = '%s'
+ ) GROUP BY 1

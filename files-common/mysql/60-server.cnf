@@ -1,0 +1,9 @@
+# These values override values from /etc/mysql/my.cnf
+
+[mysqld]
+sql-mode = NO_ENGINE_SUBSTITUTION
+bind-address = 0.0.0.0
+innodb_file_format = barracuda
+innodb_large_prefix = true
+innodb_file_per_table = 1
+

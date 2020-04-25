@@ -1,0 +1,13 @@
+[Unit]
+Description=AntiSpam SMTP Proxy
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/bin/perl /home/assp/assp.pl /home/assp/
+ExecStop=/usr/bin/killall /usr/bin/perl
+
+[Install]
+WantedBy=multi-user.target
+

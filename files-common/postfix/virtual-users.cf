@@ -1,0 +1,5 @@
+user = assp
+password = zeroSpam4me
+hosts = 127.0.0.1
+dbname = assp
+query = SELECT 1 FROM virtual_users WHERE email='%s'

@@ -1,0 +1,42 @@
+# MySQL server parameters and database name
+user = assp
+password = zeroSpam4me
+hosts = 127.0.0.1
+dbname = assp
+
+# The relay_recipient_maps parameter specifies optional lookup tables with all
+# addresses in the domains that match $relay_domains.
+#
+# If this parameter is defined, then the SMTP server will reject mail for
+# unknown relay users. This feature is off by default.
+#
+# The right-hand side of the lookup tables is conveniently ignored.
+# In the left-hand side, specify an @domain.tld wildcard, or specify
+# a user@domain.tld address.
+
+# This file folds a complete list of email address for which the email gateway
+# will accept mail. Even though you have to enter the values as a pair
+# (key & value), the second part (the value) doesn't actually matter as long
+# as the email address is correct.
+#
+# user1@example1.com			OK
+# user2@example1.com			OK
+# user1@subdomain.example.com	OK
+# user2@subdomain.example.com	OK
+#
+# valid placeholders are:
+#   %s = full search string (email address)
+#   %u = user part only, without @
+#   %d = domain part only, without @
+#
+# The SQL query template as of postfix 2.2 and later
+# skema: SELECT 1 FROM `alias` WHERE (`active` AND `email` = '%s')
+query =
+#/*relr*/
+ SELECT a.target
+ FROM mail_alias a
+ JOIN mail_domain d ON (d.aid = a.did)
+ WHERE (d.active = 1
+ AND a.active = 1
+ AND a.target = '%s'
+ ) GROUP BY 1

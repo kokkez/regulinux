@@ -1,0 +1,34 @@
+#
+# This is the kokkez personalized configuration file for Rootkit Hunter.
+#
+# You can either modify this file directly, or you can create a local
+# configuration file. The local file must be named 'rkhunter.conf.local',
+# and must reside in the same directory as this file. Please modify one
+# or both files to your own requirements.
+#
+# Please review the documentation before posting bug reports or questions.
+# To report bugs, obtain updates, or provide patches or comments, please go to:
+# http://rkhunter.sourceforge.net
+#
+
+# align this with PermitRootLogin in /etc/ssh/sshd_config
+ALLOW_SSH_ROOT_USER=without-password
+
+# The currently available test names can be seen by using the command:
+# 'rkhunter --list tests'.
+# disabling checks for modules, in openvz arent necessary
+DISABLE_TESTS="suspscan hidden_procs deleted_files packet_cap_apps apps immutable os_specific"
+
+# whitelist scripts
+#SCRIPTWHITELIST=/usr/local/bin/lwp-request
+#SCRIPTWHITELIST=/usr/bin/unhide.rb
+
+#
+# Allow the specified hidden directories to be whitelisted.
+ALLOWHIDDENDIR=/dev/.initramfs
+ALLOWHIDDENDIR=/dev/.static
+ALLOWHIDDENDIR=/dev/.udev
+
+# Allow the specified files to be present in the /dev directory,
+#ALLOWDEVFILE=/dev/tty10
+ALLOWDEVFILE=/dev/.udev/rules.d/root.rules

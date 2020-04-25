@@ -1,0 +1,20 @@
+################################################################################
+# Mail aliases for sendmail (& postfix)
+#
+# You must run 'newaliases' after making changes to this file.
+# See man 5 aliases for format
+################################################################################
+
+# Common aliases
+abuse:			postmaster
+spam:			postmaster
+nobody:			postmaster
+www-data:		postmaster
+webmaster:		postmaster
+
+# Required aliases
+MAILER-DAEMON:	postmaster
+postmaster:		root
+
+# to real users
+root:			ROOT_MAIL

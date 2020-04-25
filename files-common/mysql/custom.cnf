@@ -1,0 +1,23 @@
+# These values override values from /etc/mysql/my.cnf
+
+[mysqld]
+key_buffer_size = 12M
+query_cache_limit = 256K
+query_cache_size = 4M
+
+init_connect='SET collation_connection = utf8_unicode_ci'
+init_connect='SET NAMES utf8'
+character_set_server = utf8
+collation_server = utf8_unicode_ci
+
+default_storage_engine = MyISAM
+sql-mode = NO_ENGINE_SUBSTITUTION
+
+# replication arguments
+# https://www.digitalocean.com/community/tutorials/how-to-set-up-mysql-master-master-replication
+#server-id = 1
+#log_bin = /var/log/mysql/mysql-bin.log
+#binlog_do_db = assp
+
+[client]
+default-character-set = utf8

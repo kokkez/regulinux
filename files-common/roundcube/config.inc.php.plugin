@@ -1,0 +1,6 @@
+<?php
+$rcmail_config['identity_limit'] = false;
+$rcmail_config['soap_validate_cert'] = false;
+$rcmail_config['remote_soap_user'] = 'roundcube';
+$rcmail_config['remote_soap_pass'] = 'RPW';
+$rcmail_config['soap_url'] = 'http://127.0.0.1/ispconfig/remote/';

@@ -1,0 +1,27 @@
+# MySQL server parameters and database name
+user = assp
+password = zeroSpam4me
+hosts = 127.0.0.1
+dbname = assp
+
+# Domains listed as virtual_alias_domains can be used for forwarding an email
+# address (or multiple addresses) to the same user@ part on another domain.
+# The virtual_alias_domains do not receive email for users, they only forward
+# mail somewhere else.
+#
+# valid placeholders are:
+#   %s = full search string (email address)
+#
+# The SQL query template as of postfix 2.2 and later
+# skema: SELECT destination FROM aliases WHERE source = '%s'
+#
+query =
+#/*alid*/
+ SELECT d.domain
+ FROM mail_domain a
+ JOIN mail_domain d ON (d.did = a.aid)
+ WHERE (d.active = 1
+ AND a.active = 1
+ AND a.did != a.aid
+ AND a.domain = '%s'
+ ) GROUP BY 1

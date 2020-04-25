@@ -1,0 +1,29 @@
+# MySQL server parameters and database name
+user = assp
+password = zeroSpam4me
+hosts = 127.0.0.1
+dbname = assp
+
+# The transport method.
+# All transport methods are legal, but usually either
+#  "local:" for local transport or
+#  "virtual:" for the virtual transport agent.
+#
+# valid placeholders are:
+#   %s = full search string (email address)
+#   %u = user part only, without @
+#   %d = domain part only, without @
+#
+# This search for a full email address to transport
+#
+query =
+#/*trns*/
+ SELECT t.transport
+ FROM mail_route r
+ JOIN mail_domain d ON (d.did = r.did)
+ JOIN mail_transport t ON (t.tid = r.tid)
+ WHERE (r.active = 1
+ AND d.active = 1
+ AND t.active = 1
+ AND '%s' = CONCAT(r.prefix,d.domain)
+ ) GROUP BY 1

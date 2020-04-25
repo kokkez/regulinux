@@ -1,0 +1,15 @@
+# Debian 8 Jessie :: https://wiki.debian.org/SourcesList
+# Using Debian Long Term Support (LTS) https://wiki.debian.org/LTS/Using
+
+# main repository
+deb http://deb.debian.org/debian jessie main contrib non-free
+#deb-src http://deb.debian.org/debian jessie main contrib non-free
+
+# updates repository
+#deb http://deb.debian.org/debian jessie-updates main contrib non-free
+#deb-src http://deb.debian.org/debian jessie-updates main contrib non-free
+
+# security repository
+deb http://security.debian.org/ jessie/updates main contrib non-free
+#deb-src http://security.debian.org/ jessie/updates main contrib non-free
+
