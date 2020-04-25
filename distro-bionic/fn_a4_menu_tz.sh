@@ -26,10 +26,10 @@ tzdata tzdata/Zones/${a} select ${z}
 EOF
 	dpkg-reconfigure -f noninteractive tzdata > /dev/null 2>&1
 
-	# Show the new setting in concole
-	TZBase=$(LC_ALL=C TZ=UTC0 date)
-	UTdate=$(LC_ALL=C TZ=UTC0 date -d "$TZBase")
-	TZdate=$(unset TZ; LANG=C date -d "$TZBase")
-	msg_notice "Local time is now:      ${TZdate}"
-	msg_notice "Universal Time is now:  ${UTdate}"
+	# Show the new setting on the shell
+	a=$(LC_ALL=C TZ=UTC0 date)
+	t=$(LC_ALL=C TZ=UTC0 date -d "$a")
+	z=$(unset TZ; LANG=C date -d "$a")
+	msg_notice "Local time is now:      ${z}"
+	msg_notice "Universal Time is now:  ${t}"
 }	# end menu_tz
