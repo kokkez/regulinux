@@ -11,9 +11,9 @@ command newaliases
 
 [ -s /etc/iptables.v4.rules ] && {
 	command iptables-restore < /etc/iptables.v4.rules
-#	:
+	:	# like a boolean TRUE
 }
 [ -s /etc/iptables.v6.rules ] && {
 	command ip6tables-restore < /etc/iptables.v6.rules
-#	:
+	:	# like a boolean TRUE
 }

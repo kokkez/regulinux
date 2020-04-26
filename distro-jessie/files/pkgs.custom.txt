@@ -1,7 +1,7 @@
 # to install
 apt-utils				install
 bzip2					install
-ca-certificates			install
+#ca-certificates			install
 cron					install
 curl					install
 dbus					install
