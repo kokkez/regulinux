@@ -13,6 +13,7 @@ iftop					install
 inetutils-syslogd		install
 iotop					install
 iptables				install
+linux-base				install
 locales					install
 logrotate				install
 lsb-release				install
@@ -23,12 +24,12 @@ mktemp					install
 nano					install
 openssh-client			install
 openssh-server			install
-original-awk			install
+#original-awk			install
 perl					install
 postfix					install
 procinfo				install
 psmisc					install
-python					install
+#python					install
 python3					install
 quota					install
 rsync					install

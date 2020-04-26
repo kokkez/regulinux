@@ -27,7 +27,7 @@ nano					install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
-#original-awk			install
+original-awk			install
 perl-modules			install
 postfix					install
 procinfo				install
