@@ -1,17 +1,18 @@
 # ------------------------------------------------------------------------------
-# install PHP as MOD-PHP, PHP-FPM and FastCGI
+# install PHP 5.6 & 7.4 as MOD-PHP, PHP-FPM and FastCGI
+# https://dev.to/pushkaranand/upgrading-to-php-7-4-26dg
 # ------------------------------------------------------------------------------
 
 install_php7x_fpm() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as PHP-FPM is already installed..."
+		msg_alert "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
 	# add external repository for updated php
 	is_installed "apt-transport-https" || {
-		msg_info "Installing required packages..."
+		msg_info "Installing some required packages..."
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
@@ -24,18 +25,19 @@ EOF
 	# forcing apt update
 	pkg_update true
 
-	# now install php packages, 2 versions, 7.0 and 7.3, and some modules
+	# now install php packages, versions 5.6 & 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \
 		php5.6 libapache2-mod-php5.6 \
-		php5.6-{cli,cgi,fpm,mysql,gd,curl,imap,intl,mbstring,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip,mcrypt} \
-		php7.3 libapache2-mod-php7.3 \
-		php7.3-{cli,cgi,fpm,mysql,gd,curl,imap,intl,mbstring,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php5.6-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php7.4 libapache2-mod-php7.4 \
+		php7.4-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{apcu,apcu-bc,gettext,imagick,memcache,pear} imagemagick memcached mcrypt
+#		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 
 	# enable apache2 modules
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
-	msg_info "Configuring PHP as PHP-FPM for apache2..."
+	msg_info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -50,5 +52,5 @@ EOF
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	svc_evoke apache2 restart
-	msg_info "Installation of PHP as PHP-FPM completed!"
+	msg_info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php7x_fpm
