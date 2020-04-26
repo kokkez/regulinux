@@ -1,5 +1,6 @@
 # to install
 apt-utils				install
+busybox					install
 bzip2					install
 #ca-certificates			install
 cron					install
@@ -26,7 +27,7 @@ nano					install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
-original-awk			install
+#original-awk			install
 perl-modules			install
 postfix					install
 procinfo				install
@@ -46,6 +47,7 @@ unzip					install
 wget					install
 
 # to purge
+aptitude				purge
 bsdmainutils			purge
 exim4					purge
 exim4-base				purge
@@ -61,3 +63,4 @@ man-db					purge
 manpages				purge
 rsyslog					purge
 traceroute				purge
+xz-utils				purge
