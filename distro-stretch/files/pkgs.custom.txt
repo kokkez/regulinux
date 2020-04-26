@@ -22,6 +22,7 @@ makedev					install
 mime-support			install
 mktemp					install
 nano					install
+net-tools				install
 openssh-client			install
 openssh-server			install
 #original-awk			install
