@@ -37,6 +37,10 @@ EOF
 	# enable apache2 modules
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
+	# set default php to v7
+	a2dismod php5.6
+	a2enmod php7.4
+
 	msg_info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
