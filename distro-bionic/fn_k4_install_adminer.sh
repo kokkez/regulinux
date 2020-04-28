@@ -32,9 +32,9 @@ install_adminer() {
 	copy_to . adminer/index.php
 	sed -i "s|FILE|${D}|" index.php
 
-	# install css file & tables-filter plugin, from MyDir
+	# install css file & plugins, from MyDir
 	copy_to . adminer/adminer.css
-	copy_to plugins adminer/multi-tables-filter.php
+	copy_to plugins adminer/plugins/*
 
 	# install the virtualhost file for apache2
 	cd /etc/apache2
