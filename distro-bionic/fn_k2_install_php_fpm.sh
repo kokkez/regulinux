@@ -23,8 +23,8 @@ install_php_fpm() {
 		cat <<EOF >> sources.list
 
 # Ondrej Sury Repo for PHP 7.x
-deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
+# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 EOF
 	}
 

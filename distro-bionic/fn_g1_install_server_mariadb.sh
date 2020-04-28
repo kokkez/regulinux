@@ -3,15 +3,15 @@
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	# ubuntu 16.04 xenial install mariadb-server-10.0
-	local PKG="mariadb-server"
+	# ubuntu 18.04 bionic install mariadb-server-10.1
+	local p="mariadb-server"
 
-	is_installed "${PKG}" || {
-		msg_info "Installing ${PKG}..."
+	is_installed "${p}" || {
+		msg_info "Installing ${p}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	msg_info "Configuring ${PKG}"
+	msg_info "Configuring ${p}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	svc_evoke mysql restart
-	msg_info "Installation of ${PKG} completed!"
+	msg_info "Installation of ${p} completed!"
 }	# end install_server_mariadb

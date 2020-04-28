@@ -38,17 +38,15 @@ EOF
 	rm -rf /var/lib/dpkg/*-old
 
 	# feed packages with priority: required, important
-	dpkg --clear-selections
+	cmd dpkg --clear-selections
 	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$2~/ed$|nt$/{print $1,"install"}' | dpkg --set-selections
-	# on kvm virtualization we need to keep kernel and grub
-	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^linux/{print $1,"install"}' | dpkg --set-selections
+	# on full virtualization we need to keep kernel and grub
+	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^initram|^linux/{print $1,"install"}' | dpkg --set-selections
 
 	# set to purge packages where status != install
 	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
 
-	# set to install some indispensable packages: apt-utils ca-certificates
-	# cron curl debconf-utils dialog e2fsprogs gawk htop iftop iotop iptables
-	# lsb-release nano postfix quota rsync screen sed telnet unzip wget
+	# set to install some custom packages
 	x="${MyDISTRO}/pkgs.custom.txt"
 	[ -s ${x} ] && dpkg --set-selections < ${x}
 

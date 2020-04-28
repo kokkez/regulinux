@@ -14,8 +14,8 @@ menu_ispconfig() {
 
 	# install prerequisites
 	TARGET="ispconfig"
-	menu_mailserver			# mailserver for ispconfig
-	menu_dbserver			# database server mariadb
+	menu_mailserver			# mailserver: postfix + dovecot
+	menu_dbserver			# database server: mariadb
 	menu_webserver			# webserver: apache with php-fpm
 
 	# install ispconfig 3

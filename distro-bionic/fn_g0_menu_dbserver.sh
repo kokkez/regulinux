@@ -12,6 +12,6 @@ menu_dbserver() {
 	# it also set the variable DB_ROOTPW
 	[ -n "${DB_ROOTPW}" ] || db_root_pw
 
-	# get the type of database server to install (defaults to mysql)
+	# install the database server (mariadb)
 	cmd install_server_mariadb
 }	# end menu_dbserver

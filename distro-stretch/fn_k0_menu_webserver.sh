@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_webserver() {
-	TARGET="${1-${TARGET}}"
+	TARGET="${1:-${TARGET}}"
 
 	# verify that the system was set up properly
 	done_deps || return
@@ -13,7 +13,7 @@ menu_webserver() {
 
 	# install php based on TARGET
 	if [ "${TARGET}" = "ispconfig" ]; then
-		# php with php7-fpm for ispconfig
+		# php with php-fpm for ispconfig
 		install_php7x_fpm
 
 		install_selfsigned_sslcert

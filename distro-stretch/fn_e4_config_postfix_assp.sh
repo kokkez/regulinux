@@ -17,7 +17,7 @@ config_postfix_assp() {
 	msg_info "Configuring postfix..."
 	backup_file main.cf
 
-	# set some parameters in main.cf
+	# set basic parameters in main.cf
 	cmd postconf \
 		myhostname=${MAIL_NAME} \
 		myorigin=${HOST_FQDN} \

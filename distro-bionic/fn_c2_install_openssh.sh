@@ -4,7 +4,7 @@
 
 install_openssh() {
 	# $1: port - strictly in numerical range
-	local p=$(port_validate ${1})
+	local s p=$(port_validate ${1})
 
 	# configure SSH server arguments
 	sed -ri /etc/ssh/sshd_config \
@@ -15,12 +15,13 @@ install_openssh() {
 		-e 's|^#?(PubkeyAuthentication).*|\1 yes|'
 
 	# mitigating ssh hang on reboot on systemd capables OSes
-	[ -s /etc/systemd/system/ssh-session-cleanup.service ] || {
+	s=ssh-session-cleanup.service
+	[ -s /etc/systemd/system/${s} ] || {
 		msg_info "Mitigating the SSH hang on reboot's problem"
-		cp /usr/share/doc/openssh-client/examples/ssh-session-cleanup.service /etc/systemd/system/
-		cmd systemctl enable ssh-session-cleanup.service
+		cp /usr/share/doc/openssh-client/examples/${s} /etc/systemd/system/
+		cmd systemctl enable ${s}
 		cmd systemctl daemon-reload
-		cmd systemctl start ssh-session-cleanup.service
+		cmd systemctl start ${s}
 	}
 
 	# activate on firewall & restart SSH

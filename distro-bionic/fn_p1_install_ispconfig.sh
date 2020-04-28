@@ -45,7 +45,8 @@ install_ispconfig() {
 	copy_to . ispconfig/index.php
 
 	# load a customized database dbispconfig
-	cmd mysql 'dbispconfig' < ${MyFILES}/ispconfig/dbispconfig-${V}.sql
+	cd ${MyFILES}/ispconfig
+	[ -f "dbispconfig-${V}.sql" ] && cmd mysql 'dbispconfig' < dbispconfig-${V}.sql
 
 	# commenting lines in 2 new files of postfix
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
