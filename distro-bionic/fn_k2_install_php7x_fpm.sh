@@ -13,7 +13,7 @@ install_php7x_fpm() {
 	# append external repository for updated php
 	cd /etc/apt
 	grep -q 'Ondrej Sury' sources.list || {
-		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
+		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 		cat >> sources.list <<EOF
 
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
