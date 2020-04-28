@@ -14,9 +14,9 @@ menu_assp1() {
 	# install prerequisites
 	TARGET="assp"
 	CERT_OU="antispam-server"
-	menu_mailserver			# mailserver for assp: postfix & sasl2_sql
-	menu_dbserver			# install database server mysql
-	menu_webserver			# webserver for assp: apache with mod-php
+	menu_mailserver			# mailserver: postfix & sasl2_sql
+	menu_dbserver			# database server: mariadb
+	menu_webserver			# webserver: apache with mod-php
 
 	install_assp "v1"		# install ASSP version 1
 }	# end menu_assp1

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install AntiSpam SMTP Proxy v1.10.1_16065 for ubuntu 16.04 with perl 5.22
+# install AntiSpam SMTP Proxy v1.10.1_16065 for ubuntu 16.04 with perl 5.26
 # ------------------------------------------------------------------------------
 
 install_assp() {

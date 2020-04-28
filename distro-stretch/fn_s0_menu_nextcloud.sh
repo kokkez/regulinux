@@ -14,8 +14,8 @@ menu_nextcloud() {
 	# install prerequisites
 	TARGET="cloud"
 	CERT_OU="cloud-server"
-	menu_mailserver			# mailserver for nextcloud
-	menu_dbserver			# database server mariadb
+	menu_mailserver			# mailserver: postfix
+	menu_dbserver			# database server: mariadb
 	menu_webserver			# webserver: apache with mod-php
 
 	install_nextcloud		# install nextcloud
