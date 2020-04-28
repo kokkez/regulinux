@@ -13,6 +13,7 @@ install_php7x_fpm() {
 	# append external repository for updated php
 	cd /etc/apt
 	grep -q 'Ondrej Sury' sources.list || {
+		pkg_require gnupg
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 		cat >> sources.list <<EOF
 
