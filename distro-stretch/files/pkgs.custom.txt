@@ -25,7 +25,7 @@ nano					install
 net-tools				install
 openssh-client			install
 openssh-server			install
-#original-awk			install
+original-awk			install
 perl					install
 postfix					install
 procinfo				install
