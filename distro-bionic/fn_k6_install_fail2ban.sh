@@ -26,7 +26,7 @@ install_fail2ban() {
 		}
 	}
 
-	# fix a systemd bug of xenial 16.04
+	# fix a systemd bug found on xenial 16.04
 	msg_info "Fixing a little systemd bug that prevent fail2ban to start"
 	sed -i 's|/var||' /usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
 
