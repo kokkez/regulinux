@@ -19,5 +19,8 @@ menu_dns() {
 	chown bind:0 /var/log/bind9-query.log
 	copy_to ~ getSlaveZones.sh
 
+	# activating ports on firewall
+	firewall_allow "dns"
+
 	msg_info "Installation of DNS server bind9 completed!"
 }	# end menu_dns
