@@ -1,4 +1,5 @@
 # to install
+acl						install
 apt-utils				install
 bzip2					install
 ca-certificates			install
@@ -6,6 +7,7 @@ cron					install
 curl					install
 dbus					install
 debconf-utils			install
+dmsetup					install
 figlet					install
 gawk					install
 htop					install
@@ -30,8 +32,7 @@ perl					install
 postfix					install
 procinfo				install
 psmisc					install
-#python					install
-python3					install
+#python3					install
 quota					install
 rsync					install
 screen					install
