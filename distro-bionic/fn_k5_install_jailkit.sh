@@ -12,6 +12,7 @@ install_jailkit() {
 	# check if Jailkit is installed already
 	is_available "jk_list" || {
 		msg_info "Installing Jailkit..."
+		pkg_require python
 		dpkg -i ${MyFILES}/jailkit_2.19-1_amd64.deb
 		msg_info "Installation of Jailkit completed!"
 	}
