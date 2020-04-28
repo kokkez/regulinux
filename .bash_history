@@ -58,6 +58,5 @@ bash ~/lin*/arrange.sh ispconfig
 bash ~/lin*/arrange.sh resolv
 bash ~/lin*/arrange.sh ssh
 bash ~/lin*/arrange.sh
-bash ~/apt-update.sh
 bash ~/lin*/arrange.sh upgrade
 #
