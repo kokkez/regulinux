@@ -7,10 +7,11 @@
 # Roundcube 1.3.7: 2018-10-21
 # Roundcube 1.3.9: 2019-04-23
 # Roundcube 1.3.10: 2019-10-06
+# Roundcube 1.4.3:  2020-02-24
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local p d=/var/www/roundcube v=1.3.10	# version to install
+	local U P D=/var/www/roundcube V=1.4.3 # version to install
 
 	# test if not already installed
 	[ -s "${d}/index.php" ] && {
@@ -20,12 +21,12 @@ menu_roundcube() {
 
 	msg_info "Installing Roundcube ${v}..."
 	mkdir -p ${d}
-	p=$(menu_password 32)					# random password
+	P=$(menu_password 32) # creating a random password
 
 	# download the right version
-	v=https://github.com/roundcube/roundcubemail/releases/download/${v}/roundcubemail-${v}-complete.tar.gz
+	U=https://github.com/roundcube/roundcubemail/releases/download/${V}/roundcubemail-${V}-complete.tar.gz
 	cd /tmp
-	down_load "${v}" roundcubemail.tar.gz
+	down_load "${U}" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
 	cd roundcubemail-*
 	mv -t "${d}" bin config logs plugins program skins temp vendor .htaccess index*
@@ -57,9 +58,9 @@ menu_roundcube() {
 
 	# install the config file
 	cd ${d}/config
-	v=$(menu_password 24 1)	# strong password
+	U=$(menu_password 24 1)	# strong password
 	do_copy roundcube/config.inc.php.roundcube config.inc.php
-	sed -i "s|RPW|${p}|;s|DESKEY|${v}|" config.inc.php
+	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
 	# install into sites-available of apache2
 	[ -d /etc/apache2 ] && {
@@ -119,4 +120,5 @@ EOF
 	# activating some modules of apache2 then reload its configurations
 	a2enmod deflate expires headers
 	svc_evoke apache2 restart
+	msg_info "Installation of Roundcube ${V} completed!"
 }	# end menu_roundcube

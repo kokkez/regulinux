@@ -15,9 +15,9 @@ function adminer_object() {
 			"information_schema",
 			"performance_schema",
 		)),
-		new AdminerForeignSystem,
+		new AdminerReadableDates(),
 		new AdminerSqlLog('sql.log'),
-		new AdminerTablesFilter,
+		new AdminerMultiTablesFilter,
 	);
 
 	return new AdminerPlugin($plugins);

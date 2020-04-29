@@ -43,24 +43,25 @@ EOF
 	# on full virtualization we need to keep kernel and grub
 	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^initram|^linux/{print $1,"install"}' | dpkg --set-selections
 
-	# set to purge packages where status != install
-	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
-
 	# set to install some custom packages
 	x="${MyDISTRO}/pkgs.custom.txt"
 	[ -s ${x} ] && dpkg --set-selections < ${x}
+
+	# set to purge packages where status != install
+	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
 
 	# fix dependencies: loop until no more dependencies were founds
 	x="-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1"
 	while true; do
 		apt-get ${x} dselect-upgrade 2> pkgs.log.txt 1>/dev/null
 		# --simulate --show-upgraded --fix-broken
-		awk '/as (Pre)?Depends of/{print $2}' pkgs.log.txt > pkgs.adds.txt
-		awk '/^Broken .+ (Pre)?Depends on /{print $5}' pkgs.log.txt >> pkgs.adds.txt
+		awk '/ as.+Depends of /{print $2}' pkgs.log.txt > pkgs.adds.txt
+		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt >> pkgs.adds.txt
+		awk '/ via keep of | rather than change /{print $NF}' pkgs.log.txt >> pkgs.adds.txt
 		[ -s pkgs.adds.txt ] || break
 		cmp -s pkgs.adds.txt pkgs.copy.txt && break
 		cat pkgs.adds.txt > pkgs.copy.txt
-		sort -u pkgs.adds.txt | awk -F: '{print $1,"install"}' | dpkg --set-selections
+		awk -F: '{print $1,"install"}' pkgs.adds.txt | sort -u | dpkg --set-selections
 	done;
 
 	# do the real dselect-upgrade

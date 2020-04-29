@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install apache2 web server (version 2.4.x on xenial)
+# install apache2 web server (version 2.4.18 on xenial)
 # ------------------------------------------------------------------------------
 
 install_apache2() {

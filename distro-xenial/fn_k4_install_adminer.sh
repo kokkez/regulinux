@@ -4,37 +4,37 @@
 
 install_adminer() {
 	# set: root directory & version
-	local URL ADM DIRE=/var/www/myadminer VER="4.3.1"
+	local U D=/var/www/myadminer V="4.7.6"
 
-	[ -s "${DIRE}/index.php" ] && {
-		msg_alert "adminer-${VER} is already installed..."
+	[ -s "${D}/index.php" ] && {
+		msg_alert "adminer-${V} is already installed..."
 		return
 	}
 
-	msg_info "Installing adminer-${VER}..."
+	msg_info "Installing adminer-${V}..."
 
 	# create directory if it not exists (with -p)
-	mkdir -p ${DIRE} && cd "$_"
+	mkdir -p ${D} && cd "$_"
 
 	# get the plugins folder
-	URL=https://github.com/vrana/adminer/releases/download/v${VER}
-	down_load "${URL}/adminer-${VER}.zip" "adminer-${VER}.zip"
+	U=https://github.com/vrana/adminer/releases/download/v${V}
+	down_load "${U}/adminer-${V}.zip" "adminer-${V}.zip"
 	# some cleanup
-	unzip -qo "adminer-${VER}.zip"
-	mv ./adminer-${VER}/plugins ./
-	rm -rf ./adminer-${VER}*
+	unzip -qo "adminer-${V}.zip"
+	mv ./adminer-${V}/plugins ./
+	rm -rf ./adminer-${V}*
 
 	# download script
-	ADM="adminer-${VER}-mysql-en.php"
-	down_load "${URL}/${ADM}" "${ADM}"
+	D="adminer-${V}-mysql-en.php"
+	down_load "${U}/${D}" "${D}"
 
 	# install the index.php file
 	copy_to . adminer/index.php
-	sed -i "s|FILE|${ADM}|" index.php
+	sed -i "s|FILE|${D}|" index.php
 
-	# install css file & tables-filter plugin, from MyDir
+	# install css file & plugins, from MyDir
 	copy_to . adminer/adminer.css
-	copy_to plugins adminer/tables-filter.php
+	copy_to plugins adminer/plugins/*
 
 	# install the virtualhost file for apache2
 	cd /etc/apache2
@@ -44,5 +44,5 @@ install_adminer() {
 		svc_evoke apache2 restart
 	}
 
-	msg_info "Installation of adminer-${VER} completed!"
+	msg_info "Installation of adminer-${V} completed!"
 }	# end install_adminer
