@@ -6,6 +6,8 @@ cron					install
 curl					install
 dbus					install
 debconf-utils			install
+dmsetup					install
+dselect					install
 e2fsprogs				install
 figlet					install
 gawk					install
@@ -30,14 +32,12 @@ nano					install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
-original-awk			install
+#original-awk			install
 perl					install
 plymouth				install
 postfix					install
 procinfo				install
 psmisc					install
-#python					install
-#python-minimal			install
 python3					install
 python3-minimal			install
 quota					install
@@ -47,6 +47,7 @@ sed						install
 systemd					install
 systemd-sysv			install
 telnet					install
+ucf						install
 unzip					install
 wget					install
 xz-utils				install
@@ -58,7 +59,6 @@ info					purge
 install-info			purge
 isc-dhcp-client			purge
 isc-dhcp-common			purge
-#less					purge
 man-db					purge
 rsyslog					purge
 traceroute				purge
