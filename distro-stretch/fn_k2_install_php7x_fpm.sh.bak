@@ -37,10 +37,7 @@ EOF
 	# enable apache2 modules
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
-	# set alternative for php in cli mode
-	cmd update-alternatives --set php /usr/bin/php7.4
-
-	# set default php to v7.x
+	# set default php to v7
 	a2dismod php5.6
 	a2enmod php7.4
 
