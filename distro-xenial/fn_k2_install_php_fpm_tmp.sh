@@ -2,7 +2,7 @@
 # install PHP as MOD-PHP, PHP-FPM and FastCGI
 # ------------------------------------------------------------------------------
 
-install_php_fpm() {
+install_php_fpm_tmp() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
 		msg_alert "PHP as PHP-FPM is already installed..."
@@ -73,4 +73,4 @@ EOF
 
 	svc_evoke apache2 restart
 	msg_info "Installation of PHP as PHP-FPM completed!"
-}	# end install_php_fpm
+}	# end install_php_fpm_tmp

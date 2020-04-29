@@ -14,9 +14,9 @@ install_syslogd() {
 
 	# there is no need to log to so many files
 	cd /var/log
-	local ITM
-	for ITM in *.log mail.* debug syslog fsck news
-		do rm -rf ${ITM}
+	local F
+	for F in *.log mail.* debug syslog fsck news
+		do rm -rf ${F}
 	done
 
 	# dash before path means to not flush immediately at every logged line

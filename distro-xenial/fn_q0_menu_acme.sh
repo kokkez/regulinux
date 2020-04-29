@@ -120,8 +120,8 @@ menu_acme() {
 			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${KEY}|"
 
 		# enable related apache2 modules & site
-		[ -L sites-enabled/000-default-ssl.conf ] || {
-			ln -s ../${CNF} sites-enabled/000-default-ssl.conf
+		[ -L sites-enabled/0000-default-ssl.conf ] || {
+			ln -s ../${CNF} sites-enabled/0000-default-ssl.conf
 			rm -rf sites-enabled/default-ssl*
 		}
 		a2enmod rewrite headers ssl

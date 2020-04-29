@@ -1,11 +1,12 @@
 [Unit]
 Description=Shutdown all ssh sessions before network
+Wants=network.target
 After=network.target
 
 [Service]
-TimeoutStartSec=0
 Type=oneshot
 RemainAfterExit=yes
+TimeoutStartSec=0
 ExecStart=/bin/true
 ExecStop=/usr/bin/killall sshd
 
