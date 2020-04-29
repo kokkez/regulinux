@@ -1,5 +1,5 @@
 apt --installed list
-dpkg --get-selections > selections.txt
+dpkg --get-selections > installed.txt
 lsb_release -sc
 #
 # setting up public dns resolvers (freenom.com)
@@ -49,8 +49,6 @@ swaks -s 127.0.0.1:25 -q TO -f acq@olmark.com -t RCastoldi@parker.com
 swaks -s 127.0.0.1:25 -f kokez@libero.it -t k@rete.us --header "Subject: File to open now!" --attach ~/file.jar
 openssl s_client -showcerts -connect localhost:465
 #
-tar czf linux.tar.gz linux
-source ~/lin*/lib.sh
 bash ~/lin*/arrange.sh deps
 bash ~/lin*/arrange.sh mailserver ispconfig
 bash ~/lin*/arrange.sh dbserver ispconfig
@@ -59,4 +57,4 @@ bash ~/lin*/arrange.sh resolv
 bash ~/lin*/arrange.sh ssh
 bash ~/lin*/arrange.sh
 bash ~/lin*/arrange.sh upgrade
-#
+## namium [ provider ] ##
