@@ -14,12 +14,12 @@ install_php7x_fpm() {
 	cd /etc/apt
 	grep -q 'Ondrej Sury' sources.list || {
 		pkg_require gnupg
-		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
+		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
 		cat >> sources.list <<EOF
 
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
-deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
+deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
 EOF
 	}
 
