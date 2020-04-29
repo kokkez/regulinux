@@ -1,5 +1,6 @@
 # to install
 apt-utils				install
+busybox-initramfs		install
 bzip2					install
 ca-certificates			install
 cron					install
@@ -11,8 +12,11 @@ dselect					install
 e2fsprogs				install
 figlet					install
 gawk					install
+libmpfr4				install
+libsigsegv2				install
 gcc-4.8-base			install
 gcc-4.9-base			install
+gettext-base			install
 htop					install
 iftop					install
 inetutils-syslogd		install
@@ -34,10 +38,14 @@ openssh-server			install
 openssh-sftp-server		install
 #original-awk			install
 perl					install
+perl-modules-5.22		install
+libperl5.22				install
 plymouth				install
 postfix					install
 procinfo				install
 psmisc					install
+python					install
+python-minimal			install
 python3					install
 python3-minimal			install
 quota					install
@@ -62,4 +70,5 @@ isc-dhcp-common			purge
 man-db					purge
 rsyslog					purge
 traceroute				purge
+ubuntu-minimal			purge
 

@@ -97,3 +97,7 @@ fi
 #if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 #    . /etc/bash_completion
 #fi
+
+# workaround for the buggy xterm related to htop
+export TERM=xterm-color
+
