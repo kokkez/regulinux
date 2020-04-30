@@ -16,7 +16,7 @@ install_php7x_fpm() {
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-	cat <<EOF > /etc/apt/sources.list.d/php.list
+	cat > /etc/apt/sources.list.d/php.list <<EOF
 # https://www.patreon.com/oerdnj
 deb http://packages.sury.org/php stretch main
 #deb-src http://packages.sury.org/php stretch main
