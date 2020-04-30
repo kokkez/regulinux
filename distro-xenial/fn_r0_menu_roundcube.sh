@@ -14,13 +14,13 @@ menu_roundcube() {
 	local U P D=/var/www/roundcube V=1.4.3 # version to install
 
 	# test if not already installed
-	[ -s "${d}/index.php" ] && {
+	[ -s "${D}/index.php" ] && {
 		msg_alert "Roundcube is already installed..."
 		return
 	}
 
 	msg_info "Installing Roundcube ${v}..."
-	mkdir -p ${d}
+	mkdir -p ${D}
 	P=$(menu_password 32) # creating a random password
 
 	# download the right version
@@ -29,10 +29,10 @@ menu_roundcube() {
 	down_load "${U}" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
 	cd roundcubemail-*
-	mv -t "${d}" bin config logs plugins program skins temp vendor .htaccess index*
+	mv -t "${D}" bin config logs plugins program skins temp vendor .htaccess index*
 
 	# instruct search engines to not index our webmail
-	echo -e "User-agent: *\nDisallow: /" > ${d}/robots.txt
+	echo -e "User-agent: *\nDisallow: /" > ${D}/robots.txt
 
 	# creating a new database, then populate it from file
 	create_database "roundcube" "roundcube" "${p}"
@@ -42,9 +42,9 @@ menu_roundcube() {
 	cd /tmp
 	down_load https://github.com/w2c/ispconfig3_roundcube/archive/master.zip plugins.zip
 	unzip -qo plugins*
-	mv ispconfig3*/ispconfig3_* ${d}/plugins/
+	mv ispconfig3*/ispconfig3_* ${D}/plugins/
 	# install the config file
-	cd ${d}/plugins/ispconfig3_account/config
+	cd ${D}/plugins/ispconfig3_account/config
 	do_copy roundcube/config.inc.php.plugin config.inc.php
 	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
@@ -53,11 +53,11 @@ menu_roundcube() {
 	down_load https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip contextmenu.zip
 	unzip -qo contextmenu*
 	cd roundcube-contextmenu*
-	mkdir -p ${d}/plugins/contextmenu
-	mv -t ${d}/plugins/contextmenu localization skins contextmenu*
+	mkdir -p ${D}/plugins/contextmenu
+	mv -t ${D}/plugins/contextmenu localization skins contextmenu*
 
 	# install the config file
-	cd ${d}/config
+	cd ${D}/config
 	U=$(menu_password 24 1)	# strong password
 	do_copy roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
@@ -72,7 +72,7 @@ menu_roundcube() {
 	}
 
 	# set permissions
-	cd ${d}
+	cd ${D}
 	chown -R 0:0 .
 	chown -R 33:0 logs temp # set user www-data
 	chmod -R 400 .
@@ -113,7 +113,7 @@ EOF
 		cat >> /etc/crontab <<EOF
 
 # ROUNDCUBE daily db cleaning
-18 23 * * * root php ${d}/bin/cleandb.sh > /dev/null 2>&1
+18 23 * * * root php ${D}/bin/cleandb.sh > /dev/null 2>&1
 EOF
 	}
 
