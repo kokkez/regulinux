@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_webserver() {
-	TARGET="${1-${TARGET}}"
+	TARGET="${1:-${TARGET}}"
 
 	# verify that the system was set up properly
 	done_deps || return
