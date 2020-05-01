@@ -20,7 +20,7 @@ gcc-6-base				install
 gettext-base			install
 htop					install
 iftop					install
-ifupdown				install
+#ifupdown				install
 inetutils-syslogd		install
 #initramfs-tools			install
 #iotop					install
