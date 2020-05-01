@@ -1,6 +1,6 @@
 # to install
 #acl						install
-#apt-utils				install
+apt-utils				install
 bsdutils				install
 busybox-initramfs		install
 #bzip2					install
