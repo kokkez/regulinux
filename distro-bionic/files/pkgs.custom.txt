@@ -1,12 +1,12 @@
 # to install
-acl						install
+#acl						install
 apt-utils				install
 bsdutils				install
 busybox-initramfs		install
 #bzip2					install
 #ca-certificates			install
 #cron					install
-#curl					install
+curl					install
 dbus					install
 #debconf-utils			install
 dmsetup					install
@@ -20,7 +20,7 @@ gcc-6-base				install
 gettext-base			install
 htop					install
 iftop					install
-#ifupdown				install
+ifupdown				install
 inetutils-syslogd		install
 #initramfs-tools			install
 #iotop					install

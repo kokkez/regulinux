@@ -15,10 +15,12 @@ install_openssh() {
 		-e 's|^#?(PubkeyAuthentication).*|\1 yes|'
 
 	# mitigating ssh hang on reboot on systemd capables OSes
-	X=ssh-session-cleanup.service
+#	X=ssh-session-cleanup.service
+	X=ssh-user-sessions.service
 	[ -s /etc/systemd/system/${X} ] || {
 		msg_info "Mitigating the problem of SSH hangs on reboot"
-		cp /usr/share/doc/openssh-client/examples/${X} /etc/systemd/system/
+#		cp /usr/share/doc/openssh-client/examples/${X} /etc/systemd/system/
+		copy_to /etc/systemd/system ssh/${X}
 		cmd systemctl enable ${X}
 		cmd systemctl daemon-reload
 		cmd systemctl start ${X}
