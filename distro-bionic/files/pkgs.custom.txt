@@ -51,6 +51,7 @@ quota					install
 rsync					install
 screen					install
 telnet					install
+ucf						install
 unzip					install
 wget					install
 
