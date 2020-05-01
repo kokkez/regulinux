@@ -1,5 +1,5 @@
 # to install
-#acl						install
+acl						install
 apt-utils				install
 bsdutils				install
 busybox-initramfs		install
