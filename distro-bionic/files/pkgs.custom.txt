@@ -1,7 +1,7 @@
 # to install
-acl						install
+#acl						install
 #apt-utils				install
-#bsdutils				install
+bsdutils				install
 busybox-initramfs		install
 #bzip2					install
 #ca-certificates			install
@@ -16,15 +16,17 @@ figlet					install
 gawk					install
 libmpfr6				install
 libsigsegv2				install
-#gcc-6-base				install
+gcc-6-base				install
 gettext-base			install
 htop					install
 iftop					install
-#ifupdown				install
+ifupdown				install
 inetutils-syslogd		install
 #initramfs-tools			install
 #iotop					install
 iptables				install
+libip4tc0				install
+klibc-utils				install
 #libnih-dbus1			install
 #libnih1					install
 #libpipeline1			install
@@ -40,7 +42,7 @@ openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
 nano					install
-#net-tools				install
+net-tools				install
 #original-awk			install
 perl					install
 perl-modules-5.26		install
