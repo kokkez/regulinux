@@ -12,7 +12,7 @@ dmsetup					install
 dselect					install
 e2fsprogs				install
 figlet					install
-gawk					install
+#gawk					install
 libmpfr6				install
 libsigsegv2				install
 gcc-6-base				install
@@ -32,6 +32,7 @@ lsb-release				install
 lsof					install
 #lzma					install
 #makedev					install
+mawk					install
 #mime-support			install
 openssh-client			install
 openssh-server			install
@@ -47,10 +48,54 @@ psmisc					install
 quota					install
 rsync					install
 screen					install
+ssl-cert				install
 telnet					install
 ucf						install
 unzip					install
 wget					install
+
+# libs
+libasn1-8-heimdal		install
+libcurl4				install
+libedit2				install
+libgdbm-compat4			install
+libgdbm5				install
+libgssapi-krb5-2		install
+libgssapi3-heimdal		install
+libhcrypto4-heimdal		install
+libheimbase1-heimdal	install
+libheimntlm0-heimdal	install
+libhx509-5-heimdal		install
+libip6tc0				install
+libiptc0				install
+libk5crypto3			install
+libkeyutils1			install
+libkrb5-26-heimdal		install
+libkrb5-3				install
+libkrb5support0			install
+libldap-2.4-2			install
+libldap-common			install
+libnetfilter-conntrack3	install
+libnfnetlink0			install
+libnghttp2-14			install
+libnl-3-200				install
+libnl-genl-3-200		install
+libpcap0.8				install
+libperl5.26				install
+libpsl5					install
+libroken18-heimdal		install
+librtmp1				install
+libsasl2-2				install
+libsasl2-modules-db		install
+libslang2				install
+libssl1.0.0				install
+libtirpc1				install
+libutempter0			install
+libwind0-heimdal		install
+libwrap0				install
+multiarch-support		install
+python3-netifaces		install
+xxd						install
 
 # to purge
 bsdmainutils			purge
@@ -62,3 +107,4 @@ isc-dhcp-common			purge
 man-db					purge
 rsyslog					purge
 traceroute				purge
+ubuntu-minimal			purge
