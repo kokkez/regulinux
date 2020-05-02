@@ -1,5 +1,5 @@
 # to install
-#acl						install
+acl						install
 apt-utils				install
 bsdutils				install
 busybox-initramfs		install
@@ -23,7 +23,7 @@ iftop					install
 ifupdown				install
 inetutils-syslogd		install
 #initramfs-tools			install
-#iotop					install
+iotop					install
 iptables				install
 libip4tc0				install
 klibc-utils				install

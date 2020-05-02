@@ -4,7 +4,7 @@ apt-utils				install
 bzip2					install
 ca-certificates			install
 #cron					install
-#curl					install
+curl					install
 #dbus					install
 #debconf-utils			install
 dmsetup					install
@@ -16,11 +16,11 @@ htop					install
 iftop					install
 inetutils-syslogd		install
 iotop					install
-iptables				install
+#iptables				install
 klibc-utils				install
 locales					install
 #logrotate				install
-#lsb-release				install
+lsb-release				install
 #lsof					install
 #makedev					install
 #mime-support			install
