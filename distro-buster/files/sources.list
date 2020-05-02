@@ -1,0 +1,15 @@
+# Debian 10 Buster :: https://wiki.debian.org/SourcesList
+
+# main repository
+deb http://deb.debian.org/debian buster main contrib non-free
+#deb-src http://deb.debian.org/debian buster main contrib non-free
+
+# updates repository
+deb http://deb.debian.org/debian buster-updates main contrib non-free
+#deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+
+# security repository
+deb http://deb.debian.org/debian-security/ buster/updates main contrib non-free
+#deb-src http://deb.debian.org/debian-security/ buster/updates main contrib non-free
+
+
