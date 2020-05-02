@@ -12,7 +12,7 @@ dmsetup					install
 dselect					install
 e2fsprogs				install
 figlet					install
-#gawk					install
+gawk					install
 libmpfr6				install
 libsigsegv2				install
 gcc-6-base				install
