@@ -8,7 +8,6 @@ ca-certificates			install
 #cron					install
 curl					install
 dbus					install
-#debconf-utils			install
 dmsetup					install
 dselect					install
 e2fsprogs				install
@@ -27,14 +26,10 @@ iotop					install
 iptables				install
 libip4tc0				install
 klibc-utils				install
-#libnih-dbus1			install
-#libnih1					install
-#libpipeline1			install
 locales					install
 logrotate				install
-#lsb-base				install
 lsb-release				install
-#lsof					install
+lsof					install
 #lzma					install
 #makedev					install
 #mime-support			install

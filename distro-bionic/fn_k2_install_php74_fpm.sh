@@ -1,12 +1,14 @@
 # ------------------------------------------------------------------------------
-# install PHP 5.6 & 7.4 as MOD-PHP, PHP-FPM and FastCGI
+# install PHP 7.4 as MOD-PHP, PHP-FPM and FastCGI
 # https://dev.to/pushkaranand/upgrading-to-php-7-4-26dg
 # ------------------------------------------------------------------------------
 
-install_php7x_fpm() {
+install_php74_fpm() {
+	local V=7.4
+
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+		msg_alert "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
@@ -15,10 +17,8 @@ install_php7x_fpm() {
 
 	# now install php packages, versions 5.6 & 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \
-		php5.6 libapache2-mod-php5.6 \
-		php5.6-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php7.4 libapache2-mod-php7.4 \
-		php7.4-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php${V} libapache2-mod-php${V} \
+		php${V}-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{apcu,apcu-bc,gettext,imagick,memcache,memcached,pear} imagemagick memcached mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 
@@ -26,11 +26,11 @@ install_php7x_fpm() {
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
 	# set alternative for php in cli mode
-	cmd update-alternatives --set php /usr/bin/php7.4
+	cmd update-alternatives --set php /usr/bin/php${V}
 
 	# set default php to v7.x
 	a2dismod php5.6
-	a2enmod php7.4
+	a2enmod php${V}
 
 	msg_info "Configuring PHP for apache2..."
 	cd /etc/apache2
@@ -47,5 +47,5 @@ install_php7x_fpm() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	svc_evoke apache2 restart
-	msg_info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
-}	# end install_php7x_fpm
+	msg_info "Installation of PHP${V} as MOD-PHP, PHP-FPM and FastCGI completed!"
+}	# end install_php74_fpm
