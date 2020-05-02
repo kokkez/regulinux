@@ -471,8 +471,9 @@ detect_linux() {
 	#	"debian-7")     DISTRO="wheezy"  ;;
 		"debian-8")     DISTRO="jessie"  ;;
 		"debian-9")     DISTRO="stretch" ;;
+		"debian-10")    DISTRO="buster"  ;; # 2020-05
 		"ubuntu-16.04") DISTRO="xenial"  ;;
-		"ubuntu-18.04") DISTRO="bionic"  ;;
+		"ubuntu-18.04") DISTRO="bionic"  ;; # 2020-04
 	esac;
 
 	# test that distro isnt unknown
