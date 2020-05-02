@@ -26,7 +26,7 @@ install_openssh() {
 		cmd systemctl start ${X}
 		# edit script to catch all sshd demons: shell & winscp
 		sed -ri /usr/lib/openssh/ssh-session-cleanup \
-			-e "s|^(ssh_session_pattern).*|\1='sshd: \S.*@\w+'|"
+			-e "s|^(ssh_session_pattern).*|\1='sshd: \\S.*@\\w+'|"
 	}
 
 	# activate on firewall & restart SSH
