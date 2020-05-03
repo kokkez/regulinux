@@ -21,10 +21,10 @@ logrotate             install
 lsb-release           install
 lsof                  install
 mawk                  install
+nano                  install
 openssh-client        install
 openssh-server        install
 openssh-sftp-server   install
-nano                  install
 perl                  install
 perl-modules-5.26     install
 postfix               install
