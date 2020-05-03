@@ -8,15 +8,16 @@ install_selfsigned_sslcert() {
 	mkdir -p "${D}"		# conditional creating the parent directory
 	D="${D}/server"		# certificate path prefix
 
-	# check that was not already installed
+	# check that was not already generated
 	[ -r "${D}.cert" ] && {
-		msg_alert "SSL Certificate ( ${D}.cert ) is already installed..."
+		msg_alert "SSL Certificate ( ${D}.cert ) is already generated..."
 		return
 	}
 
-	msg_info "Installing self-signed SSL Certificate..."
+	msg_info "Generating self-signed SSL Certificate..."
 
 	# now write the certificate
+	openssl rand -out ~/.rnd -hex 256
 	openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
 		-keyout "${D}.key" -out "${D}.cert" \
 		-subj "/C=${CERT_C}/ST=${CERT_ST}/L=${CERT_L}/O=${CERT_O}/OU=${CERT_OU}/CN=${CERT_CN}/emailAddress=${CERT_E}"
@@ -37,5 +38,5 @@ install_selfsigned_sslcert() {
 		svc_evoke apache2 restart
 	}
 
-	msg_info "Installation of self-signed SSL Certificate completed!"
+	msg_info "Generation of self-signed SSL Certificate completed!"
 }	# end install_selfsigned_sslcert
