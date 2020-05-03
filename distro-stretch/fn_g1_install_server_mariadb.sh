@@ -4,14 +4,14 @@
 
 install_server_mariadb() {
 	# debian 9 stretch install mariadb-server-10.1
-	local PKG="mariadb-server"
+	local K="mariadb-server"
 
-	is_installed "${PKG}" || {
-		msg_info "Installing ${PKG}..."
+	is_installed "${K}" || {
+		msg_info "Installing ${K}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	msg_info "Configuring ${PKG}"
+	msg_info "Configuring ${K}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	svc_evoke mysql restart
-	msg_info "Installation of ${PKG} completed!"
+	msg_info "Installation of ${K} completed!"
 }	# end install_server_mariadb

@@ -16,7 +16,7 @@ install_apache2() {
 	msg_info "Configuring apache2..."
 
 	# enable apache2 modules
-	a2enmod suexec rewrite ssl actions include headers
+	a2enmod suexec rewrite ssl actions include cgi headers
 
 	cd /etc/apache2
 

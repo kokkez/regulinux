@@ -19,7 +19,7 @@ libc6 libraries/restart-without-asking boolean true
 libc6:amd64 libraries/restart-without-asking boolean true
 postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string ${MAIL_NAME}
-postfix postfix/destinations string ${HOST_FQDN}, localhost
+postfix postfix/destinations string ${HOST_FQDN},localhost
 EOF
 
 	# purging foreign architectures (i*86, ...)
@@ -27,7 +27,7 @@ EOF
 	for x in $(cmd dpkg --print-foreign-architectures); do
 		apt-get purge -qqy ".*:${x}"
 		dpkg --remove-architecture ${x}
-		msg_info "Architecture '${x}' removed"
+		msg_info "Purging architecture '${x}' completed"
 	done;
 
 	cd /tmp
@@ -55,8 +55,8 @@ EOF
 	while true; do
 		apt-get ${x} dselect-upgrade 2> pkgs.log.txt 1>/dev/null
 		# --simulate --show-upgraded --fix-broken
-		awk '/ as.+Depends of /{print $2}' pkgs.log.txt > pkgs.adds.txt
-		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt >> pkgs.adds.txt
+#		awk '/ as.+Depends of /{print $2}' pkgs.log.txt > pkgs.adds.txt
+		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt > pkgs.adds.txt
 		[ -s pkgs.adds.txt ] || break
 		awk -F: '{print $1,"install"}' pkgs.adds.txt | sort -u | dpkg --set-selections
 	done;

@@ -8,8 +8,8 @@ menu_roundcube() {
 	local U P D=/var/www/roundcube V=1.4.3 # version to install
 
 	# test if not already installed
-	[ -s "${d}/index.php" ] && {
-		msg_alert "Roundcube is already installed..."
+	[ -s "${D}/index.php" ] && {
+		msg_alert "Roundcube ${V} is already installed..."
 		return
 	}
 

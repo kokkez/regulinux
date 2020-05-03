@@ -10,7 +10,7 @@ install_php7x_fpm() {
 		return
 	}
 
-	# add repository for updated php
+	# add external repository for updated php
 	add_php_repository
 
 	# now install php packages, versions 5.6 & 7.4, with some modules

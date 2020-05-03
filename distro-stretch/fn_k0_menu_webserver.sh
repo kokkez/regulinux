@@ -15,6 +15,7 @@ menu_webserver() {
 	if [ "${TARGET}" = "ispconfig" ]; then
 		# php with php-fpm for ispconfig
 		install_php7x_fpm
+#		install_php74_fpm
 
 		install_selfsigned_sslcert
 		install_pureftpd

@@ -1,4 +1,4 @@
-# to install
+# to be installed
 apt-utils             install
 bsdutils              install
 bzip2                 install
@@ -12,6 +12,7 @@ figlet                install
 gawk                  install
 htop                  install
 iftop                 install
+ifupdown              install
 inetutils-syslogd     install
 iotop                 install
 iptables              install
@@ -37,7 +38,7 @@ ucf                   install
 unzip                 install
 wget                  install
 	
-# to purge
+# to be purged
 bsdmainutils          purge
 groff-base            purge
 info                  purge

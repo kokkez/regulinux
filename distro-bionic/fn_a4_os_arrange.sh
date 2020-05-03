@@ -19,7 +19,7 @@ libc6 libraries/restart-without-asking boolean true
 libc6:amd64 libraries/restart-without-asking boolean true
 postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string ${MAIL_NAME}
-postfix postfix/destinations string ${HOST_FQDN}, localhost
+postfix postfix/destinations string ${HOST_FQDN},localhost
 EOF
 
 	# purging foreign architectures (i*86, ...)
@@ -27,7 +27,7 @@ EOF
 	for x in $(cmd dpkg --print-foreign-architectures); do
 		apt-get purge -qqy ".*:${x}"
 		dpkg --remove-architecture ${x}
-		msg_info "Architecture '${x}' removed"
+		msg_info "Purging architecture '${x}' completed"
 	done;
 
 	cd /tmp

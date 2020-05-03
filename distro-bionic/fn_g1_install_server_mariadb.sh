@@ -4,14 +4,14 @@
 
 install_server_mariadb() {
 	# ubuntu 18.04 bionic install mariadb-server-10.1
-	local p="mariadb-server"
+	local K="mariadb-server"
 
-	is_installed "${p}" || {
-		msg_info "Installing ${p}..."
+	is_installed "${K}" || {
+		msg_info "Installing ${K}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	msg_info "Configuring ${p}"
+	msg_info "Configuring ${K}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	svc_evoke mysql restart
-	msg_info "Installation of ${p} completed!"
+	msg_info "Installation of ${K} completed!"
 }	# end install_server_mariadb

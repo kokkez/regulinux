@@ -8,7 +8,7 @@ menu_roundcube() {
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
-		msg_alert "Roundcube is already installed..."
+		msg_alert "Roundcube ${V} is already installed..."
 		return
 	}
 
