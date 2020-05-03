@@ -27,7 +27,7 @@ EOF
 	for x in $(cmd dpkg --print-foreign-architectures); do
 		apt-get purge -qqy ".*:${x}"
 		dpkg --remove-architecture ${x}
-		msg_info "Architecture '${x}' removed"
+		msg_info "Purging architecture '${x}' completed"
 	done;
 
 	cd /tmp
