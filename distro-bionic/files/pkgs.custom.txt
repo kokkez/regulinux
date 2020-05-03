@@ -7,13 +7,11 @@ cron					install
 curl					install
 dbus					install
 dmsetup					install
-dselect					install
 e2fsprogs				install
 figlet					install
 gawk					install
 htop					install
 iftop					install
-ifupdown				install
 inetutils-syslogd		install
 iotop					install
 iptables				install
@@ -21,7 +19,6 @@ locales					install
 logrotate				install
 lsb-release				install
 lsof					install
-mawk					install
 openssh-client			install
 openssh-server			install
 openssh-sftp-server		install
