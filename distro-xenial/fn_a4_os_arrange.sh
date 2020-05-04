@@ -56,7 +56,7 @@ EOF
 		apt-get ${x} dselect-upgrade 2> pkgs.log.txt 1>/dev/null
 		# --simulate --show-upgraded --fix-broken
 #		awk '/ as.+Depends of /{print $2}' pkgs.log.txt > pkgs.adds.txt
-		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt >> pkgs.adds.txt
+		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt > pkgs.adds.txt
 #		awk '/ via keep of | rather than change /{print $NF}' pkgs.log.txt >> pkgs.adds.txt
 		[ -s pkgs.adds.txt ] || break
 		cmp -s pkgs.adds.txt pkgs.copy.txt && break

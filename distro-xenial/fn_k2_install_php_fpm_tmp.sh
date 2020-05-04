@@ -20,7 +20,7 @@ install_php_fpm_tmp() {
 	grep -q 'Ondrej Sury' sources.list || {
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
 #		pkg_update true
-		cat <<EOF >> sources.list
+		cat >> sources.list <<EOF
 
 # Ondrej Sury Repo for PHP 7.x
 deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
