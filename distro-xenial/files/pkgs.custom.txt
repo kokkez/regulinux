@@ -29,6 +29,7 @@ openssh-server        install
 openssh-sftp-server   install
 perl                  install
 perl-modules-5.22     install
+plymouth              install
 postfix               install
 procinfo              install
 psmisc                install
