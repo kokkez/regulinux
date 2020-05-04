@@ -45,6 +45,8 @@ wget                  install
 
 # to be purged
 bsdmainutils          purge
+gcc-4.8-base          purge
+gcc-4.9-base          purge
 groff-base            purge
 info                  purge
 install-info          purge
