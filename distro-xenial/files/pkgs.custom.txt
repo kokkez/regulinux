@@ -20,7 +20,9 @@ locales               install
 logrotate             install
 lsb-release           install
 lsof                  install
+makedev               install
 mawk                  install
+mountall              install
 nano                  install
 openssh-client        install
 openssh-server        install
