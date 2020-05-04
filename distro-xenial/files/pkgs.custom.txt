@@ -52,6 +52,7 @@ install-info          purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
 man-db                purge
+mktemp                purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
