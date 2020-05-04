@@ -26,11 +26,11 @@ install_openssh() {
 
 	# fix a systemd bug of xenial 16.04
 	# https://askubuntu.com/questions/1109934/ssh-server-stops-working-after-reboot-caused-by-missing-var-run-sshd
-	[ -s /usr/lib/tmpfiles.d/sshd.conf ] || {
-		msg_info "Fixing a little systemd bug that prevent SSHd to start"
-		sed -i 's|/var||' /usr/lib/tmpfiles.d/sshd.conf
-		cmd mkdir -p -m0755 /var/run/sshd
-	}
+#	[ -s /usr/lib/tmpfiles.d/sshd.conf ] || {
+#		msg_info "Fixing a little systemd bug that prevent SSHd to start"
+#		sed -i 's|/var||' /usr/lib/tmpfiles.d/sshd.conf
+#		cmd mkdir -p -m0755 /var/run/sshd
+#	}
 
 	# activate on firewall & restart SSH
 	firewall_allow "${P}"

@@ -13,10 +13,8 @@ gawk                  install
 htop                  install
 iftop                 install
 inetutils-syslogd     install
-#initramfs-tools       install
 iotop                 install
 iptables              install
-#klibc-utils           install
 locales               install
 logrotate             install
 lsb-release           install
