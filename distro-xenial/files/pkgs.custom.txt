@@ -6,7 +6,6 @@ ca-certificates       install
 cron                  install
 curl                  install
 dbus                  install
-#debconf-utils         install
 dmsetup               install
 e2fsprogs             install
 figlet                install
@@ -57,4 +56,4 @@ man-db                purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
-
+vim-common            purge

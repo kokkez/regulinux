@@ -19,8 +19,8 @@ install_openssh() {
 	[ -s /etc/systemd/system/${X} ] || {
 		msg_info "Mitigating the problem of SSH hangs on reboot"
 		copy_to /etc/systemd/system ssh/${X}
-		cmd systemctl enable ${X}
 		cmd systemctl daemon-reload
+		cmd systemctl enable ${X}
 		cmd systemctl start ${X}
 	}
 
