@@ -13,9 +13,9 @@ menu_webserver() {
 
 	# install php based on TARGET
 	if [ "${TARGET}" = "ispconfig" ]; then
-		# php with php5-fpm & php-fcgi for ispconfig
-#		install_php_fpm
-		install_php7x_fpm
+		# php with php-fpm for ispconfig
+#		install_php7x_fpm
+		install_php74_fpm
 
 		install_selfsigned_sslcert
 		install_pureftpd

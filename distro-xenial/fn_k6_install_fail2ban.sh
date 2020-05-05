@@ -27,8 +27,11 @@ install_fail2ban() {
 	}
 
 	# fix a systemd bug of xenial 16.04
-	msg_info "Fixing a little systemd bug that prevent fail2ban to start"
-	sed -i 's|/var||' /usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+	local X=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+	grep -q '/var' ${X} && {
+		msg_info "Fixing a little systemd bug that prevent fail2ban to start"
+		sed -i 's|/var||' ${X}
+	}
 
 	svc_evoke fail2ban restart
 	msg_info "Installation of Fail2ban completed!"

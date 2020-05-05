@@ -3,7 +3,7 @@ dpkg --get-selections > installed.txt
 lsb_release -sc
 #
 # setting up public dns resolvers (freenom.com)
-command cat <<EOF > /etc/resolv.conf
+command cat > /etc/resolv.conf <<EOF
 nameserver 80.80.80.80
 nameserver 80.80.81.81
 EOF

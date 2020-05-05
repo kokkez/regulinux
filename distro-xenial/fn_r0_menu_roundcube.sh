@@ -15,11 +15,11 @@ menu_roundcube() {
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
-		msg_alert "Roundcube is already installed..."
+		msg_alert "Roundcube ${V} is already installed..."
 		return
 	}
 
-	msg_info "Installing Roundcube ${v}..."
+	msg_info "Installing Roundcube ${V}..."
 	mkdir -p ${D}
 	P=$(menu_password 32) # creating a random password
 
@@ -35,7 +35,7 @@ menu_roundcube() {
 	echo -e "User-agent: *\nDisallow: /" > ${D}/robots.txt
 
 	# creating a new database, then populate it from file
-	create_database "roundcube" "roundcube" "${p}"
+	create_database "roundcube" "roundcube" "${P}"
 	cmd mysql 'roundcube' < SQL/mysql.initial.sql
 
 	# install & configure plugins for ISPConfig3
@@ -46,7 +46,7 @@ menu_roundcube() {
 	# install the config file
 	cd ${D}/plugins/ispconfig3_account/config
 	do_copy roundcube/config.inc.php.plugin config.inc.php
-	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
+	sed -i "s|RPW|${P}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
 	# install & configure contextmenu plugin
 	cd /tmp
@@ -80,7 +80,7 @@ menu_roundcube() {
 
 	# add the remote_soap_user into ISPConfig3 database, if ISPConfig3 is installed
 	[ -d /usr/local/ispconfig ] && {
-		sed -e "s|RPW|${p}|" <<'EOF' | mysql
+		sed -e "s|RPW|${P}|" <<'EOF' | mysql
 USE dbispconfig;
 INSERT INTO remote_user (
  sys_userid,
