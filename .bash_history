@@ -57,4 +57,4 @@ bash ~/lin*/arrange.sh resolv
 bash ~/lin*/arrange.sh ssh
 bash ~/lin*/arrange.sh
 bash ~/lin*/arrange.sh upgrade
-## namium [ provider ] ##
+## namium @ provider [ namium ] ##

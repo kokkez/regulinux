@@ -1,10 +1,11 @@
 # ------------------------------------------------------------------------------
 # install roundcube webmail
 # Roundcube 1.4.3:  2020-02-24
+# Roundcube 1.4.6:  2020-07-05
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.3 # version to install
+	local U P D=/var/www/roundcube V=1.4.6 # version to install
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
