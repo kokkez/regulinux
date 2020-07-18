@@ -3,7 +3,14 @@
 [mysqld]
 sql-mode = NO_ENGINE_SUBSTITUTION
 bind-address = 0.0.0.0
-innodb_file_format = barracuda
-innodb_large_prefix = true
-innodb_file_per_table = 1
+
+# kokkez 2020-07
+#tmpdir                   = /dev/shm
+#innodb_log_file_size     = 64M
+#innodb_read_io_threads   = 2
+#innodb_write_io_threads  = 2
+# nextcloud
+innodb_file_format       = barracuda
+innodb_large_prefix      = true
+innodb_file_per_table    = 1
 
