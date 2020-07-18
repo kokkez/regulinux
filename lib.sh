@@ -320,6 +320,7 @@ down_load() {
 		exit
 	}
 
+	pkg_require wget
 	wget -nv --no-check-certificate ${1} -O ${2} || {
 		msg_info "Download failed ( ${2} ), exiting here..."
 		exit
