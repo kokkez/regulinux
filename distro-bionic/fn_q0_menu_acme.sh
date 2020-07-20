@@ -71,8 +71,8 @@ acme_ic30() {
 	acme_conf "acme-challenge.conf" "${THU}" "${DTV}"
 
 	# install into sites-available of apache2
-	[ -L sites-enabled/000-acme-challenge.conf ] || {
-		ln -s ../sites-available/acme-challenge.conf sites-enabled/010-acme-challenge.conf
+	[ -L sites-enabled/010-acme-challenge.conf ] || {
+		ln -s ../acme-challenge.conf sites-enabled/010-acme-challenge.conf
 	}
 }	# end acme_ic30
 
