@@ -61,7 +61,8 @@ acme_ic31() {
 acme_ic30() {
 	# creating the PHP response file
 	mkdir -p /var/www/le-challenge && cd "$_"
-	local THU=$(acme_index "index.php")
+	local THU=$(acme_thumbprint)
+	acme_index "index.php"
 
 	# creating the apache configuration file
 	cd /etc/apache2
@@ -71,7 +72,7 @@ acme_ic30() {
 
 	# install into sites-available of apache2
 	[ -L sites-enabled/000-acme-challenge.conf ] || {
-		ln -s ../sites-available/acme-challenge.conf sites-enabled/000-acme-challenge.conf
+		ln -s ../sites-available/acme-challenge.conf sites-enabled/010-acme-challenge.conf
 	}
 }	# end acme_ic30
 
