@@ -8,7 +8,7 @@ install_nextcloud() {
 	msg_info "Installing Nextcloud ${VER}..."
 
 	# install some php libraries before install Nextcloud
-	pkg_install php7.2-{cli,curl,gd,imap,intl,mbstring,xml,xmlrpc,zip} \
+	pkg_install php7.2-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{apcu,imagick,memcache} imagemagick memcached bzip2 mcrypt
 		# php7.2-mcrypt there is no more
 
