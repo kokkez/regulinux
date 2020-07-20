@@ -1,16 +1,16 @@
 # ------------------------------------------------------------------------------
-# install nextcloud 19 for ubuntu 18 with php 7.4
+# install nextcloud 19 for ubuntu 18 with php 7.2
 # ------------------------------------------------------------------------------
 
-install_nextcloud18() {
+install_nextcloud() {
 	local URL VER="19.0.1"	# need php 7.4
 
 	msg_info "Installing Nextcloud ${VER}..."
 
 	# install some php libraries before install Nextcloud
-	pkg_install php7.4-{cli,curl,gd,imap,intl,mbstring,xml,xmlrpc,zip} \
+	pkg_install php7.2-{cli,curl,gd,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{apcu,imagick,memcache} imagemagick memcached bzip2 mcrypt
-		# php7.4-mcrypt there is no more
+		# php7.2-mcrypt there is no more
 
 	# new database with related user, info saved in ~/.dbdata.txt
 	create_database "nextcloud" "nextcloud"
@@ -47,4 +47,4 @@ install_nextcloud18() {
 EOF
 	}
 	msg_info "Installation of nextcloud ${VER} completed!"
-}	# end install_nextcloud18
+}	# end install_nextcloud
