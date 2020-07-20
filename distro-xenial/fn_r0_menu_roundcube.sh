@@ -3,15 +3,16 @@
 # Roundcube 1.0.7 requirements: php5 php-pear php5-mysql php5-mcrypt php5-intl
 # Roundcube 1.1.3 requirements: php-mail-mime php-net-smtp
 # Roundcube 1.3.3 requirements: php5-ldap
-# Roundcube 1.3.6: 2018-06-24
-# Roundcube 1.3.7: 2018-10-21
-# Roundcube 1.3.9: 2019-04-23
+# Roundcube 1.3.6:  2018-06-24
+# Roundcube 1.3.7:  2018-10-21
+# Roundcube 1.3.9:  2019-04-23
 # Roundcube 1.3.10: 2019-10-06
 # Roundcube 1.4.3:  2020-02-24
+# Roundcube 1.4.7:  2020-07-20 security update
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.3 # version to install
+	local U P D=/var/www/roundcube V=1.4.7 # version to install
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
