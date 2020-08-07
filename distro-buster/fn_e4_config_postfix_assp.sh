@@ -20,8 +20,8 @@ config_postfix_assp() {
 	# set basic parameters in main.cf
 	cmd postconf \
 		myhostname=${MAIL_NAME} \
-		myorigin=${HOST_FQDN} \
-		mydestination= \
+		myorigin=\$myhostname \
+		mydestination=\$myorigin,localhost \
 		mynetworks=127.0.0.1 \
 		inet_interfaces=all \
 		message_size_limit=51200000 \

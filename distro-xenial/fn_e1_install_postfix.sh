@@ -15,7 +15,7 @@ install_postfix() {
 	debconf-set-selections <<EOF
 postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string ${MAIL_NAME}
-postfix postfix/destinations string ${HOST_FQDN}, localhost
+postfix postfix/destinations string \$myorigin,localhost
 EOF
 
 	# install required & useful packages
@@ -25,9 +25,9 @@ EOF
 
 	# set basic parameters in main.cf
 	cmd postconf \
-		myorigin=${HOST_FQDN} \
 		myhostname=${MAIL_NAME} \
-		mydestination=${MAIL_NAME},localhost
+		myorigin=\$myhostname \
+		mydestination=\$myorigin,localhost
 
 	# install /etc/aliases
 	copy_to /etc postfix/aliases
