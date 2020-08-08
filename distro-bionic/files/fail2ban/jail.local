@@ -13,10 +13,10 @@ sendername  = f2b.HOST_NICK
 [ssh]
 enabled     = false
 
-[pureftpd]
+[pure-ftpd]
 enabled     = true
 port        = ftp
-filter      = pureftpd
+filter      = pure-ftpd
 logpath     = /var/log/syslog
 maxretry    = 3
 
@@ -37,7 +37,7 @@ logpath     = /var/log/mail.log
 maxretry    = 5
 
 [roundcube-auth]
-enabled     = true
+enabled     = false
 logpath     = /var/www/roundcube/logs/userlogins.log
 
 [apache-nohome]

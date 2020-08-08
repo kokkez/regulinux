@@ -11,7 +11,10 @@ menu_mykeys() {
 
 	# append content
 	grep -q "kokkez" authorized_keys || cat "${MyFILES}/ssh/authorized_keys" >> authorized_keys
-
 	cmd chmod 0600 authorized_keys
+
+	# copy preferences for htop
+	copy_to ~ .config
+
 	msg_info "Installation of my authorized_keys completed!"
 }	# end menu_mykeys
