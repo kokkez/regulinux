@@ -14,7 +14,7 @@ menu_mykeys() {
 	cmd chmod 0600 authorized_keys
 
 	# copy preferences for htop
-	[ -d ~/.config ] || {
+	[ -d ~/.config/htop ] || {
 		mkdir -p ~/.config/htop && cd "$_"
 		copy_to . htop/*
 		cmd chmod 0700 ~/.config ~/.config/htop
