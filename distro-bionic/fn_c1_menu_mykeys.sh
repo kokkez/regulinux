@@ -14,7 +14,10 @@ menu_mykeys() {
 	cmd chmod 0600 authorized_keys
 
 	# copy preferences for htop
-	copy_to ~ .config
+	[ -d ~/.config ] || {
+		copy_to ~ .config
+		cmd chmod 0700 ~/.config ~/.config/htop
+	}
 
 	msg_info "Installation of my authorized_keys completed!"
 }	# end menu_mykeys
