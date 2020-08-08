@@ -1,32 +1,53 @@
-[pureftpd]
-enabled  = true
-port     = ftp
-filter   = pureftpd
-logpath  = /var/log/syslog
-maxretry = 3
-
-[dovecot-pop3imap]
-enabled  = true
-filter   = dovecot-pop3imap
-action   = iptables-multiport[name=dovecot-pop3imap, port="pop3,pop3s,imap,imaps", protocol=tcp]
-logpath  = /var/log/mail.log
-maxretry = 5
-
-[sasl]
-enabled  = true
-port     = smtp
-filter   = postfix-sasl
-logpath  = /var/log/mail.log
-maxretry = 3
+[DEFAULT]
+# "ignoreip" can be an IP address, a CIDR mask or a DNS host.
+# Several addresses can be defined using space separator.
+ignoreip    = 127.0.0.1/8 HOST_NICK.rete.us smtp-m.rete.us smtp-u.rete.us bip.freemyip.com
+maxretry    = 3
+findtime    = 21600
+bantime     = 86400
+action_mwl  = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+              %(mta)s-whois-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s", sendername="%(sendername)s"]
+action      = %(action_mwl)s
+sendername  = f2b.HOST_NICK
 
 [ssh]
-enabled  = false
+enabled     = false
+
+[pureftpd]
+enabled     = true
+port        = ftp
+filter      = pureftpd
+logpath     = /var/log/syslog
+maxretry    = 3
+
+[postfix-failedauth]
+enabled     = true
+port        = smtp,ssmtp,submission
+filter      = postfix-failedauth
+logpath     = /var/log/mail.log
+bantime     = 604800  ; 1 week
+findtime    = 86400   ; 1 day
+maxretry    = 2
+
+[dovecot-pop3imap]
+enabled     = true
+filter      = dovecot-pop3imap
+action      = iptables-multiport[name=dovecot-pop3imap, port="pop3,pop3s,imap,imaps", protocol=tcp]
+logpath     = /var/log/mail.log
+maxretry    = 5
+
+[roundcube-auth]
+enabled     = true
+logpath     = /var/www/roundcube/logs/userlogins.log
 
 [apache-nohome]
-enabled  = true
-port     = http,https
-filter   = apache-nohome
-logpath  = /var/log/ispconfig/httpd/*/*error.log
-           /var/log/apache*/*error.log
-maxretry = 5
-findtime = 3600; 1 hour
+enabled     = true
+port        = http,https
+filter      = apache-nohome
+logpath     = /var/log/ispconfig/httpd/*/*error.log
+              /var/log/apache*/*error.log
+maxretry    = 5
+findtime    = 3600; 1 hour
+
+[recidive]
+enabled     = true

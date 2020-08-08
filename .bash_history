@@ -48,6 +48,7 @@ do-release-upgrade -m server -f DistUpgradeViewNonInteractive
 swaks -s 127.0.0.1:25 -q TO -f acq@olmark.com -t RCastoldi@parker.com
 swaks -s 127.0.0.1:25 -f kokez@libero.it -t k@rete.us --header "Subject: File to open now!" --attach ~/file.jar
 openssl s_client -showcerts -connect localhost:465
+fail2ban-client status
 #
 bash ~/lin*/arrange.sh deps
 bash ~/lin*/arrange.sh mailserver ispconfig
