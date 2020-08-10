@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install my authorized_keys, copying or appending them
+# install htop prefs & my authorized_keys, copying or appending them
 # ------------------------------------------------------------------------------
 
 menu_mykeys() {
@@ -11,7 +11,14 @@ menu_mykeys() {
 
 	# append content
 	grep -q "kokkez" authorized_keys || cat "${MyFILES}/ssh/authorized_keys" >> authorized_keys
-
 	cmd chmod 0600 authorized_keys
+
+	# copy preferences for htop
+	[ -d ~/.config/htop ] || {
+		mkdir -p ~/.config/htop && cd "$_"
+		copy_to . htop/*
+		cmd chmod 0700 ~/.config ~/.config/htop
+	}
+
 	msg_info "Installation of my authorized_keys completed!"
 }	# end menu_mykeys

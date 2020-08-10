@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install my authorized_keys, copying or appending them
+# install htop prefs & my authorized_keys, copying or appending them
 # ------------------------------------------------------------------------------
 
 menu_mykeys() {
