@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local URL VER="19.0.1"	# need php 7.4
+	local URL VER="19.0.3"	# need php 7.2
 
 	msg_info "Installing Nextcloud ${VER}..."
 

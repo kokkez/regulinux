@@ -9,10 +9,11 @@
 # Roundcube 1.3.10: 2019-10-06
 # Roundcube 1.4.3:  2020-02-24
 # Roundcube 1.4.7:  2020-07-20 security update
+# Roundcube 1.4.8:  2020-09-21 security update
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.7 # version to install
+	local U P D=/var/www/roundcube V=1.4.8 # version to install
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {

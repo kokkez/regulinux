@@ -36,4 +36,4 @@ filter   = apache-nohome
 logpath  = /var/log/ispconfig/httpd/*/*error.log
            /var/log/apache*/*error.log
 maxretry = 5
-findtime = 3600; 1 hour
+findtime = 3600  ; 1 hour

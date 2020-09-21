@@ -9,6 +9,7 @@ action_mwl  = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(po
               %(mta)s-whois-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s", sendername="%(sendername)s"]
 action      = %(action_mwl)s
 sendername  = f2b.HOST_NICK
+sender      = k-HOST_NICK-f2b@rete.us
 
 [ssh]
 enabled     = false
@@ -29,10 +30,10 @@ bantime     = 604800  ; 1 week
 findtime    = 86400   ; 1 day
 maxretry    = 2
 
-[dovecot-pop3imap]
+[dovecot]
 enabled     = true
-filter      = dovecot-pop3imap
-action      = iptables-multiport[name=dovecot-pop3imap, port="pop3,pop3s,imap,imaps", protocol=tcp]
+port        = pop3,pop3s,imap,imaps,smtp,ssmtp,submission
+filter      = dovecot
 logpath     = /var/log/mail.log
 maxretry    = 5
 
@@ -44,10 +45,9 @@ logpath     = /var/www/roundcube/logs/userlogins.log
 enabled     = true
 port        = http,https
 filter      = apache-nohome
-logpath     = /var/log/ispconfig/httpd/*/*error.log
-              /var/log/apache*/*error.log
+logpath     = /var/log/apache2/error.log
 maxretry    = 5
-findtime    = 3600; 1 hour
+findtime    = 3600 ; 1 hour
 
 [recidive]
 enabled     = true
