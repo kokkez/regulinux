@@ -1,38 +1,26 @@
 # ------------------------------------------------------------------------------
-# install PHP 7.3 as MOD-PHP and PHP-FPM
+# install PHP 7.3 as MOD-PHP, PHP-FPM and FastCGI
+#
 # ------------------------------------------------------------------------------
 
 install_php73_fpm() {
+	local V=7.3
+
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as PHP-FPM is already installed..."
+		msg_alert "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
 	# add external repository for updated php
-	is_installed "apt-transport-https" || {
-		msg_info "Installing required packages..."
-		pkg_install apt-transport-https lsb-release ca-certificates
-	}
-	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-	cat > /etc/apt/sources.list.d/php.list <<EOF
-# https://www.patreon.com/oerdnj
-deb http://packages.sury.org/php stretch main
-#deb-src http://packages.sury.org/php stretch main
-EOF
+	add_php_repository
 
-	# forcing apt update
-	pkg_update true
+	# now install php packages, versions 7.3, with some modules
+	pkg_install libapache2-mod-fcgid \
+		php${V} libapache2-mod-php${V} \
+		php${V}-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php-{apcu,apcu-bc,bz2,gettext,imagick,memcache,memcached,pear,redis} imagemagick memcached mcrypt
 
-	# now install php 7.3 packages and some modules
-	pkg_install libapache2-mod-fcgid php7.3 libapache2-mod-php7.3 \
-		php7.3-cli php7.3-cgi php7.3-fpm php7.3-mysql php7.3-gd php7.3-bcmath \
-		php7.3-curl php7.3-imap php7.3-intl php7.3-mbstring \
-		php7.3-pspell php7.3-recode php7.3-soap php7.3-sqlite3 php7.3-tidy \
-		php7.3-xmlrpc php7.3-xsl php7.3-zip \
-		php-apcu php-apcu-bc php-gettext php-imagick imagemagick \
-		php-memcache php-memcached memcached mcrypt php-pear
-#		php-redis
 
 	# enable apache2 modules
 	a2enmod proxy_fcgi fcgid setenvif alias
@@ -50,13 +38,6 @@ EOF
 
 	# cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
-
-	# set alternative for php in manual (cli) mode
-	cmd update-alternatives --set php /usr/bin/php7.3
-
-	# instruct apache2 on the default version to use
-	cmd a2dismod php7.0 php7.1 php7.2 php7.4
-	cmd a2enmod php7.3
 
 	svc_evoke apache2 restart
 	msg_info "Installation of PHP as PHP-FPM completed!"

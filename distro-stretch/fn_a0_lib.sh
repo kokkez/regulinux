@@ -29,19 +29,22 @@ menu_upgrade() {
 # ------------------------------------------------------------------------------
 
 add_php_repository() {
-	# append external repository to sources.list for updated php
-	cd /etc/apt
-	grep -q 'Ondrej Sury' sources.list || {
-		pkg_require gnupg
-		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
-		cat >> sources.list <<EOF
+	local P="/etc/apt/sources.list.d/php.list"
 
-# Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
-deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
+	# add external repository for updated php
+	[ -s ${P} ] || {
+		is_installed "apt-transport-https" || {
+			msg_info "Installing required packages..."
+			pkg_install apt-transport-https lsb-release ca-certificates
+		}
+		down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
+		cat > ${P} <<EOF
+# https://www.patreon.com/oerdnj
+deb http://packages.sury.org/php stretch main
+#deb-src http://packages.sury.org/php stretch main
 EOF
-	}
 
-	# forcing apt update
-	pkg_update true
+		# forcing apt update
+		pkg_update true
+	}
 }	# end add_php_repository
