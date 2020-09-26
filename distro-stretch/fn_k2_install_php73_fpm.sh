@@ -18,8 +18,9 @@ install_php73_fpm() {
 	# now install php packages, versions 7.3, with some modules
 	pkg_install libapache2-mod-fcgid \
 		php${V} libapache2-mod-php${V} \
-		php${V}-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php-{apcu,apcu-bc,bz2,gettext,imagick,memcache,memcached,pear,redis} imagemagick memcached mcrypt
+		php${V}-{bcmath,cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php-{apcu,apcu-bc,bz2,gettext,imagick,pear,redis} imagemagick mcrypt
+	#	php-{memcache,memcached} memcached
 
 
 	# enable apache2 modules

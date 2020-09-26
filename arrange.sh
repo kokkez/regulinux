@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
-# OpenVZ VPS setup script for installing Debian like OSes
-# by kokkez on 2018-01
+# setup script for installing Linux OSes, mainly Debian like
+# started by kokkez on 2018-01
 ################################################################################
 
 # ==============================================================================
