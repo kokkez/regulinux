@@ -47,6 +47,8 @@ install-info          purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
 man-db                purge
+nplan                 purge
+netplan.io            purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
