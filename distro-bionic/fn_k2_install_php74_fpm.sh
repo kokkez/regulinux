@@ -19,7 +19,7 @@ install_php74_fpm() {
 	pkg_install libapache2-mod-fcgid \
 		php${V} libapache2-mod-php${V} \
 		php${V}-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php-{apcu,apcu-bc,gettext,imagick,memcache,memcached,pear} imagemagick memcached mcrypt
+		php-{apcu,apcu-bc,gettext,imagick,pear} imagemagick mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 
 	# enable apache2 modules

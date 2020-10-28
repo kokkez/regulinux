@@ -19,7 +19,7 @@ install_php7x_fpm() {
 		php5.6-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php7.4 libapache2-mod-php7.4 \
 		php7.4-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php-{apcu,apcu-bc,gettext,imagick,memcache,memcached,pear} imagemagick memcached mcrypt
+		php-{apcu,apcu-bc,gettext,imagick,pear} imagemagick mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 
 	# enable apache2 modules

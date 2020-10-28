@@ -16,7 +16,13 @@ menu_nextcloud() {
 	CERT_OU="cloud-server"
 	menu_mailserver			# mailserver: postfix
 	menu_dbserver			# database server: mariadb
-	menu_webserver			# webserver: apache with mod-php
+#	menu_webserver			# webserver: apache with mod-php
+
+	# install apache2 webserver with php 7.4
+	install_apache2
+	install_php74_fpm
+	install_selfsigned_sslcert
+	install_adminer
 
 	install_nextcloud 		# install nextcloud
 }	# end menu_nextcloud
