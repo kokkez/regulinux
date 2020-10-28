@@ -3,14 +3,16 @@
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local URL VER="19.0.3"	# need php 7.2
+	local URL VER="19.0.4"	# need php 7.2
 
 	msg_info "Installing Nextcloud ${VER}..."
 
+	# add external repository for updated php
+	add_php_repository
+
 	# install some php libraries before install Nextcloud
-	pkg_install php7.2-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
-		php-{apcu,imagick,memcache} imagemagick memcached bzip2 mcrypt
-		# php7.2-mcrypt there is no more
+	pkg_install php7.4-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
+		php-{apcu,imagick,redis} imagemagick redis-server bzip2 mcrypt varnish
 
 	# new database with related user, info saved in ~/.dbdata.txt
 	create_database "nextcloud" "nextcloud"
