@@ -12,7 +12,7 @@ install_nextcloud() {
 
 	# install some php libraries before install Nextcloud
 	pkg_install php7.4-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
-		php-{apcu,imagick,redis} imagemagick redis-server bzip2 mcrypt varnish
+		php-{apcu,imagick,pear,redis} imagemagick bzip2 mcrypt redis-server varnish
 
 	# new database with related user, info saved in ~/.dbdata.txt
 	create_database "nextcloud" "nextcloud"
