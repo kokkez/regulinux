@@ -28,6 +28,13 @@ menu_upgrade() {
 
 # ------------------------------------------------------------------------------
 
+numeric_version() {
+	# return the cleaned numeric version of a program version
+	cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "${@}"
+}	# end numeric_version
+
+# ------------------------------------------------------------------------------
+
 add_php_repository() {
 	# append external repository to sources.list for updated php
 	cd /etc/apt

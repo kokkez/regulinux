@@ -367,29 +367,15 @@ done_deps() {
 
 # ------------------------------------------------------------------------------
 
-#svc_evoke() {
-#	# try to filter the service/init.d calls, for future upgrades
-#	local SVC=${1-apache2} ACT=${2-status}
-#
-#	# swapped SVC <=> ACT
-##	is_available "${ACT}" && {
-##		SVC=${ACT}
-##		ACT=${1-apache2}
-##	}
-#
-#	# stop if service is unavailable
-#	is_available "${SVC}" || return
-#
-#	msg_info "Performing ${ACT} of ${SVC}.service..."
-#
-#	is_available "systemctl" && {
-#		[ "${ACT}" = "reload" ] && ACT="reload-or-restart"
-#		systemctl ${ACT} ${SVC}.service
-#	} || {
-##		cmd invoke-rc.d ${SVC} ${ACT}
-#		/etc/init.d/${SVC} ${ACT}
-#	}
-#}	# end svc_evoke
+php_version() {
+	# return the dotted number of the cli version of PHP
+	# $1 = word to specify the wanted result like this
+	# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
+	local V=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
+	[ "${1}" = "major" ] && V=$(cmd awk -F. '{print $1}' <<< "${V}")
+	[ "${1}" = "minor" ] && V=$(cmd awk -F. '{print $1"."$2}' <<< "${V}")
+	echo "${V}"
+}	# end php_version
 
 # ------------------------------------------------------------------------------
 

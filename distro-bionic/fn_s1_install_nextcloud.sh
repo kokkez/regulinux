@@ -1,17 +1,24 @@
 # ------------------------------------------------------------------------------
-# install nextcloud 19 for ubuntu 18 with php 7.2
+# install nextcloud 19 for ubuntu 18 with php 7.x >= 7.2
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local URL VER="19.0.4"	# need php 7.2
+	local P U V="19.0.4"	# version to install
 
-	msg_info "Installing Nextcloud ${VER}..."
+	# test that php version is at least 7.2
+	P="$(php_version minor)"
+	dpkg --compare-versions "${P}" "lt" "7.2" && {
+		msg_alert "Nextcloud ${V} require PHP7.2 but PHP${P} is installed..."
+		return
+	}
+
+	msg_info "Installing Nextcloud ${V}..."
 
 	# add external repository for updated php
 	add_php_repository
 
 	# install some php libraries before install Nextcloud
-	pkg_install php7.4-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
+	pkg_install php${P}-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{apcu,imagick,pear,redis} imagemagick bzip2 mcrypt redis-server varnish
 
 	# new database with related user, info saved in ~/.dbdata.txt
@@ -22,8 +29,8 @@ install_nextcloud() {
 
 	# download & install nextcloud
 	cd /var/www
-	URL="https://download.nextcloud.com/server/releases/nextcloud-${VER}.zip"
-	down_load "${URL}" "nextcloud.zip"
+	U="https://download.nextcloud.com/server/releases/nextcloud-${V}.zip"
+	down_load "${U}" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	chown -R 33:0 /var/www/nextcloud # set user www-data
@@ -48,5 +55,5 @@ install_nextcloud() {
 */15 * * * * www-data php -f /var/www/nextcloud/cron.php
 EOF
 	}
-	msg_info "Installation of nextcloud ${VER} completed!"
+	msg_info "Installation of nextcloud ${V} completed!"
 }	# end install_nextcloud

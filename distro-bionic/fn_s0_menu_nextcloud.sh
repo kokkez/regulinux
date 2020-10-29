@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_nextcloud() {
+	# test that was not already installed
 	[ -r /var/www/nextcloud/config/config.php ] && {
 		msg_alert "Nextcloud is already installed..."
 		return
