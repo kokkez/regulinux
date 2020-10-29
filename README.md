@@ -1,2 +1,2 @@
 # linux
- Install linux VPS & some utilities
+Install debian based linux VPS & some utilities
