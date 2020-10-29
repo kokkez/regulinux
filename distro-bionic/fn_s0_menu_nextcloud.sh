@@ -26,4 +26,5 @@ menu_nextcloud() {
 	install_adminer
 
 	install_nextcloud 		# install nextcloud
+	install_varnish			# install the cache system
 }	# end menu_nextcloud
