@@ -22,7 +22,7 @@ install_nextcloud() {
 		php-{apcu,imagick,pear,redis} imagemagick bzip2 mcrypt redis-server
 
 	# new database with related user, info saved in ~/.dbdata.txt
-	create_database "nextcloud" "nextcloud"
+	[ -d /var/lib/mysql/nextcloud ] || create_database "nextcloud" "nextcloud"
 
 	# copy script to facilitate with permissions
 	copy_to ~/ nextcloud/nextcloud-*
