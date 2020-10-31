@@ -23,16 +23,16 @@ install_varnish() {
 	# configuring apache2
 	# replace port '80' with '8008' in configuration file "ports.conf"
 	# and all virtual host files under the "sites-available" directory
-#	cd /etc/apache2
-#	sed -i 's|80$|8008|g' ports.conf
+	cd /etc/apache2
+	sed -i 's| 80$| 127.0.0.1:80|g' ports.conf
 #	sed -i 's|80>|8008>|g' sites-available/*
 
 	# configuring apache2 for SSL
 	# load all the necessary modules
 	a2enmod ssl proxy proxy_balancer proxy_http
 	cmd apachectl configtest
-	local T P=sites-available/default-ssl.conf I=$(cmd hostname -i) T="
-		########################################################################
+	local T P=sites-available/default-ssl.conf I=$(cmd hostname -s)
+	T="\t\t########################################################################
 		# varnish global settings
 		SetEnvIf			X-Forwarded-Proto https HTTPS=on
 
