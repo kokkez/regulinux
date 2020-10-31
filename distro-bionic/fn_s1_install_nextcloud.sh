@@ -35,9 +35,8 @@ install_nextcloud() {
 	mkdir -p /var/www/nextcloud-data && chown -R 33:0 "$_" # set data folder too as www-data
 
 	# apache configuration
-	cd /etc/apache2
-	copy_to sites-available nextcloud/nextcloud.conf
-	cd /sites-enabled
+	cd /etc/apache2/sites-enabled
+	copy_to . nextcloud/nextcloud.conf
 	[ -L 110-nextcloud.conf ] || ln -s ../sites-available/nextcloud.conf 110-nextcloud.conf
 	[ -L 000-default.conf ] && mv 000-default.conf 0000-default.conf
 	[ -L default-ssl.conf ] && mv default-ssl.conf 0000-default-ssl.conf
@@ -58,9 +57,8 @@ EOF
 	# aliasize the occ command
 	grep -q 'alias occ' ~/.bashrc || {
 		cat >> ~/.bashrc <<EOF
-
 # alias occ for nextcloud
-occ() { su -s /bin/bash www-data -c "/usr/bin/php /var/www/nextcloud/occ $@"; }
+occ() { su -s /bin/bash www-data -c "/usr/bin/php /var/www/nextcloud/occ \$@"; }
 EOF
 	}
 
