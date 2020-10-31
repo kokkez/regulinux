@@ -14,10 +14,8 @@ install_nextcloud() {
 
 	msg_info "Installing Nextcloud ${V}..."
 
-	# add external repository for updated php
-	add_php_repository
-
 	# install some php libraries before install Nextcloud
+	add_php_repository
 	pkg_install php${P}-{bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{apcu,imagick,pear,redis} imagemagick bzip2 mcrypt redis-server
 
@@ -38,10 +36,11 @@ install_nextcloud() {
 
 	# apache configuration
 	cd /etc/apache2
-	copy_to sites-available nextcloud/nextcloud13.conf
-	[ -L sites-enabled/110-nextcloud.conf ] || {
-		ln -s ../sites-available/nextcloud13.conf sites-enabled/110-nextcloud.conf
-	}
+	copy_to sites-available nextcloud/nextcloud.conf
+	cd /sites-enabled
+	[ -L 110-nextcloud.conf ] || ln -s ../sites-available/nextcloud.conf 110-nextcloud.conf
+	[ -L 000-default.conf ] && mv 000-default.conf 0000-default.conf
+	[ -L default-ssl.conf ] && mv default-ssl.conf 0000-default-ssl.conf
 	cmd a2enmod rewrite headers env dir mime ssl
 	cmd a2ensite default-ssl
 	svc_evoke apache2 restart
@@ -55,5 +54,15 @@ install_nextcloud() {
 */15 * * * * www-data php -f /var/www/nextcloud/cron.php
 EOF
 	}
+
+	# aliasize the occ command
+	grep -q 'alias occ' ~/.bashrc || {
+		cat >> ~/.bashrc <<EOF
+
+# alias occ for nextcloud
+occ() { su -s /bin/bash www-data -c "/usr/bin/php /var/www/nextcloud/occ $@"; }
+EOF
+	}
+
 	msg_info "Installation of nextcloud ${V} completed!"
 }	# end install_nextcloud

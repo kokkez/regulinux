@@ -32,7 +32,7 @@ install_varnish() {
 	a2enmod ssl proxy proxy_balancer proxy_http
 	cmd apachectl configtest
 	local T P=sites-available/default-ssl.conf I=$(cmd hostname -s)
-	T="\t\t########################################################################
+	T="\t########################################################################
 		# varnish global settings
 		SetEnvIf			X-Forwarded-Proto https HTTPS=on
 
