@@ -3,23 +3,31 @@
 # https://wiki.opennic.org/api/geoip
 # ------------------------------------------------------------------------------
 
-menu_resolv() {
-	local N T="OpenNIC" R=/etc/resolv.conf
-	backup_file ${R}
+resolv_via_systemd() {
+	local D=/etc/systemd
 
-	# Getting the nearest OpenNIC servers using their geoip API
-#	N=$(cmd curl -s 'https://api.opennicproject.org/geoip/' | head -3 | awk '{print "nameserver",$1}')
-#	N=$(cmd wget -q4O- 'https://api.opennicproject.org/geoip/?ns&res=4&ipv=4')
+	# copying files
+	mkdir -p ./resolved.conf.d && cd "$_"
+	copy_to . resolved.conf.d/*
 
-	# otherwise set the freenom.world public dns
-	[ -z "${N}" ] && {
-		T="cloudflare + freenom.world"
-		N="search .\noptions timeout:2 rotate\n"
-		N+="nameserver 1.1.1.1      # cloudflare\n"
-		N+="nameserver 80.80.80.80  # freenom.world\n"
-		N+="nameserver 1.0.0.1      # cloudflare\n"
-		N+="nameserver 80.80.81.81  # freenom.world"
-	}
+	cmd systemctl restart systemd-resolved
+	#cmd systemd-resolve --status
+
+	msg_info "Configuration of public dns completed via systemd-resolved"
+}	# end resolv_via_systemd
+
+
+resolv_via_resolvconf() {
+	local N T R="${1:-/etc/resolv.conf}"
+	backup_file "${R}"
+
+	# set known public dns
+	T="cloudflare + freenom.world"
+	N="search .\noptions timeout:2 rotate\n"
+	N+="nameserver 1.1.1.1      # cloudflare\n"
+	N+="nameserver 80.80.80.80  # freenom.world\n"
+	N+="nameserver 1.0.0.1      # cloudflare\n"
+	N+="nameserver 80.80.81.81  # freenom.world"
 
 	# write in /etc/resolv.conf
 	cmd chattr -i ${R}	# allow file modification
@@ -28,4 +36,22 @@ menu_resolv() {
 
 	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
+}	# end resolv_via_resolvconf
+
+
+is_symlink() {
+	# if symlink is broken, it exits with 1 (error)
+	[ -L "${1}" ] && [ -e "${1}" ]
+}	# end is_symlink
+
+
+menu_resolv() {
+	local R=/etc/resolv.conf
+
+	# if resolv.conf is a valid symlink, then setup via systemd
+	is_symlink "${R}" && {
+		resolv_via_systemd
+	} || {
+		resolv_via_resolvconf "${R}"
+	}
 }	# end menu_resolv

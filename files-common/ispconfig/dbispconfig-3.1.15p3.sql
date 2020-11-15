@@ -1420,9 +1420,10 @@ CREATE TABLE `server_php` (
 INSERT INTO `server_php` (`server_php_id`, `sys_userid`, `sys_groupid`, `sys_perm_user`, `sys_perm_group`, `sys_perm_other`, `server_id`, `client_id`, `name`, `php_fastcgi_binary`, `php_fastcgi_ini_dir`, `php_fpm_init_script`, `php_fpm_ini_dir`, `php_fpm_pool_dir`, `active`) VALUES
 (1,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP5.6',	'php-cgi5.6',	'/etc/php/5.6/cgi/php.ini',	'php5.6-fpm',	'/etc/php/5.6/fpm/php.ini',	'/etc/php/5.6/fpm/pool.d',	'y'),
 (2,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.0',	'php-cgi7.0',	'/etc/php/7.0/cgi/php.ini',	'php7.0-fpm',	'/etc/php/7.0/fpm/php.ini',	'/etc/php/7.0/fpm/pool.d',	'n'),
-(3,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.2',	'php-cgi7.2',	'/etc/php/7.2/cgi/php.ini',	'php7.2-fpm',	'/etc/php/7.2/fpm/php.ini',	'/etc/php/7.2/fpm/pool.d',	'y'),
-(4,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.3',	'php-cgi7.3',	'/etc/php/7.3/cgi/php.ini',	'php7.3-fpm',	'/etc/php/7.3/fpm/php.ini',	'/etc/php/7.3/fpm/pool.d',	'y'),
-(5,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.4',	'php-cgi7.4',	'/etc/php/7.4/cgi/php.ini',	'php7.4-fpm',	'/etc/php/7.4/fpm/php.ini',	'/etc/php/7.4/fpm/pool.d',	'y');
+(3,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.1',	'php-cgi7.1',	'/etc/php/7.1/cgi/php.ini',	'php7.1-fpm',	'/etc/php/7.1/fpm/php.ini',	'/etc/php/7.1/fpm/pool.d',	'n'),
+(4,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.2',	'php-cgi7.2',	'/etc/php/7.2/cgi/php.ini',	'php7.2-fpm',	'/etc/php/7.2/fpm/php.ini',	'/etc/php/7.2/fpm/pool.d',	'y'),
+(5,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.3',	'php-cgi7.3',	'/etc/php/7.3/cgi/php.ini',	'php7.3-fpm',	'/etc/php/7.3/fpm/php.ini',	'/etc/php/7.3/fpm/pool.d',	'y'),
+(6,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.4',	'php-cgi7.4',	'/etc/php/7.4/cgi/php.ini',	'php7.4-fpm',	'/etc/php/7.4/fpm/php.ini',	'/etc/php/7.4/fpm/pool.d',	'y');
 
 DROP TABLE IF EXISTS `shell_user`;
 CREATE TABLE `shell_user` (

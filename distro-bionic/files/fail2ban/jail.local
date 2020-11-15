@@ -1,10 +1,10 @@
 [DEFAULT]
 # "ignoreip" can be an IP address, a CIDR mask or a DNS host.
 # Several addresses can be defined using space separator.
-ignoreip    = 127.0.0.1/8 HOST_NICK.rete.us smtp-m.rete.us smtp-u.rete.us bip.freemyip.com
+ignoreip    = 127.0.0.1/8 HOST_NICK.rete.us smtp-m.rete.us smtp-e.rete.us bip.freemyip.com
 maxretry    = 3
-findtime    = 21600
-bantime     = 86400
+findtime    = 21600 ; 6 hour
+bantime     = 86400 ; 1 day
 action_mwl  = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
               %(mta)s-whois-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s", sendername="%(sendername)s"]
 action      = %(action_mwl)s
