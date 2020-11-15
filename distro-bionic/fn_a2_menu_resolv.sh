@@ -7,7 +7,7 @@ resolv_via_systemd() {
 	local D=/etc/systemd
 
 	# copying files
-	mkdir -p ./resolved.conf.d && cd "$_"
+	mkdir -p "$D/resolved.conf.d" && cd "$_"
 	copy_to . resolved.conf.d/*
 
 	# fully activate systemd-resolved
