@@ -10,6 +10,9 @@ resolv_via_systemd() {
 	mkdir -p ./resolved.conf.d && cd "$_"
 	copy_to . resolved.conf.d/*
 
+	# fully activate systemd-resolved
+	cmd systemctl unmask systemd-resolved
+	cmd systemctl enable systemd-resolved
 	cmd systemctl restart systemd-resolved
 	#cmd systemd-resolve --status
 
