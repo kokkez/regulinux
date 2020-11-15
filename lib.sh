@@ -158,6 +158,14 @@ sed_copy() {
 
 # ------------------------------------------------------------------------------
 
+is_symlink() {
+	# $1: path to a symlink
+	# exits with 0 if symlink is valid, or with 1 if it is broken
+	[ -L "${1}" ] && [ -e "${1}" ]
+}	# end is_symlink
+
+# ------------------------------------------------------------------------------
+
 detect_path() {
 	cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${MyFILES}/${1} 2>/dev/null
 };	# end detect_path

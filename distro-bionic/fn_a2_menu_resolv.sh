@@ -4,10 +4,8 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_systemd() {
-	local D=/etc/systemd
-
 	# copying files
-	mkdir -p "$D/resolved.conf.d" && cd "$_"
+	mkdir -p "/etc/systemd/resolved.conf.d" && cd "$_"
 	copy_to . resolved.conf.d/*
 
 	# fully activate systemd-resolved
@@ -40,12 +38,6 @@ resolv_via_resolvconf() {
 	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
 }	# end resolv_via_resolvconf
-
-
-is_symlink() {
-	# if symlink is broken, it exits with 1 (error)
-	[ -L "${1}" ] && [ -e "${1}" ]
-}	# end is_symlink
 
 
 menu_resolv() {

@@ -14,7 +14,5 @@ menu_deps() {
 
 	menu_motd
 	menu_ssh "${P}"
-
-	#menu_resolv
 }	# end menu_deps
 
