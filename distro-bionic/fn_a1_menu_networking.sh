@@ -19,9 +19,12 @@ menu_networking() {
 	cd /etc/network
 	cmd grep -q 'auto lo' ./interfaces || {
 		cmd cat >> ./interfaces <<EOF
+
+# loopback interface
 auto lo
 iface lo inet loopback
 
+# ethernet interface
 auto ${IF}
 iface ${IF} inet static
   address ${IP}/24
