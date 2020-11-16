@@ -5,6 +5,7 @@
 menu_deps() {
 	local P="${1-${SSHD_PORT}}"
 
+	menu_networking
 	menu_resolv
 	shell_bash
 	menu_tz
