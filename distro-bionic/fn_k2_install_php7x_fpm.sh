@@ -16,10 +16,10 @@ install_php7x_fpm() {
 	# now install php packages, versions 5.6 & 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \
 		php5.6 libapache2-mod-php5.6 \
-		php5.6-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php5.6-{apcu,bcmath,cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php7.4 libapache2-mod-php7.4 \
-		php7.4-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php-{apcu,apcu-bc,gettext,imagick,pear} imagemagick mcrypt
+		php7.4-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 
 	# enable apache2 modules

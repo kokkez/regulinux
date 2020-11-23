@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# downgrading netplan networking system to the classic ifupdown
+# disable and remove netplan networking system in favor of the classic ifupdown
 # ------------------------------------------------------------------------------
 
 menu_networking() {

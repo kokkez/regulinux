@@ -18,9 +18,10 @@ install_php74_fpm() {
 	# now install php packages, versions 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \
 		php${V} libapache2-mod-php${V} \
-		php${V}-{bcmath,bz2,cgi,cli,curl,fpm,gd,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php-{apcu,apcu-bc,gettext,imagick,pear} imagemagick mcrypt
+		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+#		php-{memcache,memcached} memcached \
 
 	# enable apache2 modules
 	a2enmod proxy_fcgi setenvif fastcgi alias
