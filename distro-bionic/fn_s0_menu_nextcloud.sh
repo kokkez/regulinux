@@ -17,7 +17,6 @@ menu_nextcloud() {
 	CERT_OU="cloud-server"
 	menu_mailserver			# mailserver: postfix
 	menu_dbserver			# database server: mariadb
-#	menu_webserver			# webserver: apache with mod-php
 
 	# install apache2 webserver with php 7.4
 	install_apache2

@@ -1,12 +1,16 @@
 apt --installed list
 dpkg --get-selections > installed.txt
 lsb_release -sc
-#
-# setting up public dns resolvers (freenom.com)
-command cat > /etc/resolv.conf <<EOF
-nameserver 80.80.80.80
-nameserver 80.80.81.81
-EOF
+curl -LsO bench.monster/speedtest.sh; bash speedtest.sh -Europe
+# add swap 512M
+swapoff /swap.img
+fallocate -l 512M /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+swapon --show
+free -h
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
 #
 # upgrade debian 8 jessie to debian 9 stretch
 command cat <<EOF > /etc/apt/sources.list

@@ -16,7 +16,17 @@ menu_ispconfig() {
 	TARGET="ispconfig"
 	menu_mailserver			# mailserver: postfix + dovecot
 	menu_dbserver			# database server: mariadb
-	menu_webserver			# webserver: apache with php-fpm
+#	menu_webserver			# webserver: apache with php-fpm
+
+	# install apache2 webserver with php 7.4
+	install_apache2
+	install_php74_fpm
+	install_selfsigned_sslcert
+	install_pureftpd
+	install_adminer
+	install_webstats
+#	install_jailkit
+	install_fail2ban
 
 	# install ispconfig 3
 	install_ispconfig		# install ispconfig panel
