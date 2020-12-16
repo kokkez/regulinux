@@ -29,9 +29,9 @@ install_php73_fpm_nginx() {
 	cd /etc/nginx
 
 	# setting up the default DirectoryIndex
-	[ -r mods-available/dir.conf ] && {
+#	[ -r mods-available/dir.conf ] && {
 #		sed -ri 's|^(\s*DirectoryIndex).*|\1 index.php index.html|' mods-available/dir.conf
-	}
+#	}
 
 	# adjust date.timezone in all php.ini
 	sed -ri "s|^;(date\.timezone =).*|\1 '${TIME_ZONE}'|" /etc/php/*/*/php.ini

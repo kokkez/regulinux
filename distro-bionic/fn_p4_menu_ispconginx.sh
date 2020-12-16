@@ -2,7 +2,7 @@
 # install ISPConfig 3 control panel
 # ------------------------------------------------------------------------------
 
-menu_ispconfig() {
+menu_ispconginx() {
 	# abort if ispconfig 3.1.x was already installed
 	[ -d /usr/local/ispconfig ] && {
 		msg_alert "ISPConfig3 is already installed..."
@@ -21,7 +21,7 @@ menu_ispconfig() {
 	# install apache2 webserver with php 7.4
 	HTTP_SERVER="nginx"
 	install_nginx
-	install_php7x_fpm_nginx
+	install_php73_fpm_nginx
 	install_selfsigned_sslcert_nginx
 	install_pureftpd
 	install_adminer_nginx
@@ -31,4 +31,4 @@ menu_ispconfig() {
 
 	# install ispconfig 3
 	install_ispconfig		# install ispconfig panel
-}	# end menu_ispconfig
+}	# end menu_ispconginx

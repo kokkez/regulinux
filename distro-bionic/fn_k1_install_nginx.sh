@@ -13,7 +13,7 @@ install_nginx() {
 	msg_info "Installing nginx..."
 	pkg_install nginx ssl-cert
 
-	msg_info "Configuring apache2..."
+	msg_info "Configuring nginx..."
 
 	# shut off ServerTokens and ServerSignature
 #	[ -r conf-available/security.conf ] && {
