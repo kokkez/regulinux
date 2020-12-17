@@ -25,7 +25,7 @@ install_php73_fpm_nginx() {
 #		php-{memcache,memcached} memcached \
 
 	# set alternative for php in cli mode
-	cmd update-alternatives --set php /usr/bin/php${V}
+#	cmd update-alternatives --set php /usr/bin/php${V}
 	cmd update-alternatives --auto php
 
 	msg_info "Configuring PHP for nginx..."

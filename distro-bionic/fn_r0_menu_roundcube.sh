@@ -59,7 +59,7 @@ menu_roundcube() {
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
 	# install into sites-available of apache2
-	[ -d /etc/apache2 ] && {
+	[ -d /etc/apache2/sites-available ] && {
 		cd /etc/apache2
 		copy_to sites-available roundcube/roundcube.conf
 		[ -L sites-enabled/080-roundcube.conf ] || {

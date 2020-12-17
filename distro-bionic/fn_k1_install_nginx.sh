@@ -15,12 +15,12 @@ install_nginx() {
 
 	msg_info "Configuring nginx..."
 
-	# shut off ServerTokens and ServerSignature
-#	[ -r conf-available/security.conf ] && {
-#		sed -ri conf-available/security.conf \
-#			-e 's|^(ServerTokens).*|\1 Prod|' \
-#			-e 's|^(ServerSignature).*|\1 Off|'
-#	}
+	# shut off server_tokens
+	local F=/etc/nginx/nginx.conf
+	[ -r "${F}" ] && {
+		sed -ri ${F} \
+			-e 's|# server_tokens off;|server_tokens off;|'
+	}
 
 	# activating ports on firewall
 	firewall_allow "http"
