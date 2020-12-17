@@ -57,7 +57,7 @@ fail2ban-client status
 bash ~/lin*/arrange.sh deps
 bash ~/lin*/arrange.sh mailserver ispconfig
 bash ~/lin*/arrange.sh dbserver ispconfig
-bash ~/lin*/arrange.sh ispconfig
+bash ~/lin*/arrange.sh ispconfig nginx
 bash ~/lin*/arrange.sh resolv
 bash ~/lin*/arrange.sh ssh
 bash ~/lin*/arrange.sh

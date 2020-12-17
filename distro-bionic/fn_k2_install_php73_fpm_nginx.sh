@@ -7,8 +7,8 @@ install_php73_fpm_nginx() {
 	local V=7.3
 
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP${V} as MOD-PHP is already installed..."
+	is_installed "php${V}-fpm" && {
+		msg_alert "PHP${V} as PHP-FPM is already installed..."
 		return
 	}
 
@@ -37,8 +37,8 @@ install_php73_fpm_nginx() {
 	sed -ri "s|^;(date\.timezone =).*|\1 '${TIME_ZONE}'|" /etc/php/*/*/php.ini
 
 	# cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI
-	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
+	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 0|' /etc/php/*/fpm/php.ini
 
 	svc_evoke nginx restart
-	msg_info "Installation of PHP${V} as MOD-PHP completed!"
+	msg_info "Installation of PHP${V} as PHP-FPM completed!"
 }	# end install_php73_fpm_nginx
