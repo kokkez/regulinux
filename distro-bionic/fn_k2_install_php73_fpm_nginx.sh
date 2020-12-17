@@ -16,7 +16,9 @@ install_php73_fpm_nginx() {
 	add_php_repository
 
 	# now install php packages, versions 7.4, with some modules
-	pkg_install php${V} \
+	pkg_install php7.2 \
+		php7.2-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip}
+		php${V} \
 		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
@@ -24,6 +26,7 @@ install_php73_fpm_nginx() {
 
 	# set alternative for php in cli mode
 	cmd update-alternatives --set php /usr/bin/php${V}
+	cmd update-alternatives --auto php
 
 	msg_info "Configuring PHP for nginx..."
 	cd /etc/nginx
