@@ -36,8 +36,8 @@ install_adminer() {
 	copy_to . adminer/adminer.css
 	copy_to plugins adminer/plugins/*
 
+	# install the virtualhost file
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		# install the virtualhost file for nginx
 		cd /etc/nginx
 		do_copy "adminer/adminer.nginx" "sites-available/adminer.conf"
 		[ -L sites-enabled/080-adminer.conf ] || {
@@ -45,7 +45,6 @@ install_adminer() {
 			svc_evoke nginx restart
 		}
 	else
-		# install the virtualhost file for apache2
 		cd /etc/apache2
 		copy_to sites-available adminer/adminer.conf
 		[ -L sites-enabled/080-adminer.conf ] || {
