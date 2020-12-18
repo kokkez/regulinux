@@ -1,8 +1,9 @@
 server {
 	listen 80;
 	listen [::]:80;
-	server_name my.adminer;
-	root /var/www/myadminer/;
+
+	server_name $hostname;
+	root /var/www/myadminer;
 	index index.php;
 
 	access_log /var/log/nginx/myadminer_access.log;
@@ -20,10 +21,14 @@ server {
 		deny all;
 	}
 
-	location ~ \.php$ {
-		fastcgi_pass unix:/var/lib/php7.2-fpm/ispconfig.sock;
-		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-		include fastcgi_params;
-		include snippets/fastcgi-php.conf;
+	location /myadminer {
+		root /var/www;
+		index index.php;
+		#autoindex on;
+
+		location ~ \.php$ {
+			include snippets/fastcgi-php.conf;
+			fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+		}
 	}
 }
