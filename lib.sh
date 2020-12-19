@@ -489,6 +489,7 @@ detect_linux() {
 	for X in distro-${DISTRO}/fn_*; do . ${X}; done
 	MyFILES=$(pwd)/files-common
 	MyDISTRO=$(pwd)/distro-${DISTRO}/files
+	is_installed 'nginx' && HTTP_SERVER='nginx'
 }	# end detect_linux
 
 # ------------------------------------------------------------------------------

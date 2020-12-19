@@ -23,6 +23,12 @@ install_nginx() {
 			-e 's|# server_tokens off;|server_tokens off;|'
 	}
 
+	# add a generic includer to "default" in sites-available
+	U=/etc/nginx/sites-available/default
+	grep -q '-nginx.conf' ${U} || {
+		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' ${U}
+	}
+
 	# rename "default" in sites-enabled, if valid symlink
 	cd /etc/nginx/sites-enabled
 	[ -L "default" ] && mv "default" "0000-default"

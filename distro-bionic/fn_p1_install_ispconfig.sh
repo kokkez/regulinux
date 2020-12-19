@@ -39,10 +39,8 @@ install_ispconfig() {
 
 	# shortcut to connect to ispconfig thru port 8080
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		U=/etc/nginx/sites-available/default
-		grep -q 'ispconfig' ${U} || {
-			sed -i 's|_;|_;\n\trewrite /ispconfig/ https://$host:8080 permanent;|' ${U}
-		}
+		copy_to /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
+		svc_evoke nginx restart
 	else
 		# apache2
 		mkdir -p /var/www/html/ispconfig && cd "$_"
@@ -56,7 +54,7 @@ install_ispconfig() {
 		cmd mysql 'dbispconfig' < ${U}
 	}
 
-	# postfix setup
+	# postfix
 	# comment lines in 2 files of postfix
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
 	cmd postconf mydestination='$myorigin, localhost'

@@ -58,15 +58,6 @@ menu_roundcube() {
 	do_copy roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
-	# install into sites-available of apache2
-	[ -d /etc/apache2/sites-available ] && {
-		cd /etc/apache2
-		copy_to sites-available roundcube/roundcube.conf
-		[ -L sites-enabled/080-roundcube.conf ] || {
-			ln -s ../sites-available/roundcube.conf sites-enabled/080-roundcube.conf
-		}
-	}
-
 	# set permissions
 	cd ${D}
 	chown -R 0:0 .
@@ -113,8 +104,20 @@ EOF
 EOF
 	}
 
-	# activating some modules of apache2 then reload its configurations
-	a2enmod deflate expires headers
-	svc_evoke apache2 restart
+	# install the configuration file for webserver
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		copy_to /etc/nginx/snippets roundcube/roundcube-nginx.conf
+		svc_evoke nginx restart
+	else
+		cd /etc/apache2
+		copy_to sites-available roundcube/roundcube.conf
+		[ -L sites-enabled/080-roundcube.conf ] || {
+			ln -s ../sites-available/roundcube.conf sites-enabled/080-roundcube.conf
+		}
+		# activating some modules of apache2 then reload its configurations
+		a2enmod deflate expires headers
+		svc_evoke apache2 restart
+	fi;
+
 	msg_info "Installation of Roundcube ${V} completed!"
 }	# end menu_roundcube
