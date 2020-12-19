@@ -41,8 +41,7 @@ install_ispconfig() {
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		U=/etc/nginx/sites-available/default
 		grep -q 'ispconfig' ${U} || {
-			sed -ri ${U} \
-				-e 's|_;|_;\n\trewrite /ispconfig/ https://$host:8080 permanent;|'
+			sed -i 's|_;|_;\n\trewrite /ispconfig/ https://$host:8080 permanent;|' ${U}
 		}
 	else
 		# apache2
@@ -53,12 +52,30 @@ install_ispconfig() {
 	# load a customized database into dbispconfig
 	U=$(detect_path ispconfig/dbispconfig-${V}.sql)
 	[ -n "${U}" ] && {
-		[ "${HTTP_SERVER}" = "nginx" ] && sed -ri ${U} -e 's|=apache\\|=nginx\\|'
+		[ "${HTTP_SERVER}" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' ${U}
 		cmd mysql 'dbispconfig' < ${U}
 	}
 
-	# commenting lines in 2 new files of postfix
+	# postfix setup
+	# comment lines in 2 files of postfix
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
+	cmd postconf mydestination='$myorigin, localhost'
+	cmd postconf -# relayhost smtpd_restriction_classes greylisting
+	U=/etc/postfix/main.cf
+	grep -q 'relaying' ${U} || {
+		M="### ----------------------------------------------------------------------------
+### relaying via an external SMTP
+### ----------------------------------------------------------------------------
+smtp_sasl_auth_enable = yes
+smtp_always_send_ehlo = yes
+smtp_sasl_security_options = noanonymous
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+relayhost = [smtp-e.rete.us]:587
+smtp_fallback_relay = [smtp-m.rete.us]:587
+### ----------------------------------------------------------------------------\n"
+		perl -i -pe "s|# TLS|${M}\n# TLS|g" ${U}
+	}
+	copy_to /etc/postfix/ postfix/sasl_passwd
 
 	# activating ports on firewall
 	firewall_allow "ispconfig"

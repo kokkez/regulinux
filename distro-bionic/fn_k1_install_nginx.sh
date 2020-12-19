@@ -17,7 +17,7 @@ install_nginx() {
 
 	# shut off server_tokens
 	local F=/etc/nginx/nginx.conf
-	[ -r "${F}" ] && {
+	[ -s "${F}" ] && {
 		sed -ri ${F} \
 			-e 's|# server_names_hash_bucket_size 64;|server_names_hash_bucket_size 64;|' \
 			-e 's|# server_tokens off;|server_tokens off;|'
