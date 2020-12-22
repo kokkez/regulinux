@@ -168,7 +168,7 @@ is_symlink() {
 # ------------------------------------------------------------------------------
 
 my_path() {
-	# returns: full path from MyDISTRO / MyFILES, or an empty string
+	# returns: full path from one of MyDISTRO / MyFILES, or an empty string
 	# $1: relative path to find
 	cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${MyFILES}/${1} 2>/dev/null
 };	# end my_path
@@ -176,7 +176,7 @@ my_path() {
 # ------------------------------------------------------------------------------
 
 do_copy() {
-	# copy a single file from one of MyDISTRO MyFILES to destination path
+	# copy a single file from one of MyDISTRO / MyFILES to destination path
 	# $1: myFileName
 	# $2: destinationFullPath
 	local F=$(my_path ${1-missing}) D=${2}

@@ -108,6 +108,58 @@ acme_webserver_conf() {
 }	# end acme_webserver_conf
 
 
+acme_paths_conf() {
+	# adjust paths to points to those of the acme certificates
+	# $1 - path to server key
+	# $2 - path to server certificate
+	local P
+
+	# ispconfig paths
+	[ -d /usr/local/ispconfig/interface/ssl ] && {
+		cd /usr/local/ispconfig/interface/ssl
+		is_symlink 'ispserver.key' || {
+			mv -f ispserver.key ispserver.key.bak
+			ln -s ${1} ispserver.key
+		}
+		is_symlink 'ispserver.crt' || {
+			mv -f ispserver.crt ispserver.crt.bak
+			ln -s ${2} ispserver.crt
+		}
+	}
+
+	# nginx paths
+	[ -d /etc/nginx ] && {
+		svc_evoke nginx restart
+	}
+
+	# apache2 paths
+	[ -d /etc/apache2 ] && {
+		cd /etc/apache2
+		P=sites-available/default-ssl
+		[ -s "${P}.conf" ] && P="${P}.conf"
+		[ -s "${P}" ] && {
+			sed -ri ${P} \
+				-e "s|^(\s*SSLCertificateFile).*|\1 ${2}|" \
+				-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${1}|"
+			# adjust symlink
+			is_symlink sites-enabled/0000-default-ssl.conf || {
+				ln -s ../${P} sites-enabled/0000-default-ssl.conf
+				rm -rf sites-enabled/default-ssl*
+			}
+			# enable related apache2 modules
+			a2enmod rewrite headers ssl
+		}
+		P=sites-available/ispconfig.vhost
+		[ -s "${P}" ] && {
+			sed -ri ${P} \
+				-e "s|^(\s*SSLCertificateFile).*|\1 ${2}|" \
+				-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${1}|"
+		}
+		svc_evoke apache2 restart		# restarting apache
+	}
+}	# end acme_paths_conf
+
+
 menu_acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
@@ -131,7 +183,7 @@ menu_acme() {
 	C=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "${W}"
+	bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "${W}"
 	[ "$?" -eq 0 ] || return	# dont continue on error
 
 	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \
@@ -139,38 +191,6 @@ menu_acme() {
 		--fullchainpath "${C}" \
 		--reloadcmd "systemctl restart ${HTTP_SERVER}"
 
-
-
-
-
-
-
-
-	# edit /etc/apache2/sites-available/default-ssl
-	cd /etc/apache2
-	CNF=sites-available/default-ssl
-	[ -s "${CNF}.conf" ] && CNF="${CNF}.conf"
-	[ -s "${CNF}" ] && {
-		#	SSLCertificateFile		/etc/ssl/myserver/server.cert
-		#	SSLCertificateKeyFile	/etc/ssl/myserver/server.key
-		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${C}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${K}|"
-
-		# enable related apache2 modules & site
-		[ -L sites-enabled/0000-default-ssl.conf ] || {
-			ln -s ../${CNF} sites-enabled/0000-default-ssl.conf
-			rm -rf sites-enabled/default-ssl*
-		}
-		a2enmod rewrite headers ssl
-	}
-	CNF=sites-available/ispconfig.vhost
-	[ -s "${CNF}" ] && {
-		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${C}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${K}|"
-	}
-	service apache2 restart		# restarting apache
-
+	acme_paths_conf "${K}" "${C}"
 	msg_info "Installation of acme.sh completed!"
 }	# end menu_acme
