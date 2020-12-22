@@ -77,38 +77,7 @@ acme_ic30() {
 }	# end acme_ic30
 
 
-
-
-
-
-
-
-
-
-acme_webroot() {
-	# returns the webroot for the acme.sh script
-	[ -d /usr/local/ispconfig/interface/acme ] && {
-		echo "/usr/local/ispconfig/interface/acme"	# ispconfig 3.1 webroot
-	} || {
-		echo "/var/www/acme-webroot"				# default webroot
-	}
-}	# end acme_webroot
-
-
-acme_webserver_conf() {
-	# install configurations for webserver
-	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		copy_to /etc/nginx/snippets acme/acme-webroot-nginx.conf
-		svc_evoke nginx restart
-	else
-		HTTP_SERVER="apache2"
-		#copy_to /etc/apache2 acme/acme-webroot-apache2.conf
-		svc_evoke apache2 restart
-	fi;
-}	# end acme_webserver_conf
-
-
-menu_acme() {
+menu_acmex() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
 		msg_alert "The acme.sh script is already installed..."
@@ -119,32 +88,26 @@ menu_acme() {
 	msg_info "Installing acme.sh script..."
 	acme_get
 
-	# get the webroot
-	local K C W=$(acme_webroot)
-
-	# creating the full path to the challenge folder
-	mkdir -p "${W}/.well-known/acme-challenge"
-	acme_webserver_conf
+	# detect ispconfig version 3.1
+	[ -d /usr/local/ispconfig/interface/acme/.well-known/acme-challenge ] && {
+		acme_ic31
+	} || {
+		acme_ic30
+	}
+	svc_evoke apache2 restart	# require an apache restart
 
 	# issue the cert
-	K=/etc/ssl/myserver/server.key
-	C=/etc/ssl/myserver/server.cert
+	KEY=/etc/ssl/myserver/server.key
+	CRT=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "${W}"
-	[ "$?" -eq 0 ] || return	# dont continue on error
+	bash ~/.acme.sh/acme.sh --issue --stateless -d "${HOST_FQDN}"
+	[ "$?" -eq 0 ] || return	# dont comtinue on error
 
 	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \
-		--keypath "${K}" \
-		--fullchainpath "${C}" \
-		--reloadcmd "systemctl restart ${HTTP_SERVER}"
-
-
-
-
-
-
-
+		--keypath "${KEY}" \
+		--fullchainpath "${CRT}" \
+		--reloadcmd "systemctl restart apache2"
 
 	# edit /etc/apache2/sites-available/default-ssl
 	cd /etc/apache2
@@ -154,8 +117,8 @@ menu_acme() {
 		#	SSLCertificateFile		/etc/ssl/myserver/server.cert
 		#	SSLCertificateKeyFile	/etc/ssl/myserver/server.key
 		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${C}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${K}|"
+			-e "s|^(\s*SSLCertificateFile).*|\1 ${CRT}|" \
+			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${KEY}|"
 
 		# enable related apache2 modules & site
 		[ -L sites-enabled/0000-default-ssl.conf ] || {
@@ -167,10 +130,10 @@ menu_acme() {
 	CNF=sites-available/ispconfig.vhost
 	[ -s "${CNF}" ] && {
 		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${C}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${K}|"
+			-e "s|^(\s*SSLCertificateFile).*|\1 ${CRT}|" \
+			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${KEY}|"
 	}
 	service apache2 restart		# restarting apache
 
 	msg_info "Installation of acme.sh completed!"
-}	# end menu_acme
+}	# end menu_acmex

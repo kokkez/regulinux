@@ -10,7 +10,10 @@ menu_mykeys() {
 	[ -r authorized_keys ] || copy_to . ssh/authorized_keys
 
 	# append content
-	grep -q "kokkez" authorized_keys || cat "${MyFILES}/ssh/authorized_keys" >> authorized_keys
+	grep -q "kokkez" authorized_keys || {
+		local K=$(my_path ssh/authorized_keys)
+		[ -z "${K}" ] || cat "${K}" >> authorized_keys
+	}
 	cmd chmod 0600 authorized_keys
 
 	# copy preferences for htop

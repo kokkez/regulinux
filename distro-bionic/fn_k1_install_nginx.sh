@@ -31,7 +31,7 @@ install_nginx() {
 
 	# rename "default" in sites-enabled, if valid symlink
 	cd /etc/nginx/sites-enabled
-	[ -L "default" ] && mv "default" "0000-default"
+	is_symlink "default" && mv "default" "0000-default"
 
 	# activating ports on firewall
 	firewall_allow "http"

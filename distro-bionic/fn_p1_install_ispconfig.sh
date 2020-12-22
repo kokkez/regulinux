@@ -48,7 +48,7 @@ install_ispconfig() {
 	fi;
 
 	# load a customized database into dbispconfig
-	U=$(detect_path ispconfig/dbispconfig-${V}.sql)
+	U=$(my_path ispconfig/dbispconfig-${V}.sql)
 	[ -n "${U}" ] && {
 		[ "${HTTP_SERVER}" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' ${U}
 		cmd mysql 'dbispconfig' < ${U}
