@@ -17,29 +17,6 @@ sslcert_paths() {
 	# adjust paths to points to these certificates
 	# $1 - path to the key file
 	# $2 - path to the certificate file
-	local P
-
-	# ispconfig paths
-	[ -s /usr/local/ispconfig/interface/ssl/ispserver.crt ] && {
-		cd /usr/local/ispconfig/interface/ssl
-		sslcert_symlinks 'ispserver.key' ${1}
-		sslcert_symlinks 'ispserver.crt' ${2}
-	}
-
-	# postfix paths
-	[ -s /etc/postfix/smtpd.cert ] && {
-		cd /etc/postfix
-		sslcert_symlinks 'smtpd.key' ${1}
-		sslcert_symlinks 'smtpd.cert' ${2}
-	}
-
-	# default certificates path
-	[ -s /etc/ssl/certs/ssl-cert-snakeoil.pem ] && {
-		cd /etc/ssl/private
-		sslcert_symlinks 'ssl-cert-snakeoil.key' ${1}
-		cd /etc/ssl/certs
-		sslcert_symlinks 'ssl-cert-snakeoil.pem' ${2}
-	}
 
 	# adjust default-ssl symlink for apache
 	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {
@@ -51,6 +28,28 @@ sslcert_paths() {
 		# enable related modules, then restart apache2
 		a2enmod rewrite headers ssl
 		svc_evoke apache2 restart
+	}
+
+	# default certificates path
+	[ -s /etc/ssl/certs/ssl-cert-snakeoil.pem ] && {
+		cd /etc/ssl/private
+		sslcert_symlinks 'ssl-cert-snakeoil.key' ${1}
+		cd /etc/ssl/certs
+		sslcert_symlinks 'ssl-cert-snakeoil.pem' ${2}
+	}
+
+	# postfix paths
+	[ -s /etc/postfix/smtpd.cert ] && {
+		cd /etc/postfix
+		sslcert_symlinks 'smtpd.key' ${1}
+		sslcert_symlinks 'smtpd.cert' ${2}
+	}
+
+	# ispconfig paths
+	[ -s /usr/local/ispconfig/interface/ssl/ispserver.crt ] && {
+		cd /usr/local/ispconfig/interface/ssl
+		sslcert_symlinks 'ispserver.key' ${1}
+		sslcert_symlinks 'ispserver.crt' ${2}
 	}
 }	# end sslcert_paths
 

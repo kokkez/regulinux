@@ -30,7 +30,6 @@ menu_ispconfig() {
 		install_php74_fpm
 	fi;
 
-	install_selfsigned_sslcert
 	install_adminer
 	install_pureftpd
 	install_webstats
@@ -39,4 +38,5 @@ menu_ispconfig() {
 
 	# install ispconfig 3
 	install_ispconfig		# install ispconfig panel
+	install_selfsigned_sslcert
 }	# end menu_ispconfig
