@@ -23,15 +23,14 @@ menu_ispconfig() {
 		# install nginx webserver with php 7.3
 		install_nginx
 		install_php73_fpm_nginx
-		install_selfsigned_sslcert_nginx
 	else
 		HTTP_SERVER="apache"
 		# install apache2 webserver with php 7.4
 		install_apache2
 		install_php74_fpm
-		install_selfsigned_sslcert
 	fi;
 
+	install_selfsigned_sslcert
 	install_adminer
 	install_pureftpd
 	install_webstats
