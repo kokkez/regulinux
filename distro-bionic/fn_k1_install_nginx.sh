@@ -28,6 +28,10 @@ install_nginx() {
 	grep -q '-nginx.conf' ${U} || {
 		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' ${U}
 	}
+	# enabling SSL
+	sed -i ${F} \
+		-e 's|# listen |listen |g' \
+		-e 's|# include |include |g'
 
 	# rename "default" in sites-enabled, if valid symlink
 	cd /etc/nginx/sites-enabled

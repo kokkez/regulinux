@@ -41,10 +41,10 @@ install_adminer() {
 		copy_to /etc/nginx/snippets adminer/adminer-nginx.conf
 		svc_evoke nginx restart
 	else
-		cd /etc/apache2
-		copy_to sites-available adminer/adminer.conf
-		[ -L sites-enabled/080-adminer.conf ] || {
-			ln -s ../sites-available/adminer.conf sites-enabled/080-adminer.conf
+		cd /etc/apache2/sites-enabled
+		is_symlink '080-adminer.conf' || {
+			copy_to ../sites-available adminer/adminer.conf
+			ln -s ../sites-available/adminer.conf '080-adminer.conf'
 			svc_evoke apache2 restart
 		}
 	fi;

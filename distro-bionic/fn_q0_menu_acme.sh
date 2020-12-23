@@ -64,7 +64,8 @@ menu_acme() {
 	C=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "${W}"
+	#bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "${W}"
+	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "${W}"
 	[ "$?" -eq 0 ] || return	# dont continue on error
 
 	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \

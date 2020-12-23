@@ -35,8 +35,8 @@ menu_ispconfig() {
 	install_webstats
 #	install_jailkit
 	install_fail2ban
+	install_selfsigned_sslcert
 
 	# install ispconfig 3
 	install_ispconfig		# install ispconfig panel
-	install_selfsigned_sslcert
 }	# end menu_ispconfig

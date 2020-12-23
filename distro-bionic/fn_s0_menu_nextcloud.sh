@@ -21,8 +21,8 @@ menu_nextcloud() {
 	# install apache2 webserver with php 7.4
 	install_apache2
 	install_php74_fpm
-	install_selfsigned_sslcert
 	install_adminer
+	install_selfsigned_sslcert
 
 	install_nextcloud 		# install nextcloud
 	install_varnish			# install the cache system
