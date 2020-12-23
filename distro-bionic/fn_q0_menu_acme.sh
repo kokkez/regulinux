@@ -44,61 +44,6 @@ acme_webserver_conf() {
 }	# end acme_webserver_conf
 
 
-acme_symlink_file() {
-	# create the symlink pointing to the homolog in /etc/ssl/myserver
-	# $1 - file name to convert to symlink
-	# $2 - path to the homolog in /etc/ssl/myserver
-	is_symlink ${1} || {
-		mv -f ${1} ${1}.bak
-		ln -s ${2} ${1}
-	}
-}	# end acme_symlink_file
-
-
-acme_paths_conf() {
-	# adjust paths to points to those of the acme certificates
-	# $1 - path to server key
-	# $2 - path to server certificate
-	local P
-
-	# ispconfig paths
-	[ -d /usr/local/ispconfig/interface/ssl ] && {
-		cd /usr/local/ispconfig/interface/ssl
-		acme_symlink_file 'ispserver.key' ${1}
-		acme_symlink_file 'ispserver.crt' ${2}
-	}
-
-	# postfix paths
-	[ -s /etc/postfix/smtpd.cert ] && {
-		cd /etc/postfix
-		acme_symlink_file 'smtpd.key' ${1}
-		acme_symlink_file 'smtpd.cert' ${2}
-	}
-
-	# nginx paths
-	[ -d /etc/nginx ] && {
-		svc_evoke nginx restart
-	}
-
-	# apache2 paths
-	[ -d /etc/apache2 ] && {
-		cd /etc/ssl/private
-		acme_symlink_file 'ssl-cert-snakeoil.key' ${1}
-		cd /etc/ssl/certs
-		acme_symlink_file 'ssl-cert-snakeoil.pem' ${2}
-		# adjust default-ssl symlink
-		cd /etc/apache2/sites-enabled
-		is_symlink '0000-default-ssl.conf' || {
-			ln -s ../sites-available/default-ssl.conf '0000-default-ssl.conf'
-			rm -rf default-ssl*
-		}
-		# enable related modules, then restart apache2
-		a2enmod rewrite headers ssl
-		svc_evoke apache2 restart
-	}
-}	# end acme_paths_conf
-
-
 menu_acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
@@ -127,6 +72,6 @@ menu_acme() {
 		--fullchainpath "${C}" \
 		--reloadcmd "systemctl restart ${HTTP_SERVER}"
 
-	acme_paths_conf "${K}" "${C}"
+	sslcert_paths "${K}" "${C}"
 	msg_info "Installation of acme.sh completed!"
 }	# end menu_acme
