@@ -2,6 +2,17 @@
 # install a self-signed certificate
 # ------------------------------------------------------------------------------
 
+sslcert_symlink_file() {
+	# create the symlink pointing to a real file
+	# $1 - file name to convert to symlink
+	# $2 - path to the real file
+	is_symlink ${1} || {
+		mv -f ${1} ${1}.bak
+		ln -s ${2} ${1}
+	}
+}	# end sslcert_symlink_file
+
+
 install_selfsigned_sslcert() {
 	# create a self-signed certificate
 	local D=/etc/ssl/myserver
@@ -23,23 +34,20 @@ install_selfsigned_sslcert() {
 		-subj "/C=${CERT_C}/ST=${CERT_ST}/L=${CERT_L}/O=${CERT_O}/OU=${CERT_OU}/CN=${CERT_CN}/emailAddress=${CERT_E}"
 #	chmod 600 "${D}.key"
 
-	# create symlinks for apache
-	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {
-		cd /etc/ssl/certs
-		is_symlink 'ssl-cert-snakeoil.pem' || {
-			mv -f ssl-cert-snakeoil.pem ssl-cert-snakeoil.pem.bak
-			ln -s ${D}.cert ssl-cert-snakeoil.pem
-		}
+	# create symlinks for certificates
+	[ -s /etc/ssl/certs/ssl-cert-snakeoil.pem ] && {
 		cd /etc/ssl/private
-		is_symlink 'ssl-cert-snakeoil.key' || {
-			mv -f ssl-cert-snakeoil.key ssl-cert-snakeoil.key.bak
-			ln -s ${D}.key ssl-cert-snakeoil.key
-		}
-		# adjust default-ssl symlink
-		cd /etc/apache2
-		is_symlink sites-enabled/0000-default-ssl.conf || {
-			ln -s ../sites-available/default-ssl.conf sites-enabled/0000-default-ssl.conf
-			rm -rf sites-enabled/default-ssl*
+		sslcert_symlink_file 'ssl-cert-snakeoil.key' ${D}.keyw
+		cd /etc/ssl/certs
+		sslcert_symlink_file 'ssl-cert-snakeoil.pem' ${D}.cert
+	}
+
+	# adjust default-ssl symlink for apache
+	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {
+		cd /etc/apache2/sites-enabled
+		is_symlink '0000-default-ssl.conf' || {
+			ln -s ../sites-available/default-ssl.conf '0000-default-ssl.conf'
+			rm -rf default-ssl*
 		}
 		# enable related modules, then restart apache2
 		a2enmod rewrite headers ssl
