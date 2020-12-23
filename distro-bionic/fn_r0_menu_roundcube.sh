@@ -109,10 +109,10 @@ EOF
 		copy_to /etc/nginx/snippets roundcube/roundcube-nginx.conf
 		svc_evoke nginx restart
 	else
-		cd /etc/apache2
-		copy_to sites-available roundcube/roundcube.conf
-		[ -L sites-enabled/080-roundcube.conf ] || {
-			ln -s ../sites-available/roundcube.conf sites-enabled/080-roundcube.conf
+		cd /etc/apache2/sites-enabled
+		is_symlink '080-roundcube.conf' || {
+			copy_to ../sites-available roundcube/roundcube.conf
+			ln -s ../sites-available/roundcube.conf '080-roundcube.conf'
 		}
 		# activating some modules of apache2 then reload its configurations
 		a2enmod deflate expires headers

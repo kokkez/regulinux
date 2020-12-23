@@ -18,9 +18,9 @@ install_nginx() {
 	# shut off server_tokens
 	local F=/etc/nginx/nginx.conf
 	[ -s "${F}" ] && {
-		sed -ri ${F} \
-			-e 's|# server_names_hash_bucket_size 64;|server_names_hash_bucket_size 64;|' \
-			-e 's|# server_tokens off;|server_tokens off;|'
+		sed -i ${F} \
+			-e 's|# server_names_|server_names_|' \
+			-e 's|# server_tokens|server_tokens|'
 	}
 
 	# add a generic includer to "default" in sites-available
@@ -29,9 +29,9 @@ install_nginx() {
 		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' ${U}
 	}
 	# enabling SSL
-	sed -i ${F} \
+	sed -i ${U} \
 		-e 's|# listen |listen |g' \
-		-e 's|# include |include |g'
+		-e 's|# include |include |'
 
 	# rename "default" in sites-enabled, if valid symlink
 	cd /etc/nginx/sites-enabled
