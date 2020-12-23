@@ -33,7 +33,7 @@ acme_webserver_conf() {
 		svc_evoke nginx restart
 	else
 		HTTP_SERVER="apache2"
-		(( ${#1} < 22 )) && {
+		(( ${#1} > 22 )) && {
 			cd /etc/apache2/conf-available
 			copy_to . acme/acme-webroot-apache2.conf
 			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
@@ -42,6 +42,17 @@ acme_webserver_conf() {
 		svc_evoke apache2 restart
 	fi;
 }	# end acme_webserver_conf
+
+
+acme_symlink_file() {
+	# create the symlink pointing to the homolog in /etc/ssl/myserver
+	# $1 - file name to convert to symlink
+	# $2 - path to the homolog in /etc/ssl/myserver
+	is_symlink ${1} || {
+		mv -f ${1} ${1}.bak
+		ln -s ${2} ${1}
+	}
+}	# end acme_symlink_file
 
 
 acme_paths_conf() {
@@ -53,14 +64,15 @@ acme_paths_conf() {
 	# ispconfig paths
 	[ -d /usr/local/ispconfig/interface/ssl ] && {
 		cd /usr/local/ispconfig/interface/ssl
-		is_symlink 'ispserver.key' || {
-			mv -f ispserver.key ispserver.key.bak
-			ln -s ${1} ispserver.key
-		}
-		is_symlink 'ispserver.crt' || {
-			mv -f ispserver.crt ispserver.crt.bak
-			ln -s ${2} ispserver.crt
-		}
+		acme_symlink_file 'ispserver.key' ${1}
+		acme_symlink_file 'ispserver.crt' ${2}
+	}
+
+	# postfix paths
+	[ -s /etc/postfix/smtpd.cert ] && {
+		cd /etc/postfix
+		acme_symlink_file 'smtpd.key' ${1}
+		acme_symlink_file 'smtpd.cert' ${2}
 	}
 
 	# nginx paths
@@ -70,21 +82,15 @@ acme_paths_conf() {
 
 	# apache2 paths
 	[ -d /etc/apache2 ] && {
-		cd /etc/ssl/certs
-		is_symlink 'ssl-cert-snakeoil.pem' || {
-			mv -f ssl-cert-snakeoil.pem ssl-cert-snakeoil.pem.bak
-			ln -s ${2} ssl-cert-snakeoil.pem
-		}
 		cd /etc/ssl/private
-		is_symlink 'ssl-cert-snakeoil.key' || {
-			mv -f ssl-cert-snakeoil.key ssl-cert-snakeoil.key.bak
-			ln -s ${1} ssl-cert-snakeoil.key
-		}
+		acme_symlink_file 'ssl-cert-snakeoil.key' ${1}
+		cd /etc/ssl/certs
+		acme_symlink_file 'ssl-cert-snakeoil.pem' ${2}
 		# adjust default-ssl symlink
-		cd /etc/apache2
-		is_symlink sites-enabled/0000-default-ssl.conf || {
-			ln -s ../sites-available/default-ssl.conf sites-enabled/0000-default-ssl.conf
-			rm -rf sites-enabled/default-ssl*
+		cd /etc/apache2/sites-enabled
+		is_symlink '0000-default-ssl.conf' || {
+			ln -s ../sites-available/default-ssl.conf '0000-default-ssl.conf'
+			rm -rf default-ssl*
 		}
 		# enable related modules, then restart apache2
 		a2enmod rewrite headers ssl
