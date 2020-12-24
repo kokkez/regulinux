@@ -16,7 +16,7 @@ function adminer_object() {
 			"performance_schema",
 		)),
 		new AdminerReadableDates(),
-		new AdminerSqlLog('sql.log'),
+		#new AdminerSqlLog('sql.log'),
 		new AdminerMultiTablesFilter,
 	);
 
