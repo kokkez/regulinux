@@ -64,6 +64,6 @@ config_postfix_assp() {
 		sed -i 's|^smtp      inet|1025      inet|' master.cf
 	}
 
-	svc_evoke postfix restart
+	cmd systemctl restart postfix
 	msg_info "Configuration of postfix completed!"
 }	# end config_postfix_assp

@@ -40,7 +40,7 @@ install_ispconfig() {
 	# shortcut to connect to ispconfig thru port 8080
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		copy_to /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
-		svc_evoke nginx restart
+		cmd systemctl restart nginx
 	else
 		# apache2
 		mkdir -p /var/www/html/ispconfig && cd "$_"
@@ -74,6 +74,7 @@ smtp_fallback_relay = [smtp-m.rete.us]:587
 		perl -i -pe "s|# TLS|${M}\n# TLS|g" ${U}
 	}
 	copy_to /etc/postfix/ postfix/sasl_passwd
+	cmd systemctl restart postfix
 
 	# activating ports on firewall
 	firewall_allow "ispconfig"

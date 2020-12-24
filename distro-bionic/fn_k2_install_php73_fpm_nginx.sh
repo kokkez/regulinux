@@ -31,17 +31,12 @@ install_php73_fpm_nginx() {
 	msg_info "Configuring PHP for nginx..."
 	cd /etc/nginx
 
-	# setting up the default DirectoryIndex
-#	[ -r mods-available/dir.conf ] && {
-#		sed -ri 's|^(\s*DirectoryIndex).*|\1 index.php index.html|' mods-available/dir.conf
-#	}
-
 	# adjust date.timezone in all php.ini
 	sed -ri "s|^;(date\.timezone =).*|\1 '${TIME_ZONE}'|" /etc/php/*/*/php.ini
 
 	# cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 0|' /etc/php/*/fpm/php.ini
 
-	svc_evoke nginx restart
+	cmd systemctl restart nginx
 	msg_info "Installation of PHP${V} as PHP-FPM completed!"
 }	# end install_php73_fpm_nginx

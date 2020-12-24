@@ -30,7 +30,7 @@ acme_webserver_conf() {
 		cd /etc/nginx/snippets
 		copy_to . acme/acme-webroot-nginx.conf
 		sed -i "s|WEBROOT|${1}|g" acme-webroot-nginx.conf
-		svc_evoke nginx restart
+		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
 		(( ${#1} > 22 )) && {
@@ -39,7 +39,7 @@ acme_webserver_conf() {
 			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
 			ln -s '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}
-		svc_evoke apache2 restart
+		cmd systemctl restart apache2
 	fi;
 }	# end acme_webserver_conf
 

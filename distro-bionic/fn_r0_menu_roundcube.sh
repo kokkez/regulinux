@@ -107,7 +107,7 @@ EOF
 	# install the configuration file for webserver
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		copy_to /etc/nginx/snippets roundcube/roundcube-nginx.conf
-		svc_evoke nginx restart
+		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled
 		is_symlink '080-roundcube.conf' || {
@@ -116,7 +116,7 @@ EOF
 		}
 		# activating some modules of apache2 then reload its configurations
 		a2enmod deflate expires headers
-		svc_evoke apache2 restart
+		cmd systemctl restart apache2
 	fi;
 
 	msg_info "Installation of Roundcube ${V} completed!"

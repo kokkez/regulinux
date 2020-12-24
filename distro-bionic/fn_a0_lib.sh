@@ -2,18 +2,11 @@
 # customized functions for ubuntu bionic
 # ------------------------------------------------------------------------------
 
-svc_evoke() {
-	# try to filter the service/init.d calls, for future upgrades
-	local s=${1:-apache2} a=${2:-status}
-
-	# stop if service is unavailable
-	is_available "${s}" || return
-
-	msg_info "Evoking ${s}.service to execute job ${a}..."
-
-	[ "${a}" = "reload" ] && a="reload-or-restart"
-	cmd systemctl ${a} ${s}.service
-}	# end svc_evoke
+cmd() {
+	# try run a real command, not an aliased version
+	# on missing command, or error, it silently returns
+	[ -n "${1}" ] && [ -n "$(command -v ${1})" ] && command "${@}"
+};	# end cmd
 
 # ------------------------------------------------------------------------------
 
@@ -25,13 +18,6 @@ menu_upgrade() {
 	export DEBIAN_FRONTEND=noninteractive
 	cmd apt -qy full-upgrade
 }	# end menu_upgrade
-
-# ------------------------------------------------------------------------------
-
-numeric_version() {
-	# return the cleaned numeric version of a program version
-	cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "${@}"
-}	# end numeric_version
 
 # ------------------------------------------------------------------------------
 

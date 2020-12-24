@@ -31,6 +31,6 @@ install_fail2ban() {
 		sed -i 's|/var||' ${X}
 	}
 
-	svc_evoke fail2ban restart
+	cmd systemctl restart fail2ban
 	msg_info "Installation of Fail2ban completed!"
 }	# end install_fail2ban

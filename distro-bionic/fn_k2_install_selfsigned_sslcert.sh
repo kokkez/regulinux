@@ -27,7 +27,7 @@ sslcert_paths() {
 		}
 		# enable related modules, then restart apache2
 		a2enmod rewrite headers ssl
-		svc_evoke apache2 restart
+		cmd systemctl restart apache2
 	}
 
 	# default certificates path

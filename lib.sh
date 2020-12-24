@@ -102,6 +102,13 @@ date_fmt() {
 
 # ------------------------------------------------------------------------------
 
+numeric_version() {
+	# return the cleaned numeric version of a program
+	cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "${@}"
+}	# end numeric_version
+
+# ------------------------------------------------------------------------------
+
 drop_folder() {
 	# if directory exists then delete it
 	# $1: path to folder

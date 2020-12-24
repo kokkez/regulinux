@@ -37,17 +37,17 @@ filter      = dovecot
 logpath     = /var/log/mail.log
 maxretry    = 5
 
-[roundcube-auth]
-enabled     = false
-logpath     = /var/www/roundcube/logs/userlogins.log
+#[roundcube-auth]
+#enabled     = false
+#logpath     = /var/www/roundcube/logs/userlogins.log
 
-[apache-nohome]
-enabled     = true
-port        = http,https
-filter      = apache-nohome
-logpath     = /var/log/apache2/error.log
-maxretry    = 5
-findtime    = 3600 ; 1 hour
+#[apache-nohome]
+#enabled     = true
+#port        = http,https
+#filter      = apache-nohome
+#logpath     = /var/log/apache2/error.log
+#maxretry    = 5
+#findtime    = 3600 ; 1 hour
 
 [recidive]
 enabled     = true

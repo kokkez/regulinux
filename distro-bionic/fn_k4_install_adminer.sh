@@ -39,13 +39,13 @@ install_adminer() {
 	# install the configuration file for webserver
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		copy_to /etc/nginx/snippets adminer/adminer-nginx.conf
-		svc_evoke nginx restart
+		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled
 		is_symlink '080-adminer.conf' || {
 			copy_to ../sites-available adminer/adminer.conf
 			ln -s ../sites-available/adminer.conf '080-adminer.conf'
-			svc_evoke apache2 restart
+			cmd systemctl restart apache2
 		}
 	fi;
 

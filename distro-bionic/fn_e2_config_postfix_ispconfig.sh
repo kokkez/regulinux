@@ -25,6 +25,6 @@ config_postfix_ispconfig() {
 		-e 's|#(  -o smtpd_sa)|\1|' \
 		-e 's|#(smtps)|\1|'
 
-	svc_evoke postfix restart
+	cmd systemctl restart postfix
 	msg_info "Configuration of postfix completed!"
 }	# end config_postfix_ispconfig
