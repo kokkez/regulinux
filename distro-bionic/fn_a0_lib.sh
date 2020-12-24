@@ -2,14 +2,6 @@
 # customized functions for ubuntu bionic
 # ------------------------------------------------------------------------------
 
-cmd() {
-	# try run a real command, not an aliased version
-	# on missing command, or error, it silently returns
-	[ -n "${1}" ] && [ -n "$(command -v ${1})" ] && command "${@}"
-};	# end cmd
-
-# ------------------------------------------------------------------------------
-
 menu_upgrade() {
 	msg_info "Upgrading system packages for ${OS} (${DISTRO})..."
 	pkg_update	# update packages lists
