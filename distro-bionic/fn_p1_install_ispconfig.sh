@@ -76,6 +76,12 @@ smtp_fallback_relay = [smtp-m.rete.us]:587
 	copy_to /etc/postfix/ postfix/sasl_passwd
 	cmd systemctl restart postfix
 
+	# symlink the certificate paths
+	[ -d /etc/ssl/myserver ] && {
+		U=/etc/ssl/myserver/server
+		sslcert_paths "${U}.key" "${U}.cert"
+	}
+
 	# activating ports on firewall
 	firewall_allow "ispconfig"
 

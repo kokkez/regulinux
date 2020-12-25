@@ -30,13 +30,13 @@ menu_ispconfig() {
 		install_php74_fpm
 	fi;
 
+	install_selfsigned_sslcert
 	install_adminer
 	install_pureftpd
 	install_webstats
 #	install_jailkit
 	install_fail2ban
-	install_selfsigned_sslcert
 
-	# install ispconfig 3
-	install_ispconfig		# install ispconfig panel
+	# install ispconfig panel
+	install_ispconfig
 }	# end menu_ispconfig
