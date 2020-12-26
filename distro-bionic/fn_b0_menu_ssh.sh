@@ -2,6 +2,14 @@
 # install my authorized_keys, then configure SSH server & firewall
 # ------------------------------------------------------------------------------
 
+setup_private_keys() {
+	mkdir -p ~/.ssh && cd "$_"
+	cmd chmod 0700 ~/.ssh
+	cmd chmod 0600 authorized_keys
+	msg_info "Setup of authorized_keys completed!"
+}	# end setup_private_keys
+
+
 setup_bash() {
 	# set bash as the default shell
 	debconf-set-selections <<< "dash dash/sh boolean false"
@@ -26,14 +34,6 @@ install_motd() {
 
 	msg_info "Customization of MOTD completed!"
 }	# end install_motd
-
-
-setup_private_keys() {
-	mkdir -p ~/.ssh && cd "$_"
-	cmd chmod 0700 ~/.ssh
-	cmd chmod 0600 authorized_keys
-	msg_info "Setup of authorized_keys completed!"
-}	# end setup_private_keys
 
 
 install_openssh() {
@@ -74,9 +74,8 @@ menu_ssh() {
 		msg_error "Missing 'kokkez' private key in '~/.ssh/authorized_keys'"
 	}
 
-	setup_bash
-	install_motd
 	setup_private_keys
+	setup_bash
 
 	# copy preferences for htop
 	[ -d ~/.config/htop ] || {
@@ -85,5 +84,6 @@ menu_ssh() {
 		cmd chmod 0700 ~/.config ~/.config/htop
 	}
 
+	install_motd
 	install_openssh "${1:-${SSHD_PORT}}"
 }	# end menu_ssh
