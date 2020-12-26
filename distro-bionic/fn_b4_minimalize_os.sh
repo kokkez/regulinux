@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# cleanup OS minimizing the installed packages
+# customize OS minimalizing the installed packages
 # ------------------------------------------------------------------------------
 
-os_arrange() {
+minimalize_os() {
 	# install sources.list from MyDir
 	copy_to /etc/apt sources.list
 	msg_info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
@@ -70,4 +70,4 @@ EOF
 	rm -rf pkg*.txt				# removing temp files
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
 	dpkg --get-selections > ~/selections.txt
-}	# end os_arrange
+}	# end minimalize_os

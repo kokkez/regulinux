@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install my authorized_keys, then configure SSH server & firewall
+# setup authorized_keys, then configure bash & SSH server
 # ------------------------------------------------------------------------------
 
 setup_private_keys() {
@@ -19,7 +19,7 @@ setup_bash() {
 }	# end setup_bash
 
 
-install_openssh() {
+setup_openssh() {
 	# $1: port - strictly in numerical range
 	local X P=$(port_validate ${1})
 
@@ -44,11 +44,10 @@ install_openssh() {
 			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
 	}
 
-	# activate on firewall & restart SSH
-	firewall_allow "${P}"
+	# restart SSH server
 	cmd systemctl restart ssh
 	msg_info "The SSH server is now listening on port: ${P}"
-}	# end install_openssh
+}	# end setup_openssh
 
 
 menu_ssh() {
@@ -67,5 +66,5 @@ menu_ssh() {
 		cmd chmod 0700 ~/.config ~/.config/htop
 	}
 
-	install_openssh "${1:-${SSHD_PORT}}"
+	setup_openssh "${1:-${SSHD_PORT}}"
 }	# end menu_ssh

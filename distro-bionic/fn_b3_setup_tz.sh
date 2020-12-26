@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# set the timezone & the localtime
+# customize the timezone & the localtime
 # ------------------------------------------------------------------------------
 
-menu_tz() {
+config_tz() {
 	local A Z T=${1:-${TIME_ZONE}}
 
 	[ -f "/usr/share/zoneinfo/${T}" ] || {
@@ -32,4 +32,18 @@ EOF
 	Z=$(unset TZ; LANG=C date -d "$A")
 	msg_notice "Local time is now:      ${Z}"
 	msg_notice "Universal Time is now:  ${T}"
-}	# end menu_tz
+}	# end config_tz
+
+
+setup_tz() {
+	local T=${1:-${TIME_ZONE}}
+
+	[ -f "/usr/share/zoneinfo/${T}" ] || {
+		msg_error "The requested timezone does not exists: ${T}"
+	}
+
+	cmd timedatectl set-timezone "${T}"
+	cmd timedatectl set-ntp on
+
+	msg_info "$(cmd timedatectl)"
+}	# end setup_tz

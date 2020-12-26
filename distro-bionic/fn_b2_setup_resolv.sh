@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# set /etc/resolv.conf with public dns
+# customize resolv.conf with public dns
 # https://wiki.opennic.org/api/geoip
 # ------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ resolv_via_resolvconf() {
 }	# end resolv_via_resolvconf
 
 
-menu_resolv() {
+setup_resolv() {
 	local R=/etc/resolv.conf
 
 	# if resolv.conf is a valid symlink, then setup via systemd
@@ -49,4 +49,4 @@ menu_resolv() {
 	} || {
 		resolv_via_resolvconf "${R}"
 	}
-}	# end menu_resolv
+}	# end setup_resolv
