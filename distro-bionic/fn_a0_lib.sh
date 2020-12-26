@@ -50,6 +50,7 @@ sslcert_paths() {
 	# adjust paths to points to these certificates
 	# $1 - full path to the key file
 	# $2 - full path to the certificate file
+	[ -s ${1} ] && [ -s ${2} ] || return
 
 	# default certificate paths
 	sslcert_symlink "/etc/ssl/private/ssl-cert-snakeoil.key" "${1}"
@@ -75,6 +76,8 @@ sslcert_paths() {
 		cmd systemctl restart apache2
 	}
 
-	# ispconfig certificate paths
+	# restart nginx webserver if installed
 	[ "${HTTP_SERVER}" = "nginx" ] && cmd systemctl restart nginx
+
+	msg_info "Symlink for the given SSL Certificate completed!"
 }	# end sslcert_paths

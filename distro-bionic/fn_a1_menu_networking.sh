@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_networking() {
-	# if we are already using classic networking, then return here
+	# if we are already using classic networking, then exit here
 	[ -e "/run/network/ifstate" ] && return
 
 	# get some required values

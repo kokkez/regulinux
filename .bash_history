@@ -49,6 +49,8 @@ do-release-upgrade --help
 do-release-upgrade -d
 do-release-upgrade -m server -f DistUpgradeViewNonInteractive
 #
+acme.sh --issue -d radium.rete.us -w /usr/local/ispconfig/interface/acme
+acme.sh --renew -d radium.rete.us --force
 swaks -s 127.0.0.1:25 -q TO -f acq@olmark.com -t RCastoldi@parker.com
 swaks -s 127.0.0.1:25 -f kokez@libero.it -t k@rete.us --header "Subject: File to open now!" --attach ~/file.jar
 openssl s_client -showcerts -connect localhost:465
