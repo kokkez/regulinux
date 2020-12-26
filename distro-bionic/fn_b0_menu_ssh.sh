@@ -19,23 +19,6 @@ setup_bash() {
 }	# end setup_bash
 
 
-install_motd() {
-	# customize the "Mot Of The Day" screen
-	[ -s "/etc/update-motd.d/*-footer" ] && return
-
-	# verify needed packages
-	is_installed "figlet" || pkg_install figlet lsb-release
-
-	# copying files & make them executables
-	mkdir -p /etc/update-motd.d && cd "$_"
-	rm -rf ./*
-	copy_to . motd/*
-	chmod +x ./*
-
-	msg_info "Customization of MOTD completed!"
-}	# end install_motd
-
-
 install_openssh() {
 	# $1: port - strictly in numerical range
 	local X P=$(port_validate ${1})
@@ -84,6 +67,5 @@ menu_ssh() {
 		cmd chmod 0700 ~/.config ~/.config/htop
 	}
 
-	install_motd
 	install_openssh "${1:-${SSHD_PORT}}"
 }	# end menu_ssh

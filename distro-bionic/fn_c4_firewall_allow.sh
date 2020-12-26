@@ -6,7 +6,7 @@ firewall_allow() {
 	# append keywords to var "ACCEPTS" in ~/firewall.sh
 
 	local u w f=~/firewall.sh			# path to the firewall script
-	[ -r "${f}" ] || return				# silently returns on missing script
+	[ -s "${f}" ] || return				# silently returns on missing script
 	[ -z "${1}" ] && return				# silently returns if no arguments
 	source <(grep '^ACCEPTS=' ${f})		# current allowed keywords (ports)
 

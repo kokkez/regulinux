@@ -11,6 +11,7 @@ menu_deps() {
 	menu_tz
 	os_arrange
 
+	install_motd
 	install_syslogd
 	install_firewall "${P}"
 }	# end menu_deps
