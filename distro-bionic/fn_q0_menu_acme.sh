@@ -33,11 +33,11 @@ acme_webserver_conf() {
 		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
-		(( ${#1} > 22 )) && {
+		(( ${#1} < 22 )) && {
 			cd /etc/apache2/conf-available
 			copy_to . acme/acme-webroot-apache2.conf
 			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
-			ln -s '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
+			ln -nfs '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}
 		cmd systemctl restart apache2
 	fi;
@@ -73,6 +73,8 @@ menu_acme() {
 		--fullchainpath "${C}" \
 		--reloadcmd "systemctl restart ${HTTP_SERVER}"
 
+	# symlink the certificate paths
 	sslcert_paths "${K}" "${C}"
+
 	msg_info "Installation of acme.sh completed!"
 }	# end menu_acme

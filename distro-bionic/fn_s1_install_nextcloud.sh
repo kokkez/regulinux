@@ -37,7 +37,7 @@ install_nextcloud() {
 	# apache configuration
 	cd /etc/apache2/sites-enabled
 	copy_to ../sites-available/ nextcloud/nextcloud.conf
-	[ -L 110-nextcloud.conf ] || ln -s ../sites-available/nextcloud.conf 110-nextcloud.conf
+	[ -L 110-nextcloud.conf ] || ln -nfs ../sites-available/nextcloud.conf 110-nextcloud.conf
 	[ -L 000-default.conf ] && mv 000-default.conf 0000-default.conf
 	[ -L default-ssl.conf ] && mv default-ssl.conf 0000-default-ssl.conf
 	cmd a2enmod rewrite headers env dir mime ssl

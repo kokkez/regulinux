@@ -113,7 +113,7 @@ EOF
 		cd /etc/apache2/sites-enabled
 		is_symlink '080-roundcube.conf' || {
 			copy_to ../sites-available roundcube/roundcube.conf
-			ln -s ../sites-available/roundcube.conf '080-roundcube.conf'
+			ln -nfs ../sites-available/roundcube.conf '080-roundcube.conf'
 		}
 		# activating some modules of apache2 then reload its configurations
 		a2enmod deflate expires headers
