@@ -167,8 +167,8 @@ sed_copy() {
 # ------------------------------------------------------------------------------
 
 is_symlink() {
-	# $1: path to a symlink
 	# exits with 0 if symlink is valid, or with 1 if it is broken
+	# $1: path to a symlink
 	[ -L "${1}" ] && [ -e "${1}" ]
 }	# end is_symlink
 
@@ -399,15 +399,15 @@ php_version() {
 
 port_validate() {
 	# set port in $1 to be strictly numeric & in range
-	local T L P=$(awk '{print int($1)}' <<< ${1-22})
-	[ ${P} -eq 22 ] || {
+	local T L P=$(awk '{print int($1)}' <<< ${1:-22})
+	(( P == 22 )) || {
 		# limit min & max range
 		P=$(( P > 65534 ? 65535 : P < 1025 ? 1024 : P ))
 		# exclude net.ipv4.ip_local_port_range (32768-60999)
 		T=$(command sysctl -e -n net.ipv4.ip_local_port_range)
 		L=$(awk '{print int($1)}' <<< ${T})
 		T=$(awk '{print int($2)}' <<< ${T})
-		P=$(( P < ${L} ? P : P > ${T} ? P : 64128 ))
+		P=$(( P < L ? P : P > T ? P : 64128 ))
 	}
 	echo ${P}
 }	# end port_validate
@@ -422,11 +422,11 @@ clean_up() {
 	# do apt cleanup if $1 is not empty
 	[ -n "${DOCLEANAPT}" ] && {
 		unset DOCLEANAPT
-		apt-get -qy purge			# remove packages and config files
-		apt-get -qy autoremove		# remove automatically all unused packages
-		apt-get -qy autoclean		# erase old downloaded archive files
-		apt-get -qy clean			# erase downloaded archive files
-		rm -rf /var/lib/apt/lists/*	# delete the entire cache
+		apt-get -qy purge				# remove packages and config files
+		apt-get -qy autoremove			# remove unused packages automatically
+		apt-get -qy autoclean			# erase old downloaded archive files
+		apt-get -qy clean				# erase downloaded archive files
+		rm -rf /var/lib/apt/lists/*		# delete the entire cache
 	}
 }	# end clean_up
 
@@ -436,22 +436,21 @@ detect_linux() {
 	# detect OS info (LINUX, VERSION, DISTRO)
 	# thanks to Mikel (http://unix.stackexchange.com/users/3169/mikel) for idea
 
-	# user must be root
-	[ $(cmd id -u) -ne 0 ] && {
-		msg_error "This script must be run by the user ${cWITELITE}root${cNULL}"
+	# user must be root (id == 0)
+	(( $(cmd id -u) )) && {
+		msg_error "This script must be run by the user: ${cWITELITE}root${cNULL}"
 	}
-	local X TMP
+	local X T
 
 	# test the presence of some very basic software
-	for X in 'awk' 'apt-get' 'cat' 'cd' 'cp' 'debconf-set-selections' 'dpkg' \
-		'dpkg-reconfigure' 'find' 'grep' 'head' 'mkdir' 'mv' 'perl' 'rm' \
-		'sed' 'tr';
+	for X in awk apt-get cat cd cp debconf-set-selections dpkg \
+		dpkg-reconfigure find grep head mkdir mv perl rm sed tr;
 	do
-		is_available "${X}" || TMP="${TMP}, ${X}"
+		is_available "${X}" || T+=", ${X}"
 	done
 
-	[ -n "${TMP}" ] && {
-		msg_error "Some required commands were not founds: ${cWITELITE}${TMP:2}${cNULL}"
+	[ -z "${T}" ] || {
+		msg_error "Some mandatory commands are missing: ${cWITELITE}${T:2}${cNULL}"
 	}
 
 	# get info on system
@@ -464,9 +463,9 @@ detect_linux() {
 		LINUX=${ID,,}					# debian, ubuntu, ...
 		VERSION=${VERSION_ID,,}			# 7, 14.04, ...
 	elif [ -f /etc/issue.net ]; then
-		X=$(head -1 /etc/issue.net)
-		LINUX=$(awk '{print $1}' <<< ${X,,})
-		VERSION=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${X,,})
+		T=$(head -1 /etc/issue.net)
+		LINUX=$(awk '{print $1}' <<< ${T,,})
+		VERSION=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${T,,})
 	fi;
 
 	# assigning distribution pretty name
@@ -487,9 +486,9 @@ detect_linux() {
 	}
 
 	# append to parent folder name the current distro infos
-	TMP=~/linux.${OS}.${DISTRO}.${ARCH}
-	[ -d ${TMP} ] || mv ~/linux* ${TMP}
-	cd ${TMP}
+	T=~/linux.${OS}.${DISTRO}.${ARCH}
+	[ -d ${T} ] || mv ~/linux* ${T}
+	cd ${T}
 
 	# removing unneeded distros
 	for X in distro-*; do [ "${X}" = "distro-${DISTRO}" ] || rm -rf ${X}; done
@@ -498,7 +497,7 @@ detect_linux() {
 	for X in distro-${DISTRO}/fn_*; do . ${X}; done
 	MyFILES=$(pwd)/files-common
 	MyDISTRO=$(pwd)/distro-${DISTRO}/files
-	is_installed 'nginx' && HTTP_SERVER='nginx'
+	is_available 'nginx' && HTTP_SERVER='nginx'
 }	# end detect_linux
 
 # ------------------------------------------------------------------------------
@@ -507,11 +506,11 @@ help_menu() {
 	# display the main menu on screen
 	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}
  [ . ${cWITELITE}Basic menu options${cNULL} ---------------------------- (in recommended order) -- ]
-   . ${cORNG}deps${cNULL}        check dependencies & update the base system
+   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}
+   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall
    . ${cORNG}resolv${cNULL}      set ${cWITELITE}/etc/resolv.conf${cNULL} with public dns
    . ${cORNG}mykeys${cNULL}      set my authorized_keys, for me & backuppers
    . ${cORNG}tz${cNULL}          set server timezone to ${cWITELITE}${TIME_ZONE}${cNULL}
-   . ${cORNG}ssh${cNULL}         set SSH2 on port ${cWITELITE}${SSHD_PORT}${cNULL} & firewall
    . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)
  [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]
    . ${cORNG}upgrade${cNULL}     apt full upgrading of the system

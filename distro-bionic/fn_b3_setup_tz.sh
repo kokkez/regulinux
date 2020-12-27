@@ -45,5 +45,6 @@ setup_tz() {
 	cmd timedatectl set-timezone "${T}"
 	cmd timedatectl set-ntp on
 
-	msg_info "$(cmd timedatectl)"
+	msg_info "Configuration of timezone completed!"
+	echo -e "$(cmd timedatectl)"
 }	# end setup_tz

@@ -15,7 +15,7 @@ setup_bash() {
 	debconf-set-selections <<< "dash dash/sh boolean false"
 	dpkg-reconfigure -f noninteractive dash
 	[ -f ~/.bashrc ] || copy_to ~ .bashrc
-	msg_info "Changing default shell to BASH, completed!"
+	msg_info "Switching default shell to BASH completed!"
 }	# end setup_bash
 
 
