@@ -45,7 +45,7 @@ resolv_via_resolvconf() {
 }	# end resolv_via_resolvconf
 
 
-menu_resolv() {
+setup_resolv() {
 	# if resolv.conf is a valid symlink, then setup via systemd
 	is_symlink '/etc/resolv.conf' \
 		&& resolv_via_systemd \
