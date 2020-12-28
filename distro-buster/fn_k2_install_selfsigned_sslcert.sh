@@ -34,7 +34,7 @@ install_selfsigned_sslcert() {
 		# enable related apache2 modules & site, then restart it
 		a2enmod rewrite headers ssl
 		a2ensite default-ssl
-		svc_evoke apache2 restart
+		cmd systemctl restart apache2
 	}
 
 	msg_info "Installation of self-signed SSL Certificate completed!"

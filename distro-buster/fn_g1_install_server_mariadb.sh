@@ -40,6 +40,6 @@ FLUSH PRIVILEGES;
 EOF
 
 	cmd systemctl daemon-reload
-	svc_evoke mysql restart
+	cmd systemctl restart mysql
 	msg_info "Installation of ${PKG} completed!"
 }	# end install_server_mariadb

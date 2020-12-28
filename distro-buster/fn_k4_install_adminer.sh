@@ -41,7 +41,7 @@ install_adminer() {
 	copy_to sites-available adminer/adminer.conf
 	[ -L sites-enabled/080-adminer.conf ] || {
 		ln -s ../sites-available/adminer.conf sites-enabled/080-adminer.conf
-		svc_evoke apache2 restart
+		cmd systemctl restart apache2
 	}
 
 	msg_info "Installation of adminer-${V} completed!"

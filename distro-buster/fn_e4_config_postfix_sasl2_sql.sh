@@ -28,6 +28,6 @@ config_postfix_sasl2_sql() {
 		broken_sasl_auth_clients=yes
 
 	# restart postfix, because reloading is not enough
-	svc_evoke postfix restart
+	cmd systemctl restart postfix
 	msg_info "Installation of Cyrus-SASL completed!"
 }	# end config_postfix_sasl2_sql

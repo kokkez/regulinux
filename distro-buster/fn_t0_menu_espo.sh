@@ -36,7 +36,7 @@ menu_espo() {
 		ln -s ../sites-available/espocrm.conf sites-enabled/120-espocrm.conf
 	}
 	cmd a2enmod rewrite headers env dir mime
-	svc_evoke apache2 restart
+	cmd systemctl restart apache2
 
 	# cron configuration
 	[ -s /etc/crontab ] && grep -q EspoCRM /etc/crontab || {

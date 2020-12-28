@@ -35,7 +35,7 @@ install_nextcloud18() {
 	}
 	cmd a2enmod rewrite headers env dir mime ssl
 	cmd a2ensite default-ssl
-	svc_evoke apache2 restart
+	cmd systemctl restart apache2
 
 	# cron configuration
 	[ -s /etc/crontab ] && grep -q NEXTCLOUD /etc/crontab || {

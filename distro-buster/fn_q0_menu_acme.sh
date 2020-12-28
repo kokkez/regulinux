@@ -93,7 +93,8 @@ menu_acme() {
 	} || {
 		acme_ic30
 	}
-	svc_evoke apache2 restart	# require an apache restart
+	# require an apache restart
+	cmd systemctl restart apache2
 
 	# issue the cert
 	KEY=/etc/ssl/myserver/server.key

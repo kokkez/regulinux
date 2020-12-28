@@ -113,6 +113,6 @@ EOF
 
 	# activating some modules of apache2 then reload its configurations
 	a2enmod deflate expires headers
-	svc_evoke apache2 restart
+	cmd systemctl restart apache2
 	msg_info "Installation of Roundcube ${V} completed!"
 }	# end menu_roundcube

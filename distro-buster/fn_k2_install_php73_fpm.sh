@@ -58,6 +58,6 @@ EOF
 	cmd a2dismod php7.0 php7.1 php7.2 php7.4
 	cmd a2enmod php7.3
 
-	svc_evoke apache2 restart
+	cmd systemctl restart apache2
 	msg_info "Installation of PHP as PHP-FPM completed!"
 }	# end install_php73_fpm

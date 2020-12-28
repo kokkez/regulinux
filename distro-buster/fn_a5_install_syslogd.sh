@@ -36,7 +36,7 @@ EOF
 	copy_to . inetutils-syslogd
 
 	> /var/log/syslog
-	svc_evoke inetutils-syslogd restart
+	cmd systemctl restart inetutils-syslogd
 	cmd logrotate -f /etc/logrotate.conf > /dev/null 2>&1
 	msg_info "Configuration of inetutils-syslogd completed!"
 }	# end install_syslogd

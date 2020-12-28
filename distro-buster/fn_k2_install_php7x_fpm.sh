@@ -58,6 +58,6 @@ EOF
 	# cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
-	svc_evoke apache2 restart
+	cmd systemctl restart apache2
 	msg_info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php7x_fpm
