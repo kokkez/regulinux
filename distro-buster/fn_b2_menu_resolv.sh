@@ -29,3 +29,21 @@ menu_resolv() {
 	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
 }	# end menu_resolv
+
+
+resolv_via_systemd() {
+	echo -e "'/etc/resolv.conf' is a symlink"
+}	# end resolv_via_systemd
+
+
+resolv_via_resolvconf() {
+	echo -e "'/etc/resolv.conf' is NOT a symlink"
+}	# end resolv_via_resolvconf
+
+
+menu_resolvconf() {
+	# if resolv.conf is a valid symlink, then setup via systemd
+	is_symlink '/etc/resolv.conf' \
+		&& resolv_via_systemd \
+		|| resolv_via_resolvconf
+}	# end menu_resolv

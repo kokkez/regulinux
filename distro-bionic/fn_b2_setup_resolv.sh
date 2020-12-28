@@ -4,8 +4,13 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_systemd() {
+	local F=/etc/systemd/resolved.conf.d
+
+	# if 'dns_servers.conf' already exists, then exit here
+	[ -s "${F}/dns_servers.conf" ] && return
+
 	# copying files
-	mkdir -p "/etc/systemd/resolved.conf.d" && cd "$_"
+	mkdir -p "${F}" && cd "$_"
 	copy_to . resolved.conf.d/*
 
 	# fully activate systemd-resolved
@@ -19,7 +24,7 @@ resolv_via_systemd() {
 
 
 resolv_via_resolvconf() {
-	local N T R="${1:-/etc/resolv.conf}"
+	local N T R=/etc/resolv.conf
 	backup_file "${R}"
 
 	# set known public dns
@@ -40,13 +45,9 @@ resolv_via_resolvconf() {
 }	# end resolv_via_resolvconf
 
 
-setup_resolv() {
-	local R=/etc/resolv.conf
-
+menu_resolv() {
 	# if resolv.conf is a valid symlink, then setup via systemd
-	is_symlink "${R}" && {
-		resolv_via_systemd
-	} || {
-		resolv_via_resolvconf "${R}"
-	}
+	is_symlink '/etc/resolv.conf' \
+		&& resolv_via_systemd \
+		|| resolv_via_resolvconf
 }	# end setup_resolv
