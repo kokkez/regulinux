@@ -1,19 +1,21 @@
 # ------------------------------------------------------------------------------
-# cleanup OS minimizing the installed packages
+# preparing a basic OS, ready to host applications
 # ------------------------------------------------------------------------------
 
 menu_deps() {
-	menu_resolv
+	local P="${1:-${SSHD_PORT}}"
+	menu_ssh "${P}"
 
-	shell_bash
-	menu_tz
-	os_arrange
+#	setup_networking
+	setup_resolv
+	setup_tz
+	minimalize_os
+
+	install_motd
 	install_syslogd
-	install_firewall "${1-${SSHD_PORT}}"
 
-	menu_motd
-	menu_ssh "${1-${SSHD_PORT}}"
-
-	menu_resolv
+	# activating firewall & allowing SSH port
+	install_firewall "${P}"
+	firewall_allow "${P}"
 }	# end menu_deps
 

@@ -5,23 +5,23 @@
 firewall_allow() {
 	# append keywords to var "ACCEPTS" in ~/firewall.sh
 
-	local u w f=~/firewall.sh			# path to the firewall script
-	[ -r "${f}" ] || return				# silently returns on missing script
+	local U W F=~/firewall.sh			# path to the firewall script
+	[ -s "${F}" ] || return				# silently returns on missing script
 	[ -z "${1}" ] && return				# silently returns if no arguments
-	source <(grep '^ACCEPTS=' ${f})		# current allowed keywords (ports)
+	source <(grep '^ACCEPTS=' ${F})		# current allowed keywords (ports)
 
 	# unique-ize arguments
-	u=($( tr [:space:] '\n' <<< "${ACCEPTS} ${@}" | awk '!_[$0]++' ))
+	U=($( tr [:space:] '\n' <<< "${ACCEPTS} ${@}" | awk '!_[$0]++' ))
 
 	# test existance of firewall rules
 	ACCEPTS=""
-	for w in ${u[@]}; do
-		grep -Pq "^manage_${w}\\(" ${f} && ACCEPTS="${ACCEPTS} ${w}"
+	for W in ${U[@]}; do
+		grep -Pq "^manage_${W}\\(" ${F} && ACCEPTS="${ACCEPTS} ${W}"
 	done
 
 	# save the new value back in ~/firewall.sh
 	msg_info "Allowing on firewall: ${ACCEPTS## }"
-	sed -ri ${f} -e "s|^(ACCEPTS=).*|\1\"${ACCEPTS## }\"|"
+	sed -ri ${F} -e "s|^(ACCEPTS=).*|\1\"${ACCEPTS## }\"|"
 
-	${f} start							# load configured rules on firewall
+	${F} start							# load configured rules on firewall
 };	# end firewall_allow

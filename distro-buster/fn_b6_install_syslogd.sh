@@ -14,13 +14,13 @@ install_syslogd() {
 
 	# there is no need to log to so many files
 	cd /var/log
-	local f
-	for f in *.log mail.* debug syslog fsck news
-		do rm -rf ${f}
+	local E
+	for E in *.log mail.* debug syslog fsck news
+		do rm -rf ${E}
 	done
 
 	# dash before path means to not flush immediately at every logged line
-	cat <<EOF > /etc/syslog.conf
+	cat > /etc/syslog.conf <<EOF
 *.*;auth,authpriv,cron,kern,mail.none	-/var/log/syslog
 auth,authpriv.*							-/var/log/auth.log
 cron.*									-/var/log/cron.log
