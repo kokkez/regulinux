@@ -2,24 +2,16 @@
 # setup authorized_keys, then configure bash & SSH server
 # ------------------------------------------------------------------------------
 
-setup_private_keys() {
-	mkdir -p ~/.ssh && cd "$_"
-	cmd chmod 0700 ~/.ssh
-	cmd chmod 0600 authorized_keys
-	msg_info "Setup of authorized_keys completed!"
-}	# end setup_private_keys
-
-
 setup_bash() {
 	# set bash as the default shell
 	debconf-set-selections <<< "dash dash/sh boolean false"
 	dpkg-reconfigure -f noninteractive dash
 	[ -f ~/.bashrc ] || copy_to ~ .bashrc
-	msg_info "Switching default shell to BASH completed!"
+	msg_info "Default shell switched to BASH"
 }	# end setup_bash
 
 
-setup_openssh() {
+setup_sshd() {
 	# $1: port - strictly in numerical range
 	local X P=$(port_validate ${1})
 
@@ -47,7 +39,7 @@ setup_openssh() {
 	# restart SSH server
 	cmd systemctl restart ssh
 	msg_info "The SSH server is now listening on port: ${P}"
-}	# end setup_openssh
+}	# end setup_sshd
 
 
 menu_ssh() {
@@ -55,9 +47,14 @@ menu_ssh() {
 	grep -q "kokkez" ~/.ssh/authorized_keys || {
 		msg_error "Missing 'kokkez' private key in '~/.ssh/authorized_keys'"
 	}
+	mkdir -p ~/.ssh && cd "$_"
+	cmd chmod 0700 ~/.ssh
+	cmd chmod 0600 authorized_keys
+	msg_info "Setup of authorized_keys completed!"
 
-	setup_private_keys
-	setup_bash
+	# install sources.list from MyDir
+	copy_to /etc/apt sources.list
+	msg_info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
 
 	# copy preferences for htop
 	[ -d ~/.config/htop ] || {
@@ -66,5 +63,6 @@ menu_ssh() {
 		cmd chmod 0700 ~/.config ~/.config/htop
 	}
 
-	setup_openssh "${1:-${SSHD_PORT}}"
+	setup_bash
+	setup_sshd "${1:-${SSHD_PORT}}"
 }	# end menu_ssh
