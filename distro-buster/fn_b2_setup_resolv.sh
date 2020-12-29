@@ -13,6 +13,12 @@ resolv_via_systemd() {
 	mkdir -p "${F}" && cd "$_"
 	copy_to . resolved.conf.d/*
 
+	# update resolv.conf symlink
+	F+='/dns_servers.conf'
+	is_symlink '/etc/resolv.conf' || {
+		[ -s "${F}" ] && ln -nfs "${F}" '/etc/resolv.conf'
+	}
+
 	# fully activate systemd-resolved
 	cmd systemctl unmask systemd-resolved
 	cmd systemctl enable systemd-resolved

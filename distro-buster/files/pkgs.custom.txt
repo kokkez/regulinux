@@ -23,6 +23,7 @@ logrotate				install
 lsb-release				install
 #lsof					install
 #makedev					install
+mawk					install
 mime-support			install
 #mktemp					install
 #nano					install
@@ -53,5 +54,5 @@ groff-base				purge
 install-info			purge
 isc-dhcp-client			purge
 isc-dhcp-common			purge
-#rsyslog					purge
+rsyslog					purge
 #whiptail				purge
