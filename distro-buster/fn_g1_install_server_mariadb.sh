@@ -3,15 +3,15 @@
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	# debian 9 stretch install mariadb-server-10.1
-	local PKG="mariadb-server"
+	# debian 10 buster install mariadb-server-10.3
+	local K="mariadb-server"
 
-	is_installed "${PKG}" || {
-		msg_info "Installing ${PKG}..."
+	is_installed "${K}" || {
+		msg_info "Installing ${K}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	msg_info "Configuring ${PKG}"
+	msg_info "Configuring ${K}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -31,7 +31,7 @@ install_server_mariadb() {
 	# lite version of mysql_secure_installation
 	cmd mysql <<EOF
 UPDATE mysql.user SET Password=PASSWORD('${DB_ROOTPW}') WHERE User='root';
-UPDATE mysql.user SET plugin='' WHERE User='root';
+UPDATE mysql.user SET plugin='mysql_native_password' WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost','127.0.0.1','::1');
 DROP DATABASE IF EXISTS test;
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	cmd systemctl restart mysql
-	msg_info "Installation of ${PKG} completed!"
+	msg_info "Installation of ${K} completed!"
 }	# end install_server_mariadb
