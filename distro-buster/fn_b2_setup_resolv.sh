@@ -4,28 +4,11 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_systemd() {
-	local F=/etc/systemd/resolved.conf.d
+	# simply delete the symlink
+	rm -rf /etc/resolv.conf
 
-	# if 'dns_servers.conf' already exists, then exit here
-	[ -s "${F}/dns_servers.conf" ] && return
-
-	# copying files
-	mkdir -p "${F}" && cd "$_"
-	copy_to . resolved.conf.d/*
-
-	# update resolv.conf symlink
-	F+='/dns_servers.conf'
-	is_symlink '/etc/resolv.conf' || {
-		[ -s "${F}" ] && ln -nfs "${F}" '/etc/resolv.conf'
-	}
-
-	# fully activate systemd-resolved
-	cmd systemctl unmask systemd-resolved
-	cmd systemctl enable systemd-resolved
-	cmd systemctl restart systemd-resolved
-	#cmd systemd-resolve --status
-
-	msg_info "Configuration of public dns completed via systemd-resolved"
+	# then recreate the file
+	resolv_via_resolvconf
 }	# end resolv_via_systemd
 
 
