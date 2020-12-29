@@ -3,7 +3,7 @@ acl						install
 apt-utils				install
 bzip2					install
 ca-certificates			install
-#cron					install
+cron					install
 curl					install
 dbus					install
 #debconf-utils			install
@@ -16,14 +16,14 @@ htop					install
 iftop					install
 inetutils-syslogd		install
 iotop					install
-#iptables				install
+iptables				install
 klibc-utils				install
 locales					install
-#logrotate				install
+logrotate				install
 lsb-release				install
 #lsof					install
 #makedev					install
-#mime-support			install
+mime-support			install
 #mktemp					install
 #nano					install
 net-tools				install
@@ -48,9 +48,10 @@ unzip					install
 wget					install
 
 # to purge
-#bsdmainutils			purge
-#install-info			purge
-#isc-dhcp-client			purge
-#isc-dhcp-common			purge
+bsdmainutils			purge
+groff-base				purge
+install-info			purge
+isc-dhcp-client			purge
+isc-dhcp-common			purge
 #rsyslog					purge
 #whiptail				purge
