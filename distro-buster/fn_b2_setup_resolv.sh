@@ -3,15 +3,6 @@
 # https://wiki.opennic.org/api/geoip
 # ------------------------------------------------------------------------------
 
-resolv_via_systemd() {
-	# simply delete the symlink
-	rm -rf /etc/resolv.conf
-
-	# then recreate the file
-	resolv_via_resolvconf
-}	# end resolv_via_systemd
-
-
 resolv_via_resolvconf() {
 	local N T R=/etc/resolv.conf
 	backup_file "${R}"
@@ -32,6 +23,15 @@ resolv_via_resolvconf() {
 	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
 }	# end resolv_via_resolvconf
+
+
+resolv_via_systemd() {
+	# simply delete the symlink
+	rm -rf /etc/resolv.conf
+
+	# then recreate the file
+	resolv_via_resolvconf
+}	# end resolv_via_systemd
 
 
 setup_resolv() {
