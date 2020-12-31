@@ -56,7 +56,7 @@ swaks -s 127.0.0.1:25 -f kokez@libero.it -t k@rete.us --header "Subject: File to
 openssl s_client -showcerts -connect localhost:465
 fail2ban-client status
 #
-systemctl restart nginx php7.2-fpm php7.3-fpm
+systemctl restart nginx php7.*-fpm
 bash ~/lin*/arrange.sh deps
 bash ~/lin*/arrange.sh mailserver ispconfig
 bash ~/lin*/arrange.sh dbserver ispconfig

@@ -623,7 +623,7 @@ INSERT INTO `directive_snippets` (`directive_snippets_id`, `sys_userid`, `sys_gr
 (1,	1,	1,	'riud',	'riud',	'',	'ForceSSL',	'apache',	'RewriteEngine On\r\nRewriteCond %{HTTPS} off\r\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (2,	1,	1,	'riud',	'riud',	'',	'ForceWWW',	'apache',	'RewriteEngine on\r\nRewriteCond %{HTTP_HOST} !^www\\. [NC]\r\nRewriteRule ^ http://www.%{SERVER_NAME}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (3,	1,	1,	'riud',	'riud',	'',	'ForceHttps:Host',	'nginx',	'# global https + host handler\r\nset $schost  \"$scheme://$host\";\r\nif ($schost != https://example.com) { return 301 https://example.com$request_uri; }\r\n',	'n',	'',	'y',	0),
-(4,	1,	1,	'riud',	'riud',	'',	'InterpretPHP',	'nginx',	'location / { try_files $uri $uri/ /index.php?$args; }',	'n',	'',	'y',	0);
+(4,	1,	1,	'riud',	'riud',	'',	'InterpretPHP',	'nginx',	'location / { try_files $uri $uri/ /index.php; }',	'n',	'',	'y',	0);
 
 DROP TABLE IF EXISTS `dns_rr`;
 CREATE TABLE `dns_rr` (
