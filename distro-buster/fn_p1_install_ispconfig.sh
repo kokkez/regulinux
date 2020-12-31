@@ -1,14 +1,10 @@
 # ------------------------------------------------------------------------------
 # install control panel ispconfig 3.1
-# IspConfig 3.1.13:   2018-10-21
-# IspConfig 3.1.13p1: 2019-04-23
-# IspConfig 3.1.14p2: 2019-08-04
-# IspConfig 3.1.15p2: 2019-11-10
 # IspConfig 3.1.15p3: 2020-02-24
 # ------------------------------------------------------------------------------
 
 install_ispconfig() {
-	local U V="3.1.15p3" # version to install
+	local M U V="3.1.15p3" # version to install
 	msg_info "Installing IspConfig ${V}..."
 
 	cd /tmp
@@ -18,12 +14,13 @@ install_ispconfig() {
 	cd ispconfig3*/install/
 
 	[ -s autoinstall.ini ] || {
-		[ "${ISP3_MULTISERVER}" = "y" ] && MOD="expert" || MOD="standard"
+		[ "${ISP3_MULTISERVER}" = "y" ] && M="expert"
 
 		do_copy ispconfig/autoinstall.ini.3.1 autoinstall.ini
 		sed -ri autoinstall.ini \
-			-e "s/^(install_mode=).*/\1${MOD}/" \
+			-e "s/^(install_mode=).*/\1${M:-standard}/" \
 			-e "s/^(hostname=).*/\1${HOST_FQDN}/" \
+			-e "s/^(http_server=).*/\1${HTTP_SERVER:-apache}/" \
 			-e "s/^(mysql_root_password=).*/\1${DB_ROOTPW}/g" \
 			-e "s/^(ssl_cert_country=).*/\1${CERT_C}/" \
 			-e "s/^(ssl_cert_state=).*/\1${CERT_ST}/" \
@@ -40,16 +37,50 @@ install_ispconfig() {
 	}
 	cmd php -q install.php --autoinstall=autoinstall.ini
 
-	# on apache 2.4 we connect to ispconfig thru port 8080
-	mkdir -p /var/www/html/ispconfig && cd "$_"
-	copy_to . ispconfig/index.php
+	# shortcut to connect to ispconfig thru port 8080
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		copy_to /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
+		cmd systemctl restart nginx
+	else
+		# apache2
+		mkdir -p /var/www/html/ispconfig && cd "$_"
+		copy_to . ispconfig/index.php
+	fi;
 
-	# load a customized database dbispconfig
-	cd ${MyFILES}/ispconfig
-	[ -f "dbispconfig-${V}.sql" ] && cmd mysql 'dbispconfig' < dbispconfig-${V}.sql
+	# load a customized database into dbispconfig
+	U=$(my_path ispconfig/dbispconfig-${V}.sql)
+	[ -n "${U}" ] && {
+		[ "${HTTP_SERVER}" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' ${U}
+		cmd mysql 'dbispconfig' < ${U}
+	}
 
-	# commenting lines in 2 new files of postfix
+	# postfix
+	# comment lines in 2 files of postfix
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
+	cmd postconf mydestination='$myorigin, localhost'
+	cmd postconf -# relayhost smtpd_restriction_classes greylisting
+	U=/etc/postfix/main.cf
+	grep -q 'relaying' ${U} || {
+		M="### ----------------------------------------------------------------------------
+### relaying via an external SMTP
+### ----------------------------------------------------------------------------
+smtp_sasl_auth_enable = yes
+smtp_always_send_ehlo = yes
+smtp_sasl_security_options = noanonymous
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+relayhost = [smtp-e.rete.us]:587
+smtp_fallback_relay = [smtp-m.rete.us]:587
+### ----------------------------------------------------------------------------\n"
+		perl -i -pe "s|# TLS|${M}\n# TLS|g" ${U}
+	}
+	copy_to /etc/postfix/ postfix/sasl_passwd
+	cmd systemctl restart postfix
+
+	# symlink the certificate paths
+	[ -d /etc/ssl/myserver ] && {
+		U=/etc/ssl/myserver/server
+		sslcert_paths "${U}.key" "${U}.cert"
+	}
 
 	# activating ports on firewall
 	firewall_allow "ispconfig"

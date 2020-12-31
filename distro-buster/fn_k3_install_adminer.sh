@@ -36,13 +36,18 @@ install_adminer() {
 	copy_to . adminer/adminer.css
 	copy_to plugins adminer/plugins/*
 
-	# install the virtualhost file for apache2
-	cd /etc/apache2
-	copy_to sites-available adminer/adminer.conf
-	[ -L sites-enabled/080-adminer.conf ] || {
-		ln -s ../sites-available/adminer.conf sites-enabled/080-adminer.conf
-		cmd systemctl restart apache2
-	}
+	# install the configuration file for webserver
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		copy_to /etc/nginx/snippets adminer/adminer-nginx.conf
+		cmd systemctl restart nginx
+	else
+		cd /etc/apache2/sites-enabled
+		is_symlink '080-adminer.conf' || {
+			copy_to ../sites-available adminer/adminer.conf
+			ln -nfs ../sites-available/adminer.conf '080-adminer.conf'
+			cmd systemctl restart apache2
+		}
+	fi;
 
 	msg_info "Installation of adminer-${V} completed!"
 }	# end install_adminer

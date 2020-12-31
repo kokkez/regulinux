@@ -1,44 +1,38 @@
 # ------------------------------------------------------------------------------
-# install PHP 7.4 as MOD-PHP and PHP-FPM
+# install PHP 7.4 as MOD-PHP, PHP-FPM and FastCGI
 # https://dev.to/pushkaranand/upgrading-to-php-7-4-26dg
 # ------------------------------------------------------------------------------
 
 install_php74_fpm() {
+	local V=7.4
+
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as PHP-FPM is already installed..."
+		msg_alert "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
 	# add external repository for updated php
-	is_installed "apt-transport-https" || {
-		msg_info "Installing required packages..."
-		pkg_install apt-transport-https lsb-release ca-certificates
-	}
-	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-	cat <<EOF > /etc/apt/sources.list.d/php.list
-# https://www.patreon.com/oerdnj
-deb http://packages.sury.org/php stretch main
-#deb-src http://packages.sury.org/php stretch main
-EOF
+	add_php_repository
 
-	# forcing apt update
-	pkg_update true
-
-	# now install php 7.4 packages and some modules
+	# install php packages with some modules
 	pkg_install libapache2-mod-fcgid \
-		php7.4 libapache2-mod-php7.4 \
-		php7.4-cli php7.4-cgi php7.4-fpm php7.4-mysql php7.4-gd php7.4-bcmath \
-		php7.4-bz2 php7.4-curl php7.4-imap php7.4-intl php7.4-ldap \
-		php7.4-mbstring php7.4-pspell php7.4-soap php7.4-sqlite3 \
-		php7.4-tidy php7.4-xmlrpc php7.4-xsl php7.4-zip php-pear mcrypt \
-		php-apcu php-apcu-bc php-gettext php-imagick imagemagick
-#		php7.4-recode php-memcache php-memcached memcached
+		php${V} libapache2-mod-php${V} \
+		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
+#		php7.4-{recode} php-{memcache,memcached} memcached \
 
 	# enable apache2 modules
-	a2enmod proxy_fcgi fcgid setenvif alias
+	a2enmod proxy_fcgi setenvif fastcgi alias
 
-	msg_info "Configuring PHP as PHP-FPM for apache2..."
+	# set alternative for php in cli mode
+	cmd update-alternatives --set php /usr/bin/php${V}
+
+	# set default mod-php to v7.x
+#	a2dismod php5.6
+	a2enmod php${V}
+
+	msg_info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -53,5 +47,5 @@ EOF
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart apache2
-	msg_info "Installation of PHP as PHP-FPM completed!"
+	msg_info "Installation of PHP${V} as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php74_fpm

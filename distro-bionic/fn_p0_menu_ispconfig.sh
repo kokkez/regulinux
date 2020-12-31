@@ -5,7 +5,7 @@
 menu_ispconfig() {
 	HTTP_SERVER="${1:-apache}"
 
-	# abort if ispconfig 3.1.x was already installed
+	# abort if ispconfig was already installed
 	[ -d /usr/local/ispconfig ] && {
 		msg_alert "ISPConfig3 is already installed..."
 		return

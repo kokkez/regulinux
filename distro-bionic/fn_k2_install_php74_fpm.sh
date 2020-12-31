@@ -15,13 +15,12 @@ install_php74_fpm() {
 	# add external repository for updated php
 	add_php_repository
 
-	# now install php packages, versions 7.4, with some modules
+	# install php packages with some modules
 	pkg_install libapache2-mod-fcgid \
 		php${V} libapache2-mod-php${V} \
 		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
-#		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-#		php-{memcache,memcached} memcached \
+#		php7.4-{recode} php-{memcache,memcached} memcached \
 
 	# enable apache2 modules
 	a2enmod proxy_fcgi setenvif fastcgi alias
@@ -29,7 +28,7 @@ install_php74_fpm() {
 	# set alternative for php in cli mode
 	cmd update-alternatives --set php /usr/bin/php${V}
 
-	# set default php to v7.x
+	# set default mod-php to v7.x
 #	a2dismod php5.6
 	a2enmod php${V}
 

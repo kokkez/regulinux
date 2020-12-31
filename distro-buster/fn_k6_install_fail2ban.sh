@@ -13,17 +13,22 @@ install_fail2ban() {
 	# make fail2ban do some monitoring
 	cd /etc/fail2ban
 	copy_to . fail2ban/jail.local
-	sed -i "s|SSHD_PORT|${SSHD_PORT}|" jail.local
+	sed -i "s|HOST_NICK|${HOST_NICK}|" jail.local
 
 	# creating filter files
 	cd filter.d
-	[ -r pureftpd.conf ] || copy_to . fail2ban/pureftpd.conf
-	[ -r dovecot-pop3imap.conf ] || copy_to . fail2ban/dovecot-pop3imap.conf
-	# add the missing "ignoreregex" line in postfix-sasl filter
-	[ -r postfix-sasl.conf ] && {
-		grep -q "ignoreregex" postfix-sasl.conf || {
-			echo "ignoreregex =" >> postfix-sasl.conf
-		}
+	[ -r postfix-failedauth.conf ] || {
+		copy_to . fail2ban/postfix-failedauth.conf
+	}
+	[ -r dovecot-pop3imap.conf ] || {
+		copy_to . fail2ban/dovecot-pop3imap.conf
+	}
+
+	# fix a systemd bug found on xenial 16.04
+	local X=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+	grep -q '/var' ${X} && {
+		msg_info "Fixing a little systemd bug that prevent fail2ban to start"
+		sed -i 's|/var||' ${X}
 	}
 
 	cmd systemctl restart fail2ban
