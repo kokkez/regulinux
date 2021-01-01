@@ -7,7 +7,7 @@ install_motd() {
 	[ -s "/etc/update-motd.d/*-footer" ] && return
 
 	# verify needed packages
-	is_installed "figlet" || pkg_install figlet lsb-release
+	pkg_require figlet lsb-release
 
 	# copying files & make them executables
 	mkdir -p /etc/update-motd.d && cd "$_"
