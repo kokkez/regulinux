@@ -53,10 +53,11 @@ acme.sh --issue -d radium.rete.us -w /usr/local/ispconfig/interface/acme
 acme.sh --renew -d radium.rete.us --force
 swaks -s 127.0.0.1:25 -q TO -f acq@olmark.com -t RCastoldi@parker.com
 swaks -s 127.0.0.1:25 -f kokez@libero.it -t k@rete.us --header "Subject: File to open now!" --attach ~/file.jar
+swaks -s 127.0.0.1:25 -f root -t k@rete.us
 openssl s_client -showcerts -connect localhost:465
 fail2ban-client status
 #
-systemctl restart nginx php7.*-fpm
+systemctl restart nginx php7.{3,4}-fpm
 bash ~/lin*/arrange.sh deps
 bash ~/lin*/arrange.sh mailserver ispconfig
 bash ~/lin*/arrange.sh dbserver ispconfig
