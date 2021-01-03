@@ -620,7 +620,7 @@ CREATE TABLE `directive_snippets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `directive_snippets` (`directive_snippets_id`, `sys_userid`, `sys_groupid`, `sys_perm_user`, `sys_perm_group`, `sys_perm_other`, `name`, `type`, `snippet`, `customer_viewable`, `required_php_snippets`, `active`, `master_directive_snippets_id`) VALUES
-(1,	1,	1,	'riud',	'riud',	'',	'ForceSSL',	'apache',	'RewriteEngine On\r\nRewriteCond %{HTTPS} off\r\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
+(1,	1,	1,	'riud',	'riud',	'',	'ForceSSL',	'apache',	'RewriteEngine On\r\nRewriteCond %{HTTPS} !on\r\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (2,	1,	1,	'riud',	'riud',	'',	'ForceWWW',	'apache',	'RewriteEngine on\r\nRewriteCond %{HTTP_HOST} !^www\\. [NC]\r\nRewriteRule ^ http://www.%{SERVER_NAME}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (3,	1,	1,	'riud',	'riud',	'',	'ForceHttps:Host',	'nginx',	'# global https + host handler\r\nset $schost  \"$scheme://$host\";\r\nif ($schost != https://example.com) { return 301 https://example.com$request_uri; }\r\n',	'n',	'',	'y',	0),
 (4,	1,	1,	'riud',	'riud',	'',	'InterpretPHP',	'nginx',	'location / { try_files $uri $uri/ /index.php; }',	'n',	'',	'y',	0);

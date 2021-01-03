@@ -620,7 +620,7 @@ CREATE TABLE `directive_snippets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `directive_snippets` (`directive_snippets_id`, `sys_userid`, `sys_groupid`, `sys_perm_user`, `sys_perm_group`, `sys_perm_other`, `name`, `type`, `snippet`, `customer_viewable`, `required_php_snippets`, `active`, `master_directive_snippets_id`) VALUES
-(1,	1,	1,	'riud',	'riud',	'',	'ForceSSL',	'apache',	'RewriteEngine On\r\nRewriteCond %{HTTPS} off\r\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
+(1,	1,	1,	'riud',	'riud',	'',	'ForceSSL',	'apache',	'RewriteEngine On\r\nRewriteCond %{HTTPS} !on\r\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (2,	1,	1,	'riud',	'riud',	'',	'ForceWWW',	'apache',	'RewriteEngine on\r\nRewriteCond %{HTTP_HOST} !^www\\. [NC]\r\nRewriteRule ^ http://www.%{SERVER_NAME}%{REQUEST_URI} [R=301,L,NE]\r\n',	'y',	'',	'y',	0),
 (3,	1,	1,	'riud',	'riud',	'',	'ForceHttps:Host',	'nginx',	'# global https + host handler\r\nset $schost  \"$scheme://$host\";\r\nif ($schost != https://example.com) { return 301 https://example.com$request_uri; }\r\n',	'n',	'',	'y',	0),
 (4,	1,	1,	'riud',	'riud',	'',	'InterpretPHP',	'nginx',	'location / { try_files $uri $uri/ /index.php; }',	'n',	'',	'y',	0);
@@ -1424,7 +1424,7 @@ INSERT INTO `server_php` (`server_php_id`, `sys_userid`, `sys_groupid`, `sys_per
 (2,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.0',	'php-cgi7.0',	'/etc/php/7.0/cgi/php.ini',	'php7.0-fpm',	'/etc/php/7.0/fpm/php.ini',	'/etc/php/7.0/fpm/pool.d',	'n'),
 (3,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.1',	'php-cgi7.1',	'/etc/php/7.1/cgi/php.ini',	'php7.1-fpm',	'/etc/php/7.1/fpm/php.ini',	'/etc/php/7.1/fpm/pool.d',	'n'),
 (4,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.2',	'php-cgi7.2',	'/etc/php/7.2/cgi/php.ini',	'php7.2-fpm',	'/etc/php/7.2/fpm/php.ini',	'/etc/php/7.2/fpm/pool.d',	'n'),
-(5,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.3',	'php-cgi7.3',	'/etc/php/7.3/cgi/php.ini',	'php7.3-fpm',	'/etc/php/7.3/fpm/php.ini',	'/etc/php/7.3/fpm/pool.d',	'n'),
+(5,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.3',	'php-cgi7.3',	'/etc/php/7.3/cgi/php.ini',	'php7.3-fpm',	'/etc/php/7.3/fpm/php.ini',	'/etc/php/7.3/fpm/pool.d',	'y'),
 (6,	1,	1,	'riud',	'riud',	'',	1,	0,	'PHP7.4',	'php-cgi7.4',	'/etc/php/7.4/cgi/php.ini',	'php7.4-fpm',	'/etc/php/7.4/fpm/php.ini',	'/etc/php/7.4/fpm/pool.d',	'n');
 
 DROP TABLE IF EXISTS `shell_user`;

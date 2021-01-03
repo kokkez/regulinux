@@ -1,15 +1,14 @@
 # ------------------------------------------------------------------------------
 # install roundcube webmail
-# Roundcube 1.3.10: 2019-10-06
-# Roundcube 1.4.3:  2020-02-24
+# Roundcube 1.4.9:  2020-11-04
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.3 # version to install
+	local U P D=/var/www/roundcube V=1.4.9 # version to install
 
 	# test if not already installed
-	[ -s "${d}/index.php" ] && {
-		msg_alert "Roundcube is already installed..."
+	[ -s "${D}/index.php" ] && {
+		msg_alert "Roundcube ${V} is already installed..."
 		return
 	}
 
@@ -55,15 +54,6 @@ menu_roundcube() {
 	U=$(menu_password 24 1)	# strong password
 	do_copy roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
-
-	# install into sites-available of apache2
-	[ -d /etc/apache2 ] && {
-		cd /etc/apache2
-		copy_to sites-available roundcube/roundcube.conf
-		[ -L sites-enabled/080-roundcube.conf ] || {
-			ln -s ../sites-available/roundcube.conf sites-enabled/080-roundcube.conf
-		}
-	}
 
 	# set permissions
 	cd ${D}
@@ -111,8 +101,20 @@ EOF
 EOF
 	}
 
-	# activating some modules of apache2 then reload its configurations
-	a2enmod deflate expires headers
-	cmd systemctl restart apache2
+	# install the configuration file for webserver
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		copy_to /etc/nginx/snippets roundcube/roundcube-nginx.conf
+		cmd systemctl restart nginx
+	else
+		cd /etc/apache2/sites-enabled
+		is_symlink '080-roundcube.conf' || {
+			copy_to ../sites-available roundcube/roundcube.conf
+			ln -nfs ../sites-available/roundcube.conf '080-roundcube.conf'
+		}
+		# activating some modules of apache2 then reload its configurations
+		a2enmod deflate expires headers
+		cmd systemctl restart apache2
+	fi;
+
 	msg_info "Installation of Roundcube ${V} completed!"
 }	# end menu_roundcube
