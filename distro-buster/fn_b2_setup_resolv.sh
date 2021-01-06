@@ -15,6 +15,9 @@ resolv_via_resolvconf() {
 	N+="nameserver 1.0.0.1      # cloudflare\n"
 	N+="nameserver 80.80.81.81  # freenom.world"
 
+	# verify needed packages
+	pkg_require e2fsprogs
+
 	# write in /etc/resolv.conf
 	cmd chattr -i ${R}	# allow file modification
 	echo -e "# public dns\n${N}" > ${R}
