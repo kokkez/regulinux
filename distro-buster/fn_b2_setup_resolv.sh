@@ -18,10 +18,10 @@ resolv_via_resolvconf() {
 	# verify needed packages
 	pkg_require e2fsprogs
 
-	# write in /etc/resolv.conf
-	cmd chattr -i ${R}	# allow file modification
-	echo -e "# public dns\n${N}" > ${R}
-	cmd chattr +i ${R}	# disallow file modification
+	# write to /etc/resolv.conf
+	[ -s "${R}" ] && cmd chattr -i "${R}"	# allow file modification
+	echo -e "# public dns\n${N}" > "${R}"
+	cmd chattr +i "${R}"					# disallow file modification
 
 	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
