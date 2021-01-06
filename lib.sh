@@ -351,7 +351,7 @@ menu_password() {
 	# generate a random password (min 6 max 32 chars)
 	# $1 number of characters (defaults to 24)
 	# $2 flag for strong password (defaults no)
-	local CHR="[:alnum:]" LEN=$(cmd awk '{print int($1)}' <<< ${1-24})
+	local CHR="[:alnum:]" LEN=$(cmd awk '{print int($1)}' <<< ${1:-24})
 
 	# constrain number of characters
 	LEN=$(( LEN > 31 ? 32 : LEN < 7 ? 6 : LEN ))
@@ -514,7 +514,7 @@ help_menu() {
    . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)
  [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]
    . ${cORNG}upgrade${cNULL}     apt full upgrading of the system
-   . ${cORNG}password${cNULL}    print a random pw: \$1 = length (24), \$2 = flag strong
+   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong
    . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS
  [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]
    . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases

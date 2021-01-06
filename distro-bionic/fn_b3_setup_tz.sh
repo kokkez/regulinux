@@ -42,6 +42,9 @@ setup_tz() {
 		msg_error "The requested timezone does not exists: ${T}"
 	}
 
+	# verify needed packages
+	pkg_require dbus
+
 	cmd timedatectl set-timezone "${T}"
 	cmd timedatectl set-ntp on
 

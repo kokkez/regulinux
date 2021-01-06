@@ -111,3 +111,9 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# workaround for the buggy xterm related to htop
+export TERM=xterm-color
+
+# alias for ~/linux*/arrange
+host() { bash ~/lin*/arrange.sh "${@}"; }

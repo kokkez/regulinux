@@ -26,7 +26,6 @@ setup_sshd() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	X=ssh-session-cleanup.service
 	[ -s /etc/systemd/system/${X} ] || {
-		msg_info "Mitigating the problem of SSH hangs on reboot"
 		cp /usr/share/doc/openssh-client/examples/${X} /etc/systemd/system/
 		cmd systemctl daemon-reload
 		cmd systemctl enable ${X}
@@ -34,11 +33,12 @@ setup_sshd() {
 		# edit script to catch all sshd demons: shell & winscp
 		sed -ri /usr/lib/openssh/ssh-session-cleanup \
 			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
+		msg_info "Mitigation of 'SSH hangs on reboot' completed"
 	}
 
 	# restart SSH server
 	cmd systemctl restart ssh
-	msg_info "The SSH server is now listening on port: ${P}"
+	msg_info "SSH server is now listening on port: ${P}"
 }	# end setup_sshd
 
 
@@ -61,6 +61,7 @@ menu_ssh() {
 		mkdir -p ~/.config/htop && cd "$_"
 		copy_to . htop/*
 		cmd chmod 0700 ~/.config ~/.config/htop
+		msg_info "Preferences for htop completed!"
 	}
 
 	setup_bash
