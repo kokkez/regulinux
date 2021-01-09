@@ -22,19 +22,23 @@
 proc=$(ps aux | wc -l)
 load=$(awk '{print $1, $2, $3}' /proc/loadavg)
 tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
-mram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
-ipv4=$(hostname -i)
+uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
+ip4n=$(wget -q4O- ifconfig.co)
+ip4c=$(hostname -i)
 tswa=$(awk '/^SwapT/{print int($2 / 1024) "MB"}' /proc/meminfo)
-swap=$(awk '/^SwapT/{ t=$2 } /^SwapF/{ f=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
+uswa="-"
+[ "$tswa" != "0MB" ] && {
+	uswa=$(awk '/^SwapT/{ t=$2 } /^SwapF/{ f=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
+}
 time=$(uptime | sed -e 's/^[^,]*up *//' -e 's/, *[[:digit:]]* user.*//')
 disk=$(df -kl / | awk '/\//{printf("%dGiB",$2/1048576)}')
-hdus=$(df -h / | awk '/\// {print $(NF-1)}')
+uhdd=$(df -h / | awk '/\// {print $(NF-1)}')
 date=$(date +'%F %T %z')
  
 echo
 printf "Processes:\t%s\tSystem load:\t%s\n" "$proc" "$load"
-printf "RAM (%s):\t%s\tIP Address:\t%s\n" "$tram" "$mram" "$ipv4"
-printf "Swap (%s):\t%s\tSystem uptime:\t%s\n" "$tswa" "$swap" "$time"
-printf "HD / (%s):\t%s\tCurrent date:\t%s\n" "$disk" "$hdus" "$date"
+printf "RAM (%s):\t%s\tIPv4 Address:\t%s [ %s ]\n" "$tram" "$uram" "$ip4n" "$ip4c"
+printf "Swap (%s):\t%s\tSystem uptime:\t%s\n" "$tswa" "$uswa" "$time"
+printf "HD / (%s):\t%s\tCurrent date:\t%s\n" "$disk" "$uhdd" "$date"
 echo
 

@@ -5,8 +5,8 @@
 menu_ispconfig() {
 	HTTP_SERVER="${1:-apache}"
 
-	# abort if ispconfig was already installed
-	[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ] && {
+	# abort if ispconfig is already installed
+	has_ispconfig && {
 		msg_alert "ISPConfig3 is already installed..."
 		return
 	}

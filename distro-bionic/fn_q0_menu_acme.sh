@@ -11,7 +11,7 @@ acme_get() {
 
 acme_webroot() {
 	# returns the webroot for the acme.sh script
-	[ -d /usr/local/ispconfig/interface/acme ] && {
+	has_ispconfig && {
 		echo "/usr/local/ispconfig/interface/acme"	# ispconfig 3.1 webroot
 	} || {
 		echo "/var/www/acme-webroot"				# default webroot

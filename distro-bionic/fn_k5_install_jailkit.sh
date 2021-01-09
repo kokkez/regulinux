@@ -4,7 +4,7 @@
 
 install_jailkit() {
 	# important: Jailkit must be installed before ISPConfig3, it cannot be installed afterwards
-	[ -d "/usr/local/ispconfig" ] && {
+	has_ispconfig && {
 		msg_alert "ISPConfig3 is already installed, Jailkit will be skipped..."
 		return
 	}

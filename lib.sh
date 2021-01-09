@@ -167,7 +167,7 @@ sed_copy() {
 # ------------------------------------------------------------------------------
 
 is_symlink() {
-	# exits with 0 if symlink is valid, or with 1 if it is broken
+	# exits with 0 (success) if symlink is valid, or 1 if broken/missing
 	# $1: path to a symlink
 	[ -L "${1}" ] && [ -e "${1}" ]
 }	# end is_symlink
@@ -385,18 +385,6 @@ done_deps() {
 
 # ------------------------------------------------------------------------------
 
-php_version() {
-	# return the dotted number of the cli version of PHP
-	# $1 = word to specify the wanted result like this
-	# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
-	local V=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
-	[ "${1}" = "major" ] && V=$(cmd awk -F. '{print $1}' <<< "${V}")
-	[ "${1}" = "minor" ] && V=$(cmd awk -F. '{print $1"."$2}' <<< "${V}")
-	echo "${V}"
-}	# end php_version
-
-# ------------------------------------------------------------------------------
-
 port_validate() {
 	# set port in $1 to be strictly numeric & in range
 	local T L P=$(awk '{print int($1)}' <<< ${1:-22})
@@ -411,6 +399,25 @@ port_validate() {
 	}
 	echo ${P}
 }	# end port_validate
+
+# ------------------------------------------------------------------------------
+
+php_version() {
+	# return the dotted number of the cli version of PHP
+	# $1 = word to specify the wanted result like this
+	# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
+	local V=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
+	[ "${1}" = "major" ] && V=$(cmd awk -F. '{print $1}' <<< "${V}")
+	[ "${1}" = "minor" ] && V=$(cmd awk -F. '{print $1"."$2}' <<< "${V}")
+	echo "${V}"
+}	# end php_version
+
+# ------------------------------------------------------------------------------
+
+has_ispconfig() {
+	# exits with 0 (success) if ispgonfig is installed, or 1 if not
+	[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ]
+}	# end has_ispconfig
 
 
 
