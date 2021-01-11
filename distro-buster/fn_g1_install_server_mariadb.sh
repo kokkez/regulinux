@@ -1,9 +1,8 @@
 # ------------------------------------------------------------------------------
-# install the database server mariadb (fully compatible with mysql)
+# install mariadb-server-10.3 (fully compatible with mysql)
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	# debian 10 buster install mariadb-server-10.3
 	local K="mariadb-server"
 
 	is_installed "${K}" || {

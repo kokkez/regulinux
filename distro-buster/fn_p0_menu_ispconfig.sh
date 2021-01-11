@@ -3,38 +3,27 @@
 # ------------------------------------------------------------------------------
 
 menu_ispconfig() {
-	HTTP_SERVER="${1:-apache}"
+	HTTP_SERVER="${1:-${HTTP_SERVER}}"
 
-	# abort if ispconfig was already installed
-	[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ] && {
+	# abort if ispconfig is already installed
+	has_ispconfig && {
 		msg_alert "ISPConfig3 is already installed..."
 		return
 	}
 
-	# verify that the system was set up
+	# abort if the system is not set up properly
 	done_deps || return
 
 	# install prerequisites
 	TARGET="ispconfig"
 	menu_mailserver			# mailserver: postfix + dovecot
 	menu_dbserver			# database server: mariadb
+	menu_webserver			# webserver: nginx/apache2 with php-fpm & adminer
 
-	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		# install nginx webserver with php 7.3
-		install_nginx
-		install_php73_fpm_nginx
-	else
-		HTTP_SERVER="apache"
-		# install apache2 webserver with php 7.4
-		install_apache2
-		install_php74_fpm
-	fi;
-
-	install_selfsigned_sslcert
-	install_adminer
+	# install needed software for ispconfig
 	install_pureftpd
 	install_webstats
-#	install_jailkit
+	install_jailkit
 	install_fail2ban
 
 	# install ispconfig panel

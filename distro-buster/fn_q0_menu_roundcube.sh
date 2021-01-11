@@ -63,7 +63,7 @@ menu_roundcube() {
 	chmod -R u+rwX,go+rX,go-w .
 
 	# add the remote_soap_user into ISPConfig3 database, if ISPConfig3 is installed
-	[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ] && {
+	has_ispconfig && {
 		sed -e "s|RPW|${P}|" <<'EOF' | mysql
 USE dbispconfig;
 INSERT INTO remote_user (

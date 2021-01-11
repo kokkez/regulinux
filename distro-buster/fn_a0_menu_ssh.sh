@@ -61,7 +61,7 @@ menu_ssh() {
 		mkdir -p ~/.config/htop && cd "$_"
 		copy_to . htop/*
 		cmd chmod 0700 ~/.config ~/.config/htop
-		msg_info "Preferences for htop completed!"
+		msg_info "Installation of preferences for htop completed!"
 	}
 
 	setup_bash

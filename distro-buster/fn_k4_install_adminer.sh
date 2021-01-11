@@ -4,7 +4,7 @@
 
 install_adminer() {
 	# set: root directory & version
-	local U D=/var/www/myadminer V="4.7.6"
+	local U D=/var/www/myadminer V="4.7.8"
 
 	[ -s "${D}/index.php" ] && {
 		msg_alert "adminer-${V} is already installed..."

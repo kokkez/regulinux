@@ -1,11 +1,16 @@
 # ------------------------------------------------------------------------------
-# install nginx web server (version 1.14.2 on buster)
+# install nginx 1.14.2 web server for debian 10 buster
 # ------------------------------------------------------------------------------
 
 install_nginx() {
-	# abort if package was already installed
+	# abort if nginx is already installed
 	is_installed "nginx" && {
 		msg_alert "nginx is already installed..."
+		return
+	}
+	# abort also if apache2 is installed
+	is_installed "apache2-bin" && {
+		msg_alert "Found apache2! Installation of nginx cannot continue"
 		return
 	}
 

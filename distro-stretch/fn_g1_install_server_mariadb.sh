@@ -1,9 +1,8 @@
 # ------------------------------------------------------------------------------
-# install the database server mariadb (fully compatible with mysql)
+# install mariadb-server-10.1 (fully compatible with mysql)
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	# debian 9 stretch install mariadb-server-10.1
 	local K="mariadb-server"
 
 	is_installed "${K}" || {

@@ -1,9 +1,9 @@
 # ------------------------------------------------------------------------------
-# install default PHP-FPM (7.3 on buster) for nginx, + another version
+# install PHP-FPM for nginx (default 7.3 + other version) for debian 10 buster
 # https://dev.to/pushkaranand/upgrading-to-php-7-4-26dg
 # ------------------------------------------------------------------------------
 
-install_php73_fpm_nginx() {
+install_phpfpm_nginx() {
 	local V=7.4
 
 	# abort if package was already installed
@@ -39,4 +39,4 @@ install_php73_fpm_nginx() {
 
 	cmd systemctl restart nginx
 	msg_info "Installation of PHP${V} as PHP-FPM completed!"
-}	# end install_php73_fpm_nginx
+}	# end install_phpfpm_nginx

@@ -8,7 +8,7 @@ install_nginx() {
 		msg_alert "nginx is already installed..."
 		return
 	}
-	# abort also if nginx is installed
+	# abort also if apache2 is installed
 	is_installed "apache2-bin" && {
 		msg_alert "Found apache2! Installation of nginx cannot continue"
 		return

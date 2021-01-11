@@ -12,19 +12,15 @@ menu_webserver() {
 
 	# install webserver (nginx or apache2)
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		# install nginx (1.10.3) with php-fpm (7.0, +7.3)
 		install_nginx
-		install_phpfpm_nginx
+		install_phpfpm_nginx				# php-fpm for all targets
 	else
 		HTTP_SERVER="apache2"
-		# install apache2 (2.4.25) with php-fpm (7.0, +7.4)
 		install_apache2
 		if [ "${TARGET}" = "ispconfig" ]; then
-			# php with php-fpm for ispconfig
-			install_phpfpm_apache2
+			install_phpfpm_apache2			# php-fpm for ispconfig
 		else
-			# php with mod-php for other installations
-			install_modphp_apache2
+			install_modphp_apache2			# mod-php for other targets
 		fi;
 	fi;
 

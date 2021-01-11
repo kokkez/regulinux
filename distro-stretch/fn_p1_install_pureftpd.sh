@@ -11,6 +11,7 @@ install_pureftpd() {
 
 	msg_info "Installing PureFTPd..."
 	pkg_install pure-ftpd-common pure-ftpd-mysql
+
 	msg_info "Configuring PureFTPd..."
 
 	# setting up Pure-Ftpd

@@ -1,11 +1,16 @@
 # ------------------------------------------------------------------------------
-# install apache2 web server (version 2.4.38 on buster)
+# install apache2 2.4.38 web server for debian 10 buster
 # ------------------------------------------------------------------------------
 
 install_apache2() {
-	# abort if package was already installed
+	# abort if apache2 is already installed
 	is_installed "apache2-bin" && {
 		msg_alert "apache2 is already installed..."
+		return
+	}
+	# abort also if nginx is installed
+	is_installed "nginx" && {
+		msg_alert "Found nginx! Installation of apache2 cannot continue"
 		return
 	}
 

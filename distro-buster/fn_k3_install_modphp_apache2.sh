@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install MOD-PHP for apache2 (default 7.0) for debian 9 stretch
+# install MOD-PHP for apache2 (default 7.3) for debian 10 buster
 # ------------------------------------------------------------------------------
 
 install_modphp_apache2() {

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for debian stretch
+# customized functions for debian 9 stretch
 # ------------------------------------------------------------------------------
 
 help_menu() {
