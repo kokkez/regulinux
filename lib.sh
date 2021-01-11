@@ -36,7 +36,7 @@ CERT_OU="internet-server"
 CERT_CN="${HOST_FQDN}"
 CERT_E="${ROOT_MAIL}"
 
-HTTP_SERVER="apache"
+HTTP_SERVER="apache2"
 ISP3_MULTISERVER="n"   # "n" or "y"
 ISP3_MASTERHOST=""     # fqdn of the master ispconfig multiserver db, or empty
 ISP3_MASTERUSER="root" # username of the master db, usually root

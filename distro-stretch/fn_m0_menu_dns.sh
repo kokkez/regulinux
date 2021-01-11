@@ -8,7 +8,7 @@ menu_dns() {
 		return
 	fi;
 
-	# verify that the system was set up
+	# abort if the system is not set up properly
 	done_deps || return
 
 	# install the DNS server

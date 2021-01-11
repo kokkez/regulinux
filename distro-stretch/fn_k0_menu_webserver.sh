@@ -1,37 +1,33 @@
 # ------------------------------------------------------------------------------
-# install web server
+# install web server for debian 9 stretch
+# nginx 1.10.3 or apache2 2.4.25, with default php7.0
 # ------------------------------------------------------------------------------
 
 menu_webserver() {
-	TARGET="${1:-${TARGET}}"
+	HTTP_SERVER="${1:-${HTTP_SERVER}}"
+	TARGET="${2:-${TARGET}}"
 
-	# verify that the system was set up properly
+	# abort if the system is not set up properly
 	done_deps || return
 
-	# install apache2 webserver
-	install_apache2
-
-	# install php based on TARGET
-	if [ "${TARGET}" = "ispconfig" ]; then
-		# php with php-fpm for ispconfig
-#		install_php7x_fpm
-		install_php73_fpm
-#		install_php74_fpm
-
-		install_selfsigned_sslcert
-		install_pureftpd
-		install_adminer
-		install_webstats
-
-		install_jailkit
-		install_fail2ban
-
+	# install webserver (nginx or apache2)
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		# install nginx (1.10.3) with php-fpm (7.0, +7.3)
+		install_nginx
+		install_phpfpm_nginx
 	else
-		[ -z "${TARGET}" ] && TARGET="cloud"
-		# php with mod-php for basic installation
-		install_php_modphp
-
-		install_selfsigned_sslcert
-		install_adminer
+		HTTP_SERVER="apache2"
+		# install apache2 (2.4.25) with php-fpm (7.0, +7.4)
+		install_apache2
+		if [ "${TARGET}" = "ispconfig" ]; then
+			# php with php-fpm for ispconfig
+			install_phpfpm_apache2
+		else
+			# php with mod-php for other installations
+			install_modphp_apache2
+		fi;
 	fi;
+
+	install_adminer
+	install_sslcert_selfsigned
 }	# end menu_webserver

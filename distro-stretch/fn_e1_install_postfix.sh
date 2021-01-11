@@ -28,6 +28,8 @@ EOF
 		apt-get -qy purge --auto-remove exim4 exim4-*
 	}
 
+	msg_info "Configuring Postfix..."
+
 	# set basic parameters in main.cf
 	cmd postconf \
 		myhostname=${MAIL_NAME} \

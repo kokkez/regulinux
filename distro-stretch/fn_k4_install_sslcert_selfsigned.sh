@@ -2,7 +2,7 @@
 # install a self-signed certificate
 # ------------------------------------------------------------------------------
 
-install_selfsigned_sslcert() {
+install_sslcert_selfsigned() {
 	# create a self-signed certificate
 	local D=/etc/ssl/myserver
 	mkdir -p "${D}"		# create the parent directory
@@ -27,4 +27,4 @@ install_selfsigned_sslcert() {
 	sslcert_paths "${D}.key" "${D}.cert"
 
 	msg_info "Generation of self-signed SSL Certificate completed!"
-}	# end install_selfsigned_sslcert
+}	# end install_sslcert_selfsigned

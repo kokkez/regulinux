@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for debian buster
+# customized functions for debian stretch
 # ------------------------------------------------------------------------------
 
 help_menu() {
@@ -22,6 +22,7 @@ help_menu() {
  [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]
    . ${cORNG}roundcube${cNULL}   full featured imap web client
    . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
+   . ${cORNG}nextcloud${cNULL}   owncloud alternative of the file sharing system
    . ${cORNG}dumpdb${cNULL}      perform the backup of all databases, or the one given in \$1
  -------------------------------------------------------------------------------"
 }	# end help_menu
@@ -48,8 +49,8 @@ add_php_repository() {
 		down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 		cat > ${P} <<EOF
 # https://www.patreon.com/oerdnj
-deb http://packages.sury.org/php buster main
-#deb-src http://packages.sury.org/php buster main
+deb http://packages.sury.org/php stretch main
+#deb-src http://packages.sury.org/php stretch main
 EOF
 
 		# forcing apt update
@@ -65,8 +66,8 @@ sslcert_symlink() {
 	# $2 - path to the target file
 	is_symlink "${1}" || {
 		[ -s "${1}" ] && {
-		mv -f "${1}" "${1}.bak"
-		[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
+			mv -f "${1}" "${1}.bak"
+			[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
 			[ -s "${2}" ] && ln -nfs "${2}" "${1}"
 		}
 	}

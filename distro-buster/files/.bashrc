@@ -117,5 +117,5 @@ export TERM=xterm-color
 
 # aliasizing "host" for ~/linux*/arrange
 if [ -f ~/lin*/arrange.sh ]; then
-	host() { bash ~/lin*/arrange.sh "${@}"; }
+	myserver() { bash ~/lin*/arrange.sh "${@}"; }
 fi
