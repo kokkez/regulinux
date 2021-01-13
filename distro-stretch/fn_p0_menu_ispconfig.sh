@@ -23,7 +23,7 @@ menu_ispconfig() {
 	# install needed software for ispconfig
 	install_pureftpd
 	install_webstats
-	install_jailkit
+#	install_jailkit
 	install_fail2ban
 
 	# install ispconfig panel

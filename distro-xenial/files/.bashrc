@@ -101,3 +101,7 @@ fi
 # workaround for the buggy xterm related to htop
 export TERM=xterm-color
 
+# aliasizing "host" for ~/linux*/arrange
+if [ -f ~/lin*/arrange.sh ]; then
+	myserver() { bash ~/lin*/arrange.sh "${@}"; }
+fi

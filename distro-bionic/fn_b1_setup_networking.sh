@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 setup_networking() {
-	# if we are already using classic networking, then exit here
+	# abort if already using classic networking
 	[ -e "/run/network/ifstate" ] && return
 
 	# get some required values
