@@ -15,7 +15,7 @@ help_menu() {
  [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]
    . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases
    . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}
-   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, adminer, pureftpd
+   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer
  [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]
    . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities
    . ${cORNG}ispconfig${cNULL}   the magic Control Panel of the nice guys at howtoforge.com
@@ -51,7 +51,6 @@ add_php_repository() {
 deb http://packages.sury.org/php buster main
 #deb-src http://packages.sury.org/php buster main
 EOF
-
 		# forcing apt update
 		pkg_update true
 	}

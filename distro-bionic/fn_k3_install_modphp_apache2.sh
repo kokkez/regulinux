@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install MOD-PHP for apache2 (default 7.3) for debian 10 buster
+# install MOD-PHP for apache2 (default 7.2) for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 install_modphp_apache2() {

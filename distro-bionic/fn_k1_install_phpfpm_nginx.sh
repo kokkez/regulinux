@@ -1,9 +1,9 @@
 # ------------------------------------------------------------------------------
-# install PHP 7.3 as PHP-FPM for nginx
+# install PHP-FPM for nginx (default 7.2 + other version) for bionic
 # https://dev.to/pushkaranand/upgrading-to-php-7-4-26dg
 # ------------------------------------------------------------------------------
 
-install_php73_fpm_nginx() {
+install_phpfpm_nginx() {
 	local V=7.3
 
 	# abort if package was already installed
@@ -15,7 +15,7 @@ install_php73_fpm_nginx() {
 	# add external repository for updated php
 	add_php_repository
 
-	# now install php packages, versions 7.4, with some modules
+	# now install php packages, + versions 7.4, with some modules
 	pkg_install php7.2 \
 		php7.2-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php${V} \
@@ -25,8 +25,8 @@ install_php73_fpm_nginx() {
 #		php-{memcache,memcached} memcached \
 
 	# set alternative for php in cli mode
-#	cmd update-alternatives --set php /usr/bin/php${V}
 	cmd update-alternatives --auto php
+#	cmd update-alternatives --set php /usr/bin/php${V}
 
 	msg_info "Configuring PHP for nginx..."
 	cd /etc/nginx
@@ -39,4 +39,4 @@ install_php73_fpm_nginx() {
 
 	cmd systemctl restart nginx
 	msg_info "Installation of PHP${V} as PHP-FPM completed!"
-}	# end install_php73_fpm_nginx
+}	# end install_phpfpm_nginx

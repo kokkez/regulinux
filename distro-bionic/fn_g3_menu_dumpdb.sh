@@ -3,12 +3,16 @@
 # require a configured ~/.my.cnf, for credentials
 # ------------------------------------------------------------------------------
 # add this in /etc/crontab to dump MySQL databases at 13:07 and 20:07
-# 7 13,20 * * * root bash ~/mysqlbak.sh > /dev/null 2>&1
+# 7 13,20 * * * root bash ~/lin*/arrange.sh dumpdb > /dev/null 2>&1
 # ------------------------------------------------------------------------------
 
 menu_dumpdb() {
 	# creating a new database
 	# $1 db name - if provided it backup only this db
+
+	# sanity check
+	is_available "mysql" || return
+
 	local B C D P Q="SHOW DATABASES;"
 
 	# on passed arguments change query

@@ -1,15 +1,19 @@
 # ------------------------------------------------------------------------------
-# install the database server mariadb (fully compatible with mysql)
+# install mariadb-server-10.1 (fully compatible with mysql)
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	# ubuntu 18.04 bionic install mariadb-server-10.1
 	local K="mariadb-server"
 
-	is_installed "${K}" || {
-		msg_info "Installing ${K}..."
-		pkg_install mariadb-client mariadb-server
+	# abort if mariadb is already installed
+	is_installed "${K}" && {
+		msg_alert "${K} is already installed..."
+		return
 	}
+
+	# install required packages
+	msg_info "Installing ${K}..."
+	pkg_install mariadb-client mariadb-server
 
 	msg_info "Configuring ${K}"
 

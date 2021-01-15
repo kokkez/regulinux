@@ -1,11 +1,16 @@
 # ------------------------------------------------------------------------------
-# install nginx web server (version 1.14.0 on bionic)
+# install nginx 1.14.0 web server for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 install_nginx() {
-	# abort if package was already installed
+	# abort if nginx is already installed
 	is_installed "nginx" && {
 		msg_alert "nginx is already installed..."
+		return
+	}
+	# abort also if apache2 is installed
+	is_installed "apache2-bin" && {
+		msg_alert "Found apache2! Installation of nginx cannot continue"
 		return
 	}
 
@@ -25,7 +30,7 @@ install_nginx() {
 
 	# add a generic includer to "default" in sites-available
 	U=/etc/nginx/sites-available/default
-	grep -q '-nginx.conf' ${U} || {
+	grep -q '\-nginx.conf' ${U} || {
 		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' ${U}
 	}
 	# enabling SSL

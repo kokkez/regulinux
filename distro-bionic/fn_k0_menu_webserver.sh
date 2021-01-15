@@ -1,36 +1,29 @@
 # ------------------------------------------------------------------------------
-# install web server
+# install web server for ubuntu 18.04 bionic
+# nginx 1.14.0 or apache2 2.4.29, with default php7.2
 # ------------------------------------------------------------------------------
 
 menu_webserver() {
-	TARGET="${1:-${TARGET}}"
+	HTTP_SERVER="${1:-${HTTP_SERVER}}"
+	TARGET="${2:-${TARGET}}"
 
-	# verify that the system was set up properly
+	# abort if the system is not set up properly
 	done_deps || return
 
-	# install apache2 webserver
-	install_apache2
-
-	# install php based on TARGET
-	if [ "${TARGET}" = "ispconfig" ]; then
-		# php with php-fpm for ispconfig
-#		install_php7x_fpm
-		install_php74_fpm
-
-		install_selfsigned_sslcert
-		install_pureftpd
-		install_adminer
-		install_webstats
-
-		install_jailkit
-		install_fail2ban
-
+	# install webserver (nginx or apache2)
+	if [ "${HTTP_SERVER}" = "nginx" ]; then
+		install_nginx
+		install_phpfpm_nginx				# php-fpm for all targets
 	else
-		[ -z "${TARGET}" ] && TARGET="cloud"
-		# php with mod-php for basic installation
-		install_php_modphp
-
-		install_selfsigned_sslcert
-		install_adminer
+		HTTP_SERVER="apache2"
+		install_apache2
+		if [ "${TARGET}" = "ispconfig" ]; then
+			install_phpfpm_apache2			# php-fpm for ispconfig
+		else
+			install_modphp_apache2			# mod-php for other targets
+		fi;
 	fi;
+
+	install_adminer
+	install_sslcert_selfsigned
 }	# end menu_webserver

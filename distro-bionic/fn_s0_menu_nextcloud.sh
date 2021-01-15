@@ -1,15 +1,17 @@
 # ------------------------------------------------------------------------------
-# install nextcloud for ubuntu 18.04 with php 7.x
+# install nextcloud with php 7.2 for ubuntu 18.04 bionic	
 # ------------------------------------------------------------------------------
 
 menu_nextcloud() {
-	# test that was not already installed
+	HTTP_SERVER="${1:-${HTTP_SERVER}}"
+
+	# abort if nextcloud is already installed
 	[ -r /var/www/nextcloud/config/config.php ] && {
 		msg_alert "Nextcloud is already installed..."
 		return
 	}
 
-	# verify that the system was set up
+	# abort if the system is not set up properly
 	done_deps || return
 
 	# install prerequisites
@@ -17,12 +19,7 @@ menu_nextcloud() {
 	CERT_OU="cloud-server"
 	menu_mailserver			# mailserver: postfix
 	menu_dbserver			# database server: mariadb
-
-	# install apache2 webserver with php 7.4
-	install_apache2
-	install_php74_fpm
-	install_adminer
-	install_selfsigned_sslcert
+	menu_webserver			# webserver: nginx/apache2 with php-fpm & adminer
 
 	install_nextcloud 		# install nextcloud
 	install_varnish			# install the cache system

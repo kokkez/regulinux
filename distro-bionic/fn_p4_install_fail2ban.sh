@@ -1,12 +1,16 @@
 # ------------------------------------------------------------------------------
-# install fail2ban
+# install fail2ban 0.10.2 for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 install_fail2ban() {
-	is_installed "fail2ban" || {
-		msg_info "Installing fail2ban..."
-		pkg_install fail2ban
+	# abort if fail2ban is already installed
+	is_installed "fail2ban" && {
+		msg_alert "fail2ban is already installed..."
+		return
 	}
+
+	msg_info "Installing fail2ban..."
+	pkg_install fail2ban
 
 	msg_info "Configuring fail2ban..."
 

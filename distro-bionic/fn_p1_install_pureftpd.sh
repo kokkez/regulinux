@@ -1,12 +1,16 @@
 # ------------------------------------------------------------------------------
-# install ftp server pure-ftpd
+# install ftp server PureFTPd 1.0.46 for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 install_pureftpd() {
-	is_installed "pure-ftpd-mysql" || {
-		msg_info "Installing PureFTPd..."
-		pkg_install pure-ftpd-common pure-ftpd-mysql
+	# abort if PureFTPd is already installed
+	is_installed "pure-ftpd-mysql" && {
+		msg_alert "PureFTPd is already installed..."
+		return
 	}
+
+	msg_info "Installing PureFTPd..."
+	pkg_install pure-ftpd-common pure-ftpd-mysql
 
 	msg_info "Configuring PureFTPd..."
 
@@ -16,11 +20,11 @@ install_pureftpd() {
 	echo 1 > /etc/pure-ftpd/conf/TLS
 
 	# creating the certificate
-	local DIRE=/etc/ssl/private
-	mkdir -p ${DIRE}
-	[ -r "${DIRE}/pure-ftpd.pem" ] || {
+	local D=/etc/ssl/private
+	mkdir -p ${D}
+	[ -r "${D}/pure-ftpd.pem" ] || {
 		openssl req -x509 -nodes -days 7300 -newkey rsa:2048 \
-			-keyout "${DIRE}/pure-ftpd.pem" -out "${DIRE}/pure-ftpd.pem" \
+			-keyout "${D}/pure-ftpd.pem" -out "${D}/pure-ftpd.pem" \
 			-subj "/C=${CERT_C}/ST=${CERT_ST}/L=${CERT_L}/O=${CERT_O}/OU=${CERT_OU}/CN=${CERT_CN}/emailAddress=${CERT_E}"
 		chmod 600 pure-ftpd.pem
 	}

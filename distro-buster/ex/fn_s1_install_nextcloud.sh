@@ -1,16 +1,15 @@
 # ------------------------------------------------------------------------------
-# install nextcloud 18 for debian 9 with php 7.3
+# install nextcloud for debian 9 with php 7.0
 # ------------------------------------------------------------------------------
 
-install_nextcloud18() {
-	local URL VER="18.0.0"	# v18 for php 7
+install_nextcloud() {
+	local URL VER="15.0.14"	# latest for php 7.0
 
 	msg_info "Installing Nextcloud ${VER}..."
 
 	# install some php libraries before install Nextcloud
-	pkg_install php7.3-{cli,curl,gd,imap,intl,mbstring,xml,xmlrpc,zip} \
-		php-{apcu,imagick,memcache} imagemagick memcached bzip2 mcrypt
-		# php7.3-mcrypt there is no more
+	pkg_install php-{cli,gd,zip,curl,intl,imap,xmlrpc,xml,mbstring,apcu} \
+		php-imagick imagemagick memcached php-memcache bzip2 php-mcrypt mcrypt
 
 	# new database with related user, info saved in ~/.dbdata.txt
 	create_database "nextcloud" "nextcloud"
@@ -24,8 +23,8 @@ install_nextcloud18() {
 	down_load "${URL}" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
-	chown -R 33:0 /var/www/nextcloud # set user www-data
-	mkdir -p /var/www/nextcloud-data && chown -R 33:0 "$_" # set data folder too as www-data
+	mkdir -p /var/www/nextcloud-data # custom data folder
+	chown -R 33:0 /var/www/nextcloud* # set user www-data
 
 	# apache configuration
 	cd /etc/apache2
@@ -47,4 +46,4 @@ install_nextcloud18() {
 EOF
 	}
 	msg_info "Installation of nextcloud ${VER} completed!"
-}	# end install_nextcloud18
+}	# end install_nextcloud

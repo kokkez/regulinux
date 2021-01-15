@@ -16,7 +16,7 @@ install_ispconfig() {
 	[ -s autoinstall.ini ] || {
 		[ "${ISP3_MULTISERVER}" = "y" ] && M="expert"
 
-		do_copy ispconfig/autoinstall.ini.3.1 autoinstall.ini
+		do_copy ispconfig/autoinstall.ini.3.2 autoinstall.ini
 		sed -ri autoinstall.ini \
 			-e "s/^(install_mode=).*/\1${M:-standard}/" \
 			-e "s/^(hostname=).*/\1${HOST_FQDN}/" \

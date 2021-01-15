@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install nextcloud 19 for debian 9 (php min 7.2)
+# install nextcloud 19 (php min 7.2) for debian 9 stretch
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {

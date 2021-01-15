@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_motd() {
-	# if already installed exit here
+	# abort if MOTD is already installed
 	[ -s "/etc/update-motd.d/*-footer" ] && return
 
 	# verify needed packages

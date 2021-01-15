@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for ubuntu bionic
+# customized functions for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 help_menu() {
@@ -14,15 +14,14 @@ help_menu() {
    . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS
  [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]
    . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases
-   . ${cORNG}dbserver${cNULL}    the DB server, MariaDB or MySQL, root pw in ${cWITELITE}~/.my.cnf${cNULL}
-   . ${cORNG}webserver${cNULL}   webserver with apache, php, adminer, pureftpd
+   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}
+   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer
  [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]
    . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities
-   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)
    . ${cORNG}ispconfig${cNULL}   the magic Control Panel of the nice guys at howtoforge.com
  [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]
-   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
    . ${cORNG}roundcube${cNULL}   full featured imap web client
+   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
    . ${cORNG}dumpdb${cNULL}      perform the backup of all databases, or the one given in \$1
  -------------------------------------------------------------------------------"
 }	# end help_menu
@@ -41,21 +40,20 @@ menu_upgrade() {
 # ------------------------------------------------------------------------------
 
 add_php_repository() {
-	# append external repository to sources.list for updated php
-	cd /etc/apt
-	grep -q 'Ondrej Sury' sources.list || {
+	local P="/etc/apt/sources.list.d/php.list"
+
+	# add external repository for updated php
+	[ -s ${P} ] || {
 		pkg_require gnupg
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
-		cat >> sources.list <<EOF
-
+		cat > ${P} <<EOF
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
 deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 # deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 EOF
+		# forcing apt update
+		pkg_update true
 	}
-
-	# forcing apt update
-	pkg_update true
 }	# end add_php_repository
 
 # ------------------------------------------------------------------------------
