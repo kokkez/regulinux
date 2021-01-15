@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
 # install mariadb-server-10.1 (fully compatible with mysql)
+# https://reposcope.com/package/mariadb-server
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {

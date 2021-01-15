@@ -13,7 +13,7 @@ config_postfix_ispconfig() {
 	# install getmail4
 	pkg_require getmail4
 
-	msg_info "Configuring Postfix..."
+	msg_info "Configuring Postfix for ISPConfig..."
 
 	# uncommenting some lines in master.cf file
 	backup_file master.cf
@@ -26,5 +26,5 @@ config_postfix_ispconfig() {
 		-e 's|#(smtps)|\1|'
 
 	cmd systemctl restart postfix
-	msg_info "Configuration of postfix completed!"
+	msg_info "Configuration of Postfix for ISPConfig completed!"
 }	# end config_postfix_ispconfig

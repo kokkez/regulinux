@@ -1,9 +1,9 @@
 # ------------------------------------------------------------------------------
-# customize the Mot Of The Day screen
+# install and customize the "Mot Of The Day" screen
 # ------------------------------------------------------------------------------
 
 install_motd() {
-	# customize the "Mot Of The Day" screen
+	# abort if MOTD is already installed
 	[ -s "/etc/update-motd.d/*-footer" ] && return
 
 	# verify needed packages

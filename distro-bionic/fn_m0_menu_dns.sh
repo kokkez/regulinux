@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install the AntiSpam SMTP Proxy version 1 (min 384ram 1core)
+# install bind9 DNS server 9.11.4 for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 menu_dns() {
@@ -8,7 +8,7 @@ menu_dns() {
 		return
 	fi;
 
-	# verify that the system was set up
+	# abort if the system is not set up properly
 	done_deps || return
 
 	# install the DNS server

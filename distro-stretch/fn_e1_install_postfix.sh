@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
-# install postfix mailserver
+# install mailserver postfix 3.1.14 for debian 9 stretch
+# https://reposcope.com/package/postfix
 # ------------------------------------------------------------------------------
 
 install_postfix() {
@@ -28,7 +29,7 @@ EOF
 		apt-get -qy purge --auto-remove exim4 exim4-*
 	}
 
-	msg_info "Configuring Postfix..."
+	msg_info "Configuring Postfix for generic use..."
 
 	# set basic parameters in main.cf
 	cmd postconf \

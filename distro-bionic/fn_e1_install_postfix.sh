@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
-# install postfix mailserver
+# install mailserver postfix 3.3.0 for for ubuntu 18.04 bionic
+# https://reposcope.com/package/postfix
 # ------------------------------------------------------------------------------
 
 install_postfix() {
@@ -21,7 +22,7 @@ EOF
 	# install required & useful packages
 	pkg_install postfix postfix-mysql libsasl2-modules pfqueue swaks
 
-	msg_info "Configuring Postfix..."
+	msg_info "Configuring Postfix for generic use..."
 
 	# set basic parameters in main.cf
 	cmd postconf \

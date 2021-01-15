@@ -8,7 +8,7 @@ install_sslcert_selfsigned() {
 	mkdir -p "${D}"		# create the parent directory
 	D="${D}/server"		# certificate path prefix
 
-	# check that was not already generated
+	# abort if certificate is already generated
 	[ -r "${D}.cert" ] && {
 		msg_alert "SSL Certificate ( ${D}.cert ) is already generated..."
 		return
@@ -16,7 +16,7 @@ install_sslcert_selfsigned() {
 
 	msg_info "Generating self-signed SSL Certificate..."
 
-	# now write the certificate
+	# write the certificate
 	openssl rand -out ~/.rnd -hex 256
 	openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
 		-keyout "${D}.key" -out "${D}.cert" \

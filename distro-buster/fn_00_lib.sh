@@ -22,6 +22,7 @@ help_menu() {
  [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]
    . ${cORNG}roundcube${cNULL}   full featured imap web client
    . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
+   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform
    . ${cORNG}dumpdb${cNULL}      perform the backup of all databases, or the one given in \$1
  -------------------------------------------------------------------------------"
 }	# end help_menu

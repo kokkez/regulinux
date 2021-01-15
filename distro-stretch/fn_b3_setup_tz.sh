@@ -13,7 +13,7 @@ setup_tz() {
 	pkg_require dbus
 
 	cmd timedatectl set-timezone "${T}"
-	cmd timedatectl set-ntp on
+	cmd timedatectl set-ntp true
 
 	msg_info "Configuration of timezone completed!"
 	echo -e "$(cmd timedatectl)"
