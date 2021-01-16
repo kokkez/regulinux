@@ -57,7 +57,7 @@ EOF
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		copy_to /etc/nginx/snippets nextcloud/nextcloud-nginx.conf
 		# configure environment variables for php-fpm
-		sed -ri 's|^;env[|env[|' /etc/php/*/fpm/pool.d/www.conf
+		sed -ri 's|^;env\[|env\[|' /etc/php/*/fpm/pool.d/www.conf
 		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled

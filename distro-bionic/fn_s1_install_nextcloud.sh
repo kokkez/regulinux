@@ -57,16 +57,16 @@ EOF
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		copy_to /etc/nginx/snippets nextcloud/nextcloud-nginx.conf
 		# configure environment variables for php-fpm
-		sed -ri 's|^;env[|env[|' /etc/php/*/fpm/pool.d/www.conf
+		sed -ri 's|^;env\[|env\[|' /etc/php/*/fpm/pool.d/www.conf
 		cmd systemctl restart nginx
 	else
+		cmd a2enmod rewrite headers env dir mime ssl
+		cmd a2ensite default-ssl
 		cd /etc/apache2/sites-enabled
 		copy_to ../sites-available/ nextcloud/nextcloud.conf
 		[ -L 110-nextcloud.conf ] || ln -nfs ../sites-available/nextcloud.conf 110-nextcloud.conf
 		[ -L 000-default.conf ] && mv 000-default.conf 0000-default.conf
 		[ -L default-ssl.conf ] && mv default-ssl.conf 0000-default-ssl.conf
-		cmd a2enmod rewrite headers env dir mime ssl
-		cmd a2ensite default-ssl
 		cmd systemctl restart apache2
 	fi;
 
