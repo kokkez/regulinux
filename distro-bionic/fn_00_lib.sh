@@ -61,12 +61,14 @@ EOF
 
 sslcert_symlink() {
 	# create the symlink pointing to a real file
-	# $1 - file path to convert to symlink
-	# $2 - path to the real file
-	[ -s "${1}" ] && is_symlink "${1}" || {
+	# $1 - path to the file to convert to symlink
+	# $2 - path to the target file
+	is_symlink "${1}" || {
+		[ -s "${1}" ] && {
 		mv -f "${1}" "${1}.bak"
 		[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
-		ln -nfs "${2}" "${1}"
+			[ -s "${2}" ] && ln -nfs "${2}" "${1}"
+		}
 	}
 }	# end sslcert_symlink
 
