@@ -485,6 +485,7 @@ detect_linux() {
 		"debian-10")    DISTRO="buster"  ;; # 2020-05
 		"ubuntu-16.04") DISTRO="xenial"  ;;
 		"ubuntu-18.04") DISTRO="bionic"  ;; # 2020-04
+		"ubuntu-20.04") DISTRO="focal"   ;; # 2021-01
 	esac;
 
 	# test that distro isnt unknown
@@ -511,30 +512,41 @@ detect_linux() {
 
 help_menu() {
 	# display the main menu on screen
+	local k g c o; declare -a I; declare -A U	# indexed + associative arrays
+	# One time actions
+	k=a.title;     I+=($k);U[$k]=" [ . ${cWITELITE}One time actions${cNULL} ------------------------------ (in recommended order) -- ]"
+	k=a.ssh;       I+=($k);U[$k]="   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}"
+	k=a.deps;      I+=($k);U[$k]="   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall"
+	# Standalone utilities
+	k=b.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]"
+	k=b.upgrade;   I+=($k);U[$k]="   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system"
+	k=b.password;  I+=($k);U[$k]="   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
+	k=b.iotest;    I+=($k);U[$k]="   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS"
+	# Main applications
+	k=c.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]"
+	k=c.mailserver;I+=($k);U[$k]="   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases"
+	k=c.dbserver;  I+=($k);U[$k]="   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}"
+	k=c.webserver; I+=($k);U[$k]="   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer"
+	# Target system
+	k=d.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]"
+	k=d.dns;       I+=($k);U[$k]="   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities"
+	k=d.assp1;     I+=($k);U[$k]="   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)"
+	k=d.ispconfig; I+=($k);U[$k]="   . ${cORNG}ispconfig${cNULL}   historical Control Panel, support at ${cWITELITE}howtoforge.com${cNULL}"
+	# Others applications
+	k=e.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]"
+	k=e.dumpdb;    I+=($k);U[$k]="   . ${cORNG}dumpdb${cNULL}      to backup all databases, or the one given in ${cWITELITE}\$1${cNULL}"
+	k=e.roundcube; I+=($k);U[$k]="   . ${cORNG}roundcube${cNULL}   full featured imap web client"
+	k=e.nextcloud; I+=($k);U[$k]="   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform"
+	k=e.espo;      I+=($k);U[$k]="   . ${cORNG}espo${cNULL}        EspoCRM full featured CRM web application"
+	k=e.acme;      I+=($k);U[$k]="   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free SSL certificates"
+
+	for k in "${I[@]}"; do
+		[ "${k:0:2}" = "${g}" ] || {
+			[ -z "${c}" ] || o+="${U[${g}title]}\n${c}"
+			c=; g="${k:0:2}"
+		}
+		is_available "menu_${k:2}" && c+="${U[$k]}\n"
+	done
 	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}
- [ . ${cWITELITE}Basic menu options${cNULL} ---------------------------- (in recommended order) -- ]
-   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}
-   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall
-   . ${cORNG}resolv${cNULL}      set ${cWITELITE}/etc/resolv.conf${cNULL} with public dns
-   . ${cORNG}mykeys${cNULL}      set my authorized_keys, for me & backuppers
-   . ${cORNG}tz${cNULL}          set server timezone to ${cWITELITE}${TIME_ZONE}${cNULL}
-   . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)
- [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]
-   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system
-   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong
-   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS
- [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]
-   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases
-   . ${cORNG}dbserver${cNULL}    the DB server, MariaDB or MySQL, root pw in ${cWITELITE}~/.my.cnf${cNULL}
-   . ${cORNG}webserver${cNULL}   webserver with apache, php, adminer, pureftpd
- [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]
-   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities
-   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)
-   . ${cORNG}ispconfig${cNULL}   the magic Control Panel of the nice guys at howtoforge.com
- [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]
-   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
-   . ${cORNG}roundcube${cNULL}   full featured imap web client
-   . ${cORNG}nextcloud${cNULL}   owncloud alternative of the file sharing system
-   . ${cORNG}espo${cNULL}        EspoCRM full featured CRM webapplication
- -------------------------------------------------------------------------------"
+${o}${U[${g}title]}\n${c} -------------------------------------------------------------------------------"
 }	# end help_menu
