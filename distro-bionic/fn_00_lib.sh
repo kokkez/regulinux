@@ -2,33 +2,6 @@
 # customized functions for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
-help_menu() {
-	# display the main menu on screen
-	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}
- [ . ${cWITELITE}Basic menu options${cNULL} ---------------------------- (in recommended order) -- ]
-   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}
-   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall
- [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]
-   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system
-   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong
-   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS
- [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]
-   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases
-   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}
-   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer
- [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]
-   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities
-   . ${cORNG}ispconfig${cNULL}   the magic Control Panel of the nice guys at howtoforge.com
- [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]
-   . ${cORNG}roundcube${cNULL}   full featured imap web client
-   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free certificate client
-   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform
-   . ${cORNG}dumpdb${cNULL}      perform the backup of all databases, or the one given in \$1
- -------------------------------------------------------------------------------"
-}	# end help_menu
-
-# ------------------------------------------------------------------------------
-
 menu_upgrade() {
 	msg_info "Upgrading system packages for ${OS} (${DISTRO})..."
 	pkg_update	# update packages lists
