@@ -522,6 +522,10 @@ help_menu() {
 	k=b.upgrade;   I+=($k);U[$k]="   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system"
 	k=b.password;  I+=($k);U[$k]="   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
 	k=b.iotest;    I+=($k);U[$k]="   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS"
+	k=b.resolv;    I+=($k);U[$k]="   . ${cORNG}resolv${cNULL}      set ${cWITELITE}/etc/resolv.conf${cNULL} with public dns"
+	k=b.mykeys;    I+=($k);U[$k]="   . ${cORNG}mykeys${cNULL}      set my authorized_keys, for me & backuppers"
+	k=b.tz;        I+=($k);U[$k]="   . ${cORNG}tz${cNULL}          set server timezone to ${cWITELITE}${TIME_ZONE}${cNULL}"
+	k=b.motd;      I+=($k);U[$k]="   . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)"
 	# Main applications
 	k=c.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]"
 	k=c.mailserver;I+=($k);U[$k]="   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases"
