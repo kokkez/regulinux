@@ -6,6 +6,7 @@ ca-certificates       install
 cron                  install
 curl                  install
 dbus                  install
+distro-info-data      install
 dmsetup               install
 e2fsprogs             install
 figlet                install
