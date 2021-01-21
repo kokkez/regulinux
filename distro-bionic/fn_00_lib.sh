@@ -38,8 +38,8 @@ sslcert_symlink() {
 	# $2 - path to the target file
 	is_symlink "${1}" || {
 		[ -s "${1}" ] && {
-		mv -f "${1}" "${1}.bak"
-		[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
+			mv -f "${1}" "${1}.bak"
+			[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
 			[ -s "${2}" ] && ln -nfs "${2}" "${1}"
 		}
 	}
