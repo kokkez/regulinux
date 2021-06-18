@@ -12,9 +12,9 @@ menu_dumpdb() {
 	# sanity check
 	is_available "mysql" || return
 
-	local C B D P Q="SHOW DATABASES;"
+	local B C D P Q="SHOW DATABASES;"
 
-	# on passed arguments change query
+	# if are there arguments, then change query
 	(( $# )) && Q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder

@@ -7,7 +7,6 @@
 # ------------------------------------------------------------------------------
 
 menu_dumpdb() {
-	# creating a new database
 	# $1 db name - if provided it backup only this db
 
 	# sanity check
@@ -15,7 +14,7 @@ menu_dumpdb() {
 
 	local B C D P Q="SHOW DATABASES;"
 
-	# on passed arguments change query
+	# if are there arguments, then change query
 	(( $# )) && Q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder
@@ -23,13 +22,15 @@ menu_dumpdb() {
 	mkdir -p "${C}"
 
 	# set static blacklist
-	B="# Database information_schema mysql performance_schema #"
+	B="information_schema|mysql|performance_schema"
 
-	# show all databases without print labels
-	for D in $(cmd mysql -Ne "${Q}"); do
-		[[ ${B} = *${D}* ]] && continue		# skip db in blacklist
+	# show databases NOT blacklisted, silently & without labels
+	# mysql -B : --batch
+	# mysql -N : --skip-column-names
+	for D in $(cmd mysql -BNe "${Q}" | grep -vP "${B}"); do
 		P="${C}/${D}.sql.gz"
-		cmd mysqldump --force -h 127.0.0.1 ${D} | cmd gzip > ${P}
-		msg_info "Database '${D}' on '$(cmd date '+%F %H:%M')' saved to: '${P}'"
+		cmd mysqldump --single-transaction --routines --quick --force ${D} | \
+			cmd gzip --best --rsyncable > ${P}
+		msg_info "$(cmd date '+%F %T') database '${D}' saved to: '${P}'"
 	done
 }	# end menu_dumpdb
