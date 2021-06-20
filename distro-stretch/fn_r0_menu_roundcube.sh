@@ -1,10 +1,11 @@
 # ------------------------------------------------------------------------------
 # install roundcube webmail
 # Roundcube 1.4.9:  2020-11-04
+# Roundcube 1.4.11: 2021-06-20
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.9 # version to install
+	local U P D=/var/www/roundcube V=1.4.11 # version to install
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
@@ -62,7 +63,7 @@ menu_roundcube() {
 	chmod -R 400 .
 	chmod -R u+rwX,go+rX,go-w .
 
-	# add the remote_soap_user into ISPConfig3 database, if ISPConfig3 is installed
+	# if ispconfig is installed, add the remote user into the db
 	has_ispconfig && {
 		sed -e "s|RPW|${P}|" <<'EOF' | mysql
 USE dbispconfig;
