@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
 # install ftp server PureFTPd 1.0.46 for ubuntu 18.04 bionic
+# https://reposcope.com/package/pure-ftpd-mysql
 # ------------------------------------------------------------------------------
 
 install_pureftpd() {

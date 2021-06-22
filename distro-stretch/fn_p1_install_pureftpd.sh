@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
 # install ftp server PureFTPd 1.0.43 for debian 9 stretch
+# https://reposcope.com/package/pure-ftpd-mysql
 # ------------------------------------------------------------------------------
 
 install_pureftpd() {

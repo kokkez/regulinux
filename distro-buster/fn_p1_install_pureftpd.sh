@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
 # install ftp server PureFTPd 1.0.47 for debian 10 buster
+# https://reposcope.com/package/pure-ftpd-mysql
 # ------------------------------------------------------------------------------
 
 install_pureftpd() {

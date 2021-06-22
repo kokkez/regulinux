@@ -7,7 +7,6 @@
 # ------------------------------------------------------------------------------
 
 menu_dumpdb() {
-	# creating a new database
 	# $1 db name - if provided it backup only this db
 
 	# sanity check
@@ -15,7 +14,7 @@ menu_dumpdb() {
 
 	local B C D P Q="SHOW DATABASES;"
 
-	# on passed arguments change query
+	# if are there arguments, then change query
 	(( $# )) && Q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder
