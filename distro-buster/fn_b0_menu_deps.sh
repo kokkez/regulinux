@@ -6,7 +6,7 @@ menu_deps() {
 	local P="${1:-${SSHD_PORT}}"
 	menu_ssh "${P}"
 
-#	setup_networking
+	setup_networking
 	setup_resolv
 	setup_tz
 	minimalize_os

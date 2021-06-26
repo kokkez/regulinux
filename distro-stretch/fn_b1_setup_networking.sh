@@ -6,10 +6,7 @@ setup_networking() {
 	# check for using classic networking
 	[ -e "/run/network/ifstate" ] || return
 
-	cd /etc/network
-
 	# abort if already using static ip address
-	cmd grep -q 'inet static' ./interfaces && return
 
 	# get some required values
 	local IF IP GW=$(cmd ip route get 1.1.1.1)
