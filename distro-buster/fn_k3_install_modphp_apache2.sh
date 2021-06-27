@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_modphp_apache2() {
-	# abort if MOD-PHP is already installed
+	# abort if package is already installed
 	is_installed "libapache2-mod-php" && {
 		msg_alert "PHP as MOD-PHP for apache2 is already installed..."
 		return

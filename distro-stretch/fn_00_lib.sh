@@ -25,7 +25,6 @@ add_php_repository() {
 deb http://packages.sury.org/php stretch main
 #deb-src http://packages.sury.org/php stretch main
 EOF
-
 		# forcing apt update
 		pkg_update true
 	}

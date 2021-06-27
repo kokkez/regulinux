@@ -6,22 +6,25 @@ setup_networking() {
 	# check for using classic networking
 	[ -e "/run/network/ifstate" ] || return
 
-	cd /etc/network
-
-	# abort if already using static ip address
-	cmd grep -q 'inet static' ./interfaces && return
-
 	# get some required values
 	local IF IP GW=$(cmd ip route get 1.1.1.1)
 	IF=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "${GW}")
 	IP=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "${GW}")
 	GW=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "${GW}")
 
+	cd /etc/network
+
+	# abort if already using static ip address
+	cmd grep -q 'inet static' ./interfaces && {
+		msg_info "Network already configured with static IP: ${IP}"
+		return
+	}
+
 	# backup original file
 	backup_file ./interfaces
 
 	# setup /etc/network/interfaces file
-	cmd cat >> ./interfaces <<EOF
+	cmd cat > ./interfaces <<EOF
 # loopback interface
 auto lo
 iface lo inet loopback
@@ -37,6 +40,6 @@ EOF
 #	cmd ifdown --force ${IF} lo && cmd ifup -a
 	cmd systemctl restart networking
 
+	msg_info "Networking changed to run with static IP: ${IP}"
 	msg_alert "Carefully check /etc/network/interfaces before reboot!"
 }	# end setup_networking
-
