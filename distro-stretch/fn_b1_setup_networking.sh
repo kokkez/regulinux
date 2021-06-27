@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 setup_networking() {
-	# check for using classic networking
+	# abort if NOT using classic networking
 	[ -e "/run/network/ifstate" ] || return
 
 	# get some required values
