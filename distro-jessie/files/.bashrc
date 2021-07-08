@@ -115,6 +115,6 @@ fi
 # workaround for the buggy xterm related to htop
 export TERM=xterm-color
 
-# aliasizing "os" for ~/linux-*/arrange.sh
-[ -s ~/lin*/arrange.sh ] && os() { bash ~/lin*/arrange.sh "${@}"; }
+# aliasizing "os" for ~/linux-*/os.sh
+[ -s ~/lin*/os.sh ] && os() { bash ~/lin*/os.sh "${@}"; }
 
