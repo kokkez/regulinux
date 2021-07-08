@@ -1,8 +1,12 @@
 # ------------------------------------------------------------------------------
-# customize OS minimalizing the installed packages
+# cleanup OS minimizing the installed packages
 # ------------------------------------------------------------------------------
 
-minimalize_os() {
+OS.minimalize() {
+	# install sources.list from MyDir
+	copy_to /etc/apt sources.list
+	msg_info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
+
 	# always use --no-install-recommends (also used as a check in "done_deps")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
 APT::Install-Recommends "0";
@@ -15,7 +19,7 @@ libc6 libraries/restart-without-asking boolean true
 libc6:amd64 libraries/restart-without-asking boolean true
 postfix postfix/main_mailer_type select Internet Site
 postfix postfix/mailname string ${MAIL_NAME}
-postfix postfix/destinations string ${HOST_FQDN},localhost
+postfix postfix/destinations string ${HOST_FQDN}, localhost
 EOF
 
 	# purging foreign architectures (i*86, ...)
@@ -66,4 +70,4 @@ EOF
 	rm -rf pkg*.txt				# removing temp files
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
 	dpkg --get-selections > ~/selections.txt
-}	# end minimalize_os
+}	# end OS.minimalize

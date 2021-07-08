@@ -9,7 +9,7 @@ menu_deps() {
 	setup_networking
 	setup_resolv
 	setup_tz
-	minimalize_os
+	OS.minimalize
 
 	install_motd
 	install_syslogd

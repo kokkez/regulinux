@@ -19,6 +19,8 @@ setup_networking() {
 	cd /etc/network
 	cmd grep -q 'auto lo' ./interfaces || {
 		cmd cat >> ./interfaces <<EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
 
 # loopback interface
 auto lo

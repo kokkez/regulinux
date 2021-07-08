@@ -25,6 +25,9 @@ setup_networking() {
 
 	# setup /etc/network/interfaces file
 	cmd cat > ./interfaces <<EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
 # loopback interface
 auto lo
 iface lo inet loopback

@@ -29,5 +29,5 @@
 		cmd "menu_${1}" "${@:2}"
 		msg_notice "Execution of '${1}' completed!"
 	else
-		help_menu
+		OS.menu
 	fi;

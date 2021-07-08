@@ -2,7 +2,7 @@
 # customize OS minimalizing the installed packages
 # ------------------------------------------------------------------------------
 
-minimalize_os() {
+OS.minimalize() {
 	# always use --no-install-recommends (also used as a check in "done_deps")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
 APT::Install-Recommends "0";
@@ -66,4 +66,4 @@ EOF
 	rm -rf pkg*.txt				# removing temp files
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
 	dpkg --get-selections > ~/selections.txt
-}	# end minimalize_os
+}	# end OS.minimalize

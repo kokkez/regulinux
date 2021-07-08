@@ -9,7 +9,7 @@ menu_deps() {
 
 	shell_bash
 	menu_tz
-	os_arrange
+	OS.minimalize
 	install_syslogd
 	install_firewall "${P}"
 

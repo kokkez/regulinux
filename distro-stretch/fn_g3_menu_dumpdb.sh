@@ -3,7 +3,7 @@
 # require a configured ~/.my.cnf, for credentials
 # ------------------------------------------------------------------------------
 # add this in /etc/crontab to dump MySQL databases at 13:07 and 20:07
-# 7 13,20 * * * root bash ~/lin*/arrange.sh dumpdb > /dev/null 2>&1
+# 7 13,20 * * * root bash ~/lin*/os.sh dumpdb > /dev/null 2>&1
 # ------------------------------------------------------------------------------
 
 menu_dumpdb() {

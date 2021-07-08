@@ -2,7 +2,7 @@
 # customized functions for ubuntu 20.04 focal
 # ------------------------------------------------------------------------------
 
-help_menu() {
+OS.menu() {
 	# display the main menu on screen
 	local S O=""
 
@@ -63,5 +63,5 @@ help_menu() {
 
 	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}\n${S}
  -------------------------------------------------------------------------------"
-}	# end help_menu
+}	# end OS.menu
 

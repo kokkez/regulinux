@@ -415,7 +415,7 @@ php_version() {
 # ------------------------------------------------------------------------------
 
 has_ispconfig() {
-	# exits with 0 (success) if ispgonfig is installed, or 1 if not
+	# exits with 0 (success) if ispconfig is installed
 	[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ]
 }	# end has_ispconfig
 
@@ -510,7 +510,7 @@ detect_linux() {
 
 # ------------------------------------------------------------------------------
 
-help_menu() {
+OS.menu() {
 	# display the main menu on screen
 	local k g c o; declare -a I; declare -A U	# indexed + associative arrays
 	# One time actions
@@ -553,4 +553,4 @@ help_menu() {
 	done
 	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}
 ${o}${U[${g}title]}\n${c} -------------------------------------------------------------------------------"
-}	# end help_menu
+}	# end OS.menu
