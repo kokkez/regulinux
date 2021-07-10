@@ -32,7 +32,7 @@ install_adminer() {
 	copy_to . adminer/index.php
 	sed -i "s|FILE|${D}|" index.php
 
-	# install css file & plugins, from MyDir
+	# install css file & plugins
 	copy_to . adminer/adminer.css
 	copy_to plugins adminer/plugins/*
 

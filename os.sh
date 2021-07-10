@@ -8,21 +8,22 @@
 #	----------------------------------------------------------------------------
 	# $0 refers to the calling script
 	# ${BASH_SOURCE[0]} refers to this particular file
-	MyDir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
-	. "${MyDir}/lib.sh"
+	ENV_dir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
+	. "${ENV_dir}/lib.sh"
 
 
 #	main program
 #	----------------------------------------------------------------------------
 	# on exit and CTRL C execute some cleanup
-	trap clean_up EXIT
+	trap Env.clean EXIT
 
 	PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 	export PATH=${PATH}
 
-	# get info on system
-	detect_linux
+	# environment initialization
+	ENV.init
 
+	# control and execution of the requested command
 	if [ -n "$1" ] && is_available "menu_${1}"; then
 		cmd "menu_${1}" "${@:2}"
 		Msg.debug "Execution of '${1}' completed!"

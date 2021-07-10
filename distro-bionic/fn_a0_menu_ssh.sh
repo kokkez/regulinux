@@ -52,9 +52,9 @@ menu_ssh() {
 	cmd chmod 0600 authorized_keys
 	Msg.info "Setup of authorized_keys completed!"
 
-	# install sources.list from MyDir
+	# install sources.list
 	copy_to /etc/apt sources.list
-	Msg.info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
+	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
 
 	# copy preferences for htop
 	[ -d ~/.config/htop ] || {

@@ -10,7 +10,7 @@ menu_mykeys() {
 	[ -r authorized_keys ] || copy_to . ssh/authorized_keys
 
 	# append content
-	grep -q "kokkez" authorized_keys || cat "${MyFILES}/ssh/authorized_keys" >> authorized_keys
+	grep -q "kokkez" authorized_keys || cat "${ENV_files}/ssh/authorized_keys" >> authorized_keys
 
 	cmd chmod 0600 authorized_keys
 	Msg.info "Installation of my authorized_keys completed!"

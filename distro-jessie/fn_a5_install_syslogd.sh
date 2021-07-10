@@ -30,7 +30,7 @@ mail.err								-/var/log/mail.err
 mail.*									-/var/log/mail.log
 EOF
 
-	# install /etc/logrotate.d/inetutils-syslogd from MyDir
+	# install /etc/logrotate.d/inetutils-syslogd
 	mkdir -p /etc/logrotate.d && cd "$_"
 	rm -f inetutils-syslogd
 	copy_to . inetutils-syslogd

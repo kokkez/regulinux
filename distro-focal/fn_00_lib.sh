@@ -61,7 +61,7 @@ OS.menu() {
 	is_available "menu_acme" && {
 		S+="   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free SSL certificates\n"; }
 
-	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL} :: ${MyDir}\n${S}
+	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}$ENV_os $ENV_arch${cNULL} :: ${ENV_dir}\n${S}
  -------------------------------------------------------------------------------"
 }	# end OS.menu
 

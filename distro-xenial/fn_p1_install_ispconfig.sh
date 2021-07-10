@@ -45,7 +45,7 @@ install_ispconfig() {
 	copy_to . ispconfig/index.php
 
 	# load a customized database dbispconfig
-	cd ${MyFILES}/ispconfig
+	cd ${ENV_files}/ispconfig
 	[ -f "dbispconfig-${V}.sql" ] && cmd mysql 'dbispconfig' < dbispconfig-${V}.sql
 
 	# commenting lines in 2 new files of postfix

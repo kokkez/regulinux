@@ -66,7 +66,7 @@
 	}	# end is_available
 
 	detect_linux() {
-		# detect OS info (LINUX, VERSION, DISTRO)
+		# detect OS info (ENV_product, ENV_version, ENV_codename)
 		# thanks to Mikel (http://unix.stackexchange.com/users/3169/mikel) for idea
 
 		# user must be root (id == 0)
@@ -76,7 +76,7 @@
 		local x t
 		Dye.fg.gray "You are currently logged as:" $( Dye.fg.gray.lite $( cmd id -un ) )
 
-		# test the presence of some required commands
+		# test the availability of some required commands
 		for x in awk apt-get cat cd cp debconf-set-selections dpkg \
 			dpkg-reconfigure find grep head mkdir mv perl rm sed tr;
 		do
@@ -84,62 +84,63 @@
 				|| Dye.fg.gray "Missing command:" $( Dye.fg.gray.lite "$x" )
 		done
 
-		# set some environmental vars
-		OS_arch=$( cmd uname -m )
-		OS_path=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
-		OS_files="$OS_path/files-common"
+		# setup some environment variables
+		ENV_dir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
+		ENV_arch=$( cmd uname -m )
+		ENV_files="$ENV_dir/files-common"
 
 		# get info on system
 		if [ -f /etc/lsb-release ]; then
 			. /etc/lsb-release
-			LINUX=${DISTRIB_ID,,}			# debian, ubuntu, ...
-			VERSION=${DISTRIB_RELEASE,,}	# 7, 14.04, ...
+			ENV_product=${DISTRIB_ID,,}			# debian, ubuntu, ...
+			ENV_version=${DISTRIB_RELEASE,,}	# 7, 14.04, ...
 		elif [ -f /etc/os-release ]; then
 			. /etc/os-release
-			LINUX=${ID,,}					# debian, ubuntu, ...
-			VERSION=${VERSION_ID,,}			# 7, 14.04, ...
+			ENV_product=${ID,,}					# debian, ubuntu, ...
+			ENV_version=${VERSION_ID,,}			# 7, 14.04, ...
 		elif [ -f /etc/issue.net ]; then
 			t=$(head -1 /etc/issue.net)
-			LINUX=$(awk '{print $1}' <<< ${t,,})
-			VERSION=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
+			ENV_product=$(awk '{print $1}' <<< ${t,,})
+			ENV_version=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
 		fi;
 
 		# assigning distribution pretty name
-		OS_info="${LINUX}-${VERSION}"
+		ENV_release="${ENV_product}-${ENV_version}"
 
-		case "$OS_info" in
-		#	"debian-7")     DISTRO="wheezy"  ;;
-			"debian-8")     DISTRO="jessie"  ;;
-			"debian-9")     DISTRO="stretch" ;;
-			"debian-10")    DISTRO="buster"  ;; # 2020-05
-			"ubuntu-16.04") DISTRO="xenial"  ;;
-			"ubuntu-18.04") DISTRO="bionic"  ;; # 2020-04
-			"ubuntu-20.04") DISTRO="focal"   ;; # 2021-01
+		case "$ENV_release" in
+		#	"debian-7")     ENV_codename="wheezy"  ;;
+			"debian-8")     ENV_codename="jessie"  ;;
+			"debian-9")     ENV_codename="stretch" ;;
+			"debian-10")    ENV_codename="buster"  ;; # 2020-05
+			"ubuntu-16.04") ENV_codename="xenial"  ;;
+			"ubuntu-18.04") ENV_codename="bionic"  ;; # 2020-04
+			"ubuntu-20.04") ENV_codename="focal"   ;; # 2021-01
 		esac;
 
 		# test that distro isnt unknown
-		[ "${DISTRO}" = "unknown" ] && {
-			Msg.error "This distribution is not supported: $OS_info"
+		[ "${ENV_codename}" = "unknown" ] && {
+			Msg.error "This distribution is not supported: $ENV_release"
 		}
-		Dye.fg.gray "This distribution is supported:" $( Dye.fg.gray.lite "$OS_info ($OS_path)" )
+
+		ENV_os="$ENV_release ($ENV_codename)"
+		Dye.fg.gray "This distribution is supported:" $( Dye.fg.gray.lite "$ENV_os" )
 
 		# append to parent folder name the current distro infos
-		t=~/linux.${OS_info}.${DISTRO}.${OS_arch}
-		[ -d "$t" ] || { mv ~/linux* "$t"; OS_path="$t"; }
+		t=~/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		[ -d "$t" ] || { mv ~/linux* "$t"; ENV_dir="$t"; }
 
 		# removing unneeded distros
-		for x in $OS_path/distro-*; do
-#			[ "$x" = "distro-${DISTRO}" ] || rm -rf "$x"
-			[ "$x" = "$OS_path/distro-$DISTRO" ] || Dye.fg.gray removing "$x"
+		for x in $ENV_dir/distro-*; do
+#			[ "$x" = "distro-${ENV_codename}" ] || rm -rf "$x"
+			[ "$x" = "$ENV_dir/distro-$ENV_codename" ] || Dye.fg.gray removing "$x"
 		done
 
 		# sourcing all scripts
-		for x in $OS_path/distro-${DISTRO}/fn_*; do
+		for x in $ENV_dir/distro-${ENV_codename}/fn_*; do
 #			echo "$x"
 			. "$x"
 		done
-		MyFILES=$OS_path/files-common
-		MyDISTRO=$OS_path/distro-${DISTRO}/files
+		MyDISTRO=$ENV_dir/distro-${ENV_codename}/files
 		is_available 'nginx' && HTTP_SERVER='nginx'
 	}	# end detect_linux
 
@@ -188,8 +189,8 @@
 			is_available "menu_${k:2}" && c+="${H[$k]}\n"
 		done
 		echo -e " $( cmd date '+%F %T %z' ) ::" \
-			$( Dye.fg.orange "$OS_info ($DISTRO) $OS_arch" ) \
-			":: $OS_path\n$o${H[${g}title]}\n${c}" \
+			$( Dye.fg.orange "$ENV_os $ENV_arch" ) \
+			":: $ENV_dir\n$o${H[${g}title]}\n${c}" \
 			"[ -------------------------------------------------------------------------------------------- ]"
 	}	# end OS.menu
 

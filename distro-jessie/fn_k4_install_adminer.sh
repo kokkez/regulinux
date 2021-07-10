@@ -32,7 +32,7 @@ install_adminer() {
 	copy_to . adminer/index.php
 	sed -i "s|FILE|${ADM}|" index.php
 
-	# install css file & tables-filter plugin, from MyDir
+	# install css file & tables-filter plugin
 	copy_to . adminer/adminer.css
 	copy_to plugins adminer/tables-filter.php
 

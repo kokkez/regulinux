@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_upgrade() {
-	Msg.info "Upgrading system packages for ${OS} (${DISTRO})..."
+	Msg.info "Upgrading system packages for ${ENV_os}..."
 	pkg_update	# update packages lists
 
 	# do the apt upgrade

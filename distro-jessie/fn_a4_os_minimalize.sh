@@ -3,9 +3,9 @@
 # ------------------------------------------------------------------------------
 
 OS.minimalize() {
-	# install sources.list from MyDir
+	# install sources.list
 	copy_to /etc/apt sources.list
-	Msg.info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
+	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
 
 	# always use --no-install-recommends (also used as a check in "done_deps")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF

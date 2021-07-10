@@ -12,7 +12,7 @@ install_jailkit() {
 	# check if Jailkit is installed already
 	is_available "jk_list" || {
 		Msg.info "Installing Jailkit..."
-		dpkg -i ${MyFILES}/jailkit_2.19-1_amd64.deb
+		dpkg -i ${ENV_files}/jailkit_2.19-1_amd64.deb
 		Msg.info "Installation of Jailkit completed!"
 	}
 }	# end install_jailkit

@@ -5,13 +5,13 @@
 
 #	DEFAULT VARIABLES
 #	----------------------------------------------------------------------------
-	LINUX="unknown"
-	VERSION="unknown"
-	DISTRO="unknown"					# pretty name of the linux distribution
-	ARCH=$(command uname -m)
-	XBIT=$(command getconf LONG_BIT)
-	OS="unknown"
-	MyFILES=""
+	ENV_product="unknown"				# linux distribution
+	ENV_version="unknown"				# version of the distribution
+	ENV_release="unknown"				# linux <product>-<version>
+	ENV_codename="unknown"				# codename of the distribution
+	ENV_arch="unknown"					# kernel architecture
+	ENV_bits="unknown"					# kernel bits (numeric)
+	ENV_files=""
 	MyDISTRO=""
 
 	TARGET="unknown"
@@ -101,19 +101,19 @@
 
 
 
-#	UTILITIES
+#	FUNCTIONS
+#	companion functions for the entire system
 #	----------------------------------------------------------------------------
 	cmd() {
-		# run a command without returning errors
-		[ -n "${1}" ] || return 0
-		local c="$(command -v ${1})"
-		shift && [ -n "${c}" ] && ${c} "${@}"
-	};	# end cmd
+		# try to run the real command, not an aliased version
+		# on missing command, or error, it return silently
+		[ -n "$1" ] && [ -n "$( command -v $1 )" ] && command "$@"
+	}	# end cmd
 
 
 	date_fmt() {
 		echo $(cmd date "${@-+'%F %T'}")	# formatted datetime
-	};	# end date_fmt
+	}	# end date_fmt
 
 
 	numeric_version() {
@@ -130,13 +130,13 @@
 			[ -n "${2}" ] && echo -e "${2}"
 			cmd rm -rf "${1}"
 		}
-	};	# end drop_folder
+	}	# end drop_folder
 
 
 	clean_me_up() {
 		# if directory exists then delete it
 		drop_folder "${1}" "Cleaning up the lock folder: ${cWITELITE}${1}${cNULL}"
-	};	# end clean_me_up
+	}	# end clean_me_up
 
 
 	lock_me_baby() {
@@ -156,7 +156,7 @@
 		# ref http://www.shelldorado.com/goodcoding/tempfiles.html
 		trap "clean_me_up ${LOCKDIR}" 0
 		trap "exit 2" 1 2 3 13 15
-	};	# end lock_me_baby
+	}	# end lock_me_baby
 
 
 	backup_file() {
@@ -177,19 +177,19 @@
 	is_symlink() {
 		# exits with 0 (success) if symlink is valid, or 1 if broken/missing
 		# $1: path to a symlink
-		[ -L "${1}" ] && [ -e "${1}" ]
+		[ -L "$1" ] && [ -e "$1" ]
 	}	# end is_symlink
 
 
 	my_path() {
-		# returns: full path from one of MyDISTRO / MyFILES, or an empty string
+		# returns: full path from one of MyDISTRO / ENV_files, or an empty string
 		# $1: relative path to find
-		cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${MyFILES}/${1} 2>/dev/null
-	};	# end my_path
+		cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${ENV_files}/${1} 2>/dev/null
+	}	# end my_path
 
 
 	do_copy() {
-		# copy a single file from one of MyDISTRO / MyFILES to destination path
+		# copy a single file from one of MyDISTRO / ENV_files to destination path
 		# $1: myFileName
 		# $2: destinationFullPath
 		local F=$(my_path ${1-missing}) D=${2}
@@ -202,14 +202,14 @@
 
 	copy_to() {
 		# copy to the single destination folder in $1, one or more files in $@
-		# that can comes exclusively from one of MyDISTRO MyFILES
+		# that can comes exclusively from one of MyDISTRO ENV_files
 		[ -d "${1}" ] || return
 
 		local ALT C A F D=$(cmd readlink -e ${1})
 		shift
 
 		# iterating containers
-		for C in ${MyDISTRO} ${MyFILES}; do
+		for C in ${MyDISTRO} ${ENV_files}; do
 
 			# iterating arguments
 			for A in "${@}"; do
@@ -270,7 +270,7 @@
 
 
 	menu_upgrade() {
-		Msg.info "Upgrading system packages for ${OS} (${DISTRO})..."
+		Msg.info "Upgrading system packages for ${ENV_release} (${ENV_codename})..."
 		pkg_update	# update packages lists
 
 		# do the apt-get upgrade
@@ -414,7 +414,7 @@
 #	MAIN MENU
 #	----------------------------------------------------------------------------
 
-	clean_up() {
+	Env.clean() {
 		# do apt cleanup if $1 is not empty
 		[ -n "${DOCLEANAPT}" ] && {
 			unset DOCLEANAPT
@@ -424,79 +424,82 @@
 			apt-get -qy clean				# erase downloaded archive files
 			rm -rf /var/lib/apt/lists/*		# delete the entire cache
 		}
-	}	# end clean_up
+	}	# end Env.clean
 
 
-	detect_linux() {
-		# detect OS info (LINUX, VERSION, DISTRO)
-		# thanks to Mikel (http://unix.stackexchange.com/users/3169/mikel) for idea
+	ENV.init() {
+		# initializes the environment
+		# no arguments expected
 
 		# user must be root (id == 0)
 		(( $(cmd id -u) )) && {
 			Msg.error "This script must be run by the user: ${cWITELITE}root${cNULL}"
 		}
-		local X T
+		local x t
 
-		# test the presence of some very basic software
-		for X in awk apt-get cat cd cp debconf-set-selections dpkg \
+		# test the availability of some required commands
+		for x in awk apt-get cat cd cp debconf-set-selections dpkg \
 			dpkg-reconfigure find grep head mkdir mv perl rm sed tr;
 		do
-			is_available "${X}" || T+=", ${X}"
+			is_available "$x" || Msg.error "Missing command: $x"
 		done
 
-		[ -z "${T}" ] || {
-			Msg.error "Some mandatory commands are missing: ${cWITELITE}${T:2}${cNULL}"
-		}
-
-		# get info on system
+		# detect OS info (ENV_product, ENV_version, ENV_codename)
+		# thanks to Mikel (http://unix.stackexchange.com/users/3169/mikel) for idea
 		if [ -f /etc/lsb-release ]; then
 			. /etc/lsb-release
-			LINUX=${DISTRIB_ID,,}			# debian, ubuntu, ...
-			VERSION=${DISTRIB_RELEASE,,}	# 7, 14.04, ...
+			ENV_product=${DISTRIB_ID,,}			# lowercase debian, ubuntu, ...
+			ENV_version=${DISTRIB_RELEASE,,}	# lowercase 9, 18.04, ...
 		elif [ -f /etc/os-release ]; then
 			. /etc/os-release
-			LINUX=${ID,,}					# debian, ubuntu, ...
-			VERSION=${VERSION_ID,,}			# 7, 14.04, ...
+			ENV_product=${ID,,}					# lowercase debian, ubuntu, ...
+			ENV_version=${VERSION_ID,,}			# lowercase 9, 18.04, ...
 		elif [ -f /etc/issue.net ]; then
-			T=$(head -1 /etc/issue.net)
-			LINUX=$(awk '{print $1}' <<< ${T,,})
-			VERSION=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${T,,})
+			t=$(head -1 /etc/issue.net)
+			ENV_product=$(awk '{print $1}' <<< ${t,,})
+			ENV_version=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
 		fi;
 
-		# assigning distribution pretty name
-		OS="${LINUX}-${VERSION}"
+		# define ENV_release
+		ENV_release="${ENV_product}-${ENV_version}"
 
-		case ${OS} in
-		#	"debian-7")     DISTRO="wheezy"  ;;
-			"debian-8")     DISTRO="jessie"  ;;
-			"debian-9")     DISTRO="stretch" ;;
-			"debian-10")    DISTRO="buster"  ;; # 2020-05
-			"ubuntu-16.04") DISTRO="xenial"  ;;
-			"ubuntu-18.04") DISTRO="bionic"  ;; # 2020-04
-			"ubuntu-20.04") DISTRO="focal"   ;; # 2021-01
+		case $ENV_release in
+		#	"debian-7")     ENV_codename="wheezy"  ;;
+			"debian-8")     ENV_codename="jessie"  ;;
+			"debian-9")     ENV_codename="stretch" ;;
+			"debian-10")    ENV_codename="buster"  ;; # 2020-05
+			"ubuntu-16.04") ENV_codename="xenial"  ;;
+			"ubuntu-18.04") ENV_codename="bionic"  ;; # 2020-04
+			"ubuntu-20.04") ENV_codename="focal"   ;; # 2021-01
 		esac;
 
-		# test that distro isnt unknown
-		[ "${DISTRO}" = "unknown" ] && {
-			Msg.error "This distribution is not supported ( ${LINUX} : ${VERSION} )"
+		# control that release isnt unknown
+		[ "$ENV_codename" = "unknown" ] && {
+			Msg.error "This distribution is not supported ( $ENV_release )"
 		}
 
-		# append to parent folder name the current distro infos
-		T=~/linux.${OS}.${DISTRO}.${ARCH}
-		[ -d ${T} ] || mv ~/linux* ${T}
-		cd ${T}
+		# setup some environment variables
+		ENV_os="$ENV_release ($ENV_codename)"
+		ENV_files="$ENV_dir/files-common"
+		ENV_distro="$ENV_dir/distro-$ENV_codename"
+		ENV_arch=$( cmd uname -m )
+		ENV_bits=$( cmd getconf LONG_BIT )
+
+		# append to parent folder name the discovered infos
+		t=~/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		[ -d "$t" ] || mv ~/linux* "$t"
 
 		# removing unneeded distros
-		for X in distro-*; do
-			[ "$X" = "distro-${DISTRO}" ] || rm -rf "$X"
+		t="$ENV_dir/distro-$ENV_codename"
+		for x in $ENV_dir/distro-*; do
+			[ "$x" = "$ENV_distro" ] || rm -rf "$x"
 		done
 
 		# sourcing all scripts
-		for X in distro-${DISTRO}/fn_*; do . ${X}; done
-		MyFILES=$(pwd)/files-common
-		MyDISTRO=$(pwd)/distro-${DISTRO}/files
+		for x in distro-${ENV_codename}/fn_*; do . ${x}; done
+		MyDISTRO=$(pwd)/distro-${ENV_codename}/files
 		is_available 'nginx' && HTTP_SERVER='nginx'
-	}	# end detect_linux
+	}	# end ENV.init
 
 
 	OS.menu() {
@@ -542,7 +545,7 @@
 			}
 			is_available "menu_${k:2}" && c+="${U[$k]}\n"
 		done
-		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${OS} (${DISTRO}) ${ARCH}${cNULL}" \
-			":: ${MyDir}\n${o}${U[${g}title]}\n${c}" \
+		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${ENV_release} (${ENV_codename}) ${ENV_arch}${cNULL}" \
+			":: ${ENV_dir}\n${o}${U[${g}title]}\n${c}" \
 			"-------------------------------------------------------------------------------"
 	}	# end OS.menu
