@@ -47,8 +47,8 @@ EOF
 	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
 
 	# set to install some custom packages
-	x="${MyDISTRO}/pkgs.custom.txt"
-	[ -s ${x} ] && dpkg --set-selections < ${x}
+	x=$( File.pick pkgs.custom.txt )
+	[ -s "$x" ] && dpkg --set-selections < "$x"
 
 	# fix dependencies: loop until no more dependencies were founds
 	x="-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1"

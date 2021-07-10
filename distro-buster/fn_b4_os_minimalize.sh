@@ -40,8 +40,8 @@ EOF
 	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^initram|^linux/{print $1,"install"}' | dpkg --set-selections
 
 	# set to install some custom packages
-	x="${MyDISTRO}/pkgs.custom.txt"
-	[ -s ${x} ] && dpkg --set-selections < ${x}
+	x=$( File.pick pkgs.custom.txt )
+	[ -s "$x" ] && dpkg --set-selections < "$x"
 
 	# set to purge packages where status != install
 	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections

@@ -87,13 +87,8 @@
 
 
 
-#	MESSAGERS
+#	MESSENGERS
 #	----------------------------------------------------------------------------
-#	msg_notice() { echo -e "${cGRENLITE}$@${cNULL}"; }
-#	msg_info()   { echo -e "${cCYANLITE}$@${cNULL}"; }
-#	msg_alert()  { echo -e "${cYELWLITE}$@${cNULL}"; }
-#	msg_error()  { echo -e "${cREDDLITE}ERROR: $@${cNULL}"; exit 1; }
-
 	Msg.debug() { Dye.as 1 32 "$@"; }					# green lite
 	Msg.info()  { Dye.as 1 36 "$@"; }					# cyan lite
 	Msg.warn()  { Dye.as 1 33 "$@"; }					# yellow lite
@@ -104,16 +99,33 @@
 #	FUNCTIONS
 #	companion functions for the entire system
 #	----------------------------------------------------------------------------
+	Arg.expect() {
+		# helper function for verifying args in functions
+		# expects: variable number of arguments ( $1 [, $2 [, $3 ... ]] )
+		local i=1
+		for (( ; i<=$#; i++ )); do
+			[ -z "${!i}" ] \
+				&& Msg.warn "Missing argument #$i to ${FUNCNAME[1]}()" \
+				&& return 1
+		done
+		return 0
+	};
+
+
 	cmd() {
 		# try to run the real command, not an aliased version
 		# on missing command, or error, it return silently
-		[ -n "$1" ] && [ -n "$( command -v $1 )" ] && command "$@"
+		Arg.expect "$1" || return 0
+		#[ -n "$1" ] || return 0
+		local c="$( command -v $1 )"
+		shift && [ -n "$c" ] && "$c" "$@"
 	}	# end cmd
 
 
-	date_fmt() {
-		echo $(cmd date "${@-+'%F %T'}")	# formatted datetime
-	}	# end date_fmt
+	Date.fmt() {
+		# return a formatted date/time, providing a custom default
+		echo $(cmd date ${@:-'+%F %T'})
+	}	# end Date.fmt
 
 
 	numeric_version() {
@@ -179,6 +191,18 @@
 		# $1: path to a symlink
 		[ -L "$1" ] && [ -e "$1" ]
 	}	# end is_symlink
+
+
+	File.pick() {
+		# return the full path to a common file, looking first into the distro/files 
+		# $1 relative path to search
+		Arg.expect "$1" && {
+			cmd readlink -e $ENV_distro/files/$1 \
+				|| cmd readlink -e $ENV_files/$1 \
+				|| return 1
+		}
+		return 0
+	}	# end File.pick
 
 
 	my_path() {
@@ -270,7 +294,7 @@
 
 
 	menu_upgrade() {
-		Msg.info "Upgrading system packages for ${ENV_release} (${ENV_codename})..."
+		Msg.info "Upgrading system packages for ${ENV_os}..."
 		pkg_update	# update packages lists
 
 		# do the apt-get upgrade
@@ -460,8 +484,10 @@
 			ENV_version=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
 		fi;
 
-		# define ENV_release
+		# setup some environment variables
 		ENV_release="${ENV_product}-${ENV_version}"
+		ENV_arch=$( cmd uname -m )
+		ENV_bits=$( cmd getconf LONG_BIT )
 
 		case $ENV_release in
 		#	"debian-7")     ENV_codename="wheezy"  ;;
@@ -475,29 +501,32 @@
 
 		# control that release isnt unknown
 		[ "$ENV_codename" = "unknown" ] && {
-			Msg.error "This distribution is not supported ( $ENV_release )"
+			Msg.error "This distribution is not supported: $ENV_release"
 		}
 
-		# setup some environment variables
+		# append to parent folder name the discovered infos
+		t=${ENV_dir%/*}/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		[ -d "$t" ] || {
+			mv ~/linux* "$t"
+			ENV_dir="$t"
+		}
+
+		# setup other environment variables
 		ENV_os="$ENV_release ($ENV_codename)"
 		ENV_files="$ENV_dir/files-common"
 		ENV_distro="$ENV_dir/distro-$ENV_codename"
-		ENV_arch=$( cmd uname -m )
-		ENV_bits=$( cmd getconf LONG_BIT )
-
-		# append to parent folder name the discovered infos
-		t=~/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
-		[ -d "$t" ] || mv ~/linux* "$t"
+		MyDISTRO="$ENV_distro/files"
 
 		# removing unneeded distros
-		t="$ENV_dir/distro-$ENV_codename"
 		for x in $ENV_dir/distro-*; do
 			[ "$x" = "$ENV_distro" ] || rm -rf "$x"
 		done
 
 		# sourcing all scripts
-		for x in distro-${ENV_codename}/fn_*; do . ${x}; done
-		MyDISTRO=$(pwd)/distro-${ENV_codename}/files
+		for x in $ENV_distro/fn_*
+			do . "$x"
+		done
+
 		is_available 'nginx' && HTTP_SERVER='nginx'
 	}	# end ENV.init
 
@@ -508,11 +537,11 @@
 		declare -a I;	# indexed array
 		declare -A U	# associative array
 		# One time actions
-		k=a.title;     I+=($k);U[$k]=" [ . ${cWITELITE}One time actions${cNULL} ------------------------------ (in recommended order) -- ]"
+		k=a.title;     I+=($k);U[$k]=" [ . ${cWITELITE}One time actions${cNULL} ---------------------------------------------- (in recommended order) -- ]"
 		k=a.ssh;       I+=($k);U[$k]="   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}"
 		k=a.deps;      I+=($k);U[$k]="   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall"
 		# Standalone utilities
-		k=b.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]"
+		k=b.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Standalone utilities${cNULL} ---------------------------------------- (in no particular order) -- ]"
 		k=b.upgrade;   I+=($k);U[$k]="   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system"
 		k=b.password;  I+=($k);U[$k]="   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
 		k=b.iotest;    I+=($k);U[$k]="   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS"
@@ -521,17 +550,17 @@
 		k=b.tz;        I+=($k);U[$k]="   . ${cORNG}tz${cNULL}          set server timezone to ${cWITELITE}${TIME_ZONE}${cNULL}"
 		k=b.motd;      I+=($k);U[$k]="   . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)"
 		# Main applications
-		k=c.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]"
+		k=c.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Main applications${cNULL} --------------------------------------------- (in recommended order) -- ]"
 		k=c.mailserver;I+=($k);U[$k]="   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases"
 		k=c.dbserver;  I+=($k);U[$k]="   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}"
 		k=c.webserver; I+=($k);U[$k]="   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer"
 		# Target system
-		k=d.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]"
+		k=d.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Target system${cNULL} ----------------------------------------------- (in no particular order) -- ]"
 		k=d.dns;       I+=($k);U[$k]="   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities"
 		k=d.assp1;     I+=($k);U[$k]="   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)"
 		k=d.ispconfig; I+=($k);U[$k]="   . ${cORNG}ispconfig${cNULL}   historical Control Panel, support at ${cWITELITE}howtoforge.com${cNULL}"
 		# Others applications
-		k=e.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Others applications${cNULL} ------------------- (depends on main applications) -- ]"
+		k=e.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Others applications${cNULL} ----------------------------------- (depends on main applications) -- ]"
 		k=e.dumpdb;    I+=($k);U[$k]="   . ${cORNG}dumpdb${cNULL}      to backup all databases, or the one given in ${cWITELITE}\$1${cNULL}"
 		k=e.roundcube; I+=($k);U[$k]="   . ${cORNG}roundcube${cNULL}   full featured imap web client"
 		k=e.nextcloud; I+=($k);U[$k]="   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform"
@@ -545,7 +574,7 @@
 			}
 			is_available "menu_${k:2}" && c+="${U[$k]}\n"
 		done
-		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${ENV_release} (${ENV_codename}) ${ENV_arch}${cNULL}" \
+		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${ENV_os} ${ENV_arch}${cNULL}" \
 			":: ${ENV_dir}\n${o}${U[${g}title]}\n${c}" \
-			"-------------------------------------------------------------------------------"
+			"[ ------------------------------------------------------------------------------------------- ]"
 	}	# end OS.menu

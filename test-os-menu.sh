@@ -35,9 +35,11 @@
 
 
 	cmd() {
-		# try run a real command, not an aliased version
-		# on missing command, or error, it silently returns
-		[ -n "$1" ] && [ -n "$( command -v $1 )" ] && command "$@"
+		# try to run the real command, not an aliased version
+		# on missing command, or error, it return silently
+		[ -n "$1" ] || return 0
+		local c="$( command -v $1 )"
+		shift && [ -n "$c" ] && "$c" "$@"
 	};	# end cmd
 
 	Arg.expect() {
@@ -74,7 +76,7 @@
 			Msg.error "This script must be run by the user: ${cWITELITE}root${cNULL}"
 		}
 		local x t
-		Dye.fg.gray "You are currently logged as:" $( Dye.fg.gray.lite $( cmd id -un ) )
+		#Dye.fg.gray "You are currently logged as:" $( Dye.fg.gray.lite $( cmd id -un ) )
 
 		# test the availability of some required commands
 		for x in awk apt-get cat cd cp debconf-set-selections dpkg \
@@ -83,11 +85,6 @@
 			is_available "$x" \
 				|| Dye.fg.gray "Missing command:" $( Dye.fg.gray.lite "$x" )
 		done
-
-		# setup some environment variables
-		ENV_dir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
-		ENV_arch=$( cmd uname -m )
-		ENV_files="$ENV_dir/files-common"
 
 		# get info on system
 		if [ -f /etc/lsb-release ]; then
@@ -104,10 +101,13 @@
 			ENV_version=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
 		fi;
 
-		# assigning distribution pretty name
+		# setup some environment variables
 		ENV_release="${ENV_product}-${ENV_version}"
+		ENV_arch=$( cmd uname -m )
+		ENV_bits=$( cmd getconf LONG_BIT )
+		ENV_dir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
 
-		case "$ENV_release" in
+		case $ENV_release in
 		#	"debian-7")     ENV_codename="wheezy"  ;;
 			"debian-8")     ENV_codename="jessie"  ;;
 			"debian-9")     ENV_codename="stretch" ;;
@@ -117,34 +117,51 @@
 			"ubuntu-20.04") ENV_codename="focal"   ;; # 2021-01
 		esac;
 
-		# test that distro isnt unknown
-		[ "${ENV_codename}" = "unknown" ] && {
+		# control that release isnt unknown
+		[ "$ENV_codename" = "unknown" ] && {
 			Msg.error "This distribution is not supported: $ENV_release"
 		}
 
-		ENV_os="$ENV_release ($ENV_codename)"
-		Dye.fg.gray "This distribution is supported:" $( Dye.fg.gray.lite "$ENV_os" )
-
 		# append to parent folder name the current distro infos
-		t=~/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
-		[ -d "$t" ] || { mv ~/linux* "$t"; ENV_dir="$t"; }
+		t=${ENV_dir%/*}/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		[ -d "$t" ] || {
+			mv ~/linux* "$t"
+			ENV_dir="$t"
+		}
+
+		# setup other environment variables
+		ENV_os="$ENV_release ($ENV_codename)"
+		ENV_files="$ENV_dir/files-common"
+		ENV_distro="$ENV_dir/distro-$ENV_codename"
+		MyDISTRO="$ENV_distro/files"
 
 		# removing unneeded distros
 		for x in $ENV_dir/distro-*; do
-#			[ "$x" = "distro-${ENV_codename}" ] || rm -rf "$x"
-			[ "$x" = "$ENV_dir/distro-$ENV_codename" ] || Dye.fg.gray removing "$x"
+			#[ "$x" = "$ENV_distro" ] || rm -rf "$x"
+			[ "$x" = "$ENV_distro" ] || Dye.fg.gray removing "$x"
 		done
 
 		# sourcing all scripts
-		for x in $ENV_dir/distro-${ENV_codename}/fn_*; do
-#			echo "$x"
-			. "$x"
+		for x in $ENV_distro/fn_*
+			do . "$x"
+			#echo "$x"
 		done
-		MyDISTRO=$ENV_dir/distro-${ENV_codename}/files
+
 		is_available 'nginx' && HTTP_SERVER='nginx'
 	}	# end detect_linux
 
 	OS.menu() {
+		# returns: full path from one of MyDISTRO / ENV_files, or an empty string
+		# $1: relative path to find
+		Arg.expect "$1" && {
+			cmd readlink -e $ENV_distro/files/$1 \
+				|| cmd readlink -e $ENV_files/$1 \
+				|| return 1
+		}
+		return 0
+		cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${ENV_files}/${1} 2>/dev/null
+
+
 		# output the main menu on screen
 		local k g c o;
 		# need to create both arrays, as bash dont keep order on associative
