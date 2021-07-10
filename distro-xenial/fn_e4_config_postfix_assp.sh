@@ -15,7 +15,7 @@ config_postfix_assp() {
 	}
 
 	Msg.info "Configuring postfix..."
-	backup_file main.cf
+	File.backup main.cf
 
 	# set basic parameters in main.cf
 	cmd postconf \
@@ -60,7 +60,7 @@ config_postfix_assp() {
 
 	# set master.cf to listen on 127.0.0.1:1025
 	[ -r master.cf ] && {
-		backup_file master.cf
+		File.backup master.cf
 		sed -i 's|^smtp      inet|1025      inet|' master.cf
 	}
 

@@ -10,7 +10,7 @@ menu_dumpdb() {
 	# $1 db name - if provided it backup only this db
 
 	# sanity check
-	is_available "mysql" || return
+	Cmd.usable "mysql" || return
 
 	local B C D P Q="SHOW DATABASES;"
 

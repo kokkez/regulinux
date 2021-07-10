@@ -23,7 +23,7 @@ EOF
 	pkg_install postfix postfix-mysql libsasl2-modules pfqueue swaks
 
 	# purge exim4 on pure debian
-	is_available "exim" && {
+	Cmd.usable "exim" && {
 		Msg.info "Purging exim4 and the like..."
 		export DEBIAN_FRONTEND=noninteractive
 		apt-get -qy purge --auto-remove exim4 exim4-*

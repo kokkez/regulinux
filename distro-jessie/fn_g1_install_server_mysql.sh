@@ -22,7 +22,7 @@ EOF
 
 	# allow MySQL to listen on all interfaces
 	# correct some deprecated keys (http://kb.sp.parallels.com/en/120461)
-	backup_file my.cnf
+	File.backup my.cnf
 	sed -ri my.cnf \
 		-e "s/^(bind-address)/#\1/" \
 		-e "s/^(key_buffer)\s+/\1_size     /" \

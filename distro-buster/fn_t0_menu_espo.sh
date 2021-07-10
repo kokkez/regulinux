@@ -40,7 +40,7 @@ menu_espo() {
 
 	# cron configuration
 	[ -s /etc/crontab ] && grep -q EspoCRM /etc/crontab || {
-		backup_file /etc/crontab
+		File.backup /etc/crontab
 		cat <<EOF >> /etc/crontab
 
 # EspoCRM

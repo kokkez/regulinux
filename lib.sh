@@ -130,60 +130,60 @@
 
 	numeric_version() {
 		# return the cleaned numeric version of a program
-		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "${@}"
+		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
 	}	# end numeric_version
 
 
-	drop_folder() {
+	Dir.delete() {
 		# if directory exists then delete it
 		# $1: path to folder
 		# $2: optional message
-		[ -d "${1}" ] && {
-			[ -n "${2}" ] && echo -e "${2}"
-			cmd rm -rf "${1}"
+		Arg.expect "$1" && [ -d "$1" ] && {
+			[ -n "$2" ] && echo -e "${@:2}"
+			cmd rm -rf "$1"
 		}
-	}	# end drop_folder
+	}	# end Dir.delete
 
 
-	clean_me_up() {
-		# if directory exists then delete it
-		drop_folder "${1}" "Cleaning up the lock folder: ${cWITELITE}${1}${cNULL}"
-	}	# end clean_me_up
+	Sess.clean() {
+		# try to delete the folder in $1
+		Dir.delete "$1" "Cleaning up the lock folder:" $( Dye.fg.white "$1" )
+	}	# end Sess.clean
 
 
-	lock_me_baby() {
-		# give lockdir the name in arg 1, or a default one
-		local LOCKDIR=/tmp/${1-myapp}
+	Sess.lock() {
+		# give lockdir the name in $1, or a default one
+		local d=/tmp/${1-myapp}
 		# if directory exists exit here
-		[ -d "${LOCKDIR}" ] && {
-			Msg.warn "Job is already running with pid: $(< ${LOCKDIR}/PID)"
+		[ -d "$d" ] && {
+			Msg.warn "Job is already running with pid: $(< $d/PID)"
 			exit 6
 		}
 		# this is a new instance
-		echo -e "Locking the job in: ${cWITELITE}${LOCKDIR}${cNULL}";
+		echo -e "Locking the job in:" $( Dye.fg.white "$d" )
 		# create folder & store the pid
-		mkdir -p ${LOCKDIR}
-		echo $$ > ${LOCKDIR}/PID
+		mkdir -p "$d"
+		echo $$ > $d/PID
 		# then set traps to cleanup upon script termination
 		# ref http://www.shelldorado.com/goodcoding/tempfiles.html
-		trap "clean_me_up ${LOCKDIR}" 0
+		trap "Sess.clean $d" 0
 		trap "exit 2" 1 2 3 13 15
-	}	# end lock_me_baby
+	}	# end Sess.lock
 
 
-	backup_file() {
+	File.backup() {
 		# if backup exists do nothing
-		[ -e "${1}.backup" ] && return
+		Arg.expect "$1" && [ -e "${1}.backup" ] && return
 		# if original is not empty, copy it to backup
-		[ -s "${1}" ] && cp "${1}" "${1}.backup"
-	}	# end backup_file
+		[ -s "$1" ] && cp "$1" "${1}.backup"
+	}	# end File.backup
 
 
-	sed_copy() {
-		# copy a file $1 to destination $2 forcing unix EOLs
-		backup_file "${2}"					# do backup first
-		sed -e 's|\r||g' "${1}" > "${2}"	# copy forcing unix EOLs
-	}	# end sed_copy
+	File.recopy() {
+		# copy the file in $1 to the destination in $2, forcing unix EOLs
+		File.backup "$2"				# do backup first
+		sed -e 's|\r||g' "$1" > "$2"	# copy forcing unix EOLs
+	}	# end File.recopy
 
 
 	is_symlink() {
@@ -194,32 +194,27 @@
 
 
 	File.pick() {
-		# return the full path to a common file, looking first into the distro/files 
+		# return the full path to a file in "files-common", looking first
+		# into distro-xxx/files
+		# return an empty string if nothing is found
 		# $1 relative path to search
 		Arg.expect "$1" && {
-			cmd readlink -e $ENV_distro/files/$1 \
-				|| cmd readlink -e $ENV_files/$1 \
+			cmd readlink -e "$ENV_distro/files/$1" \
+				|| cmd readlink -e "$ENV_files/$1" \
 				|| return 1
 		}
 		return 0
 	}	# end File.pick
 
 
-	my_path() {
-		# returns: full path from one of MyDISTRO / ENV_files, or an empty string
-		# $1: relative path to find
-		cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${ENV_files}/${1} 2>/dev/null
-	}	# end my_path
-
-
 	do_copy() {
 		# copy a single file from one of MyDISTRO / ENV_files to destination path
 		# $1: myFileName
 		# $2: destinationFullPath
-		local F=$(my_path ${1-missing}) D=${2}
-		[ -n "${F}" ] && {
-			[ -d "${D}" ] && D="${D}/${1}"	# build destination
-			sed_copy "${F}" "${D}"			# backup & copy
+		local f=$( File.pick ${1-missing} ) d="$2"
+		[ -n "$f" ] && {
+			[ -d "$d" ] && d="$d/$1"	# build destination
+			File.recopy "$f" "$d"		# backup & copy
 		}
 	}	# end do_copy
 
@@ -227,9 +222,9 @@
 	copy_to() {
 		# copy to the single destination folder in $1, one or more files in $@
 		# that can comes exclusively from one of MyDISTRO ENV_files
-		[ -d "${1}" ] || return
+		[ -d "$1" ] || return
 
-		local ALT C A F D=$(cmd readlink -e ${1})
+		local ALT C A F D=$( cmd readlink -e $1 )
 		shift
 
 		# iterating containers
@@ -240,7 +235,7 @@
 
 				# iterating files
 				for F in $(find ${C} -wholename "*${A}"); do
-					sed_copy "${F}" "${D}/$(basename ${F})"
+					File.recopy "${F}" "${D}/$(basename ${F})"
 					ALT=1
 				done
 			done
@@ -260,10 +255,10 @@
 	}	# end is_installed
 
 
-	is_available() {
-		# test 1st argument for: not empty & callable
-		[ -n "${1}" ] && command -v "${1}" >/dev/null 2>&1
-	}	# end is_available
+	Cmd.usable() {
+		# test argument $1 for: not empty & callable
+		Arg.expect "$1" && command -v "$1" &> /dev/null
+	}	# end Cmd.usable
 
 
 	pkg_update() {
@@ -288,19 +283,9 @@
 	is_installable() {
 		# test 1st argument for: not empty & package installable
 		pkg_update	# update packages lists
-		[ -n "${1}" ] && [ $(apt-cache search "^${1}$" | wc -l) -gt 0 ] && return
+		[ -n "${1}" ] && [ $( cmd apt-cache search "^${1}$" | wc -l ) -gt 0 ] && return
 		return 1
 	}	# end is_installable
-
-
-	menu_upgrade() {
-		Msg.info "Upgrading system packages for ${ENV_os}..."
-		pkg_update	# update packages lists
-
-		# do the apt-get upgrade
-		export DEBIAN_FRONTEND=noninteractive
-		apt-get -qy dist-upgrade
-	}	# end menu_upgrade
 
 
 	pkg_install() {
@@ -359,7 +344,7 @@
 		}
 
 		pkg_require wget
-		wget -nv --no-check-certificate ${1} -O ${2} || {
+		cmd wget -nv --no-check-certificate "$1" -O "$2" || {
 			Msg.info "Download failed ( ${2} ), exiting here..."
 			exit
 		}
@@ -421,10 +406,10 @@
 		# return the dotted number of the cli version of PHP
 		# $1 = word to specify the wanted result like this
 		# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
-		local V=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
-		[ "${1}" = "major" ] && V=$(cmd awk -F. '{print $1}' <<< "${V}")
-		[ "${1}" = "minor" ] && V=$(cmd awk -F. '{print $1"."$2}' <<< "${V}")
-		echo "${V}"
+		local v=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
+		[ "$1" = "major" ] && v=$(cmd awk -F. '{print $1}' <<< "$v")
+		[ "$1" = "minor" ] && v=$(cmd awk -F. '{print $1"."$2}' <<< "$v")
+		echo "$v"
 	}	# end php_version
 
 
@@ -465,7 +450,7 @@
 		for x in awk apt-get cat cd cp debconf-set-selections dpkg \
 			dpkg-reconfigure find grep head mkdir mv perl rm sed tr;
 		do
-			is_available "$x" || Msg.error "Missing command: $x"
+			Cmd.usable "$x" || Msg.error "Missing command: $x"
 		done
 
 		# detect OS info (ENV_product, ENV_version, ENV_codename)
@@ -527,7 +512,7 @@
 			do . "$x"
 		done
 
-		is_available 'nginx' && HTTP_SERVER='nginx'
+		Cmd.usable 'nginx' && HTTP_SERVER='nginx'
 	}	# end ENV.init
 
 
@@ -572,7 +557,7 @@
 				[ -z "${c}" ] || o+="${U[${g}title]}\n${c}"
 				c=; g="${k:0:2}"
 			}
-			is_available "menu_${k:2}" && c+="${U[$k]}\n"
+			Cmd.usable "menu_${k:2}" && c+="${U[$k]}\n"
 		done
 		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${ENV_os} ${ENV_arch}${cNULL}" \
 			":: ${ENV_dir}\n${o}${U[${g}title]}\n${c}" \

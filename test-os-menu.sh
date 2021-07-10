@@ -62,10 +62,10 @@
 		Arg.expect "$1" && eval echo \${!${1}[@]}
 	}
 
-	is_available() {
+	Cmd.usable() {
 		# test argument $1 for: not empty & callable
 		Arg.expect "$1" && command -v "$1" &> /dev/null
-	}	# end is_available
+	}	# end Cmd.usable
 
 	detect_linux() {
 		# detect OS info (ENV_product, ENV_version, ENV_codename)
@@ -82,7 +82,7 @@
 		for x in awk apt-get cat cd cp debconf-set-selections dpkg \
 			dpkg-reconfigure find grep head mkdir mv perl rm sed tr;
 		do
-			is_available "$x" \
+			Cmd.usable "$x" \
 				|| Dye.fg.gray "Missing command:" $( Dye.fg.gray.lite "$x" )
 		done
 
@@ -133,7 +133,6 @@
 		ENV_os="$ENV_release ($ENV_codename)"
 		ENV_files="$ENV_dir/files-common"
 		ENV_distro="$ENV_dir/distro-$ENV_codename"
-		MyDISTRO="$ENV_distro/files"
 
 		# removing unneeded distros
 		for x in $ENV_dir/distro-*; do
@@ -147,21 +146,10 @@
 			#echo "$x"
 		done
 
-		is_available 'nginx' && HTTP_SERVER='nginx'
+		Cmd.usable 'nginx' && HTTP_SERVER='nginx'
 	}	# end detect_linux
 
 	OS.menu() {
-		# returns: full path from one of MyDISTRO / ENV_files, or an empty string
-		# $1: relative path to find
-		Arg.expect "$1" && {
-			cmd readlink -e $ENV_distro/files/$1 \
-				|| cmd readlink -e $ENV_files/$1 \
-				|| return 1
-		}
-		return 0
-		cmd readlink -e ${MyDISTRO}/${1} || readlink -e ${ENV_files}/${1} 2>/dev/null
-
-
 		# output the main menu on screen
 		local k g c o;
 		# need to create both arrays, as bash dont keep order on associative
@@ -203,7 +191,7 @@
 				[ -z "$c" ] || o+="${H[${g}title]}\n$c"
 				c=; g="${k:0:2}"
 			}
-			is_available "menu_${k:2}" && c+="${H[$k]}\n"
+			Cmd.usable "menu_${k:2}" && c+="${H[$k]}\n"
 		done
 		echo -e " $( cmd date '+%F %T %z' ) ::" \
 			$( Dye.fg.orange "$ENV_os $ENV_arch" ) \

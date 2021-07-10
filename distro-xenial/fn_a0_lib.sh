@@ -7,12 +7,12 @@ svc_evoke() {
 	local s=${1:-apache2} a=${2:-status}
 
 	# stop if service is unavailable
-	is_available "${s}" || return
+	Cmd.usable "$s" || return
 
 	Msg.info "Evoking ${s}.service to execute job ${a}..."
 
-	[ "${a}" = "reload" ] && a="reload-or-restart"
-	cmd systemctl ${a} ${s}.service
+	[ "$a" = "reload" ] && a="reload-or-restart"
+	cmd systemctl $a ${s}.service
 }	# end svc_evoke
 
 # ------------------------------------------------------------------------------

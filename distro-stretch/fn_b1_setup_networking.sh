@@ -21,7 +21,7 @@ setup_networking() {
 	}
 
 	# backup original file
-	backup_file ./interfaces
+	File.backup ./interfaces
 
 	# setup /etc/network/interfaces file
 	cmd cat > ./interfaces <<EOF

@@ -45,7 +45,7 @@ EOF
 
 	# cron configuration
 	[ -s /etc/crontab ] && grep -q '# NEXTCLOUD' /etc/crontab || {
-		backup_file /etc/crontab
+		File.backup /etc/crontab
 		cat >> /etc/crontab <<EOF
 
 # NEXTCLOUD scheduled cleaning

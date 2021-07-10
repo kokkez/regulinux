@@ -16,7 +16,7 @@ config_postfix_ispconfig() {
 	Msg.info "Configuring Postfix..."
 
 	# uncommenting some lines in master.cf file
-	backup_file master.cf
+	File.backup master.cf
 	sed -ri master.cf \
 		-e 's|#(submission)|\1|' \
 		-e 's|#(  -o syslog)|\1|' \

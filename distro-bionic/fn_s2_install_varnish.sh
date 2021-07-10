@@ -49,7 +49,7 @@ install_varnish() {
 	}
 
 	# backup default varnish config file
-	backup_file /etc/varnish/default.vcl
+	File.backup /etc/varnish/default.vcl
 	# change port in 'backend default' section, line 18
 	sed -i 's|"8080"|"80"|g' /etc/varnish/default.vcl
 	# change port in the varnish service file, line 9

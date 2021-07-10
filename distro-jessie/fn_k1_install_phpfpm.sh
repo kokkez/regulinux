@@ -9,7 +9,7 @@ install_phpfpm() {
 
 	# cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI
 	[ -r php.ini ] && {
-		backup_file php.ini
+		File.backup php.ini
 		sed -ri php.ini \
 			-e 's|^(expose_php =) On|\1 Off|' \
 			-e 's|^(upload_max_filesize).*|\1 = 32M|' \

@@ -24,7 +24,7 @@
 	ENV.init
 
 	# check for not empty argument and available command, then exec it
-	if [ -n "$1" ] && is_available "menu_${1}"; then
+	if [ -n "$1" ] && Cmd.usable "menu_${1}"; then
 		cmd "menu_$1" "${@:2}"
 		Msg.debug "Execution of '${1}' completed!"
 	else

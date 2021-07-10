@@ -98,7 +98,7 @@ EOF
 
 	# install crontab to keep the database cleaned
 	[ -s /etc/crontab ] && grep -q ROUNDCUBE /etc/crontab || {
-		backup_file /etc/crontab
+		File.backup /etc/crontab
 		cat >> /etc/crontab <<EOF
 
 # ROUNDCUBE daily db cleaning

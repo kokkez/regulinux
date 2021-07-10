@@ -14,7 +14,7 @@ menu_tz() {
 	Msg.info "Setup timezone as AREA: '${A}', ZONE: '${Z}'"
 
 	# backup old first, then get the new from zoneinfo file
-	backup_file /etc/localtime
+	File.backup /etc/localtime
 	rm -f /etc/localtime
 	cp "/usr/share/zoneinfo/${T}" /etc/localtime
 	echo "${T}" > /etc/timezone		# also write in /etc/timezone

@@ -38,7 +38,7 @@ install_nextcloud() {
 
 	# cron configuration
 	[ -s /etc/crontab ] && grep -q NEXTCLOUD /etc/crontab || {
-		backup_file /etc/crontab
+		File.backup /etc/crontab
 		cat <<EOF >> /etc/crontab
 
 # NEXTCLOUD scheduled cleaning

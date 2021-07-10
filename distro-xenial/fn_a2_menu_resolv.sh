@@ -5,7 +5,7 @@
 
 menu_resolv() {
 	local N T="OpenNIC" R=/etc/resolv.conf
-	backup_file ${R}
+	File.backup ${R}
 
 	# Getting the nearest OpenNIC servers using their geoip API
 #	N=$(cmd curl -s 'https://api.opennicproject.org/geoip/' | head -3 | awk '{print "nameserver",$1}')
