@@ -13,5 +13,5 @@ install_apache2_modphp() {
 	# activating ports on firewall
 	firewall_allow "http"
 
-	msg_info "Configuration of mod-php5 completed!"
+	Msg.info "Configuration of mod-php5 completed!"
 }	# end install_apache2_modphp

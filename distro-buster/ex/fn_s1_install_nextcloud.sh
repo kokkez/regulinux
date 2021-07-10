@@ -5,7 +5,7 @@
 install_nextcloud() {
 	local URL VER="15.0.14"	# latest for php 7.0
 
-	msg_info "Installing Nextcloud ${VER}..."
+	Msg.info "Installing Nextcloud ${VER}..."
 
 	# install some php libraries before install Nextcloud
 	pkg_install php-{cli,gd,zip,curl,intl,imap,xmlrpc,xml,mbstring,apcu} \
@@ -45,5 +45,5 @@ install_nextcloud() {
 */15 * * * * www-data php -f /var/www/nextcloud/cron.php
 EOF
 	}
-	msg_info "Installation of nextcloud ${VER} completed!"
+	Msg.info "Installation of nextcloud ${VER} completed!"
 }	# end install_nextcloud

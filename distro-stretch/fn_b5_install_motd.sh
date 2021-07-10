@@ -18,5 +18,5 @@ install_motd() {
 	# remove /etc/motd on pure debian
 	rm -f /etc/motd
 
-	msg_info "Customization of MOTD completed!"
+	Msg.info "Customization of MOTD completed!"
 }	# end install_motd

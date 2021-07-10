@@ -17,11 +17,11 @@ menu_roundcube() {
 
 	# test if not already installed
 	[ -s "${D}/index.php" ] && {
-		msg_alert "Roundcube ${V} is already installed..."
+		Msg.warn "Roundcube ${V} is already installed..."
 		return
 	}
 
-	msg_info "Installing Roundcube ${V}..."
+	Msg.info "Installing Roundcube ${V}..."
 	mkdir -p ${D}
 	P=$(menu_password 32) # creating a random password
 
@@ -122,5 +122,5 @@ EOF
 	# activating some modules of apache2 then reload its configurations
 	a2enmod deflate expires headers
 	svc_evoke apache2 restart
-	msg_info "Installation of Roundcube ${V} completed!"
+	Msg.info "Installation of Roundcube ${V} completed!"
 }	# end menu_roundcube

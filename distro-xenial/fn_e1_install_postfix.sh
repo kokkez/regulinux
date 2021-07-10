@@ -4,12 +4,12 @@
 
 install_postfix() {
 	is_installed "postfix-mysql" && {
-		msg_alert "Postfix is already installed..."
+		Msg.warn "Postfix is already installed..."
 		return
 	}
 
 	# install postfix & saslauthd, this add openssl ssl-cert
-	msg_info "Installing postfix..."
+	Msg.info "Installing postfix..."
 
 	# preseed postfix
 	debconf-set-selections <<EOF
@@ -21,7 +21,7 @@ EOF
 	# install required & useful packages
 	pkg_install postfix postfix-mysql libsasl2-modules pfqueue swaks
 
-	msg_info "Configuring Postfix..."
+	Msg.info "Configuring Postfix..."
 
 	# set basic parameters in main.cf
 	cmd postconf \
@@ -37,5 +37,5 @@ EOF
 	# activating ports on firewall
 	firewall_allow "ssltls"
 
-	msg_info "Installation of postfix & aliases completed!"
+	Msg.info "Installation of postfix & aliases completed!"
 }	# end install_postfix

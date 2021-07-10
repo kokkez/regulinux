@@ -5,15 +5,15 @@
 install_apache2() {
 	# abort if package was already installed
 	is_installed "apache2-bin" && {
-		msg_alert "apache2 is already installed..."
+		Msg.warn "apache2 is already installed..."
 		return
 	}
 
 	# install required packages
-	msg_info "Installing apache2..."
+	Msg.info "Installing apache2..."
 	pkg_install apache2 apache2-utils apache2-suexec-pristine ssl-cert
 
-	msg_info "Configuring apache2..."
+	Msg.info "Configuring apache2..."
 
 	# enable apache2 modules
 	a2enmod suexec rewrite ssl actions include cgi headers
@@ -39,7 +39,7 @@ EOF
 	# activating ports on firewall
 	firewall_allow "http"
 
-	msg_info "Configuration of apache2 completed!"
+	Msg.info "Configuration of apache2 completed!"
 }	# end install_apache2
 
 

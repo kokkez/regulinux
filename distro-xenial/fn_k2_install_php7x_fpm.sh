@@ -6,7 +6,7 @@
 install_php7x_fpm() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+		Msg.warn "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
@@ -32,7 +32,7 @@ install_php7x_fpm() {
 	a2dismod php5.6
 	a2enmod php7.4
 
-	msg_info "Configuring PHP for apache2..."
+	Msg.info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -47,5 +47,5 @@ install_php7x_fpm() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	svc_evoke apache2 restart
-	msg_info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
+	Msg.info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php7x_fpm

@@ -6,12 +6,12 @@ menu_tz() {
 	local A Z T=${1:-${TIME_ZONE}}
 
 	[ -f "/usr/share/zoneinfo/${T}" ] || {
-		msg_error "The requested timezone does not exists: ${T}"
+		Msg.error "The requested timezone does not exists: ${T}"
 	}
 
 	# split into variables
 	A=${T%%/*} Z=${T#*/}
-	msg_info "Setup timezone as AREA: '${A}', ZONE: '${Z}'"
+	Msg.info "Setup timezone as AREA: '${A}', ZONE: '${Z}'"
 
 	# backup old first, then get the new from zoneinfo file
 	backup_file /etc/localtime
@@ -30,6 +30,6 @@ EOF
 	A=$(LC_ALL=C TZ=UTC0 date)
 	T=$(LC_ALL=C TZ=UTC0 date -d "$A")
 	Z=$(unset TZ; LANG=C date -d "$A")
-	msg_notice "Local time is now:      ${Z}"
-	msg_notice "Universal Time is now:  ${T}"
+	Msg.debug "Local time is now:      ${Z}"
+	Msg.debug "Universal Time is now:  ${T}"
 }	# end menu_tz

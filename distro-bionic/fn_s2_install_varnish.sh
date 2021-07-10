@@ -5,20 +5,20 @@
 install_varnish() {
 	# abort if package was already installed
 	is_installed "varnish" && {
-		msg_alert "Varnish is already installed..."
+		Msg.warn "Varnish is already installed..."
 		return
 	}
 
 	# check the presence of apache2
 	is_installed "apache2-bin" || {
-		msg_alert "apache2 is NOT installed..."
+		Msg.warn "apache2 is NOT installed..."
 		return
 	}
 
-	msg_info "Installing Varnish..."
+	Msg.info "Installing Varnish..."
 	pkg_install varnish
 
-	msg_info "Configuring Varnish..."
+	Msg.info "Configuring Varnish..."
 
 	# configuring apache2
 	# replace port '80' with '8008' in configuration file "ports.conf"
@@ -58,5 +58,5 @@ install_varnish() {
 	# reload the systemd service, then varnish
 	cmd systemctl daemon-reload
 	cmd systemctl restart varnish apache2
-	msg_info "Installation of Varnish completed!"
+	Msg.info "Installation of Varnish completed!"
 }	# end install_varnish

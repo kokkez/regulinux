@@ -5,7 +5,7 @@
 menu_ispconfig() {
 	# abort if ispconfig 3.1.x was already installed
 	[ -d /usr/local/ispconfig ] && {
-		msg_alert "ISPConfig3 is already installed..."
+		Msg.warn "ISPConfig3 is already installed..."
 		return
 	}
 

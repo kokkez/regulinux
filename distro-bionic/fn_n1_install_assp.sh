@@ -8,7 +8,7 @@ install_assp() {
 
 	# download & install ASSP
 	[ -s assp/assp.cfg ] || {
-		msg_info "Installing ASSP v1..."
+		Msg.info "Installing ASSP v1..."
 		# download ASSP
 		down_load "${u}/ASSP%20Installation/ASSP%201.10.X/ASSP_1.10.1_16065_install.zip" assp.zip
 		# some cleanup
@@ -21,7 +21,7 @@ install_assp() {
 	}
 
 	# install some required perl modules before run mod_inst.pl
-	msg_info "Installing ASSP dependencies..."
+	Msg.info "Installing ASSP dependencies..."
 	pkg_install perl perl-base perl-modules build-essential libssl-dev \
 		libnet-dns-perl libio-compress-perl libemail-mime-modifier-perl \
 		libemail-sender-perl libemail-valid-perl libfile-readbackwards-perl \
@@ -42,8 +42,8 @@ install_assp() {
 	# run mod_inst.pl to install other perl modules
 	perl mod_inst.pl /home/assp
 
-	msg_info "Installing ASSP dependencies completed!"
-	msg_info "Remember to run twice 'perl mod_inst.pl'..."
+	Msg.info "Installing ASSP dependencies completed!"
+	Msg.info "Remember to run twice 'perl mod_inst.pl'..."
 
 	# force unix EOLs & adjust some values
 	cd /home/assp
@@ -78,6 +78,6 @@ install_assp() {
 	# courtesy symlink into ~
 	ln -nfs /home/assp ~
 
-	msg_info "Installing ASSP completed!"
-	msg_info "Check carefully every single perl module before start ASSP..."
+	Msg.info "Installing ASSP completed!"
+	Msg.info "Check carefully every single perl module before start ASSP..."
 }	# end install_assp

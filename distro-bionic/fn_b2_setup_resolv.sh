@@ -23,7 +23,7 @@ resolv_via_resolvconf() {
 	echo -e "# public dns\n${N}" > "${R}"
 	cmd chattr +i "${R}"					# disallow file modification
 
-	msg_info "Configuration of ${T} public dns completed! Now ${R} has:"
+	Msg.info "Configuration of ${T} public dns completed! Now ${R} has:"
 	sed 's|^|> |' < ${R}
 }	# end resolv_via_resolvconf
 
@@ -44,7 +44,7 @@ resolv_via_systemd() {
 	cmd systemctl restart systemd-resolved
 	#cmd systemd-resolve --status
 
-	msg_info "Configuration of public dns completed via systemd-resolved"
+	Msg.info "Configuration of public dns completed via systemd-resolved"
 }	# end resolv_via_systemd
 
 

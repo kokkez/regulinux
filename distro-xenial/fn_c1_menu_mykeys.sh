@@ -20,5 +20,5 @@ menu_mykeys() {
 		cmd chmod 0700 ~/.config ~/.config/htop
 	}
 
-	msg_info "Installation of my authorized_keys completed!"
+	Msg.info "Installation of my authorized_keys completed!"
 }	# end menu_mykeys

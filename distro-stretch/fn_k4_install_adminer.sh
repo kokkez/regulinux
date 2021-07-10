@@ -7,11 +7,11 @@ install_adminer() {
 	local U D=/var/www/myadminer V="4.7.8"
 
 	[ -s "${D}/index.php" ] && {
-		msg_alert "adminer-${V} is already installed..."
+		Msg.warn "adminer-${V} is already installed..."
 		return
 	}
 
-	msg_info "Installing adminer-${V}..."
+	Msg.info "Installing adminer-${V}..."
 
 	# create directory if it not exists (with -p)
 	mkdir -p ${D} && cd "$_"
@@ -49,5 +49,5 @@ install_adminer() {
 		}
 	fi;
 
-	msg_info "Installation of adminer-${V} completed!"
+	Msg.info "Installation of adminer-${V} completed!"
 }	# end install_adminer

@@ -47,12 +47,12 @@ acme_webserver_conf() {
 menu_acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
-		msg_alert "The acme.sh script is already installed..."
+		Msg.warn "The acme.sh script is already installed..."
 		return
 	}
 
 	# get acme.sh script
-	msg_info "Installing acme.sh script..."
+	Msg.info "Installing acme.sh script..."
 	acme_get
 
 	# get the webroot
@@ -76,5 +76,5 @@ menu_acme() {
 	# symlink the certificate paths
 	sslcert_paths "${K}" "${C}"
 
-	msg_info "Installation of acme.sh completed!"
+	Msg.info "Installation of acme.sh completed!"
 }	# end menu_acme

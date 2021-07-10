@@ -4,11 +4,11 @@
 
 install_fail2ban() {
 	is_installed "fail2ban" || {
-		msg_info "Installing fail2ban..."
+		Msg.info "Installing fail2ban..."
 		pkg_install fail2ban
 	}
 
-	msg_info "Configuring fail2ban..."
+	Msg.info "Configuring fail2ban..."
 
 	# make fail2ban do some monitoring
 	cd /etc/fail2ban
@@ -29,10 +29,10 @@ install_fail2ban() {
 	# fix a systemd bug of xenial 16.04
 	local X=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
 	grep -q '/var' ${X} && {
-		msg_info "Fixing a little systemd bug that prevent fail2ban to start"
+		Msg.info "Fixing a little systemd bug that prevent fail2ban to start"
 		sed -i 's|/var||' ${X}
 	}
 
 	svc_evoke fail2ban restart
-	msg_info "Installation of Fail2ban completed!"
+	Msg.info "Installation of Fail2ban completed!"
 }	# end install_fail2ban

@@ -6,14 +6,14 @@ config_postfix_ispconfig() {
 	# set master.cf to listen on ports 465 & 587
 	cd /etc/postfix
 	[ -r master.cf ] || {
-		msg_alert "Missing master.cf, skipping configuration"
+		Msg.warn "Missing master.cf, skipping configuration"
 		return
 	}
 
 	# install getmail4
 	pkg_require getmail4
 
-	msg_info "Configuring Postfix..."
+	Msg.info "Configuring Postfix..."
 
 	# uncommenting some lines in master.cf file
 	backup_file master.cf
@@ -26,5 +26,5 @@ config_postfix_ispconfig() {
 		-e 's|#(smtps)|\1|'
 
 	svc_evoke postfix restart
-	msg_info "Configuration of postfix completed!"
+	Msg.info "Configuration of postfix completed!"
 }	# end config_postfix_ispconfig

@@ -6,7 +6,7 @@ config_postfix_assp() {
 	# set main.cf for use with assp
 	cd /etc/postfix
 	[ -r main.cf ] || {
-		msg_error "Missing main.cf, skipping configuration"
+		Msg.error "Missing main.cf, skipping configuration"
 	}
 
 	# install opendkim
@@ -14,7 +14,7 @@ config_postfix_assp() {
 		pkg_install opendkim opendkim-tools
 	}
 
-	msg_info "Configuring postfix..."
+	Msg.info "Configuring postfix..."
 	backup_file main.cf
 
 	# set basic parameters in main.cf
@@ -65,5 +65,5 @@ config_postfix_assp() {
 	}
 
 	svc_evoke postfix restart
-	msg_info "Configuration of postfix completed!"
+	Msg.info "Configuration of postfix completed!"
 }	# end config_postfix_assp

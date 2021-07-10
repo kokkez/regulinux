@@ -5,13 +5,13 @@
 install_php_fpm() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as PHP-FPM is already installed..."
+		Msg.warn "PHP as PHP-FPM is already installed..."
 		return
 	}
 
 	# add external repository for updated php
 #	is_installed "software-properties-common" || {
-#		msg_info "Installing required packages..."
+#		Msg.info "Installing required packages..."
 #		pkg_install python-software-properties software-properties-common
 #	}
 #	LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
@@ -55,7 +55,7 @@ EOF
 #	a2enmod proxy_fcgi setenvif fastcgi alias
 	a2enmod proxy_fcgi fcgid setenvif alias
 
-	msg_info "Configuring PHP for apache2..."
+	Msg.info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -78,5 +78,5 @@ EOF
 #	cmd a2enmod php7.3
 
 	svc_evoke apache2 restart
-	msg_info "Installation of PHP as PHP-FPM completed!"
+	Msg.info "Installation of PHP as PHP-FPM completed!"
 }	# end install_php_fpm

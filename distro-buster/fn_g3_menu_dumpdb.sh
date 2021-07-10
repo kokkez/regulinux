@@ -31,6 +31,6 @@ menu_dumpdb() {
 		P="${C}/${D}.sql.gz"
 		cmd mysqldump --single-transaction --routines --quick --force ${D} | \
 			cmd gzip --best --rsyncable > ${P}
-		msg_info "$(cmd date '+%F %T') database '${D}' saved to: '${P}'"
+		Msg.info "$(cmd date '+%F %T') database '${D}' saved to: '${P}'"
 	done
 }	# end menu_dumpdb

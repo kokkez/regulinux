@@ -4,11 +4,11 @@
 
 install_dovecot() {
 	is_installed "dovecot-imapd" && {
-		msg_alert "Dovecot is already installed..."
+		Msg.warn "Dovecot is already installed..."
 		return
 	}
 
-	msg_info "Installing Dovecot..."
+	Msg.info "Installing Dovecot..."
 
 	# preseed dovecot
 #	debconf-set-selections <<EOF
@@ -22,5 +22,5 @@ install_dovecot() {
 	# activating ports on firewall
 	firewall_allow "mail"
 
-	msg_info "Installation of dovecot completed!"
+	Msg.info "Installation of dovecot completed!"
 }	# end install_dovecot

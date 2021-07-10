@@ -8,5 +8,5 @@ shell_bash() {
 
 	[ -f ~/.bashrc ] || copy_to ~ .bashrc
 
-	msg_info "Changing default shell to BASH, completed"
+	Msg.info "Changing default shell to BASH, completed"
 }	# end shell_bash

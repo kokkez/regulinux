@@ -27,5 +27,5 @@ create_database() {
 	# appending info in ~
 	echo -e "[${DB}]\nusername = ${UN}\npassword = ${PW}\n" >> ~/.dbdata.txt
 
-	msg_info "Creation of the new database '${DB}' completed!"
+	Msg.info "Creation of the new database '${DB}' completed!"
 }	# end create_database

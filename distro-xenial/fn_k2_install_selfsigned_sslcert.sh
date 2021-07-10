@@ -10,11 +10,11 @@ install_selfsigned_sslcert() {
 
 	# check that was not already generated
 	[ -r "${D}.cert" ] && {
-		msg_alert "SSL Certificate ( ${D}.cert ) is already generated..."
+		Msg.warn "SSL Certificate ( ${D}.cert ) is already generated..."
 		return
 	}
 
-	msg_info "Generating self-signed SSL Certificate..."
+	Msg.info "Generating self-signed SSL Certificate..."
 
 	# now write the certificate
 	openssl rand -out ~/.rnd -hex 256
@@ -38,5 +38,5 @@ install_selfsigned_sslcert() {
 		svc_evoke apache2 restart
 	}
 
-	msg_info "Generation of self-signed SSL Certificate completed!"
+	Msg.info "Generation of self-signed SSL Certificate completed!"
 }	# end install_selfsigned_sslcert

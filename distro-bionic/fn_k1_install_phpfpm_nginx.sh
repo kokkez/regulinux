@@ -8,7 +8,7 @@ install_phpfpm_nginx() {
 
 	# abort if package was already installed
 	is_installed "php${V}-fpm" && {
-		msg_alert "PHP${V} as PHP-FPM is already installed..."
+		Msg.warn "PHP${V} as PHP-FPM is already installed..."
 		return
 	}
 
@@ -28,7 +28,7 @@ install_phpfpm_nginx() {
 	cmd update-alternatives --auto php
 #	cmd update-alternatives --set php /usr/bin/php${V}
 
-	msg_info "Configuring PHP for nginx..."
+	Msg.info "Configuring PHP for nginx..."
 	cd /etc/nginx
 
 	# adjust date.timezone in all php.ini
@@ -38,5 +38,5 @@ install_phpfpm_nginx() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 0|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart nginx
-	msg_info "Installation of PHP${V} as PHP-FPM completed!"
+	Msg.info "Installation of PHP${V} as PHP-FPM completed!"
 }	# end install_phpfpm_nginx

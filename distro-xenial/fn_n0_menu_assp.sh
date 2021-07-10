@@ -4,7 +4,7 @@
 
 menu_assp1() {
 	[ -d /home/assp ] && {
-		msg_alert "ASSP v1 is already installed..."
+		Msg.warn "ASSP v1 is already installed..."
 		return
 	}
 

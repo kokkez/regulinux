@@ -6,7 +6,7 @@
 menu_espo() {
 	local URL VER="5.0.3"						# use with php 5.6 or 7
 
-	msg_info "Installing EspoCRM ${VER}..."
+	Msg.info "Installing EspoCRM ${VER}..."
 
 	# install some php modules before install EspoCRM
 	pkg_install libapache2-mod-php5 php5-mysqlnd php5-json php5-gd \
@@ -48,5 +48,5 @@ menu_espo() {
 EOF
 	}
 
-	msg_info "Now install EspoCRM ${VER} via browser..."
+	Msg.info "Now install EspoCRM ${VER} via browser..."
 }	# end menu_espo

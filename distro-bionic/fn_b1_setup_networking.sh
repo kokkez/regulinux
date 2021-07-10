@@ -47,7 +47,7 @@ EOF
 	cmd systemctl mask ${IF}
 	cmd apt -y purge nplan netplan.io
 
-	msg_info "Configuration of netplan was fully disabled"
-	msg_alert "Carefully check /etc/network/interfaces before reboot!"
+	Msg.info "Configuration of netplan was fully disabled"
+	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
 }	# end setup_networking
 

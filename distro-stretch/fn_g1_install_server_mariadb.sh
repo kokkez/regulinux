@@ -8,15 +8,15 @@ install_server_mariadb() {
 
 	# abort if mariadb is already installed
 	is_installed "${K}" && {
-		msg_alert "${K} is already installed..."
+		Msg.warn "${K} is already installed..."
 		return
 	}
 
 	# install required packages
-	msg_info "Installing ${K}..."
+	Msg.info "Installing ${K}..."
 	pkg_install mariadb-client mariadb-server
 
-	msg_info "Configuring ${K}"
+	Msg.info "Configuring ${K}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -46,5 +46,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	cmd systemctl restart mysql
-	msg_info "Installation of ${K} completed!"
+	Msg.info "Installation of ${K} completed!"
 }	# end install_server_mariadb

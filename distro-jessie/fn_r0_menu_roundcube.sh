@@ -17,11 +17,11 @@ menu_roundcube() {
 
 	# test if not already installed
 	[ -s "${d}/index.php" ] && {
-		msg_alert "Roundcube is already installed..."
+		Msg.warn "Roundcube is already installed..."
 		return
 	}
 
-	msg_info "Installing Roundcube ${v}..."
+	Msg.info "Installing Roundcube ${v}..."
 	mkdir -p ${d}
 	p=$(menu_password 32)					# random password
 

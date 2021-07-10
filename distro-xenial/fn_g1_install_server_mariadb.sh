@@ -7,11 +7,11 @@ install_server_mariadb() {
 	local K="mariadb-server"
 
 	is_installed "${K}" || {
-		msg_info "Installing ${K}..."
+		Msg.info "Installing ${K}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	msg_info "Configuring ${K}"
+	Msg.info "Configuring ${K}"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	svc_evoke mysql restart
-	msg_info "Installation of ${K} completed!"
+	Msg.info "Installation of ${K} completed!"
 }	# end install_server_mariadb

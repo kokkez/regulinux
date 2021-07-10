@@ -21,5 +21,5 @@ install_phpfpm() {
 	a2enmod actions fastcgi alias
 	svc_evoke php5-fpm restart
 
-	msg_info "Installation of php5-fpm completed!"
+	Msg.info "Installation of php5-fpm completed!"
 }	# end install_phpfpm

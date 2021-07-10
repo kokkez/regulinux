@@ -6,12 +6,12 @@ menu_tz() {
 	local TIZO=${1:-${TIME_ZONE}}
 
 	[ -f "/usr/share/zoneinfo/${TIZO}" ] || {
-		msg_error "The requested timezone does not exists: ${TIZO}"
+		Msg.error "The requested timezone does not exists: ${TIZO}"
 	}
 
 	# split into variables
 	local AREA=${TIZO%%/*} ZONE=${TIZO#*/}
-	msg_info "Setup timezone as AREA: '${AREA}', ZONE: '${ZONE}'"
+	Msg.info "Setup timezone as AREA: '${AREA}', ZONE: '${ZONE}'"
 
 	# backup old first, then get the new from zoneinfo file
 	backup_file /etc/localtime
@@ -30,6 +30,6 @@ EOF
 	TZBase=$(LC_ALL=C TZ=UTC0 date)
 	UTdate=$(LC_ALL=C TZ=UTC0 date -d "$TZBase")
 	TZdate=$(unset TZ; LANG=C date -d "$TZBase")
-	msg_notice "Local time is now:      ${TZdate}"
-	msg_notice "Universal Time is now:  ${UTdate}"
+	Msg.debug "Local time is now:      ${TZdate}"
+	Msg.debug "Universal Time is now:  ${UTdate}"
 }	# end menu_tz

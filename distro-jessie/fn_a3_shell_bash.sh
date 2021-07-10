@@ -8,5 +8,5 @@ shell_bash() {
 
 	[ -f ~/.bashrc ] || copy_to ~ .bashrc
 
-	msg_info "Bash is now set as the default shell"
+	Msg.info "Bash is now set as the default shell"
 }	# end shell_bash

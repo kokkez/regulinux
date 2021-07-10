@@ -4,11 +4,11 @@
 
 install_pureftpd() {
 	is_installed "pure-ftpd-mysql" || {
-		msg_info "Installing PureFTPd..."
+		Msg.info "Installing PureFTPd..."
 		pkg_install pure-ftpd-common pure-ftpd-mysql
 	}
 
-	msg_info "Configuring PureFTPd..."
+	Msg.info "Configuring PureFTPd..."
 
 	# setting up Pure-Ftpd
 	sed -ri 's|(VIRTUALCHROOT=)false|\1true|' /etc/default/pure-ftpd-common
@@ -29,5 +29,5 @@ install_pureftpd() {
 	firewall_allow "ftp"
 
 	svc_evoke pure-ftpd-mysql restart
-	msg_info "Installation of PureFTPd completed!"
+	Msg.info "Installation of PureFTPd completed!"
 }	# end install_pureftpd

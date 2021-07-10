@@ -8,7 +8,7 @@ virtualuser_get() {
 	then
 		VIRTUAL_USER_UID=$(cmd id -u postfix)
 		VIRTUAL_USER_GID=$(cmd id -g postfix)
-		msg_info "Using postfix as user vmail: UID=${VIRTUAL_USER_UID}, GID=${VIRTUAL_USER_GID}"
+		Msg.info "Using postfix as user vmail: UID=${VIRTUAL_USER_UID}, GID=${VIRTUAL_USER_GID}"
 
 	else
 		# add user vmail
@@ -20,6 +20,6 @@ virtualuser_get() {
 
 		VIRTUAL_USER_UID=$(cmd id -u vmail)
 		VIRTUAL_USER_GID=$(cmd id -g mail)
-		msg_info "Creating virtual user completed: UID=${VIRTUAL_USER_UID}, GID=${VIRTUAL_USER_GID}"
+		Msg.info "Creating virtual user completed: UID=${VIRTUAL_USER_UID}, GID=${VIRTUAL_USER_GID}"
 	fi;
 }	# end virtualuser_get

@@ -7,10 +7,10 @@ config_postfix_sasl2_sql() {
 	# https://wiki.debian.org/PostfixAndSASL
 	# postfix.state-of-mind.de/patrick.koetter/smtpauth/sasldb_configuration.html
 	is_installed "libsasl2-modules-sql" && {
-		msg_alert "Cyrus sasl2 is already installed"
+		Msg.warn "Cyrus sasl2 is already installed"
 		return
 	}
-	msg_info "Installing Cyrus-SASL ..."
+	Msg.info "Installing Cyrus-SASL ..."
 
 	# install software
 	pkg_install postfix libsasl2-modules libsasl2-modules-sql sasl2-bin
@@ -29,5 +29,5 @@ config_postfix_sasl2_sql() {
 
 	# restart postfix, because reloading is not enough
 	svc_evoke postfix restart
-	msg_info "Installation of Cyrus-SASL completed!"
+	Msg.info "Installation of Cyrus-SASL completed!"
 }	# end config_postfix_sasl2_sql

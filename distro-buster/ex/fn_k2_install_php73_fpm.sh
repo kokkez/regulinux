@@ -5,13 +5,13 @@
 install_php73_fpm() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as PHP-FPM is already installed..."
+		Msg.warn "PHP as PHP-FPM is already installed..."
 		return
 	}
 
 	# add external repository for updated php
 	is_installed "apt-transport-https" || {
-		msg_info "Installing required packages..."
+		Msg.info "Installing required packages..."
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
@@ -37,7 +37,7 @@ EOF
 	# enable apache2 modules
 	a2enmod proxy_fcgi fcgid setenvif alias
 
-	msg_info "Configuring PHP as PHP-FPM for apache2..."
+	Msg.info "Configuring PHP as PHP-FPM for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -59,5 +59,5 @@ EOF
 	cmd a2enmod php7.3
 
 	cmd systemctl restart apache2
-	msg_info "Installation of PHP as PHP-FPM completed!"
+	Msg.info "Installation of PHP as PHP-FPM completed!"
 }	# end install_php73_fpm

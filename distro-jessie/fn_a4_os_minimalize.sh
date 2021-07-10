@@ -5,7 +5,7 @@
 OS.minimalize() {
 	# install sources.list from MyDir
 	copy_to /etc/apt sources.list
-	msg_info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
+	Msg.info "Installed /etc/apt/sources.list for ${OS} (${DISTRO})..."
 
 	# always use --no-install-recommends (also used as a check in "done_deps")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
@@ -27,7 +27,7 @@ EOF
 	for x in $(cmd dpkg --print-foreign-architectures); do
 		apt-get purge -qqy ".*:${x}"
 		dpkg --remove-architecture ${x}
-		msg_info "Architecture '${x}' removed"
+		Msg.info "Architecture '${x}' removed"
 	done;
 
 	cd /tmp

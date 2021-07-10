@@ -6,7 +6,8 @@
 
 #	import main library
 #	----------------------------------------------------------------------------
-#	MyDir=$(cd $(command dirname "$0"); pwd)
+	# $0 refers to the calling script
+	# ${BASH_SOURCE[0]} refers to this particular file
 	MyDir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
 	. "${MyDir}/lib.sh"
 
@@ -24,7 +25,7 @@
 
 	if [ -n "$1" ] && is_available "menu_${1}"; then
 		cmd "menu_${1}" "${@:2}"
-		msg_notice "Execution of '${1}' completed!"
+		Msg.debug "Execution of '${1}' completed!"
 	else
 		OS.menu
 	fi;

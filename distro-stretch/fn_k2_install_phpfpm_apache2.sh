@@ -9,7 +9,7 @@ install_phpfpm_apache2() {
 
 	# abort if apache2 is already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+		Msg.warn "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
@@ -26,7 +26,7 @@ install_phpfpm_apache2() {
 		php5.6-{bcmath,cgi,cli,curl,fpm,gd,gmp,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 
-	msg_info "Configuring PHP for apache2..."
+	Msg.info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# enable apache2 modules
@@ -52,5 +52,5 @@ install_phpfpm_apache2() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart apache2
-	msg_info "Installation of PHP${V} as MOD-PHP, PHP-FPM and FastCGI completed!"
+	Msg.info "Installation of PHP${V} as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_phpfpm_apache2

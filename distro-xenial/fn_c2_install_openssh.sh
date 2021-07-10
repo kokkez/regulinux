@@ -17,7 +17,7 @@ install_openssh() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	X=ssh-user-sessions.service
 	[ -s /etc/systemd/system/${X} ] || {
-		msg_info "Mitigating the problem of SSH hangs on reboot"
+		Msg.info "Mitigating the problem of SSH hangs on reboot"
 		copy_to /etc/systemd/system ssh/${X}
 		cmd systemctl daemon-reload
 		cmd systemctl enable ${X}
@@ -28,7 +28,7 @@ install_openssh() {
 	# https://askubuntu.com/questions/1109934/ssh-server-stops-working-after-reboot-caused-by-missing-var-run-sshd
 	X=/usr/lib/tmpfiles.d/sshd.conf
 	grep -q '/var' ${X} && {
-		msg_info "Fixing a little systemd bug that prevent SSHd to start"
+		Msg.info "Fixing a little systemd bug that prevent SSHd to start"
 		sed -i 's|/var||' ${X}
 #		cmd mkdir -p -m0755 /var/run/sshd
 	}
@@ -36,5 +36,5 @@ install_openssh() {
 	# activate on firewall & restart SSH
 	firewall_allow "${P}"
 	svc_evoke ssh restart
-	msg_info "The SSH server is listening on port: ${P}"
+	Msg.info "The SSH server is listening on port: ${P}"
 }	# end install_openssh

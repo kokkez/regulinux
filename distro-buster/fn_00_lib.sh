@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_upgrade() {
-	msg_info "Upgrading system packages for ${OS} (${DISTRO})..."
+	Msg.info "Upgrading system packages for ${OS} (${DISTRO})..."
 	pkg_update	# update packages lists
 
 	# do the apt upgrade
@@ -80,5 +80,5 @@ sslcert_paths() {
 	# restart nginx webserver if installed
 	[ "${HTTP_SERVER}" = "nginx" ] && cmd systemctl restart nginx
 
-	msg_info "Symlink for the given SSL Certificate completed!"
+	Msg.info "Symlink for the given SSL Certificate completed!"
 }	# end sslcert_paths

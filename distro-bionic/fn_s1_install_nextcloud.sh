@@ -8,11 +8,11 @@ install_nextcloud() {
 	# test that php version is at least 7.2
 	P="$(php_version minor)"
 	dpkg --compare-versions "${P}" "lt" "7.2" && {
-		msg_alert "Nextcloud ${V} require PHP7.2 but PHP${P} is installed..."
+		Msg.warn "Nextcloud ${V} require PHP7.2 but PHP${P} is installed..."
 		return
 	}
 
-	msg_info "Installing Nextcloud ${V}..."
+	Msg.info "Installing Nextcloud ${V}..."
 
 	# install some php libraries before install Nextcloud
 	add_php_repository
@@ -70,5 +70,5 @@ EOF
 		cmd systemctl restart apache2
 	fi;
 
-	msg_info "Installation of nextcloud ${V} completed!"
+	Msg.info "Installation of nextcloud ${V} completed!"
 }	# end install_nextcloud

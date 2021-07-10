@@ -15,5 +15,5 @@ install_motd() {
 	copy_to . motd/*
 	chmod +x ./*
 
-	msg_info "Customization of MOTD completed!"
+	Msg.info "Customization of MOTD completed!"
 }	# end install_motd

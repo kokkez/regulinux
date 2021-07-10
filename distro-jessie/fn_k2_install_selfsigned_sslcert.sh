@@ -10,11 +10,11 @@ install_selfsigned_sslcert() {
 
 	# check that was not already installed
 	[ -r "${SSL}.cert" ] && {
-		msg_alert "SSL Certificate ( ${SSL}.cert ) is already installed..."
+		Msg.warn "SSL Certificate ( ${SSL}.cert ) is already installed..."
 		return
 	}
 
-	msg_info "Installing self-signed SSL Certificate..."
+	Msg.info "Installing self-signed SSL Certificate..."
 
 	# now write the certificate
 	openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
@@ -37,5 +37,5 @@ install_selfsigned_sslcert() {
 		svc_evoke apache2 restart
 	}
 
-	msg_info "Installation of self-signed SSL Certificate completed!"
+	Msg.info "Installation of self-signed SSL Certificate completed!"
 }	# end install_selfsigned_sslcert

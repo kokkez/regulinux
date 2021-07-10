@@ -9,7 +9,7 @@ svc_evoke() {
 	# stop if service is unavailable
 	is_available "${s}" || return
 
-	msg_info "Evoking ${s}.service to execute job ${a}..."
+	Msg.info "Evoking ${s}.service to execute job ${a}..."
 
 	[ "${a}" = "reload" ] && a="reload-or-restart"
 	cmd systemctl ${a} ${s}.service

@@ -10,11 +10,11 @@ install_sslcert_selfsigned() {
 
 	# abort if certificate is already generated
 	[ -r "${D}.cert" ] && {
-		msg_alert "SSL Certificate ( ${D}.cert ) is already generated..."
+		Msg.warn "SSL Certificate ( ${D}.cert ) is already generated..."
 		return
 	}
 
-	msg_info "Generating self-signed SSL Certificate..."
+	Msg.info "Generating self-signed SSL Certificate..."
 
 	# write the certificate
 	openssl rand -out ~/.rnd -hex 256
@@ -26,5 +26,5 @@ install_sslcert_selfsigned() {
 	# symlink the certificate paths
 	sslcert_paths "${D}.key" "${D}.cert"
 
-	msg_info "Generation of self-signed SSL Certificate completed!"
+	Msg.info "Generation of self-signed SSL Certificate completed!"
 }	# end install_sslcert_selfsigned

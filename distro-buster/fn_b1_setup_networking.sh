@@ -16,7 +16,7 @@ setup_networking() {
 
 	# abort if already using static ip address
 	cmd grep -q 'inet static' ./interfaces && {
-		msg_info "Network already configured with static IP: ${IP}"
+		Msg.info "Network already configured with static IP: ${IP}"
 		return
 	}
 
@@ -43,6 +43,6 @@ EOF
 #	cmd ifdown --force ${IF} lo && cmd ifup -a
 	cmd systemctl restart networking
 
-	msg_info "Networking changed to run with static IP: ${IP}"
-	msg_alert "Carefully check /etc/network/interfaces before reboot!"
+	Msg.info "Networking changed to run with static IP: ${IP}"
+	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
 }	# end setup_networking

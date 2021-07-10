@@ -19,5 +19,5 @@ menu_motd() {
 	# relink /etc/motd on pure debian
 	ln -nfs /run/motd /etc/motd
 
-	msg_info "Customization of MOTD completed!"
+	Msg.info "Customization of MOTD completed!"
 }	# end menu_motd

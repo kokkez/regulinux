@@ -7,7 +7,7 @@ install_firewall() {
 	# $1 port, strictly numeric
 	local p f=~/firewall.sh				# path to the firewall script
 
-	is_installed "iptables" || msg_error "Seems that iptables was missing"
+	is_installed "iptables" || Msg.error "Seems that iptables was missing"
 
 	p=$(port_validate ${1})				# strictly numeric port
 

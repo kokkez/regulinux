@@ -7,7 +7,7 @@ install_server_mysql() {
 	local PKG="mysql-server-5.5"
 
 	is_installed "${PKG}" || {
-		msg_info "Installing ${PKG}..."
+		Msg.info "Installing ${PKG}..."
 
 		# preseed mysql-server
 		debconf-set-selections <<EOF
@@ -17,7 +17,7 @@ EOF
 		pkg_install bsdutils mysql-client mysql-server
 	}
 
-	msg_info "Configuring ${PKG}"
+	Msg.info "Configuring ${PKG}"
 	cd /etc/mysql
 
 	# allow MySQL to listen on all interfaces
@@ -43,5 +43,5 @@ FLUSH PRIVILEGES;
 EOF
 
 	svc_evoke mysql restart
-	msg_info "Installation of ${PKG} completed!"
+	Msg.info "Installation of ${PKG} completed!"
 }	# end install_server_mysql

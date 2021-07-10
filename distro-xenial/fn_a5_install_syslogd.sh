@@ -5,12 +5,12 @@
 
 install_syslogd() {
 	is_installed "inetutils-syslogd" || {
-		msg_info "Installing inetutils-syslogd..."
+		Msg.info "Installing inetutils-syslogd..."
 		pkg_purge "rsyslogd"
 		pkg_install inetutils-syslogd logrotate
 	}
 
-	msg_info "Configuring inetutils-syslogd..."
+	Msg.info "Configuring inetutils-syslogd..."
 
 	# there is no need to log to so many files
 	cd /var/log
@@ -38,5 +38,5 @@ EOF
 	> /var/log/syslog
 	svc_evoke inetutils-syslogd restart
 	cmd logrotate -f /etc/logrotate.conf > /dev/null 2>&1
-	msg_info "Configuration of inetutils-syslogd completed!"
+	Msg.info "Configuration of inetutils-syslogd completed!"
 }	# end install_syslogd

@@ -20,7 +20,7 @@ firewall_allow() {
 	done
 
 	# save the new value back in ~/firewall.sh
-	msg_info "Allowing on firewall: ${ACCEPTS## }"
+	Msg.info "Allowing on firewall: ${ACCEPTS## }"
 	sed -ri ${F} -e "s|^(ACCEPTS=).*|\1\"${ACCEPTS## }\"|"
 
 	${F} start							# load configured rules on firewall

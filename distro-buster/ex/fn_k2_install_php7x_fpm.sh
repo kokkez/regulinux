@@ -6,13 +6,13 @@
 install_php7x_fpm() {
 	# abort if package was already installed
 	is_installed "libapache2-mod-fcgid" && {
-		msg_alert "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+		Msg.warn "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
 	# add external repository for updated php
 	is_installed "apt-transport-https" || {
-		msg_info "Installing some required packages..."
+		Msg.info "Installing some required packages..."
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
@@ -44,7 +44,7 @@ EOF
 	a2dismod php5.6
 	a2enmod php7.4
 
-	msg_info "Configuring PHP for apache2..."
+	Msg.info "Configuring PHP for apache2..."
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
@@ -59,5 +59,5 @@ EOF
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart apache2
-	msg_info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
+	Msg.info "Installation of PHP as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php7x_fpm

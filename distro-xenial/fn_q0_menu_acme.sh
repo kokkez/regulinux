@@ -44,7 +44,7 @@ acme_index() {
 header('Content-Type: text/plain');
 echo basename(\$_SERVER['REQUEST_URI']) .".${THU}\n";
 EOF
-		msg_info "The ACCOUNT_THUMBPRINT value is: ${THU}"
+		Msg.info "The ACCOUNT_THUMBPRINT value is: ${THU}"
 	}
 }	# end acme_index
 
@@ -79,12 +79,12 @@ acme_ic30() {
 menu_acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
-		msg_alert "The acme.sh script is already installed..."
+		Msg.warn "The acme.sh script is already installed..."
 		return
 	}
 
 	# get acme.sh script
-	msg_info "Installing acme.sh script..."
+	Msg.info "Installing acme.sh script..."
 	acme_get
 
 	# detect ispconfig version 3.1
@@ -134,5 +134,5 @@ menu_acme() {
 	}
 	service apache2 restart		# restarting apache
 
-	msg_info "Installation of acme.sh completed!"
+	Msg.info "Installation of acme.sh completed!"
 }	# end menu_acme

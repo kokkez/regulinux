@@ -10,7 +10,7 @@
 
 install_ispconfig() {
 	local U V="3.1.15p3" # version to install
-	msg_info "Installing IspConfig ${V}..."
+	Msg.info "Installing IspConfig ${V}..."
 
 	cd /tmp
 	U=https://www.ispconfig.org/downloads/ISPConfig-${V}.tar.gz
@@ -57,5 +57,5 @@ install_ispconfig() {
 
 	# cleanup
 	rm -rf /tmp/*
-	msg_info "Installation of IspConfig ${V} completed!"
+	Msg.info "Installation of IspConfig ${V} completed!"
 }	# end install_ispconfig

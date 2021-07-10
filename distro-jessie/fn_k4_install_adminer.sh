@@ -7,11 +7,11 @@ install_adminer() {
 	local URL ADM DIRE=/var/www/myadminer VER="4.3.1"
 
 	[ -s "${DIRE}/index.php" ] && {
-		msg_alert "adminer-${VER} is already installed..."
+		Msg.warn "adminer-${VER} is already installed..."
 		return
 	}
 
-	msg_info "Installing adminer-${VER}..."
+	Msg.info "Installing adminer-${VER}..."
 
 	# create directory if it not exists (with -p)
 	mkdir -p ${DIRE} && cd "$_"
@@ -44,5 +44,5 @@ install_adminer() {
 		svc_evoke apache2 restart
 	}
 
-	msg_info "Installation of adminer-${VER} completed!"
+	Msg.info "Installation of adminer-${VER} completed!"
 }	# end install_adminer

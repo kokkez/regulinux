@@ -5,7 +5,7 @@
 
 menu_dns() {
 	if is_installed "bind9"; then
-		msg_alert "DNS server bind9 is already installed..."
+		Msg.warn "DNS server bind9 is already installed..."
 		return
 	fi;
 
@@ -13,7 +13,7 @@ menu_dns() {
 	done_deps || return
 
 	# install the DNS server
-	msg_info "Installing DNS server bind9..."
+	Msg.info "Installing DNS server bind9..."
 
 	pkg_install bind9 dnsutils
 	touch /var/log/bind9-query.log
@@ -23,5 +23,5 @@ menu_dns() {
 	# activating ports on firewall
 	firewall_allow "dns"
 
-	msg_info "Installation of DNS server bind9 completed!"
+	Msg.info "Installation of DNS server bind9 completed!"
 }	# end menu_dns

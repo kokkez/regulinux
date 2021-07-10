@@ -7,7 +7,7 @@ menu_nextcloud() {
 
 	# abort if nextcloud is already installed
 	[ -r /var/www/nextcloud/config/config.php ] && {
-		msg_alert "Nextcloud is already installed..."
+		Msg.warn "Nextcloud is already installed..."
 		return
 	}
 

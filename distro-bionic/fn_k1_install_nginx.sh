@@ -6,20 +6,20 @@
 install_nginx() {
 	# abort if nginx is already installed
 	is_installed "nginx" && {
-		msg_alert "nginx is already installed..."
+		Msg.warn "nginx is already installed..."
 		return
 	}
 	# abort also if apache2 is installed
 	is_installed "apache2-bin" && {
-		msg_alert "Found apache2! Installation of nginx cannot continue"
+		Msg.warn "Found apache2! Installation of nginx cannot continue"
 		return
 	}
 
 	# install required packages
-	msg_info "Installing nginx..."
+	Msg.info "Installing nginx..."
 	pkg_install nginx ssl-cert
 
-	msg_info "Configuring nginx..."
+	Msg.info "Configuring nginx..."
 
 	# shut off server_tokens
 	local F=/etc/nginx/nginx.conf
@@ -46,7 +46,7 @@ install_nginx() {
 	# activating ports on firewall
 	firewall_allow "http"
 
-	msg_info "Configuration of nginx completed!"
+	Msg.info "Configuration of nginx completed!"
 }	# end install_nginx
 
 
