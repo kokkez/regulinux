@@ -18,7 +18,7 @@ menu_espo() {
 	# go, install EspoCRM
 	cd /var/www
 	u="https://www.espocrm.com/downloads/EspoCRM-${v}.zip"
-	down_load "$u" "espo.zip"
+	File.download "$u" "espo.zip"
 	unzip -qo espo.zip
 	rm -rf espo.zip
 	mv EspoCRM-* espo

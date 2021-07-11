@@ -20,7 +20,7 @@ install_nextcloud() {
 	# go, install Nextcloud
 	cd /var/www
 	u="https://download.nextcloud.com/server/releases/nextcloud-${v}.zip"
-	down_load "$u" "nextcloud.zip"
+	File.download "$u" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	mkdir -p /var/www/nextcloud-data # custom data folder

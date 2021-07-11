@@ -15,7 +15,7 @@ install_php7x_fpm() {
 		Msg.info "Installing some required packages..."
 		Pkg.install apt-transport-https lsb-release ca-certificates
 	}
-	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
+	File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 	cat > /etc/apt/sources.list.d/php.list <<EOF
 # https://www.patreon.com/oerdnj
 deb http://packages.sury.org/php stretch main

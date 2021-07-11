@@ -28,7 +28,7 @@ menu_roundcube() {
 	# download the right version
 	U=https://github.com/roundcube/roundcubemail/releases/download/${V}/roundcubemail-${V}-complete.tar.gz
 	cd /tmp
-	down_load "${U}" roundcubemail.tar.gz
+	File.download "${U}" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
 	cd roundcubemail-*
 	mv -t "${D}" bin config logs plugins program skins temp vendor .htaccess index*
@@ -42,7 +42,7 @@ menu_roundcube() {
 
 	# install & configure plugins for ISPConfig3
 	cd /tmp
-	down_load https://github.com/w2c/ispconfig3_roundcube/archive/master.zip plugins.zip
+	File.download https://github.com/w2c/ispconfig3_roundcube/archive/master.zip plugins.zip
 	unzip -qo plugins*
 	mv ispconfig3*/ispconfig3_* ${D}/plugins/
 	# install the config file
@@ -52,7 +52,7 @@ menu_roundcube() {
 
 	# install & configure contextmenu plugin
 	cd /tmp
-	down_load https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip contextmenu.zip
+	File.download https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip contextmenu.zip
 	unzip -qo contextmenu*
 	cd roundcube-contextmenu*
 	mkdir -p ${D}/plugins/contextmenu

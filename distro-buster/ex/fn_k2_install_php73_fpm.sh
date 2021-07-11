@@ -14,7 +14,7 @@ install_php73_fpm() {
 		Msg.info "Installing required packages..."
 		Pkg.install apt-transport-https lsb-release ca-certificates
 	}
-	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
+	File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 	cat <<EOF > /etc/apt/sources.list.d/php.list
 # https://www.patreon.com/oerdnj
 deb http://packages.sury.org/php stretch main

@@ -13,23 +13,23 @@ setup_bash() {
 
 setup_sshd() {
 	# $1 - port - strictly in numerical range
-	local X P=$( port_validate ${1:-$SSHD_PORT} )
+	local x p=$( Port.audit ${1:-$SSHD_PORT} )
 
 	# configure SSH server arguments
 	sed -ri /etc/ssh/sshd_config \
-		-e "s|^#?Port.*|Port ${P}|" \
+		-e "s|^#?Port.*|Port $p|" \
 		-e 's|^#?(PasswordAuthentication).*|\1 no|' \
 		-e 's|^#?(PermitRootLogin).*|\1 without-password|' \
 		-e 's|^#?(RSAAuthentication).*|\1 yes|' \
 		-e 's|^#?(PubkeyAuthentication).*|\1 yes|'
 
 	# mitigating ssh hang on reboot on systemd capables OSes
-	X=ssh-session-cleanup.service
-	[ -s /etc/systemd/system/${X} ] || {
-		cp /usr/share/doc/openssh-client/examples/${X} /etc/systemd/system/
+	x=ssh-session-cleanup.service
+	[ -s /etc/systemd/system/$x ] || {
+		cp /usr/share/doc/openssh-client/examples/$x /etc/systemd/system/
 		cmd systemctl daemon-reload
-		cmd systemctl enable ${X}
-		cmd systemctl start ${X}
+		cmd systemctl enable $x
+		cmd systemctl start $x
 		# edit script to catch all sshd demons: shell & winscp
 		sed -ri /usr/lib/openssh/ssh-session-cleanup \
 			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
@@ -38,7 +38,7 @@ setup_sshd() {
 
 	# restart SSH server
 	cmd systemctl restart ssh
-	Msg.info "SSH server is now listening on port: ${P}"
+	Msg.info "SSH server is now listening on port: $p"
 }	# end setup_sshd
 
 

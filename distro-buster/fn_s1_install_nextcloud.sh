@@ -28,7 +28,7 @@ install_nextcloud() {
 	# download & install nextcloud
 	cd /var/www
 	u="https://download.nextcloud.com/server/releases/nextcloud-${v}.zip"
-	down_load "$u" "nextcloud.zip"
+	File.download "$u" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	chown -R 33:0 /var/www/nextcloud # set user www-data

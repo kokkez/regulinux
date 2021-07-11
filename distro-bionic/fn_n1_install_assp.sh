@@ -10,7 +10,7 @@ install_assp() {
 	[ -s assp/assp.cfg ] || {
 		Msg.info "Installing ASSP v1..."
 		# download ASSP
-		down_load "${u}/ASSP%20Installation/ASSP%201.10.X/ASSP_1.10.1_16065_install.zip" assp.zip
+		File.download "${u}/ASSP%20Installation/ASSP%201.10.X/ASSP_1.10.1_16065_install.zip" assp.zip
 		# some cleanup
 		unzip assp.zip
 		mv ASSP_*/ASSP assp

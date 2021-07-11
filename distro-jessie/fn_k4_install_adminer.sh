@@ -18,7 +18,7 @@ install_adminer() {
 
 	# get the plugins folder
 	u=https://github.com/vrana/adminer/releases/download/v${v}
-	down_load "$u/adminer-${v}.zip" "adminer-${v}.zip"
+	File.download "$u/adminer-${v}.zip" "adminer-${v}.zip"
 	# some cleanup
 	unzip -qo "adminer-${v}.zip"
 	mv ./adminer-$v/plugins ./
@@ -26,7 +26,7 @@ install_adminer() {
 
 	# download script
 	a="adminer-${v}-mysql-en.php"
-	down_load "$u/$a" "$a"
+	File.download "$u/$a" "$a"
 
 	# install the index.php file
 	File.into . adminer/index.php

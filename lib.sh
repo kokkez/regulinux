@@ -227,31 +227,6 @@
 	}	# end File.into
 
 
-	File.to() {
-		# copy to the single destination folder in $1, one or more files in $@
-		# that can comes exclusively from one of the "files-common" folders
-		[ -d "$1" ] || return
-
-		local ALT C A F D=$( cmd readlink -e $1 )
-		shift
-
-		# iterating containers
-		for C in ${MyDISTRO} ${ENV_files}; do
-
-			# iterating arguments
-			for A in "${@}"; do
-
-				# iterating files
-				for F in $(find ${C} -wholename "*${A}"); do
-					File.recopy "${F}" "${D}/$(basename ${F})"
-					ALT=1
-				done
-			done
-			[ -z "${ALT}" ] || break
-		done
-	}	# end File.to
-
-
 	Cmd.usable() {
 		# test argument $1 for: not empty & callable
 		Arg.expect "$1" && command -v "$1" &> /dev/null
@@ -271,11 +246,9 @@
 
 	Pkg.installable() {
 		# test argument $1 for: not empty & package installable
-		Arg.expect "$1" && {
-			Pkg.update	# update packages lists
-			[ $( cmd apt-cache search "^$1$" | wc -l ) -gt 0 ] && return
-		}
-		return 1
+		Arg.expect "$1" || return
+		Pkg.update	# update packages lists
+		[ $( cmd apt-cache search "^$1$" | wc -l ) -gt 0 ] || return 1
 	}	# end Pkg.installable
 
 
@@ -346,45 +319,40 @@
 	}	# end Pkg.purge
 
 
-	down_load() {
+	File.download() {
 		# download via wget, returning an error on failure
 		# $1 url
 		# $2 destination name
-
-		# we need exactly 2 arguments
-		[ $# == 2 ] || {
-			Msg.info "Missing arguments for downloading, exiting here..."
-			exit
-		}
+		Arg.expect "$1" "$2" || exit
 
 		Pkg.requires wget
 		cmd wget -nv --no-check-certificate "$1" -O "$2" || {
-			Msg.info "Download failed ( ${2} ), exiting here..."
+			Msg.info "Download failed ( $2 ), exiting here..."
 			exit
 		}
-	}	# end down_load
+	}	# end File.download
 
 
 	menu_password() {
 		# generate a random password (min 6 max 32 chars)
 		# $1 number of characters (defaults to 24)
 		# $2 flag for strong password (defaults no)
-		local CHR="[:alnum:]" LEN=$(cmd awk '{print int($1)}' <<< ${1:-24})
+		local c="[:alnum:]" n=$(cmd awk '{print int($1)}' <<< ${1:-24})
 
 		# constrain number of characters
-		LEN=$(( LEN > 31 ? 32 : LEN < 7 ? 6 : LEN ))
+		n=$(( n > 31 ? 32 : n < 7 ? 6 : n ))
 
 		# add special chars for strong password
-		[ -n "${2}" ] && CHR="!#\$%&*+\-.:<=>?@[]^~${CHR}"
+		[ -n "$2" ] && c="!#\$%&*+\-.:<=>?@[]^~$c"
 
-		echo $(cmd tr -dc "${CHR}" < /dev/urandom | head -c ${LEN})
+		echo $( cmd tr -dc "$c" < /dev/urandom | head -c $n )
 	}	# end menu_password
 
 
 	menu_iotest() {
 		# classic disk I/O test
 		Msg.info "Performing classic I/O test..."
-		cd ~
+		#cd ~
 		cmd dd if=/dev/zero of=~/tmpf bs=64k count=16k conv=fdatasync && rm -rf ~/tmpf
 	}	# end menu_iotest
 
@@ -400,29 +368,29 @@
 	}	# end done_deps
 
 
-	port_validate() {
+	Port.audit() {
 		# set port in $1 to be strictly numeric & in range
-		local T L P=$(awk '{print int($1)}' <<< ${1:-22})
-		(( P == 22 )) || {
+		local t l p=$( cmd awk '{print int($1)}' <<< ${1:-22} )
+		(( p == 22 )) || {
 			# limit min & max range
-			P=$(( P > 65534 ? 65535 : P < 1025 ? 1024 : P ))
+			p=$(( p > 65534 ? 65535 : p < 1025 ? 1024 : p ))
 			# exclude net.ipv4.ip_local_port_range (32768-60999)
-			T=$(command sysctl -e -n net.ipv4.ip_local_port_range)
-			L=$(awk '{print int($1)}' <<< ${T})
-			T=$(awk '{print int($2)}' <<< ${T})
-			P=$(( P < L ? P : P > T ? P : 64128 ))
+			t=$( cmd sysctl -e -n net.ipv4.ip_local_port_range )
+			l=$( cmd awk '{print int($1)}' <<< $t )
+			t=$( cmd awk '{print int($2)}' <<< $t )
+			p=$(( p < l ? p : p > t ? p : 64128 ))
 		}
-		echo ${P}
-	}	# end port_validate
+		echo $p
+	}	# end Port.audit
 
 
 	php_version() {
 		# return the dotted number of the cli version of PHP
 		# $1 = word to specify the wanted result like this
 		# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
-		local v=$(cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}')
-		[ "$1" = "major" ] && v=$(cmd awk -F. '{print $1}' <<< "$v")
-		[ "$1" = "minor" ] && v=$(cmd awk -F. '{print $1"."$2}' <<< "$v")
+		local v=$( cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}' )
+		[ "$1" = "major" ] && v=$( cmd awk -F. '{print $1}' <<< "$v" )
+		[ "$1" = "minor" ] && v=$( cmd awk -F. '{print $1"."$2}' <<< "$v" )
 		echo "$v"
 	}	# end php_version
 

@@ -3,9 +3,9 @@
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local URL VER="15.0.14"	# latest for php 7.0
+	local u v="15.0.14"	# latest for php 7.0
 
-	Msg.info "Installing Nextcloud ${VER}..."
+	Msg.info "Installing Nextcloud ${v}..."
 
 	# install some php libraries before install Nextcloud
 	Pkg.install php-{cli,gd,zip,curl,intl,imap,xmlrpc,xml,mbstring,apcu} \
@@ -19,8 +19,8 @@ install_nextcloud() {
 
 	# download & install nextcloud
 	cd /var/www
-	URL="https://download.nextcloud.com/server/releases/nextcloud-${VER}.zip"
-	down_load "${URL}" "nextcloud.zip"
+	u="https://download.nextcloud.com/server/releases/nextcloud-${v}.zip"
+	File.download "$u" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	mkdir -p /var/www/nextcloud-data # custom data folder
@@ -45,5 +45,5 @@ install_nextcloud() {
 */15 * * * * www-data php -f /var/www/nextcloud/cron.php
 EOF
 	}
-	Msg.info "Installation of nextcloud ${VER} completed!"
+	Msg.info "Installation of nextcloud $v completed!"
 }	# end install_nextcloud

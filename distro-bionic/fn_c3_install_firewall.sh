@@ -11,7 +11,7 @@ install_firewall() {
 		Msg.error "Seems that iptables was missing"
 	}
 
-	P=$(port_validate ${1})			# strictly numeric port
+	P=$( Port.audit $1 )			# strictly numeric port
 
 	# determining default iptables rules
 	case ${TARGET} in

@@ -14,7 +14,7 @@ install_ispconfig() {
 
 	cd /tmp
 	u=https://www.ispconfig.org/downloads/ISPConfig-${v}.tar.gz
-	down_load "$u" "isp3.tar.gz"
+	File.download "$u" "isp3.tar.gz"
 	tar xzf isp3.tar.gz
 	cd ispconfig3*/install/
 
