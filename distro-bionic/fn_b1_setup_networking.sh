@@ -13,7 +13,7 @@ setup_networking() {
 	GW=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "${GW}")
 
 	# install required packages
-	pkg_require ifupdown
+	Pkg.requires ifupdown
 
 	# setup /etc/network/interfaces file
 	cd /etc/network

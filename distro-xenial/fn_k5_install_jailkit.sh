@@ -12,7 +12,7 @@ install_jailkit() {
 	# check if Jailkit is installed already
 	Cmd.usable "jk_list" || {
 		Msg.info "Installing Jailkit..."
-		pkg_require python
+		Pkg.requires python
 		dpkg -i ${ENV_files}/jailkit_2.19-1_amd64.deb
 		Msg.info "Installation of Jailkit completed!"
 	}

@@ -14,7 +14,7 @@ install_php7x_fpm() {
 	add_php_repository
 
 	# now install php packages, versions 5.6 & 7.4, with some modules
-	pkg_install libapache2-mod-fcgid \
+	Pkg.install libapache2-mod-fcgid \
 		php5.6 libapache2-mod-php5.6 \
 		php5.6-{apcu,bcmath,cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php7.4 libapache2-mod-php7.4 \

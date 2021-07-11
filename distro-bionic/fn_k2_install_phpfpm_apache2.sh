@@ -17,7 +17,7 @@ install_phpfpm_apache2() {
 	add_php_repository
 
 	# install php packages with some modules
-	pkg_install libapache2-mod-fcgid \
+	Pkg.install libapache2-mod-fcgid \
 		php7.2 libapache2-mod-php7.2 \
 		php7.2-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php${v} libapache2-mod-php${v} \

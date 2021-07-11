@@ -16,18 +16,18 @@ menu_roundcube() {
 	local p d=/var/www/roundcube v=1.3.15	# version to install
 
 	# test if not already installed
-	[ -s "${d}/index.php" ] && {
+	[ -s "$d/index.php" ] && {
 		Msg.warn "Roundcube is already installed..."
 		return
 	}
 
 	Msg.info "Installing Roundcube ${v}..."
-	mkdir -p ${d}
+	mkdir -p $d
 	p=$(menu_password 32)					# random password
 
 	# install requirements
-	pkg_require php5 php-pear php5-mysqlnd php5-mcrypt php5-intl php-mail-mime \
-		php-net-smtp php5-ldap
+	#Pkg.requires php5 php-pear php5-mysqlnd php5-mcrypt php5-intl php-mail-mime php-net-smtp php5-ldap
+	Pkg.requires php5 php5-{intl,ldap,mcrypt,mysqlnd} php-{mail-mime,net-smtp,pear}
 
 	# download the right version
 	v=https://github.com/roundcube/roundcubemail/releases/download/${v}/roundcubemail-${v}-complete.tar.gz
@@ -35,10 +35,10 @@ menu_roundcube() {
 	down_load "${v}" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
 	cd roundcubemail-*
-	mv -t "${d}" bin config logs plugins program skins temp vendor .htaccess index*
+	mv -t "$d" bin config logs plugins program skins temp vendor .htaccess index*
 
 	# instruct search engines to not index our webmail
-	echo -e "User-agent: *\nDisallow: /" > ${d}/robots.txt
+	echo -e "User-agent: *\nDisallow: /" > $d/robots.txt
 
 	# creating a new database, then populate it from file
 	create_database "roundcube" "roundcube" "${p}"
@@ -48,9 +48,9 @@ menu_roundcube() {
 	cd /tmp
 	down_load https://github.com/w2c/ispconfig3_roundcube/archive/master.zip plugins.zip
 	unzip -qo plugins*
-	mv ispconfig3*/ispconfig3_* ${d}/plugins/
+	mv ispconfig3*/ispconfig3_* $d/plugins/
 	# install the config file
-	cd ${d}/plugins/ispconfig3_account/config
+	cd $d/plugins/ispconfig3_account/config
 	File.place roundcube/config.inc.php.plugin config.inc.php
 	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
@@ -59,11 +59,11 @@ menu_roundcube() {
 	down_load https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip contextmenu.zip
 	unzip -qo contextmenu*
 	cd roundcube-contextmenu*
-	mkdir -p ${d}/plugins/contextmenu
-	mv -t ${d}/plugins/contextmenu localization skins contextmenu*
+	mkdir -p $d/plugins/contextmenu
+	mv -t $d/plugins/contextmenu localization skins contextmenu*
 
 	# install the config file
-	cd ${d}/config
+	cd $d/config
 	v=$(menu_password 24 1)	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${p}|;s|DESKEY|${v}|" config.inc.php
@@ -78,7 +78,7 @@ menu_roundcube() {
 	}
 
 	# set permissions
-	cd ${d}
+	cd $d
 	chown -R 0:0 .
 	chown -R 33:0 logs temp # set user www-data
 	chmod -R 400 .
@@ -119,7 +119,7 @@ EOF
 		cat <<EOF >> /etc/crontab
 
 # ROUNDCUBE daily db cleaning
-18 23 * * * root php ${d}/bin/cleandb.sh > /dev/null 2>&1
+18 23 * * * root php $d/bin/cleandb.sh > /dev/null 2>&1
 EOF
 	}
 

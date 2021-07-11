@@ -16,7 +16,7 @@ install_varnish() {
 	}
 
 	Msg.info "Installing Varnish..."
-	pkg_install varnish
+	Pkg.install varnish
 
 	Msg.info "Configuring Varnish..."
 

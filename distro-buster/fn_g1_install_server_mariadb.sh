@@ -14,7 +14,7 @@ install_server_mariadb() {
 
 	# install required packages
 	Msg.info "Installing ${p} for ${ENV_os}..."
-	pkg_install mariadb-client mariadb-server
+	Pkg.install mariadb-client mariadb-server
 
 	Msg.info "Configuring $p"
 

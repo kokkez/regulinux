@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_phpfpm() {
-	pkg_require php5-fpm libapache2-mod-fastcgi
+	Pkg.requires php5-fpm libapache2-mod-fastcgi
 
 	cd /etc/php5/fpm
 

@@ -15,7 +15,7 @@ menu_dns() {
 	# install the DNS server
 	Msg.info "Installing DNS server bind9 for ${ENV_os}..."
 
-	pkg_install bind9 dnsutils
+	Pkg.install bind9 dnsutils
 	touch /var/log/bind9-query.log
 	chown bind:0 /var/log/bind9-query.log
 	File.into ~ getSlaveZones.sh

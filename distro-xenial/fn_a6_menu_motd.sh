@@ -7,7 +7,7 @@ menu_motd() {
 
 	# verify needed packages
 	Pkg.installed "figlet" || {
-		pkg_install figlet lsb-release
+		Pkg.install figlet lsb-release
 	}
 
 	# copying files & make them executables

@@ -16,7 +16,7 @@ install_php74_fpm() {
 	add_php_repository
 
 	# now install php packages, versions 7.4, with some modules
-	pkg_install libapache2-mod-fcgid \
+	Pkg.install libapache2-mod-fcgid \
 		php${v} libapache2-mod-php${v} \
 		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt

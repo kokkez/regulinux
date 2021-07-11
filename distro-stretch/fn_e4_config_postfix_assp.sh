@@ -11,7 +11,7 @@ config_postfix_assp() {
 
 	# install opendkim
 	Pkg.installed "opendkim" || {
-		pkg_install opendkim opendkim-tools
+		Pkg.install opendkim opendkim-tools
 	}
 
 	Msg.info "Configuring postfix..."

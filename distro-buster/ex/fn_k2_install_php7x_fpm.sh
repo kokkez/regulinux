@@ -13,7 +13,7 @@ install_php7x_fpm() {
 	# add external repository for updated php
 	Pkg.installed "apt-transport-https" || {
 		Msg.info "Installing some required packages..."
-		pkg_install apt-transport-https lsb-release ca-certificates
+		Pkg.install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 	cat > /etc/apt/sources.list.d/php.list <<EOF
@@ -26,7 +26,7 @@ EOF
 	Pkg.update 'coerce'
 
 	# now install php packages, versions 5.6 & 7.4, with some modules
-	pkg_install libapache2-mod-fcgid \
+	Pkg.install libapache2-mod-fcgid \
 		php5.6 libapache2-mod-php5.6 \
 		php5.6-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php7.4 libapache2-mod-php7.4 \

@@ -16,7 +16,7 @@ install_phpfpm_nginx() {
 	add_php_repository
 
 	# now install php packages, + versions 7.4, with some modules
-	pkg_install php7.0 \
+	Pkg.install php7.0 \
 		php7.0-{bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mcrypt,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php${v} \
 		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \

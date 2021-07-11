@@ -18,7 +18,7 @@ add_php_repository() {
 
 	# add external repository for updated php
 	[ -s ${P} ] || {
-		pkg_require gnupg
+		Pkg.requires gnupg
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 		cat > ${P} <<EOF
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]

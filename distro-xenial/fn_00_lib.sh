@@ -32,7 +32,7 @@ add_php_repository() {
 	# append external repository to sources.list for updated php
 	cd /etc/apt
 	grep -q 'Ondrej Sury' sources.list || {
-		pkg_require gnupg
+		Pkg.requires gnupg
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
 		cat >> sources.list <<EOF
 

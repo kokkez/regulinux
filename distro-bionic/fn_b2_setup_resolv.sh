@@ -16,7 +16,7 @@ resolv_via_resolvconf() {
 	N+="nameserver 80.80.81.81  # freenom.world"
 
 	# verify needed packages
-	pkg_require e2fsprogs
+	Pkg.requires e2fsprogs
 
 	# write to /etc/resolv.conf
 	[ -s "${R}" ] && cmd chattr -i "${R}"	# allow file modification

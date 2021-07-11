@@ -5,7 +5,7 @@
 install_pureftpd() {
 	Pkg.installed "pure-ftpd-mysql" || {
 		Msg.info "Installing PureFTPd for ${ENV_os}..."
-		pkg_install pure-ftpd-common pure-ftpd-mysql
+		Pkg.install pure-ftpd-common pure-ftpd-mysql
 	}
 
 	Msg.info "Configuring PureFTPd..."

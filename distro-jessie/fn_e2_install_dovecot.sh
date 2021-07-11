@@ -17,7 +17,7 @@ dovecot-core dovecot-core/ssl-cert-name string ${HOST_FQDN}
 EOF
 
 	# install required & useful packages
-	pkg_install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
+	Pkg.install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
 
 	# activating ports on firewall
 	firewall_allow "mail"

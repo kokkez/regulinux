@@ -11,7 +11,7 @@ install_fail2ban() {
 	}
 
 	Msg.info "Installing fail2ban for ${ENV_os}..."
-	pkg_install fail2ban
+	Pkg.install fail2ban
 
 	Msg.info "Configuring fail2ban..."
 

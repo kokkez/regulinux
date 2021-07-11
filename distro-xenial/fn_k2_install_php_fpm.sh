@@ -12,7 +12,7 @@ install_php_fpm() {
 	# add external repository for updated php
 #	Pkg.installed "software-properties-common" || {
 #		Msg.info "Installing required packages..."
-#		pkg_install python-software-properties software-properties-common
+#		Pkg.install python-software-properties software-properties-common
 #	}
 #	LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
 	# append external repository for updated php
@@ -32,7 +32,7 @@ EOF
 	Pkg.update 'coerce'
 
 	# now install php packages, 2 versions, 7.0 and 7.3, and some modules
-	pkg_install libapache2-mod-fcgid \
+	Pkg.install libapache2-mod-fcgid \
 		php7.3 libapache2-mod-php7.3 \
 		php7.3-cgi php7.3-mysql php7.3-curl php7.3-intl php7.3-zip \
 		php7.3-mbstring php7.3-sqlite3 php7.3-imap php7.3-gd php7.3-pspell \

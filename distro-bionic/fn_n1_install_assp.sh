@@ -22,7 +22,7 @@ install_assp() {
 
 	# install some required perl modules before run mod_inst.pl
 	Msg.info "Installing ASSP dependencies..."
-	pkg_install perl perl-base perl-modules build-essential libssl-dev \
+	Pkg.install perl perl-base perl-modules build-essential libssl-dev \
 		libnet-dns-perl libio-compress-perl libemail-mime-modifier-perl \
 		libemail-sender-perl libemail-valid-perl libfile-readbackwards-perl \
 		libio-socket-inet6-perl libio-socket-ssl-perl libmail-dkim-perl \

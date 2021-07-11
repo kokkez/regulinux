@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_apache2_modphp() {
-	pkg_require apache2 libapache2-mod-php5 php5 php5-mysqlnd
+	Pkg.requires apache2 libapache2-mod-php5 php5 php5-mysqlnd
 
 	# adjust expose_php & date.timezone in all php.ini
 	sed -ri /etc/php5/*/php.ini \

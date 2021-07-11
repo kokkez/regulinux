@@ -8,7 +8,7 @@ install_nextcloud() {
 	Msg.info "Installing Nextcloud ${v}..."
 
 	# install some php libraries before install Nextcloud
-	pkg_install php5-{cli,curl,gd,imagick,imap,intl,ldap,mcrypt,memcached,xmlrpc} \
+	Pkg.install php5-{cli,curl,gd,imagick,imap,intl,ldap,mcrypt,memcached,xmlrpc} \
 		php-{apc,pclzip} memcached bzip2
 
 	# new database with related user, info saved in ~/.dbdata.txt

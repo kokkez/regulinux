@@ -13,7 +13,7 @@ config_postfix_sasl2_sql() {
 	Msg.info "Installing Cyrus-SASL ..."
 
 	# install software
-	pkg_install postfix libsasl2-modules libsasl2-modules-sql sasl2-bin
+	Pkg.install postfix libsasl2-modules libsasl2-modules-sql sasl2-bin
 
 	# creating smtpd.conf
 	local c=/etc/postfix/sasl/smtpd.conf

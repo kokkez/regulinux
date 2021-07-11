@@ -11,7 +11,7 @@ install_apache2() {
 
 	# install required packages
 	Msg.info "Installing apache2 for ${ENV_os}..."
-	pkg_install apache2 apache2-utils apache2-suexec-pristine ssl-cert
+	Pkg.install apache2 apache2-utils apache2-suexec-pristine ssl-cert
 
 	Msg.info "Configuring apache2..."
 

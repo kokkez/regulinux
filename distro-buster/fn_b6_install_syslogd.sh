@@ -7,16 +7,16 @@ install_syslogd() {
 	Pkg.installed "inetutils-syslogd" || {
 		Msg.info "Installing inetutils-syslogd..."
 		Pkg.purge "rsyslogd"
-		pkg_install inetutils-syslogd logrotate
+		Pkg.install inetutils-syslogd logrotate
 	}
 
 	Msg.info "Configuring inetutils-syslogd..."
 
 	# there is no need to log to so many files
 	cd /var/log
-	local E
-	for E in *.log mail.* debug syslog fsck news
-		do rm -rf ${E}
+	local e
+	for e in *.log mail.* debug syslog fsck news
+		do rm -rf "$e"
 	done
 
 	# dash before path means to not flush immediately at every logged line

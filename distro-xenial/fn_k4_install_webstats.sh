@@ -7,7 +7,7 @@ install_webstats() {
 	Pkg.installed "vlogger" || {
 		Msg.info "Installing Web statistics packages..."
 
-		pkg_install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl
+		Pkg.install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl
 
 		sed -i 's/^/#/;s/^##/#/g' /etc/cron.d/awstats
 

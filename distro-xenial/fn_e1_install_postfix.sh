@@ -19,7 +19,7 @@ postfix postfix/destinations string \$myorigin,localhost
 EOF
 
 	# install required & useful packages
-	pkg_install postfix postfix-mysql libsasl2-modules pfqueue swaks
+	Pkg.install postfix postfix-mysql libsasl2-modules pfqueue swaks
 
 	Msg.info "Configuring Postfix..."
 

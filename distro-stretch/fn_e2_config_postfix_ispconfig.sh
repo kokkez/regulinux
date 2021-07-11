@@ -11,7 +11,7 @@ config_postfix_ispconfig() {
 	}
 
 	# install getmail4
-	pkg_require getmail4
+	Pkg.requires getmail4
 
 	Msg.info "Configuring Postfix for ISPConfig..."
 

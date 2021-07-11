@@ -49,7 +49,7 @@
 		# $2 num : color (default 37, gray)
 		# $3 text: message to colorize
 		echo -e "\e[${1:-0};${2:-37}m${@:3}\e[0m";
-	};
+	}
 	Dye.fg.red()         { Dye.as 0 31 "$@"; };
 	Dye.fg.red.lite()    { Dye.as 1 31 "$@"; };
 	Dye.fg.green()       { Dye.as 0 32 "$@"; };
@@ -174,16 +174,14 @@
 
 
 	File.path() {
-		# return the full path to a file in "files-common", looking first
-		# into distro-xxx/files
+		# return the full path to a single file in "files-common", looking
+		# first into distro-xxx/files
 		# return an empty string if nothing is found
-		# $1 relative path to search
-		Arg.expect "$1" && {
-			cmd readlink -e "$ENV_distro/files/$1" \
-				|| cmd readlink -e "$ENV_files/$1" \
-				|| return 1
-		}
-		return 0
+		# $1 - relative path to search
+		Arg.expect "$1" || return
+		cmd readlink -e "$ENV_distro/files/$1" \
+			|| cmd readlink -e "$ENV_files/$1" \
+			|| return 1
 	}	# end File.path
 
 
@@ -201,7 +199,35 @@
 	}	# end File.place
 
 
+	File.paths() {
+		# return the full path to all files matching $1
+		# $1 - file path relative to one of the "files-common" folders
+		Arg.expect "$1" || return
+		local f=$( cmd find $ENV_distro/files -wholename "*$1" )
+		[ -z "$f" ] && f=$( cmd find $ENV_files -wholename "*$1" )
+		echo "$f"
+	}	# end File.paths
+
+
 	File.into() {
+		# copy to the destination folder in $1, the files from ${@:2}
+		# that can comes exclusively from one of the "files-common" folders
+		Arg.expect "$1" "$2" || return
+
+		# detect the real destination
+		local a f d=$( cmd readlink -e $1 )
+		[ -d "$d" ] || return
+
+		for a in "${@:2}"; do				# iterating from 2nd arguments
+			for f in $( File.paths "$a" )	# iterating files
+			do
+				File.recopy "$f" "$d/${f##*/}"
+			done
+		done
+	}	# end File.into
+
+
+	File.to() {
 		# copy to the single destination folder in $1, one or more files in $@
 		# that can comes exclusively from one of the "files-common" folders
 		[ -d "$1" ] || return
@@ -223,7 +249,7 @@
 			done
 			[ -z "${ALT}" ] || break
 		done
-	}	# end File.into
+	}	# end File.to
 
 
 	Cmd.usable() {
@@ -243,24 +269,24 @@
 	}	# end Pkg.installed
 
 
-	is_installable() {
-		# test argument $1 for: not empty & package installable		
+	Pkg.installable() {
+		# test argument $1 for: not empty & package installable
 		Arg.expect "$1" && {
 			Pkg.update	# update packages lists
 			[ $( cmd apt-cache search "^$1$" | wc -l ) -gt 0 ] && return
 		}
 		return 1
-	}	# end is_installable
+	}	# end Pkg.installable
 
 
-	pkg_install() {
+	Pkg.install() {
 		Pkg.update	# update packages lists
 		export DEBIAN_FRONTEND=noninteractive
 		apt-get -qy \
 			-o Dpkg::Options::="--force-confdef" \
 			-o Dpkg::Options::="--force-confnew" \
 			install "${@}"
-	}	# end pkg_install
+	}	# end Pkg.install
 
 
 	Pkg.update() {
@@ -282,16 +308,19 @@
 	}	# end Pkg.update
 
 
-	pkg_require() {
-		local T
-		for T in "${@}"
-			do Pkg.installed "${T}" || {
-				Msg.info "Installing required packages: ${@}"
-				pkg_install "${@}"
+	Pkg.requires() {
+		# check that the given packages are installed, if not
+		# then it install all at once
+		Arg.expect "$1" || return
+		local p
+		for p in "$@"
+			do Pkg.installed "$p" || {
+				Msg.info "Installing required packages: [ $@ ]"
+				Pkg.install "$@"
 				break
 			}
 		done
-	}	# end pkg_require
+	}	# end Pkg.requires
 
 
 	Pkg.purge() {
@@ -303,7 +332,7 @@
 
 		# detect package from command
 		c=${c:+$(dpkg -S "$c" 2> /dev/null)}
-		c=${c%:*}	# remove optional arch (every char from the last ":")
+		c=${c%:*}	# remove optional arch (all char from the last ":")
 
 		# do the real deletion
 		Pkg.installed "$c" && {
@@ -328,7 +357,7 @@
 			exit
 		}
 
-		pkg_require wget
+		Pkg.requires wget
 		cmd wget -nv --no-check-certificate "$1" -O "$2" || {
 			Msg.info "Download failed ( ${2} ), exiting here..."
 			exit

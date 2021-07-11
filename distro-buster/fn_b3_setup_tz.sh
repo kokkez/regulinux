@@ -10,7 +10,7 @@ setup_tz() {
 	}
 
 	# verify needed packages
-	pkg_require dbus
+	Pkg.requires dbus
 
 	cmd timedatectl set-timezone "${T}"
 	cmd timedatectl set-ntp true

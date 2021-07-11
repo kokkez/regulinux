@@ -18,7 +18,7 @@ add_php_repository() {
 
 	# add external repository for updated php
 	[ -s ${P} ] || {
-		pkg_require apt-transport-https lsb-release ca-certificates
+		Pkg.requires apt-transport-https lsb-release ca-certificates
 		down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 		cat > ${P} <<EOF
 # https://www.patreon.com/oerdnj

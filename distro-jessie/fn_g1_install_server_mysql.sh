@@ -14,7 +14,7 @@ install_server_mysql() {
 $p mysql-server/root_password password ${DB_ROOTPW}
 $p mysql-server/root_password_again password ${DB_ROOTPW}
 EOF
-		pkg_install bsdutils mysql-client mysql-server
+		Pkg.install bsdutils mysql-client mysql-server
 	}
 
 	Msg.info "Configuring $p"

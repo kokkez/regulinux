@@ -12,7 +12,7 @@ install_php73_fpm() {
 	# add external repository for updated php
 	Pkg.installed "apt-transport-https" || {
 		Msg.info "Installing required packages..."
-		pkg_install apt-transport-https lsb-release ca-certificates
+		Pkg.install apt-transport-https lsb-release ca-certificates
 	}
 	down_load https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 	cat <<EOF > /etc/apt/sources.list.d/php.list
@@ -25,7 +25,7 @@ EOF
 	Pkg.update 'coerce'
 
 	# now install php 7.3 packages and some modules
-	pkg_install libapache2-mod-fcgid php7.3 libapache2-mod-php7.3 \
+	Pkg.install libapache2-mod-fcgid php7.3 libapache2-mod-php7.3 \
 		php7.3-cli php7.3-cgi php7.3-fpm php7.3-mysql php7.3-gd php7.3-bcmath \
 		php7.3-curl php7.3-imap php7.3-intl php7.3-mbstring \
 		php7.3-pspell php7.3-recode php7.3-soap php7.3-sqlite3 php7.3-tidy \

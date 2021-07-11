@@ -9,7 +9,7 @@ menu_espo() {
 	Msg.info "Installing EspoCRM ${v}..."
 
 	# install some php modules before install EspoCRM
-	pkg_require libapache2-mod-php5 php5-mysqlnd php5-json php5-gd \
+	Pkg.requires libapache2-mod-php5 php5-mysqlnd php5-json php5-gd \
 		php5-mcrypt php5-imap php5-curl
 
 	# new database with related user, info saved in ~/.dbdata.txt
