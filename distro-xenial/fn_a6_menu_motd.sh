@@ -13,7 +13,7 @@ menu_motd() {
 	# copying files & make them executables
 	mkdir -p /etc/update-motd.d && cd "$_"
 	rm -rf ./*
-	copy_to . motd/*
+	File.into . motd/*
 	chmod +x ./*
 
 	# relink /etc/motd on pure debian

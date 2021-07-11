@@ -15,7 +15,7 @@ install_nextcloud() {
 	create_database "nextcloud" "nextcloud"
 
 	# copy script to facilitate with permissions
-	copy_to ~/ nextcloud/nextcloud-*
+	File.into ~/ nextcloud/nextcloud-*
 
 	# download & install nextcloud
 	cd /var/www
@@ -28,7 +28,7 @@ install_nextcloud() {
 
 	# apache configuration
 	cd /etc/apache2
-	copy_to sites-available nextcloud/nextcloud13.conf
+	File.into sites-available nextcloud/nextcloud13.conf
 	[ -L sites-enabled/110-nextcloud.conf ] || {
 		ln -s ../sites-available/nextcloud13.conf sites-enabled/110-nextcloud.conf
 	}

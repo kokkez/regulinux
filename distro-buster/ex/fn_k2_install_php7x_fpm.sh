@@ -23,7 +23,7 @@ deb http://packages.sury.org/php stretch main
 EOF
 
 	# forcing apt update
-	pkg_update true
+	Pkg.update 'coerce'
 
 	# now install php packages, versions 5.6 & 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \

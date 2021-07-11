@@ -4,7 +4,7 @@
 
 OS.minimalize() {
 	# install sources.list
-	copy_to /etc/apt sources.list
+	File.into /etc/apt sources.list
 	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
 
 	# always use --no-install-recommends (also used as a check in "done_deps")
@@ -25,13 +25,13 @@ EOF
 	# purging foreign architectures (i*86, ...)
 	local x
 	for x in $(cmd dpkg --print-foreign-architectures); do
-		apt-get purge -qqy ".*:${x}"
-		dpkg --remove-architecture ${x}
-		Msg.info "Purging architecture '${x}' completed"
+		apt-get purge -qqy ".*:$x"
+		dpkg --remove-architecture $x
+		Msg.info "Purging architecture '$x' completed"
 	done;
 
 	cd /tmp
-	pkg_update	# update packages lists
+	Pkg.update	# update packages lists
 
 	# merge infos on availabes packages
 	cmd apt-cache dumpavail | cmd dpkg --merge-avail	# from jessie onward
@@ -44,7 +44,7 @@ EOF
 	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^initram|^linux/{print $1,"install"}' | dpkg --set-selections
 
 	# set to install some custom packages
-	x=$( File.pick pkgs.custom.txt )
+	x=$( File.path pkgs.custom.txt )
 	[ -s "$x" ] && dpkg --set-selections < "$x"
 
 	# set to purge packages where status != install
@@ -53,7 +53,7 @@ EOF
 	# fix dependencies: loop until no more dependencies were founds
 	x="-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1"
 	while true; do
-		apt-get ${x} dselect-upgrade 2> pkgs.log.txt 1>/dev/null
+		apt-get $x dselect-upgrade 2> pkgs.log.txt 1>/dev/null
 		# --simulate --show-upgraded --fix-broken
 #		awk '/ as.+Depends of /{print $2}' pkgs.log.txt > pkgs.adds.txt
 		awk '/^Broken .+Depends on /{print $5}' pkgs.log.txt > pkgs.adds.txt

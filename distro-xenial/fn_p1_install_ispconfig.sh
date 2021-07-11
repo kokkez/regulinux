@@ -8,21 +8,21 @@
 # ------------------------------------------------------------------------------
 
 install_ispconfig() {
-	local U V="3.1.15p3" # version to install
-	Msg.info "Installing IspConfig ${V}..."
+	local m u v="3.1.15p3" # version to install
+	Msg.info "Installing IspConfig ${v}..."
 
 	cd /tmp
-	U=https://www.ispconfig.org/downloads/ISPConfig-${V}.tar.gz
-	down_load "${U}" "isp3.tar.gz"
+	u=https://www.ispconfig.org/downloads/ISPConfig-${v}.tar.gz
+	down_load "$u" "isp3.tar.gz"
 	tar xzf isp3.tar.gz
 	cd ispconfig3*/install/
 
 	[ -s autoinstall.ini ] || {
-		[ "${ISP3_MULTISERVER}" = "y" ] && MOD="expert" || MOD="standard"
+		[ "$ISP3_MULTISERVER" = "y" ] && m="expert"
 
-		do_copy ispconfig/autoinstall.ini.3.1 autoinstall.ini
+		File.place ispconfig/autoinstall.ini.3.1 autoinstall.ini
 		sed -ri autoinstall.ini \
-			-e "s/^(install_mode=).*/\1${MOD}/" \
+			-e "s/^(install_mode=).*/\1${m:-standard}/" \
 			-e "s/^(hostname=).*/\1${HOST_FQDN}/" \
 			-e "s/^(mysql_root_password=).*/\1${DB_ROOTPW}/g" \
 			-e "s/^(ssl_cert_country=).*/\1${CERT_C}/" \
@@ -42,11 +42,11 @@ install_ispconfig() {
 
 	# on apache 2.4 we connect to ispconfig thru port 8080
 	mkdir -p /var/www/html/ispconfig && cd "$_"
-	copy_to . ispconfig/index.php
+	File.into . ispconfig/index.php
 
 	# load a customized database dbispconfig
-	cd ${ENV_files}/ispconfig
-	[ -f "dbispconfig-${V}.sql" ] && cmd mysql 'dbispconfig' < dbispconfig-${V}.sql
+	u=$( File.path ispconfig/dbispconfig-${v}.sql )
+	[ -n "$u" ] && cmd mysql 'dbispconfig' < $u
 
 	# commenting lines in 2 new files of postfix
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
@@ -56,5 +56,5 @@ install_ispconfig() {
 
 	# cleanup
 	rm -rf /tmp/*
-	Msg.info "Installation of IspConfig ${V} completed!"
+	Msg.info "Installation of IspConfig $v completed!"
 }	# end install_ispconfig

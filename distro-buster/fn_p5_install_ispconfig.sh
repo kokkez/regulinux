@@ -4,21 +4,21 @@
 # ------------------------------------------------------------------------------
 
 install_ispconfig() {
-	local M U V="3.1.15p3" # version to install
-	Msg.info "Installing IspConfig ${V}..."
+	local m u v="3.1.15p3" # version to install
+	Msg.info "Installing IspConfig ${v}..."
 
 	cd /tmp
-	U=https://www.ispconfig.org/downloads/ISPConfig-${V}.tar.gz
-	down_load "${U}" "isp3.tar.gz"
+	u=https://www.ispconfig.org/downloads/ISPConfig-${v}.tar.gz
+	down_load "$u" "isp3.tar.gz"
 	tar xzf isp3.tar.gz
 	cd ispconfig3*/install/
 
 	[ -s autoinstall.ini ] || {
-		[ "${ISP3_MULTISERVER}" = "y" ] && M="expert"
+		[ "$ISP3_MULTISERVER" = "y" ] && m="expert"
 
-		do_copy ispconfig/autoinstall.ini.3.2 autoinstall.ini
+		File.place ispconfig/autoinstall.ini.3.2 autoinstall.ini
 		sed -ri autoinstall.ini \
-			-e "s/^(install_mode=).*/\1${M:-standard}/" \
+			-e "s/^(install_mode=).*/\1${m:-standard}/" \
 			-e "s/^(hostname=).*/\1${HOST_FQDN}/" \
 			-e "s/^(http_server=).*/\1${HTTP_SERVER:-apache}/" \
 			-e "s/^(mysql_root_password=).*/\1${DB_ROOTPW}/g" \
@@ -39,19 +39,19 @@ install_ispconfig() {
 
 	# shortcut to connect to ispconfig thru port 8080
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		copy_to /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
+		File.into /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
 		cmd systemctl restart nginx
 	else
 		# apache2
 		mkdir -p /var/www/html/ispconfig && cd "$_"
-		copy_to . ispconfig/index.php
+		File.into . ispconfig/index.php
 	fi;
 
 	# load a customized database into dbispconfig
-	U=$( File.pick ispconfig/dbispconfig-${V}.sql )
-	[ -n "${U}" ] && {
-		[ "${HTTP_SERVER}" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' ${U}
-		cmd mysql 'dbispconfig' < ${U}
+	u=$( File.path ispconfig/dbispconfig-${v}.sql )
+	[ -n "$u" ] && {
+		[ "$HTTP_SERVER" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' $u
+		cmd mysql 'dbispconfig' < $u
 	}
 
 	# postfix
@@ -59,9 +59,9 @@ install_ispconfig() {
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
 	cmd postconf mydestination='$myorigin, localhost'
 	cmd postconf -# relayhost smtpd_restriction_classes greylisting
-	U=/etc/postfix/main.cf
-	grep -q 'relaying' ${U} || {
-		M="### ----------------------------------------------------------------------------
+	u=/etc/postfix/main.cf
+	grep -q 'relaying' $u || {
+		m="### ----------------------------------------------------------------------------
 ### relaying via an external SMTP
 ### ----------------------------------------------------------------------------
 smtp_sasl_auth_enable = yes
@@ -71,15 +71,15 @@ smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 relayhost = [smtp-e.rete.us]:587
 smtp_fallback_relay = [smtp-m.rete.us]:587
 ### ----------------------------------------------------------------------------\n"
-		perl -i -pe "s|# TLS|${M}\n# TLS|g" ${U}
+		perl -i -pe "s|# TLS|${m}\n# TLS|g" $u
 	}
-	copy_to /etc/postfix/ postfix/sasl_passwd
+	File.into /etc/postfix/ postfix/sasl_passwd
 	cmd systemctl restart postfix
 
 	# symlink the certificate paths
 	[ -d /etc/ssl/myserver ] && {
-		U=/etc/ssl/myserver/server
-		sslcert_paths "${U}.key" "${U}.cert"
+		u=/etc/ssl/myserver/server
+		sslcert_paths "${u}.key" "${u}.cert"
 	}
 
 	# activating ports on firewall
@@ -87,5 +87,5 @@ smtp_fallback_relay = [smtp-m.rete.us]:587
 
 	# cleanup
 	rm -rf /tmp/*
-	Msg.info "Installation of IspConfig ${V} completed!"
+	Msg.info "Installation of IspConfig $v completed!"
 }	# end install_ispconfig

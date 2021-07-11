@@ -4,9 +4,9 @@
 # ------------------------------------------------------------------------------
 
 menu_espo() {
-	local URL VER="5.0.3"						# use with php 5.6 or 7
+	local u v="5.0.3"						# use with php 5.6 or 7
 
-	Msg.info "Installing EspoCRM ${VER}..."
+	Msg.info "Installing EspoCRM ${v}..."
 
 	# install some php modules before install EspoCRM
 	pkg_require libapache2-mod-php5 php5-mysqlnd php5-json php5-gd \
@@ -17,8 +17,8 @@ menu_espo() {
 
 	# go, install EspoCRM
 	cd /var/www
-	URL="https://www.espocrm.com/downloads/EspoCRM-${VER}.zip"
-	down_load "${URL}" "espo.zip"
+	u="https://www.espocrm.com/downloads/EspoCRM-${v}.zip"
+	down_load "$u" "espo.zip"
 	unzip -qo espo.zip
 	rm -rf espo.zip
 	mv EspoCRM-* espo
@@ -30,7 +30,7 @@ menu_espo() {
 
 	# apache configuration
 	cd /etc/apache2
-	copy_to sites-available espocrm.conf
+	File.into sites-available espocrm.conf
 	sed -i "s|ALLOWALL|Require all granted|" sites-available/espocrm.conf
 	[ -L sites-enabled/120-espocrm.conf ] || {
 		ln -s ../sites-available/espocrm.conf sites-enabled/120-espocrm.conf
@@ -48,5 +48,5 @@ menu_espo() {
 EOF
 	}
 
-	Msg.info "Now install EspoCRM ${VER} via browser..."
+	Msg.info "Now install EspoCRM $v via browser..."
 }	# end menu_espo

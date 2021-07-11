@@ -10,23 +10,23 @@ install_fail2ban() {
 		return
 	}
 
-	Msg.info "Installing fail2ban..."
+	Msg.info "Installing fail2ban for ${ENV_os}..."
 	pkg_install fail2ban
 
 	Msg.info "Configuring fail2ban..."
 
 	# make fail2ban do some monitoring
 	cd /etc/fail2ban
-	copy_to . fail2ban/jail.local
+	File.into . fail2ban/jail.local
 	sed -i "s|HOST_NICK|${HOST_NICK}|" jail.local
 
 	# creating filter files
 	cd filter.d
 	[ -r postfix-failedauth.conf ] || {
-		copy_to . fail2ban/postfix-failedauth.conf
+		File.into . fail2ban/postfix-failedauth.conf
 	}
 	[ -r dovecot-pop3imap.conf ] || {
-		copy_to . fail2ban/dovecot-pop3imap.conf
+		File.into . fail2ban/dovecot-pop3imap.conf
 	}
 
 	# fix a systemd bug found on xenial 16.04

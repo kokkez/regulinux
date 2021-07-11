@@ -6,7 +6,7 @@ install_adminer() {
 	# set: root directory & version
 	local u d=/var/www/myadminer v="4.7.8"
 
-	[ -s "${d}/index.php" ] && {
+	[ -s "$d/index.php" ] && {
 		Msg.warn "adminer-$v is already installed..."
 		return
 	}
@@ -18,32 +18,32 @@ install_adminer() {
 
 	# get the plugins folder
 	u=https://github.com/vrana/adminer/releases/download/v$v
-	down_load "${u}/adminer-${v}.zip" "adminer-${v}.zip"
+	down_load "$u/adminer-${v}.zip" "adminer-${v}.zip"
 	# some cleanup
 	unzip -qo "adminer-${v}.zip"
 	mv ./adminer-${v}/plugins ./
-	rm -rf ./adminer-$v*
+	rm -rf ./adminer-${v}*
 
 	# download script
 	d="adminer-${v}-mysql-en.php"
-	down_load "${u}/$d" "$d"
+	down_load "$u/$d" "$d"
 
 	# install the index.php file
-	copy_to . adminer/index.php
+	File.into . adminer/index.php
 	sed -i "s|FILE|${d}|" index.php
 
 	# install css file & plugins
-	copy_to . adminer/adminer.css
-	copy_to plugins adminer/plugins/*
+	File.into . adminer/adminer.css
+	File.into plugins adminer/plugins/*
 
 	# install the configuration file for webserver
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		copy_to /etc/nginx/snippets adminer/adminer-nginx.conf
+		File.into /etc/nginx/snippets adminer/adminer-nginx.conf
 		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled
 		File.islink '080-adminer.conf' || {
-			copy_to ../sites-available adminer/adminer.conf
+			File.into ../sites-available adminer/adminer.conf
 			ln -nfs ../sites-available/adminer.conf '080-adminer.conf'
 			cmd systemctl restart apache2
 		}

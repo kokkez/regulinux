@@ -47,7 +47,7 @@ menu_roundcube() {
 	mv ispconfig3*/ispconfig3_* ${D}/plugins/
 	# install the config file
 	cd ${D}/plugins/ispconfig3_account/config
-	do_copy roundcube/config.inc.php.plugin config.inc.php
+	File.place roundcube/config.inc.php.plugin config.inc.php
 	sed -i "s|RPW|${P}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
 	# install & configure contextmenu plugin
@@ -61,13 +61,13 @@ menu_roundcube() {
 	# install the config file
 	cd ${D}/config
 	U=$(menu_password 24 1)	# strong password
-	do_copy roundcube/config.inc.php.roundcube config.inc.php
+	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
 	# install into sites-available of apache2
 	[ -d /etc/apache2 ] && {
 		cd /etc/apache2
-		copy_to sites-available roundcube/roundcube.conf
+		File.into sites-available roundcube/roundcube.conf
 		[ -L sites-enabled/080-roundcube.conf ] || {
 			ln -s ../sites-available/roundcube.conf sites-enabled/080-roundcube.conf
 		}

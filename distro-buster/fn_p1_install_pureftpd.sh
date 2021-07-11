@@ -10,7 +10,7 @@ install_pureftpd() {
 		return
 	}
 
-	Msg.info "Installing PureFTPd..."
+	Msg.info "Installing PureFTPd for ${ENV_os}..."
 	pkg_install pure-ftpd-common pure-ftpd-mysql
 
 	Msg.info "Configuring PureFTPd..."

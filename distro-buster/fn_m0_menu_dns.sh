@@ -13,12 +13,12 @@ menu_dns() {
 	done_deps || return
 
 	# install the DNS server
-	Msg.info "Installing DNS server bind9..."
+	Msg.info "Installing DNS server bind9 for ${ENV_os}..."
 
 	pkg_install bind9 dnsutils
 	touch /var/log/bind9-query.log
 	chown bind:0 /var/log/bind9-query.log
-	copy_to ~ getSlaveZones.sh
+	File.into ~ getSlaveZones.sh
 
 	# activating ports on firewall
 	firewall_allow "dns"

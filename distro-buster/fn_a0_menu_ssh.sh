@@ -6,7 +6,7 @@ setup_bash() {
 	# set bash as the default shell
 	debconf-set-selections <<< "dash dash/sh boolean false"
 	dpkg-reconfigure -f noninteractive dash
-	[ -f ~/.bashrc ] || copy_to ~ .bashrc
+	[ -f ~/.bashrc ] || File.into ~ .bashrc
 	Msg.info "Default shell switched to BASH"
 }	# end setup_bash
 
@@ -53,13 +53,13 @@ menu_ssh() {
 	Msg.info "Setup of authorized_keys completed!"
 
 	# install sources.list
-	copy_to /etc/apt sources.list
+	File.into /etc/apt sources.list
 	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
 
 	# copy preferences for htop
 	[ -d ~/.config/htop ] || {
 		mkdir -p ~/.config/htop && cd "$_"
-		copy_to . htop/*
+		File.into . htop/*
 		cmd chmod 0700 ~/.config ~/.config/htop
 		Msg.info "Installation of preferences for htop completed!"
 	}

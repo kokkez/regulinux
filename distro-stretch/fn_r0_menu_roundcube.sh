@@ -39,7 +39,7 @@ menu_roundcube() {
 	mv ispconfig3*/ispconfig3_* ${D}/plugins/
 	# install the config file
 	cd ${D}/plugins/ispconfig3_account/config
-	do_copy roundcube/config.inc.php.plugin config.inc.php
+	File.place roundcube/config.inc.php.plugin config.inc.php
 	sed -i "s|RPW|${P}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
 	# install & configure contextmenu plugin
@@ -53,7 +53,7 @@ menu_roundcube() {
 	# install the config file
 	cd ${D}/config
 	U=$(menu_password 24 1)	# strong password
-	do_copy roundcube/config.inc.php.roundcube config.inc.php
+	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
 	# set permissions
@@ -104,12 +104,12 @@ EOF
 
 	# install the configuration file for webserver
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		copy_to /etc/nginx/snippets roundcube/roundcube-nginx.conf
+		File.into /etc/nginx/snippets roundcube/roundcube-nginx.conf
 		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled
 		File.islink '080-roundcube.conf' || {
-			copy_to ../sites-available roundcube/roundcube.conf
+			File.into ../sites-available roundcube/roundcube.conf
 			ln -nfs ../sites-available/roundcube.conf '080-roundcube.conf'
 		}
 		# activating some modules of apache2 then reload its configurations

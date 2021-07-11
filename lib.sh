@@ -43,25 +43,6 @@
 	ISP3_MASTERPASS=""     # password of the master db, if empty will be asked
 
 	# -- bash colors -----------------------------------------------------------
-	cNULL='\e[0m'
-	cBLAK='\e[0;30m'
-	cREDD='\e[0;31m'
-	cGREN='\e[0;32m'
-	cYELW='\e[0;33m'
-	cBLUE='\e[0;34m'
-	cPURP='\e[0;35m'
-	cCYAN='\e[0;36m'
-	cGRAY='\e[0;37m'
-	cORNG='\e[38;5;215m'
-	cBLAKLITE='\e[1;30m'
-	cREDDLITE='\e[1;31m'
-	cGRENLITE='\e[1;32m'
-	cYELWLITE='\e[1;33m'
-	cBLUELITE='\e[1;34m'
-	cPURPLITE='\e[1;35m'
-	cCYANLITE='\e[1;36m'
-	cWITELITE='\e[1;37m'
-
 	Dye.as() {
 		# output painted text
 		# $1 num : type (default 0, dark)
@@ -116,7 +97,6 @@
 		# try to run the real command, not an aliased version
 		# on missing command, or error, it return silently
 		Arg.expect "$1" || return 0
-		#[ -n "$1" ] || return 0
 		local c="$( command -v $1 )"
 		shift && [ -n "$c" ] && "$c" "$@"
 	}	# end cmd
@@ -124,7 +104,6 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		#echo $(cmd date ${@:-'+%F %T'})
 		echo -e $(cmd date "${@-+'%F %T'}")
 	}	# end Date.fmt
 
@@ -194,7 +173,7 @@
 	}	# end File.islink
 
 
-	File.pick() {
+	File.path() {
 		# return the full path to a file in "files-common", looking first
 		# into distro-xxx/files
 		# return an empty string if nothing is found
@@ -205,24 +184,26 @@
 				|| return 1
 		}
 		return 0
-	}	# end File.pick
+	}	# end File.path
 
 
-	do_copy() {
-		# copy a single file from one of MyDISTRO / ENV_files to destination path
-		# $1: myFileName
-		# $2: destinationFullPath
-		local f=$( File.pick ${1-missing} ) d="$2"
+	File.place() {
+		# copy a single file, from one of the "files-common" folders, to
+		# the destination path in $2
+		# $1 - file path relative to one of the "files-common" folders
+		# $2 - destination full path
+		Arg.expect "$1" "$2" || return
+		local f=$( File.path $1 ) d="$2"
 		[ -n "$f" ] && {
 			[ -d "$d" ] && d="$d/$1"	# build destination
 			File.recopy "$f" "$d"		# backup & copy
 		}
-	}	# end do_copy
+	}	# end File.place
 
 
-	copy_to() {
+	File.into() {
 		# copy to the single destination folder in $1, one or more files in $@
-		# that can comes exclusively from one of MyDISTRO ENV_files
+		# that can comes exclusively from one of the "files-common" folders
 		[ -d "$1" ] || return
 
 		local ALT C A F D=$( cmd readlink -e $1 )
@@ -242,7 +223,13 @@
 			done
 			[ -z "${ALT}" ] || break
 		done
-	}	# end copy_to
+	}	# end File.into
+
+
+	Cmd.usable() {
+		# test argument $1 for: not empty & callable
+		Arg.expect "$1" && command -v "$1" &> /dev/null
+	}	# end Cmd.usable
 
 
 	Pkg.installed() {
@@ -256,47 +243,43 @@
 	}	# end Pkg.installed
 
 
-	Cmd.usable() {
-		# test argument $1 for: not empty & callable
-		Arg.expect "$1" && command -v "$1" &> /dev/null
-	}	# end Cmd.usable
-
-
-	pkg_update() {
-		# the "apt-get update", to run before install any package
-		dpkg --configure -a	# in case apt is in a bad state
-
-		# if an argument is given then forcing run apt-get
-		[ -z "${1}" ] || {
-			Msg.info "Forcing packages list to update..."
-			DOCLEANAPT=
-		}
-
-		[ -z "${DOCLEANAPT}" ] && {
-			DOCLEANAPT=1		# signal to do apt cleanup on exit
-			apt-get -qy update || {
-				Msg.error "Some errors occurred executing 'apt-get update'. Try again later..."
-			}
-		}
-	}	# end pkg_update
-
-
 	is_installable() {
-		# test 1st argument for: not empty & package installable
-		pkg_update	# update packages lists
-		[ -n "${1}" ] && [ $( cmd apt-cache search "^${1}$" | wc -l ) -gt 0 ] && return
+		# test argument $1 for: not empty & package installable		
+		Arg.expect "$1" && {
+			Pkg.update	# update packages lists
+			[ $( cmd apt-cache search "^$1$" | wc -l ) -gt 0 ] && return
+		}
 		return 1
 	}	# end is_installable
 
 
 	pkg_install() {
-		pkg_update	# update packages lists
+		Pkg.update	# update packages lists
 		export DEBIAN_FRONTEND=noninteractive
 		apt-get -qy \
 			-o Dpkg::Options::="--force-confdef" \
 			-o Dpkg::Options::="--force-confnew" \
 			install "${@}"
 	}	# end pkg_install
+
+
+	Pkg.update() {
+		# the "apt-get update", to run before install any package
+		cmd dpkg --configure -a	# in case apt is in a bad state
+
+		# if an argument is given then forcing run apt-get
+		[ -z "$1" ] || {
+			Msg.info "Coerce the update of the package list for ${ENV_os}..."
+			DOCLEANAPT=
+		}
+
+		[ -z "$DOCLEANAPT" ] && {
+			DOCLEANAPT=1		# signal to do apt cleanup on exit
+			cmd apt -qy update || {
+				Msg.error "An errors occurred executing 'apt update'. Try again later..."
+			}
+		}
+	}	# end Pkg.update
 
 
 	pkg_require() {
@@ -311,26 +294,27 @@
 	}	# end pkg_require
 
 
-	pkg_purge() {
+	Pkg.purge() {
 		# remove a single package via apt-get
-		[ -z "${1}" ] && return
+		Arg.expect "$1" || return
 
 		# it can be a command
-		local CMD=$(command -v $1)
+		local c=$(command -v $1)
 
 		# detect package from command
-		CMD=${CMD:+$(dpkg -S "${CMD}" 2> /dev/null)}
+		c=${c:+$(dpkg -S "$c" 2> /dev/null)}
+		c=${c%:*}	# remove optional arch (every char from the last ":")
 
 		# do the real deletion
-		Pkg.installed "${CMD%:*}" && {
+		Pkg.installed "$c" && {
 			export DEBIAN_FRONTEND=noninteractive
-			apt-get -qy purge --auto-remove "${CMD%:*}"
-			Msg.info "Removing package '${CMD%:*}' (from '${1}') completed!"
+			apt-get -qy purge --auto-remove "$c"
+			Msg.info "Removing package '$c' (from '$1') completed!"
 			return
 		}
 
-		Msg.warn "No package for '${1}' is installed"
-	}	# end pkg_purge
+		Msg.warn "No package for '$1' is installed"
+	}	# end Pkg.purge
 
 
 	down_load() {
@@ -443,7 +427,7 @@
 
 		# user must be root (id == 0)
 		(( $(cmd id -u) )) && {
-			Msg.error "This script must be run by the user: ${cWITELITE}root${cNULL}"
+			Msg.error "This app must be run as:" $(Dye.fg.white root)
 		}
 		local x t
 

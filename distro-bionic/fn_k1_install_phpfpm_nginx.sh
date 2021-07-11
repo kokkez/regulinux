@@ -8,7 +8,7 @@ install_phpfpm_nginx() {
 
 	# abort if package was already installed
 	Pkg.installed "php${v}-fpm" && {
-		Msg.warn "PHP${v} as PHP-FPM is already installed..."
+		Msg.warn "PHP$v as PHP-FPM is already installed..."
 		return
 	}
 
@@ -38,5 +38,5 @@ install_phpfpm_nginx() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 0|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart nginx
-	Msg.info "Installation of PHP${v} as PHP-FPM completed!"
+	Msg.info "Installation of PHP$v as PHP-FPM completed!"
 }	# end install_phpfpm_nginx

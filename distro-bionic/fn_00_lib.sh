@@ -4,7 +4,7 @@
 
 menu_upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
-	pkg_update	# update packages lists
+	Pkg.update	# update packages lists
 
 	# do the apt upgrade
 	export DEBIAN_FRONTEND=noninteractive
@@ -26,7 +26,7 @@ deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 # deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 EOF
 		# forcing apt update
-		pkg_update true
+		Pkg.update 'coerce'
 	}
 }	# end add_php_repository
 

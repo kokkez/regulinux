@@ -6,7 +6,7 @@
 install_syslogd() {
 	Pkg.installed "inetutils-syslogd" || {
 		Msg.info "Installing inetutils-syslogd..."
-		pkg_purge "rsyslogd"
+		Pkg.purge "rsyslogd"
 		pkg_install inetutils-syslogd logrotate
 	}
 
@@ -33,7 +33,7 @@ EOF
 	# install /etc/logrotate.d/inetutils-syslogd
 	mkdir -p /etc/logrotate.d && cd "$_"
 	rm -f inetutils-syslogd
-	copy_to . inetutils-syslogd
+	File.into . inetutils-syslogd
 
 	> /var/log/syslog
 	svc_evoke inetutils-syslogd restart

@@ -16,8 +16,8 @@ config_postfix_sasl2_sql() {
 	pkg_install postfix libsasl2-modules libsasl2-modules-sql sasl2-bin
 
 	# creating smtpd.conf
-	local C=/etc/postfix/sasl/smtpd.conf
-	[ -s ${C} ] || do_copy postfix/smtpd.conf ${C}
+	local c=/etc/postfix/sasl/smtpd.conf
+	[ -s "$c" ] || File.place postfix/smtpd.conf "$c"
 
 	# edit postfix configuration
 	cmd postconf \

@@ -16,26 +16,26 @@ install_nginx() {
 	}
 
 	# install required packages
-	Msg.info "Installing nginx..."
+	Msg.info "Installing nginx for ${ENV_os}..."
 	pkg_install nginx ssl-cert
 
 	Msg.info "Configuring nginx..."
 
 	# shut off server_tokens
-	local F=/etc/nginx/nginx.conf
-	[ -s "${F}" ] && {
-		sed -i ${F} \
+	local f=/etc/nginx/nginx.conf
+	[ -s "$f" ] && {
+		sed -i $f \
 			-e 's|# server_names_|server_names_|' \
 			-e 's|# server_tokens|server_tokens|'
 	}
 
 	# add a generic includer to "default" in sites-available
-	U=/etc/nginx/sites-available/default
-	grep -q '\-nginx.conf' ${U} || {
-		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' ${U}
+	f=/etc/nginx/sites-available/default
+	grep -q '\-nginx.conf' $f || {
+		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' $f
 	}
 	# enabling SSL
-	sed -i ${U} \
+	sed -i $f \
 		-e 's|# listen |listen |g' \
 		-e 's|# include |include |'
 

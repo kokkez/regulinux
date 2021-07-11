@@ -3,8 +3,8 @@
 # ------------------------------------------------------------------------------
 
 menu_deps() {
-	local P="${1:-${SSHD_PORT}}"
-	menu_ssh "${P}"
+	# $1: ssh port number
+	menu_ssh "$1"
 
 	setup_networking
 	setup_resolv
@@ -15,7 +15,7 @@ menu_deps() {
 	install_syslogd
 
 	# activating firewall & allowing SSH port
-	install_firewall "${P}"
-	firewall_allow "${P}"
+	install_firewall "$1"
+	firewall_allow "$1"
 }	# end menu_deps
 

@@ -19,7 +19,7 @@ install_php_fpm() {
 	cd /etc/apt
 	grep -q 'Ondrej Sury' sources.list || {
 		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
-#		pkg_update true
+#		Pkg.update 'coerce'
 		cat >> sources.list <<EOF
 
 # Ondrej Sury Repo for PHP 7.x
@@ -29,7 +29,7 @@ EOF
 	}
 
 	# forcing apt update
-	pkg_update true
+	Pkg.update 'coerce'
 
 	# now install php packages, 2 versions, 7.0 and 7.3, and some modules
 	pkg_install libapache2-mod-fcgid \

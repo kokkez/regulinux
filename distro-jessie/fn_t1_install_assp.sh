@@ -47,7 +47,7 @@ install_assp() {
 
 	# force unix EOLs & adjust some values
 	cd /home/assp
-	do_copy assp/assp1.cfg ./assp.cfg
+	File.place assp/assp1.cfg ./assp.cfg
 	sed -i 's|\r||g' rc/_etc_*
 	sed -i 's|srv|home|;s|assp\.pid|pid|' rc/_etc_default_assp.debian
 	sed -i assp.cfg \
@@ -63,7 +63,7 @@ install_assp() {
 
 	# systemd
 	[ -s /etc/systemd/system/assp.service ] || {
-		copy_to /etc/systemd/system assp/assp.service
+		File.into /etc/systemd/system assp/assp.service
 		cmd systemctl enable assp.service
 		cmd systemctl daemon-reload
 	}

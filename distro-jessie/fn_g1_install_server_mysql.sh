@@ -7,7 +7,7 @@ install_server_mysql() {
 	local p="mysql-server-5.5"
 
 	Pkg.installed "$p" || {
-		Msg.info "Installing ${p}..."
+		Msg.info "Installing $p for ${ENV_os}..."
 
 		# preseed mysql-server
 		debconf-set-selections <<EOF
@@ -30,7 +30,7 @@ EOF
 
 	# install a custom configuration to disable InnoDB
 	> /var/log/mysql/slow-queries.log
-	copy_to conf.d mysql/custom.cnf
+	File.into conf.d mysql/custom.cnf
 
 	# lite version of mysql_secure_installation
 #	UPDATE mysql.user SET Password=PASSWORD('${DB_ROOTPW}') WHERE User='root';

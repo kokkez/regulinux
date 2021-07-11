@@ -18,7 +18,7 @@ install_openssh() {
 	s=ssh-user-sessions.service
 	[ -s /etc/systemd/system/${s} ] || {
 		Msg.info "Mitigating the SSH hang on reboot's problem"
-		copy_to /etc/systemd/system ssh/${s}
+		File.into /etc/systemd/system ssh/${s}
 		cmd systemctl enable ${s}
 		cmd systemctl daemon-reload
 		cmd systemctl start ${s}

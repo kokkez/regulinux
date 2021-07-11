@@ -8,7 +8,7 @@ install_dovecot() {
 		return
 	}
 
-	Msg.info "Installing Dovecot..."
+	Msg.info "Installing Dovecot for ${ENV_os}..."
 
 	# preseed dovecot
 	debconf-set-selections <<EOF

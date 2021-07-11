@@ -7,7 +7,7 @@
 install_phpfpm_apache2() {
 	local v=7.4
 
-	# abort if packages are already installed
+	# abort if apache2 is already installed
 	Pkg.installed "libapache2-mod-fcgid" && {
 		Msg.warn "PHP${v} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return

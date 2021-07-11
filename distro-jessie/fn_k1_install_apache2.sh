@@ -3,11 +3,11 @@
 # ------------------------------------------------------------------------------
 
 install_apache2() {
-	local PHPV="php5"
+	local p="php5"
 
 	# install Apache 2.4, FCGI, suExec & others...
 	Pkg.installed "apache2-mpm-prefork" || {
-		Msg.info "Installing apache2..."
+		Msg.info "Installing apache2 for ${ENV_os}..."
 		pkg_install apache2 apache2-mpm-prefork apache2-suexec \
 			libapache2-mod-fcgid libapache2-mod-python libexpat1 ssl-cert
 		# apache2-doc libapache2-mod-passenger libruby
@@ -15,7 +15,7 @@ install_apache2() {
 
 	# install PHP5, pear, mcrypt, xcache & others...
 	Pkg.installed "libapache2-mod-php5" || {
-		Msg.info "Installing ${PHPV}..."
+		Msg.info "Installing ${p}..."
 		pkg_install libapache2-mod-php5 php5 php5-common php5-cgi php5-cli \
 			php5-curl php5-mysqlnd php5-imap php5-ldap php5-intl \
 			php5-gd php5-imagick imagemagick php5-mcrypt mcrypt \
@@ -29,7 +29,7 @@ install_apache2() {
 	# plus dav_fs, dav, and auth_digest if you want to use WebDAV
 #	a2enmod dav_fs dav auth_digest
 
-	Msg.info "Configuring apache2 with ${PHPV}..."
+	Msg.info "Configuring apache2 with ${p}..."
 
 	# comment out the line application/x-ruby rb in /etc/mime.types
 	sed -ri 's|^(application/x-ruby)|#\1|' /etc/mime.types
@@ -62,5 +62,5 @@ install_apache2() {
 	firewall_allow "http"
 
 	svc_evoke apache2 restart
-	Msg.info "Installation of apache2 with ${PHPV} completed!"
+	Msg.info "Installation of apache2 with $p completed!"
 }	# end install_apache2

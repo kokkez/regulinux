@@ -7,7 +7,7 @@ menu_mykeys() {
 	cmd chmod 0700 ~/.ssh
 
 	# copy file
-	[ -r authorized_keys ] || copy_to . ssh/authorized_keys
+	[ -r authorized_keys ] || File.into . ssh/authorized_keys
 
 	# append content
 	grep -q "kokkez" authorized_keys || cat "${ENV_files}/ssh/authorized_keys" >> authorized_keys

@@ -56,7 +56,7 @@ config_postfix_assp() {
 		address_verify_negative_refresh_time=1h
 
 	# creating db config files
-	copy_to . postfix/mysql-*
+	File.into . postfix/mysql-*
 
 	# set master.cf to listen on 127.0.0.1:1025
 	[ -r master.cf ] && {

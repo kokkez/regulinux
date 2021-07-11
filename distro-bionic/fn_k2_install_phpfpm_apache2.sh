@@ -9,7 +9,7 @@ install_phpfpm_apache2() {
 
 	# abort if apache2 is already installed
 	Pkg.installed "libapache2-mod-fcgid" && {
-		Msg.warn "PHP${v} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+		Msg.warn "PHP$v as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
@@ -36,7 +36,7 @@ install_phpfpm_apache2() {
 
 	# set default php to newest version
 	a2dismod php*
-	a2enmod php${v}
+	a2enmod php$v
 
 	# setting up the default DirectoryIndex
 	[ -r mods-available/dir.conf ] && {
@@ -50,5 +50,5 @@ install_phpfpm_apache2() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart apache2
-	Msg.info "Installation of PHP${v} as MOD-PHP, PHP-FPM and FastCGI completed!"
+	Msg.info "Installation of PHP$v as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_phpfpm_apache2

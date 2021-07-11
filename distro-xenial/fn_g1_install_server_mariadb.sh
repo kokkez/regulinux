@@ -4,14 +4,14 @@
 
 install_server_mariadb() {
 	# ubuntu 16.04 xenial install mariadb-server-10.0
-	local K="mariadb-server"
+	local p="mariadb-server"
 
-	Pkg.installed "${K}" || {
-		Msg.info "Installing ${K}..."
+	Pkg.installed "$p" || {
+		Msg.info "Installing $p for ${ENV_os}..."
 		pkg_install mariadb-client mariadb-server
 	}
 
-	Msg.info "Configuring ${K}"
+	Msg.info "Configuring $p"
 
 	# set debian passwords
 	cd /etc/mysql
@@ -23,10 +23,10 @@ install_server_mariadb() {
 		echo -e "mysql soft nofile 65535\nmysql hard nofile 65535" >> limits.conf
 	}
 	mkdir -p /etc/systemd/system/mariadb.service.d && cd "$_"
-	[ -s limits.conf ] || copy_to . mysql/limits.conf
+	[ -s limits.conf ] || File.into . mysql/limits.conf
 
 	# install a custom configuration file
-	copy_to /etc/mysql/mariadb.conf.d mysql/60-server.cnf
+	File.into /etc/mysql/mariadb.conf.d mysql/60-server.cnf
 
 	# lite version of mysql_secure_installation
 	cmd mysql <<EOF
@@ -41,5 +41,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	svc_evoke mysql restart
-	Msg.info "Installation of ${K} completed!"
+	Msg.info "Installation of $p completed!"
 }	# end install_server_mariadb

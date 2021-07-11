@@ -28,14 +28,14 @@ acme_webserver_conf() {
 
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		cd /etc/nginx/snippets
-		copy_to . acme/acme-webroot-nginx.conf
+		File.into . acme/acme-webroot-nginx.conf
 		sed -i "s|WEBROOT|${1}|g" acme-webroot-nginx.conf
 		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
 		(( ${#1} < 22 )) && {
 			cd /etc/apache2/conf-available
-			copy_to . acme/acme-webroot-apache2.conf
+			File.into . acme/acme-webroot-apache2.conf
 			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
 			ln -nfs '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}
@@ -64,14 +64,14 @@ menu_acme() {
 	c=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	#bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "$w"
-	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "$w"
+	#bash ~/.acme.sh/acme.sh --issue --test -d "$HOST_FQDN" -w "$w"
+	bash ~/.acme.sh/acme.sh --issue -d "$HOST_FQDN" -w "$w"
 	[ "$?" -eq 0 ] || return	# dont continue on error
 
-	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \
+	bash ~/.acme.sh/acme.sh --installcert -d "$HOST_FQDN" \
 		--keypath "$k" \
 		--fullchainpath "$c" \
-		--reloadcmd "systemctl restart ${HTTP_SERVER}"
+		--reloadcmd "systemctl restart $HTTP_SERVER"
 
 	# symlink the certificate paths
 	sslcert_paths "$k" "$c"

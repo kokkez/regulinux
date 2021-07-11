@@ -28,14 +28,14 @@ acme_webserver_conf() {
 
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
 		cd /etc/nginx/snippets
-		copy_to . acme/acme-webroot-nginx.conf
+		File.into . acme/acme-webroot-nginx.conf
 		sed -i "s|WEBROOT|${1}|g" acme-webroot-nginx.conf
 		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
 		(( ${#1} < 22 )) && {
 			cd /etc/apache2/conf-available
-			copy_to . acme/acme-webroot-apache2.conf
+			File.into . acme/acme-webroot-apache2.conf
 			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
 			ln -nfs '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}

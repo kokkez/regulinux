@@ -17,7 +17,7 @@ install_php_modphp() {
 #	LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
 
 	# forcing apt update
-	pkg_update true
+	Pkg.update 'coerce'
 
 	# now install php packages
 	pkg_install php libapache2-mod-php php-mysql php-gd

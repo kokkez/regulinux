@@ -10,7 +10,7 @@ install_postfix() {
 	}
 
 	# install postfix & saslauthd, this add openssl ssl-cert
-	Msg.info "Installing postfix..."
+	Msg.info "Installing postfix for ${ENV_os}..."
 
 	# preseed postfix
 	debconf-set-selections <<EOF
@@ -31,7 +31,7 @@ EOF
 		mydestination=\$myorigin,localhost
 
 	# install /etc/aliases
-	copy_to /etc postfix/aliases
+	File.into /etc postfix/aliases
 	sed -i "s|ROOT_MAIL|${ROOT_MAIL}|" /etc/aliases
 	cmd newaliases
 

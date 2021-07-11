@@ -23,7 +23,7 @@ install_firewall() {
 	# install the firewall script
 	cd ~
 	rm -rf $f
-	copy_to . ssh/firewall.sh
+	File.into . ssh/firewall.sh
 	sed -ri $f \
 		-e "s|^(SSHPORT=).*|\1${p}|" \
 		-e "s|^(ACCEPTS=).*|\1\"${IPT_RULES}\"|"
@@ -32,6 +32,6 @@ install_firewall() {
 	# set these rules to load on startup
 	cd /etc/network/if-pre-up.d
 	rm -rf iptables
-	copy_to . ssh/iptables
+	File.into . ssh/iptables
 	chmod +x iptables				# make it executable
 }	# end install_firewall

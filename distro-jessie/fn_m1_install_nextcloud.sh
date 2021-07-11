@@ -3,9 +3,9 @@
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local URL VER="13.0.12"	# v13 for php 5.6 or 7
+	local u v="13.0.12"	# v13 for php 5.6 or 7
 
-	Msg.info "Installing Nextcloud ${VER}..."
+	Msg.info "Installing Nextcloud ${v}..."
 
 	# install some php libraries before install Nextcloud
 	pkg_install php5-{cli,curl,gd,imagick,imap,intl,ldap,mcrypt,memcached,xmlrpc} \
@@ -15,12 +15,12 @@ install_nextcloud() {
 	create_database "nextcloud" "nextcloud"
 
 	# copy script to facilitate with permissions
-	copy_to ~/ nextcloud/nextcloud-*
+	File.into ~/ nextcloud/nextcloud-*
 
 	# go, install Nextcloud
 	cd /var/www
-	URL="https://download.nextcloud.com/server/releases/nextcloud-${VER}.zip"
-	down_load "${URL}" "nextcloud.zip"
+	u="https://download.nextcloud.com/server/releases/nextcloud-${v}.zip"
+	down_load "$u" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	mkdir -p /var/www/nextcloud-data # custom data folder
@@ -28,7 +28,7 @@ install_nextcloud() {
 
 	# apache configuration
 	cd /etc/apache2
-	copy_to sites-available nextcloud/nextcloud13.conf
+	File.into sites-available nextcloud/nextcloud13.conf
 	[ -L sites-enabled/110-nextcloud.conf ] || {
 		ln -s ../sites-available/nextcloud13.conf sites-enabled/110-nextcloud.conf
 	}
@@ -45,5 +45,5 @@ install_nextcloud() {
 */15 * * * * www-data php -f /var/www/nextcloud/cron.php
 EOF
 	}
-	Msg.info "Installation of nextcloud ${VER} completed!"
+	Msg.info "Installation of nextcloud $v completed!"
 }	# end install_nextcloud

@@ -16,7 +16,7 @@ install_nginx() {
 	}
 
 	# install required packages
-	Msg.info "Installing nginx..."
+	Msg.info "Installing nginx for ${ENV_os}..."
 	pkg_install nginx ssl-cert
 
 	Msg.info "Configuring nginx..."

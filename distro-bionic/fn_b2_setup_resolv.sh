@@ -29,14 +29,14 @@ resolv_via_resolvconf() {
 
 
 resolv_via_systemd() {
-	local F=/etc/systemd/resolved.conf.d
+	local f=/etc/systemd/resolved.conf.d
 
 	# if 'dns_servers.conf' already exists, then exit here
-	[ -s "${F}/dns_servers.conf" ] && return
+	[ -s "$f/dns_servers.conf" ] && return
 
 	# copying files
-	mkdir -p "${F}" && cd "$_"
-	copy_to . resolved.conf.d/*
+	mkdir -p "$f" && cd "$_"
+	File.into . resolved.conf.d/*
 
 	# fully activate systemd-resolved
 	cmd systemctl unmask systemd-resolved
