@@ -6,7 +6,7 @@ install_apache2() {
 	local PHPV="php5"
 
 	# install Apache 2.4, FCGI, suExec & others...
-	is_installed "apache2-mpm-prefork" || {
+	Pkg.installed "apache2-mpm-prefork" || {
 		Msg.info "Installing apache2..."
 		pkg_install apache2 apache2-mpm-prefork apache2-suexec \
 			libapache2-mod-fcgid libapache2-mod-python libexpat1 ssl-cert
@@ -14,7 +14,7 @@ install_apache2() {
 	}
 
 	# install PHP5, pear, mcrypt, xcache & others...
-	is_installed "libapache2-mod-php5" || {
+	Pkg.installed "libapache2-mod-php5" || {
 		Msg.info "Installing ${PHPV}..."
 		pkg_install libapache2-mod-php5 php5 php5-common php5-cgi php5-cli \
 			php5-curl php5-mysqlnd php5-imap php5-ldap php5-intl \

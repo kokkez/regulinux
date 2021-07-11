@@ -5,7 +5,7 @@
 
 install_php7x_fpm() {
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
+	Pkg.installed "libapache2-mod-fcgid" && {
 		Msg.warn "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}

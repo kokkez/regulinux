@@ -9,59 +9,59 @@ OS.menu() {
 	# Basic menu options
 	S=""
 	Cmd.usable "menu_ssh" && {
-		S+="   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}\n"; }
+		S+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 	Cmd.usable "menu_deps" && {
-		S+="   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall\n"; }
-	[ -z "${S}" ] || {
-		O+=" [ . ${cWITELITE}Basic menu options${cNULL} ---------------------------- (in recommended order) -- ]\n${S}"; }
+		S+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
+	[ -z "$S" ] || {
+		O+=" [ . $(Dye.fg.white Basic menu options) ---------------------------- (in recommended order) -- ]\n$S"; }
 
 	# Standalone utilities
 	S=""
 	Cmd.usable "menu_upgrade" && {
-		S+="   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system\n"; }
+		S+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
 	Cmd.usable "menu_password" && {
-		S+="   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
+		S+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
 	Cmd.usable "menu_iotest" && {
-		S+="   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS\n"; }
-	[ -z "${S}" ] || {
-		O+=" [ . ${cWITELITE}Standalone utilities${cNULL} ------------------------ (in no particular order) -- ]\n${S}"; }
+		S+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the VPS\n"; }
+	[ -z "$S" ] || {
+		O+=" [ . $(Dye.fg.white Standalone utilities) ------------------------ (in no particular order) -- ]\n$S"; }
 
 	# Main applications
 	S=""
 	Cmd.usable "menu_mailserver" && {
-		S+="   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases\n"; }
+		S+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
 	Cmd.usable "menu_dbserver" && {
-		S+="   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}\n"; }
+		S+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw in $(Dye.fg.white ~/.my.cnf)\n"; }
 	Cmd.usable "menu_webserver" && {
-		S+="   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
-	[ -z "${S}" ] || {
-		O+=" [ . ${cWITELITE}Main applications${cNULL} ----------------------------- (in recommended order) -- ]\n${S}"; }
+		S+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
+	[ -z "$S" ] || {
+		O+=" [ . $(Dye.fg.white Main applications) ----------------------------- (in recommended order) -- ]\n$S"; }
 
 	# Target system
 	S=""
 	Cmd.usable "menu_dns" && {
-		S+="   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities\n"; }
+		S+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
 	Cmd.usable "menu_assp1" && {
-		S+="   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)\n"; }
+		S+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
 	Cmd.usable "menu_ispconfig" && {
-		S+="   . ${cORNG}ispconfig${cNULL}   historical Control Panel with support at ${cWITELITE}howtoforge.com${cNULL}\n"; }
-	[ -z "${S}" ] || {
-		O+=" [ . ${cWITELITE}Target system${cNULL} ------------------------------- (in no particular order) -- ]\n${S}"; }
+		S+="   . $(Dye.fg.orange ispconfig)   historical Control Panel with support at $(Dye.fg.white howtoforge.com)\n"; }
+	[ -z "$S" ] || {
+		O+=" [ . $(Dye.fg.white Target system) ------------------------------- (in no particular order) -- ]\n$S"; }
 
 	# Others applications
 	S=""
 	Cmd.usable "menu_dumpdb" && {
-		S+="   . ${cORNG}dumpdb${cNULL}      perform the backup of all databases, or the one given in \$1\n"; }
+		S+="   . $(Dye.fg.orange dumpdb)      perform the backup of all databases, or the one given in \$1\n"; }
 	Cmd.usable "menu_roundcube" && {
-		S+="   . ${cORNG}roundcube${cNULL}   full featured imap web client\n"; }
+		S+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
 	Cmd.usable "menu_nextcloud" && {
-		S+="   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform\n"; }
+		S+="   . $(Dye.fg.orange nextcloud)   on-premises file share and collaboration platform\n"; }
 	Cmd.usable "menu_espo" && {
-		S+="   . ${cORNG}espo${cNULL}        EspoCRM full featured CRM web application\n"; }
+		S+="   . $(Dye.fg.orange espo)        EspoCRM full featured CRM web application\n"; }
 	Cmd.usable "menu_acme" && {
-		S+="   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free SSL certificates\n"; }
+		S+="   . $(Dye.fg.orange acme)        shell script for Let's Encrypt free SSL certificates\n"; }
 
-	echo -e " $(date '+%Y-%m-%d %T %z') :: ${cORNG}$ENV_os $ENV_arch${cNULL} :: ${ENV_dir}\n${S}
- -------------------------------------------------------------------------------"
+	echo -e " $(Date.fmt '+%F %T %z') :: $(Dye.fg.orange $ENV_os $ENV_arch) :: ${ENV_dir}\n$S
+ [ ------------------------------------------------------------------------------------------- ]"
 }	# end OS.menu
 

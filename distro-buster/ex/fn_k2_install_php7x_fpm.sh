@@ -5,13 +5,13 @@
 
 install_php7x_fpm() {
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
+	Pkg.installed "libapache2-mod-fcgid" && {
 		Msg.warn "PHP as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
 	# add external repository for updated php
-	is_installed "apt-transport-https" || {
+	Pkg.installed "apt-transport-https" || {
 		Msg.info "Installing some required packages..."
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}

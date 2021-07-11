@@ -4,13 +4,13 @@
 
 install_php_modphp() {
 	# abort if package was already installed
-	is_installed "libapache2-mod-php" && {
+	Pkg.installed "libapache2-mod-php" && {
 		Msg.warn "PHP as MOD-PHP is already installed..."
 		return
 	}
 
 	# add external repository for updated php 7.3
-#	is_installed "software-properties-common" || {
+#	Pkg.installed "software-properties-common" || {
 #		Msg.info "Installing required packages..."
 #		pkg_install python-software-properties software-properties-common
 #	}

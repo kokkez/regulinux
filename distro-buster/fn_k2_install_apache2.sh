@@ -5,12 +5,12 @@
 
 install_apache2() {
 	# abort if apache2 is already installed
-	is_installed "apache2-bin" && {
+	Pkg.installed "apache2-bin" && {
 		Msg.warn "apache2 is already installed..."
 		return
 	}
 	# abort also if nginx is installed
-	is_installed "nginx" && {
+	Pkg.installed "nginx" && {
 		Msg.warn "Found nginx! Installation of apache2 cannot continue"
 		return
 	}

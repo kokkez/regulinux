@@ -5,7 +5,7 @@
 
 install_pureftpd() {
 	# abort if PureFTPd is already installed
-	is_installed "pure-ftpd-mysql" && {
+	Pkg.installed "pure-ftpd-mysql" && {
 		Msg.warn "PureFTPd is already installed..."
 		return
 	}

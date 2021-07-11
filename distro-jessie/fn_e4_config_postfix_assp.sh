@@ -10,7 +10,7 @@ config_postfix_assp() {
 	}
 
 	# install opendkim
-	is_installed "opendkim" || {
+	Pkg.installed "opendkim" || {
 		pkg_install opendkim opendkim-tools
 	}
 

@@ -4,11 +4,11 @@
 # ------------------------------------------------------------------------------
 
 install_php74_fpm() {
-	local V=7.4
+	local v=7.4
 
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
-		Msg.warn "PHP${V} as MOD-PHP, PHP-FPM and FastCGI is already installed..."
+	Pkg.installed "libapache2-mod-fcgid" && {
+		Msg.warn "PHP$v as MOD-PHP, PHP-FPM and FastCGI is already installed..."
 		return
 	}
 
@@ -17,8 +17,8 @@ install_php74_fpm() {
 
 	# now install php packages, versions 7.4, with some modules
 	pkg_install libapache2-mod-fcgid \
-		php${V} libapache2-mod-php${V} \
-		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php${v} libapache2-mod-php${v} \
+		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 #		php-{memcache,memcached} memcached \
@@ -27,11 +27,11 @@ install_php74_fpm() {
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
 	# set alternative for php in cli mode
-	cmd update-alternatives --set php /usr/bin/php${V}
+	cmd update-alternatives --set php /usr/bin/php$v
 
 	# set default php to v7.x
 #	a2dismod php5.6
-	a2enmod php${V}
+	a2enmod php$v
 
 	Msg.info "Configuring PHP for apache2..."
 	cd /etc/apache2
@@ -48,5 +48,5 @@ install_php74_fpm() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 1|' /etc/php/*/fpm/php.ini
 
 	svc_evoke apache2 restart
-	Msg.info "Installation of PHP${V} as MOD-PHP, PHP-FPM and FastCGI completed!"
+	Msg.info "Installation of PHP$v as MOD-PHP, PHP-FPM and FastCGI completed!"
 }	# end install_php74_fpm

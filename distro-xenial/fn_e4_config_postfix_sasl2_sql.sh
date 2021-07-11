@@ -6,7 +6,7 @@ config_postfix_sasl2_sql() {
 	# sources:
 	# https://wiki.debian.org/PostfixAndSASL
 	# postfix.state-of-mind.de/patrick.koetter/smtpauth/sasldb_configuration.html
-	is_installed "libsasl2-modules-sql" && {
+	Pkg.installed "libsasl2-modules-sql" && {
 		Msg.warn "Cyrus sasl2 is already installed"
 		return
 	}

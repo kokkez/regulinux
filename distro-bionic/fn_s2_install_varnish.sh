@@ -4,13 +4,13 @@
 
 install_varnish() {
 	# abort if package was already installed
-	is_installed "varnish" && {
+	Pkg.installed "varnish" && {
 		Msg.warn "Varnish is already installed..."
 		return
 	}
 
 	# check the presence of apache2
-	is_installed "apache2-bin" || {
+	Pkg.installed "apache2-bin" || {
 		Msg.warn "apache2 is NOT installed..."
 		return
 	}

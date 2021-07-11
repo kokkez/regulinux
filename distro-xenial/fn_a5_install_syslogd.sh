@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 install_syslogd() {
-	is_installed "inetutils-syslogd" || {
+	Pkg.installed "inetutils-syslogd" || {
 		Msg.info "Installing inetutils-syslogd..."
 		pkg_purge "rsyslogd"
 		pkg_install inetutils-syslogd logrotate

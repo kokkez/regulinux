@@ -4,13 +4,13 @@
 
 install_php_fpm_tmp() {
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
+	Pkg.installed "libapache2-mod-fcgid" && {
 		Msg.warn "PHP as PHP-FPM is already installed..."
 		return
 	}
 
 	# add external repository for updated php
-#	is_installed "software-properties-common" || {
+#	Pkg.installed "software-properties-common" || {
 #		Msg.info "Installing required packages..."
 #		pkg_install python-software-properties software-properties-common
 #	}

@@ -4,13 +4,13 @@
 
 install_php73_fpm() {
 	# abort if package was already installed
-	is_installed "libapache2-mod-fcgid" && {
+	Pkg.installed "libapache2-mod-fcgid" && {
 		Msg.warn "PHP as PHP-FPM is already installed..."
 		return
 	}
 
 	# add external repository for updated php
-	is_installed "apt-transport-https" || {
+	Pkg.installed "apt-transport-https" || {
 		Msg.info "Installing required packages..."
 		pkg_install apt-transport-https lsb-release ca-certificates
 	}

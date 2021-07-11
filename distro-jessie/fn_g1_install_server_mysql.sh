@@ -4,20 +4,20 @@
 
 install_server_mysql() {
 	# debian 8 jessie install mysql-server-5.5
-	local PKG="mysql-server-5.5"
+	local p="mysql-server-5.5"
 
-	is_installed "${PKG}" || {
-		Msg.info "Installing ${PKG}..."
+	Pkg.installed "$p" || {
+		Msg.info "Installing ${p}..."
 
 		# preseed mysql-server
 		debconf-set-selections <<EOF
-${PKG} mysql-server/root_password password ${DB_ROOTPW}
-${PKG} mysql-server/root_password_again password ${DB_ROOTPW}
+$p mysql-server/root_password password ${DB_ROOTPW}
+$p mysql-server/root_password_again password ${DB_ROOTPW}
 EOF
 		pkg_install bsdutils mysql-client mysql-server
 	}
 
-	Msg.info "Configuring ${PKG}"
+	Msg.info "Configuring $p"
 	cd /etc/mysql
 
 	# allow MySQL to listen on all interfaces
@@ -43,5 +43,5 @@ FLUSH PRIVILEGES;
 EOF
 
 	svc_evoke mysql restart
-	Msg.info "Installation of ${PKG} completed!"
+	Msg.info "Installation of $p completed!"
 }	# end install_server_mysql

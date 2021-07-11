@@ -6,7 +6,7 @@ install_server_mariadb() {
 	# ubuntu 16.04 xenial install mariadb-server-10.0
 	local K="mariadb-server"
 
-	is_installed "${K}" || {
+	Pkg.installed "${K}" || {
 		Msg.info "Installing ${K}..."
 		pkg_install mariadb-client mariadb-server
 	}

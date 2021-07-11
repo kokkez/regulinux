@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_fail2ban() {
-	is_installed "fail2ban" || {
+	Pkg.installed "fail2ban" || {
 		Msg.info "Installing fail2ban..."
 		pkg_install fail2ban
 	}

@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_pureftpd() {
-	is_installed "pure-ftpd-mysql" || {
+	Pkg.installed "pure-ftpd-mysql" || {
 		Msg.info "Installing PureFTPd..."
 		pkg_install pure-ftpd-common pure-ftpd-mysql
 	}

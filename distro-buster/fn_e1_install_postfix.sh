@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 install_postfix() {
-	is_installed "postfix-mysql" && {
+	Pkg.installed "postfix-mysql" && {
 		Msg.warn "Postfix is already installed..."
 		return
 	}

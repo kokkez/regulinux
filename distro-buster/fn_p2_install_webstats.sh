@@ -4,7 +4,7 @@
 
 install_webstats() {
 	# abort if web statistics packages are already installed
-	is_installed "vlogger" && {
+	Pkg.installed "vlogger" && {
 		Msg.warn "Web statistics packages are already installed..."
 		return
 	}

@@ -56,25 +56,25 @@ menu_acme() {
 	acme_get
 
 	# get the webroot
-	local K C W=$(acme_webroot)
-	acme_webserver_conf "${W}"
+	local k c w=$(acme_webroot)
+	acme_webserver_conf "$w"
 
 	# issue the cert
-	K=/etc/ssl/myserver/server.key
-	C=/etc/ssl/myserver/server.cert
+	k=/etc/ssl/myserver/server.key
+	c=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	#bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "${W}"
-	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "${W}"
+	#bash ~/.acme.sh/acme.sh --issue --test -d "${HOST_FQDN}" -w "$w"
+	bash ~/.acme.sh/acme.sh --issue -d "${HOST_FQDN}" -w "$w"
 	[ "$?" -eq 0 ] || return	# dont continue on error
 
 	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \
-		--keypath "${K}" \
-		--fullchainpath "${C}" \
+		--keypath "$k" \
+		--fullchainpath "$c" \
 		--reloadcmd "systemctl restart ${HTTP_SERVER}"
 
 	# symlink the certificate paths
-	sslcert_paths "${K}" "${C}"
+	sslcert_paths "$k" "$c"
 
 	Msg.info "Installation of acme.sh completed!"
 }	# end menu_acme

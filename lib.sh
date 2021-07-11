@@ -124,7 +124,8 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		echo $(cmd date ${@:-'+%F %T'})
+		#echo $(cmd date ${@:-'+%F %T'})
+		echo -e $(cmd date "${@-+'%F %T'}")
 	}	# end Date.fmt
 
 
@@ -186,11 +187,11 @@
 	}	# end File.recopy
 
 
-	is_symlink() {
+	File.islink() {
 		# exits with 0 (success) if symlink is valid, or 1 if broken/missing
 		# $1: path to a symlink
-		[ -L "$1" ] && [ -e "$1" ]
-	}	# end is_symlink
+		Arg.expect "$1" && [ -L "$1" ] && [ -e "$1" ]
+	}	# end File.islink
 
 
 	File.pick() {
@@ -244,7 +245,7 @@
 	}	# end copy_to
 
 
-	is_installed() {
+	Pkg.installed() {
 		# > /my/file  redirects stdout to /my/file
 		# 1> /my/file redirects stdout to /my/file
 		# 2> /my/file redirects stderr to /my/file
@@ -252,7 +253,7 @@
 
 		# redirects stderr to the black hole
 		[ -n "${1}" ] && dpkg -l "${1}" 2> /dev/null | grep -q ^ii
-	}	# end is_installed
+	}	# end Pkg.installed
 
 
 	Cmd.usable() {
@@ -301,7 +302,7 @@
 	pkg_require() {
 		local T
 		for T in "${@}"
-			do is_installed "${T}" || {
+			do Pkg.installed "${T}" || {
 				Msg.info "Installing required packages: ${@}"
 				pkg_install "${@}"
 				break
@@ -321,7 +322,7 @@
 		CMD=${CMD:+$(dpkg -S "${CMD}" 2> /dev/null)}
 
 		# do the real deletion
-		is_installed "${CMD%:*}" && {
+		Pkg.installed "${CMD%:*}" && {
 			export DEBIAN_FRONTEND=noninteractive
 			apt-get -qy purge --auto-remove "${CMD%:*}"
 			Msg.info "Removing package '${CMD%:*}' (from '${1}') completed!"
@@ -517,49 +518,74 @@
 
 
 	OS.menu() {
-		# output the main menu on screen
-		local k g c o;
-		declare -a I;	# indexed array
-		declare -A U	# associative array
-		# One time actions
-		k=a.title;     I+=($k);U[$k]=" [ . ${cWITELITE}One time actions${cNULL} ---------------------------------------------- (in recommended order) -- ]"
-		k=a.ssh;       I+=($k);U[$k]="   . ${cORNG}ssh${cNULL}         setup private key, shell, SSH on port ${cWITELITE}${SSHD_PORT}${cNULL}"
-		k=a.deps;      I+=($k);U[$k]="   . ${cORNG}deps${cNULL}        check dependencies, update the base system, setup firewall"
-		# Standalone utilities
-		k=b.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Standalone utilities${cNULL} ---------------------------------------- (in no particular order) -- ]"
-		k=b.upgrade;   I+=($k);U[$k]="   . ${cORNG}upgrade${cNULL}     apt full upgrading of the system"
-		k=b.password;  I+=($k);U[$k]="   . ${cORNG}password${cNULL}    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
-		k=b.iotest;    I+=($k);U[$k]="   . ${cORNG}iotest${cNULL}      perform the classic I/O test on the VPS"
-		k=b.resolv;    I+=($k);U[$k]="   . ${cORNG}resolv${cNULL}      set ${cWITELITE}/etc/resolv.conf${cNULL} with public dns"
-		k=b.mykeys;    I+=($k);U[$k]="   . ${cORNG}mykeys${cNULL}      set my authorized_keys, for me & backuppers"
-		k=b.tz;        I+=($k);U[$k]="   . ${cORNG}tz${cNULL}          set server timezone to ${cWITELITE}${TIME_ZONE}${cNULL}"
-		k=b.motd;      I+=($k);U[$k]="   . ${cORNG}motd${cNULL}        set a dynamic Message of the Day (motd)"
-		# Main applications
-		k=c.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Main applications${cNULL} --------------------------------------------- (in recommended order) -- ]"
-		k=c.mailserver;I+=($k);U[$k]="   . ${cORNG}mailserver${cNULL}  full mailserver with postfix, dovecot & aliases"
-		k=c.dbserver;  I+=($k);U[$k]="   . ${cORNG}dbserver${cNULL}    the DB server MariaDB, root pw in ${cWITELITE}~/.my.cnf${cNULL}"
-		k=c.webserver; I+=($k);U[$k]="   . ${cORNG}webserver${cNULL}   webserver apache2 or nginx, with php, selfsigned cert, adminer"
-		# Target system
-		k=d.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Target system${cNULL} ----------------------------------------------- (in no particular order) -- ]"
-		k=d.dns;       I+=($k);U[$k]="   . ${cORNG}dns${cNULL}         bind9 DNS server with some related utilities"
-		k=d.assp1;     I+=($k);U[$k]="   . ${cORNG}assp1${cNULL}       the AntiSpam SMTP Proxy version 1 (min 384ram 1core)"
-		k=d.ispconfig; I+=($k);U[$k]="   . ${cORNG}ispconfig${cNULL}   historical Control Panel, support at ${cWITELITE}howtoforge.com${cNULL}"
-		# Others applications
-		k=e.title;     I+=($k);U[$k]=" [ . ${cWITELITE}Others applications${cNULL} ----------------------------------- (depends on main applications) -- ]"
-		k=e.dumpdb;    I+=($k);U[$k]="   . ${cORNG}dumpdb${cNULL}      to backup all databases, or the one given in ${cWITELITE}\$1${cNULL}"
-		k=e.roundcube; I+=($k);U[$k]="   . ${cORNG}roundcube${cNULL}   full featured imap web client"
-		k=e.nextcloud; I+=($k);U[$k]="   . ${cORNG}nextcloud${cNULL}   on-premises file share and collaboration platform"
-		k=e.espo;      I+=($k);U[$k]="   . ${cORNG}espo${cNULL}        EspoCRM full featured CRM web application"
-		k=e.acme;      I+=($k);U[$k]="   . ${cORNG}acme${cNULL}        shell script for Let's Encrypt free SSL certificates"
+		# display the main menu on screen
+		local s o=""
 
-		for k in "${I[@]}"; do
-			[ "${k:0:2}" = "${g}" ] || {
-				[ -z "${c}" ] || o+="${U[${g}title]}\n${c}"
-				c=; g="${k:0:2}"
-			}
-			Cmd.usable "menu_${k:2}" && c+="${U[$k]}\n"
-		done
-		echo -e " $(cmd date '+%F %T %z') :: ${cORNG}${ENV_os} ${ENV_arch}${cNULL}" \
-			":: ${ENV_dir}\n${o}${U[${g}title]}\n${c}" \
+		# One time actions
+		s=""
+		Cmd.usable "menu_ssh" && {
+			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
+		Cmd.usable "menu_deps" && {
+			s+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
+		[ -z "$s" ] || {
+			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
+
+		# Standalone utilities
+		s=""
+		Cmd.usable "menu_upgrade" && {
+			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
+		Cmd.usable "menu_password" && {
+			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
+		Cmd.usable "menu_iotest" && {
+			s+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the server\n"; }
+		Cmd.usable "menu_resolv" && {
+			s+="   . $(Dye.fg.orange resolv)      set $(Dye.fg.white /etc/resolv.conf) with public dns\n"; }
+		Cmd.usable "menu_mykeys" && {
+			s+="   . $(Dye.fg.orange mykeys)      set my authorized_keys, for me & backuppers\n"; }
+		Cmd.usable "menu_tz" && {
+			s+="   . $(Dye.fg.orange tz)          set the server timezone to $(Dye.fg.white $TIME_ZONE)\n"; }
+		Cmd.usable "menu_motd" && {
+			s+="   . $(Dye.fg.orange motd)        customize the dynamic Message of the Day (motd)\n"; }
+		[ -z "$s" ] || {
+			o+=" [ . $(Dye.fg.white Standalone utilities) ---------------------------------------- (in no particular order) -- ]\n$s"; }
+
+		# Main applications
+		s=""
+		Cmd.usable "menu_mailserver" && {
+			s+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
+		Cmd.usable "menu_dbserver" && {
+			s+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw stored in $(Dye.fg.white ~/.my.cnf)\n"; }
+		Cmd.usable "menu_webserver" && {
+			s+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
+		[ -z "$s" ] || {
+			o+=" [ . $(Dye.fg.white Main applications) --------------------------------------------- (in recommended order) -- ]\n$s"; }
+
+		# Target system
+		s=""
+		Cmd.usable "menu_dns" && {
+			s+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
+		Cmd.usable "menu_assp1" && {
+			s+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
+		Cmd.usable "menu_ispconfig" && {
+			s+="   . $(Dye.fg.orange ispconfig)   historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
+		[ -z "$s" ] || {
+			o+=" [ . $(Dye.fg.white Target system) ----------------------------------------------- (in no particular order) -- ]\n$s"; }
+
+		# Others applications
+		s=""
+		Cmd.usable "menu_dumpdb" && {
+			s+="   . $(Dye.fg.orange dumpdb)      to backup all databases, or the one given in $(Dye.fg.white \$1)\n"; }
+		Cmd.usable "menu_roundcube" && {
+			s+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
+		Cmd.usable "menu_nextcloud" && {
+			s+="   . $(Dye.fg.orange nextcloud)   on-premises file share and collaboration platform\n"; }
+		Cmd.usable "menu_espo" && {
+			s+="   . $(Dye.fg.orange espo)        EspoCRM full featured CRM web application\n"; }
+		Cmd.usable "menu_acme" && {
+			s+="   . $(Dye.fg.orange acme)        shell script for Let's Encrypt free SSL certificates\n"; }
+		[ -z "$s" ] || {
+			o+=" [ . $(Dye.fg.white Others applications) ----------------------------------- (depends on main applications) -- ]\n$s"; }
+
+		echo -e " $(Date.fmt +'%F %T %z') :: $(Dye.fg.orange $ENV_os $ENV_arch) :: ${ENV_dir}\n$o" \
 			"[ ------------------------------------------------------------------------------------------- ]"
 	}	# end OS.menu

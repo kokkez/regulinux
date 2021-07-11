@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 install_dovecot() {
-	is_installed "dovecot-imapd" && {
+	Pkg.installed "dovecot-imapd" && {
 		Msg.warn "Dovecot is already installed..."
 		return
 	}

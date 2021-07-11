@@ -50,7 +50,7 @@ resolv_via_systemd() {
 
 setup_resolv() {
 	# if resolv.conf is a valid symlink, then setup via systemd
-	is_symlink '/etc/resolv.conf' \
+	File.islink '/etc/resolv.conf' \
 		&& resolv_via_systemd \
 		|| resolv_via_resolvconf
 }	# end setup_resolv

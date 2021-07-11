@@ -4,7 +4,7 @@
 
 install_webstats() {
 	# install some web statistics packages
-	is_installed "vlogger" || {
+	Pkg.installed "vlogger" || {
 		Msg.info "Installing Web statistics packages..."
 
 		pkg_install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl

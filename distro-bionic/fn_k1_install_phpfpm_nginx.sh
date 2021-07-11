@@ -4,11 +4,11 @@
 # ------------------------------------------------------------------------------
 
 install_phpfpm_nginx() {
-	local V=7.3
+	local v=7.3
 
 	# abort if package was already installed
-	is_installed "php${V}-fpm" && {
-		Msg.warn "PHP${V} as PHP-FPM is already installed..."
+	Pkg.installed "php${v}-fpm" && {
+		Msg.warn "PHP${v} as PHP-FPM is already installed..."
 		return
 	}
 
@@ -18,15 +18,15 @@ install_phpfpm_nginx() {
 	# now install php packages, + versions 7.4, with some modules
 	pkg_install php7.2 \
 		php7.2-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php${V} \
-		php${V}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php${v} \
+		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.3-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 #		php-{memcache,memcached} memcached \
 
 	# set alternative for php in cli mode
 	cmd update-alternatives --auto php
-#	cmd update-alternatives --set php /usr/bin/php${V}
+#	cmd update-alternatives --set php /usr/bin/php${v}
 
 	Msg.info "Configuring PHP for nginx..."
 	cd /etc/nginx
@@ -38,5 +38,5 @@ install_phpfpm_nginx() {
 	sed -ri 's|^;(cgi.fix_pathinfo).*|\1 = 0|' /etc/php/*/fpm/php.ini
 
 	cmd systemctl restart nginx
-	Msg.info "Installation of PHP${V} as PHP-FPM completed!"
+	Msg.info "Installation of PHP${v} as PHP-FPM completed!"
 }	# end install_phpfpm_nginx

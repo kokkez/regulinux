@@ -6,7 +6,7 @@ menu_motd() {
 	[ -s "/etc/update-motd.d/*-footer" ] && return
 
 	# verify needed packages
-	is_installed "figlet" || {
+	Pkg.installed "figlet" || {
 		pkg_install figlet lsb-release
 	}
 

@@ -5,7 +5,7 @@
 
 install_fail2ban() {
 	# abort if fail2ban is already installed
-	is_installed "fail2ban" && {
+	Pkg.installed "fail2ban" && {
 		Msg.warn "fail2ban is already installed..."
 		return
 	}

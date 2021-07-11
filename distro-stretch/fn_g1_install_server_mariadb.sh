@@ -7,7 +7,7 @@ install_server_mariadb() {
 	local K="mariadb-server"
 
 	# abort if mariadb is already installed
-	is_installed "${K}" && {
+	Pkg.installed "${K}" && {
 		Msg.warn "${K} is already installed..."
 		return
 	}

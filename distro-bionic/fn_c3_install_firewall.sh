@@ -7,7 +7,7 @@ install_firewall() {
 	# $1 port, strictly numeric
 	local P F=~/firewall.sh			# path to the firewall script
 
-	is_installed "iptables" || {
+	Pkg.installed "iptables" || {
 		Msg.error "Seems that iptables was missing"
 	}
 

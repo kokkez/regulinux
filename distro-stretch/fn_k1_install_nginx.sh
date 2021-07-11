@@ -5,12 +5,12 @@
 
 install_nginx() {
 	# abort if nginx is already installed
-	is_installed "nginx" && {
+	Pkg.installed "nginx" && {
 		Msg.warn "nginx is already installed..."
 		return
 	}
 	# abort also if apache2 is installed
-	is_installed "apache2-bin" && {
+	Pkg.installed "apache2-bin" && {
 		Msg.warn "Found apache2! Installation of nginx cannot continue"
 		return
 	}
@@ -41,7 +41,7 @@ install_nginx() {
 
 	# rename "default" in sites-enabled, if valid symlink
 	cd /etc/nginx/sites-enabled
-	is_symlink "default" && mv "default" "0000-default"
+	File.islink "default" && mv "default" "0000-default"
 
 	# activating ports on firewall
 	firewall_allow "http"

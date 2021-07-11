@@ -42,7 +42,7 @@ install_adminer() {
 		cmd systemctl restart nginx
 	else
 		cd /etc/apache2/sites-enabled
-		is_symlink '080-adminer.conf' || {
+		File.islink '080-adminer.conf' || {
 			copy_to ../sites-available adminer/adminer.conf
 			ln -nfs ../sites-available/adminer.conf '080-adminer.conf'
 			cmd systemctl restart apache2

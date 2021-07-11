@@ -7,30 +7,30 @@
 # ------------------------------------------------------------------------------
 
 menu_dumpdb() {
-	# $1 db name - if provided it backup only this db
+	# $1 - db name, optional, if provided will be backed up only that db
 
 	# sanity check
 	Cmd.usable "mysql" || return
 
-	local B C D P Q="SHOW DATABASES;"
+	local b c d z q="SHOW DATABASES;"
 
 	# if are there arguments, then change query
-	(( $# )) && Q="SHOW DATABASES LIKE '%${*}%';"
+	(( $# )) && q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder
-	C="/var/backups/dumpdbs"
-	mkdir -p "${C}"
+	c="/var/backups/dumpdbs"
+	mkdir -p "$c"
 
 	# set static blacklist
-	B="information_schema|mysql|performance_schema"
+	b="information_schema|mysql|performance_schema"
 
 	# show databases NOT blacklisted, silently & without labels
 	# mysql -B : --batch
 	# mysql -N : --skip-column-names
-	for D in $(cmd mysql -BNe "${Q}" | grep -vP "${B}"); do
-		P="${C}/${D}.sql.gz"
-		cmd mysqldump --single-transaction --routines --quick --force ${D} | \
-			cmd gzip --best --rsyncable > ${P}
-		Msg.info "$(cmd date '+%F %T') database '${D}' saved to: '${P}'"
+	for d in $(cmd mysql -BNe "$q" | grep -vP "$b"); do
+		z="${c}/${d}.sql.gz"
+		cmd mysqldump --single-transaction --routines --quick --force $d \
+			| cmd gzip --best --rsyncable > $z
+		Msg.info "$( Date.fmt ) database '$d' saved to: '$z'"
 	done
 }	# end menu_dumpdb

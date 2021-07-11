@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 menu_dns() {
-	if is_installed "bind9"; then
+	if Pkg.installed "bind9"; then
 		Msg.warn "DNS server bind9 is already installed..."
 		return
 	fi;

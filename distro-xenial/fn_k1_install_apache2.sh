@@ -4,7 +4,7 @@
 
 install_apache2() {
 	# abort if package was already installed
-	is_installed "apache2-bin" && {
+	Pkg.installed "apache2-bin" && {
 		Msg.warn "apache2 is already installed..."
 		return
 	}

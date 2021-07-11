@@ -36,10 +36,10 @@ sslcert_symlink() {
 	# create the symlink pointing to a real file
 	# $1 - path to the file to convert to symlink
 	# $2 - path to the target file
-	is_symlink "$1" || {
+	File.islink "$1" || {
 		[ -s "$1" ] && {
 			mv -f "$1" "${1}.bak"
-			[ "${2:0:1}" = "/" ] || cd $(cmd dirname "${1}")
+			[ "${2:0:1}" = "/" ] || cd $(cmd dirname "$1")
 			[ -s "$2" ] && ln -nfs "$2" "$1"
 		}
 	}
@@ -51,7 +51,7 @@ sslcert_paths() {
 	# adjust paths to points to these certificates
 	# $1 - full path to the key file
 	# $2 - full path to the certificate file
-	[ -s "$1" ] && [ -s "$2" ] || return
+	Arg.expect "$1" "$2" || return
 
 	# default certificate paths
 	sslcert_symlink "/etc/ssl/private/ssl-cert-snakeoil.key" "$1"
@@ -68,7 +68,7 @@ sslcert_paths() {
 	# adjust default-ssl symlink for apache
 	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {
 		cd /etc/apache2/sites-enabled
-		is_symlink '0000-default-ssl.conf' || {
+		File.islink '0000-default-ssl.conf' || {
 			ln -s ../sites-available/default-ssl.conf '0000-default-ssl.conf'
 			rm -rf default-ssl*
 		}
@@ -78,7 +78,7 @@ sslcert_paths() {
 	}
 
 	# restart nginx webserver if installed
-	[ "${HTTP_SERVER}" = "nginx" ] && cmd systemctl restart nginx
+	[ "$HTTP_SERVER" = "nginx" ] && cmd systemctl restart nginx
 
 	Msg.info "Symlinks for the given SSL Certificate completed!"
 }	# end sslcert_paths
