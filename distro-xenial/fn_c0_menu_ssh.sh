@@ -6,5 +6,5 @@ menu_ssh() {
 	TARGET="${2:-${TARGET}}"
 
 	menu_mykeys
-	install_openssh "${1-${SSHD_PORT}}"
+	install_openssh "$1"
 }	# end menu_ssh

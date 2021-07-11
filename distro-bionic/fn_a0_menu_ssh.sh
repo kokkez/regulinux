@@ -12,7 +12,7 @@ setup_bash() {
 
 
 setup_sshd() {
-	# $1 - port - strictly in numerical range
+	# $1 - ssh port, numerical
 	local x p=$( Port.audit ${1:-$SSHD_PORT} )
 
 	# configure SSH server arguments

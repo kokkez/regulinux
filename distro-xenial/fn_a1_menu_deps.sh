@@ -3,18 +3,17 @@
 # ------------------------------------------------------------------------------
 
 menu_deps() {
-	local P="${1:-${SSHD_PORT}}"
-
+	# $1: ssh port number
 	menu_resolv
 
 	shell_bash
 	menu_tz
 	OS.minimalize
 	install_syslogd
-	install_firewall "${P}"
+	install_firewall "$1"
 
 	menu_motd
-	menu_ssh "${P}"
+	menu_ssh "$1"
 
 	menu_resolv
 }	# end menu_deps

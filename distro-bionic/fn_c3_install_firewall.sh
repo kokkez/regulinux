@@ -5,13 +5,13 @@
 install_firewall() {
 	# setup firewall via iptables
 	# $1 port, strictly numeric
-	local P F=~/firewall.sh			# path to the firewall script
+	local P F=~/firewall.sh				# path to the firewall script
 
 	Pkg.installed "iptables" || {
 		Msg.error "Seems that iptables was missing"
 	}
 
-	P=$( Port.audit $1 )			# strictly numeric port
+	P=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
 	# determining default iptables rules
 	case ${TARGET} in
@@ -27,11 +27,11 @@ install_firewall() {
 	sed -ri ${F} \
 		-e "s|^(SSHPORT=).*|\1${P}|" \
 		-e "s|^(ACCEPTS=).*|\1\"${IPT_RULES}\"|"
-	chmod +x ${F}					# make it executable
+	chmod +x ${F}						# make it executable
 
 	# set these rules to load on startup
 	cd /etc/network/if-pre-up.d
 	rm -rf iptables
 	File.into . ssh/iptables
-	chmod +x iptables				# make it executable
+	chmod +x iptables					# make it executable
 }	# end install_firewall

@@ -6,14 +6,14 @@ setup_bash() {
 	# set bash as the default shell
 	debconf-set-selections <<< "dash dash/sh boolean false"
 	dpkg-reconfigure -f noninteractive dash
-	[ -f ~/.bashrc ] || File.into ~ .bashrc
+	[ -f ~/.bashrc ] || { File.into ~ .bashrc; . .bashrc; }
 	Msg.info "Default shell switched to BASH"
 }	# end setup_bash
 
 
 setup_sshd() {
-	# $1: port - strictly in numerical range
-	local x p=$( Port.audit $1 )
+	# $1 - ssh port, numerical
+	local x p=$( Port.audit ${1:-$SSHD_PORT} )
 
 	# configure SSH server arguments
 	sed -ri /etc/ssh/sshd_config \
@@ -44,6 +44,7 @@ setup_sshd() {
 
 menu_ssh() {
 	# sanity check, stop here if my key is missing
+	# $1 - ssh port, optional
 	grep -q "kokkez" ~/.ssh/authorized_keys || {
 		Msg.error "Missing 'kokkez' private key in '~/.ssh/authorized_keys'"
 	}
@@ -65,5 +66,5 @@ menu_ssh() {
 	}
 
 	setup_bash
-	setup_sshd "${1:-${SSHD_PORT}}"
+	setup_sshd "$1"
 }	# end menu_ssh

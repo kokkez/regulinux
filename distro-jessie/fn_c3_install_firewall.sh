@@ -4,12 +4,12 @@
 
 install_firewall() {
 	# setup firewall via iptables
-	# $1 port, strictly numeric
+	# $1 - ssh port, numerical
 	local p f=~/firewall.sh				# path to the firewall script
 
 	Pkg.installed "iptables" || Msg.error "Seems that iptables was missing"
 
-	p=$( Port.audit $1 )				# strictly numeric port
+	p=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
 	# determining default iptables rules
 	case ${TARGET} in

@@ -12,8 +12,8 @@ setup_bash() {
 
 
 setup_sshd() {
-	# $1: port - strictly in numerical range
-	local x p=$( Port.audit $1 )
+	# $1 - ssh port, numerical
+	local x p=$( Port.audit ${1:-$SSHD_PORT} )
 
 	# configure SSH server arguments
 	sed -ri /etc/ssh/sshd_config \
@@ -65,5 +65,5 @@ menu_ssh() {
 	}
 
 	setup_bash
-	setup_sshd "${1:-${SSHD_PORT}}"
+	setup_sshd "$1"
 }	# end menu_ssh
