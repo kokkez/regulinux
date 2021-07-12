@@ -18,7 +18,7 @@ install_adminer() {
 
 	# get the plugins folder
 	u=https://github.com/vrana/adminer/releases/download/v$v
-	File.download "${u}/adminer-${v}.zip" "adminer-${v}.zip"
+	File.download "$u/adminer-${v}.zip" "adminer-${v}.zip"
 	# some cleanup
 	unzip -qo "adminer-${v}.zip"
 	mv ./adminer-${v}/plugins ./

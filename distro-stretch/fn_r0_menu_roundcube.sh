@@ -5,67 +5,67 @@
 # ------------------------------------------------------------------------------
 
 menu_roundcube() {
-	local U P D=/var/www/roundcube V=1.4.11 # version to install
+	local u p d=/var/www/roundcube v=1.4.11 # version to install
 
 	# test if not already installed
-	[ -s "${D}/index.php" ] && {
-		Msg.warn "Roundcube ${V} is already installed..."
+	[ -s "$d/index.php" ] && {
+		Msg.warn "Roundcube $v is already installed..."
 		return
 	}
 
-	Msg.info "Installing Roundcube ${V}..."
-	mkdir -p ${D}
-	P=$(menu_password 32) # creating a random password
+	Msg.info "Installing Roundcube ${v}..."
+	mkdir -p $d
+	p=$( menu_password 32 )		# creating a random password
 
 	# download the right version
-	U=https://github.com/roundcube/roundcubemail/releases/download/${V}/roundcubemail-${V}-complete.tar.gz
+	u=https://github.com/roundcube/roundcubemail/releases/download/$v/roundcubemail-${v}-complete.tar.gz
 	cd /tmp
-	File.download "${U}" roundcubemail.tar.gz
+	File.download "$u" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
 	cd roundcubemail-*
-	mv -t "${D}" bin config logs plugins program skins temp vendor .htaccess index*
+	mv -t "$d" bin config logs plugins program skins temp vendor .htaccess index*
 
 	# instruct search engines to not index our webmail
-	echo -e "User-agent: *\nDisallow: /" > ${D}/robots.txt
+	echo -e "User-agent: *\nDisallow: /" > $d/robots.txt
 
 	# creating a new database, then populate it from file
-	create_database "roundcube" "roundcube" "${P}"
+	create_database "roundcube" "roundcube" "$p"
 	cmd mysql 'roundcube' < SQL/mysql.initial.sql
 
-	# install & configure plugins for ISPConfig3
+	# plugins for ISPConfig3
 	cd /tmp
 	File.download https://github.com/w2c/ispconfig3_roundcube/archive/master.zip plugins.zip
 	unzip -qo plugins*
-	mv ispconfig3*/ispconfig3_* ${D}/plugins/
+	mv ispconfig3*/ispconfig3_* $d/plugins/
 	# install the config file
-	cd ${D}/plugins/ispconfig3_account/config
+	cd $d/plugins/ispconfig3_account/config
 	File.place roundcube/config.inc.php.plugin config.inc.php
-	sed -i "s|RPW|${P}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
+	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
 
-	# install & configure contextmenu plugin
+	# contextmenu plugin
 	cd /tmp
 	File.download https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip contextmenu.zip
 	unzip -qo contextmenu*
 	cd roundcube-contextmenu*
-	mkdir -p ${D}/plugins/contextmenu
-	mv -t ${D}/plugins/contextmenu localization skins contextmenu*
+	mkdir -p $d/plugins/contextmenu
+	mv -t $d/plugins/contextmenu localization skins contextmenu*
 
 	# install the config file
-	cd ${D}/config
-	U=$(menu_password 24 1)	# strong password
+	cd $d/config
+	u=$( menu_password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
-	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
+	sed -i "s|RPW|${p}|;s|DESKEY|${u}|" config.inc.php
 
 	# set permissions
-	cd ${D}
+	cd $d
 	chown -R 0:0 .
-	chown -R 33:0 logs temp # set user www-data
+	chown -R 33:0 logs temp		# set user www-data
 	chmod -R 400 .
 	chmod -R u+rwX,go+rX,go-w .
 
 	# if ispconfig is installed, add the remote user into the db
 	has_ispconfig && {
-		sed -e "s|RPW|${P}|" <<'EOF' | mysql
+		sed -e "s|RPW|${p}|" <<'EOF' | mysql
 USE dbispconfig;
 INSERT INTO remote_user (
  sys_userid,
@@ -98,12 +98,12 @@ EOF
 		cat >> /etc/crontab <<EOF
 
 # ROUNDCUBE daily db cleaning
-18 23 * * * root php ${D}/bin/cleandb.sh > /dev/null 2>&1
+18 23 * * * root php $d/bin/cleandb.sh > /dev/null 2>&1
 EOF
 	}
 
 	# install the configuration file for webserver
-	if [ "${HTTP_SERVER}" = "nginx" ]; then
+	if [ "$HTTP_SERVER" = "nginx" ]; then
 		File.into /etc/nginx/snippets roundcube/roundcube-nginx.conf
 		cmd systemctl restart nginx
 	else
@@ -117,5 +117,5 @@ EOF
 		cmd systemctl restart apache2
 	fi;
 
-	Msg.info "Installation of Roundcube ${V} completed!"
+	Msg.info "Installation of Roundcube $v completed!"
 }	# end menu_roundcube

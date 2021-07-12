@@ -3,20 +3,20 @@
 # ------------------------------------------------------------------------------
 
 install_nextcloud() {
-	local P U V="19.0.6"	# version to install
+	local p u v="19.0.6"	# version to install
 
 	# test that php version is at least 7.2
-	P="$(php_version minor)"
-	dpkg --compare-versions "${P}" "lt" "7.2" && {
-		Msg.warn "Nextcloud ${V} require PHP7.2 but PHP${P} is installed..."
+	p="$( php_version minor )"
+	dpkg --compare-versions "$p" "lt" "7.2" && {
+		Msg.warn "Nextcloud $v require PHP7.2 but PHP$p is installed..."
 		return
 	}
 
-	Msg.info "Installing Nextcloud ${V}..."
+	Msg.info "Installing Nextcloud ${v}..."
 
 	# install some php libraries before install Nextcloud
 	add_php_repository
-	Pkg.install php${P}-{apcu,apcu-bc,bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
+	Pkg.install php${p}-{apcu,apcu-bc,bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{imagick,pear,redis} imagemagick bzip2 mcrypt redis-server
 
 	# new database with related user, info saved in ~/.dbdata.txt
@@ -27,8 +27,8 @@ install_nextcloud() {
 
 	# download & install nextcloud
 	cd /var/www
-	U="https://download.nextcloud.com/server/releases/nextcloud-${V}.zip"
-	File.download "$U" "nextcloud.zip"
+	u="https://download.nextcloud.com/server/releases/nextcloud-${v}.zip"
+	File.download "$u" "nextcloud.zip"
 	unzip -qo nextcloud.zip
 	rm -rf nextcloud.zip
 	chown -R 33:0 /var/www/nextcloud # set user www-data
@@ -70,5 +70,5 @@ EOF
 		cmd systemctl restart apache2
 	fi;
 
-	Msg.info "Installation of nextcloud ${V} completed!"
+	Msg.info "Installation of nextcloud $v completed!"
 }	# end install_nextcloud

@@ -38,7 +38,7 @@ install_ispconfig() {
 	cmd php -q install.php --autoinstall=autoinstall.ini
 
 	# shortcut to connect to ispconfig thru port 8080
-	if [ "${HTTP_SERVER}" = "nginx" ]; then
+	if [ "$HTTP_SERVER" = "nginx" ]; then
 		File.into /etc/nginx/snippets ispconfig/ispconfig-nginx.conf
 		cmd systemctl restart nginx
 	else

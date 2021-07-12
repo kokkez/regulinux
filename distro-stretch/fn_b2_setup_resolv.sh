@@ -4,27 +4,27 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_resolvconf() {
-	local N T R=/etc/resolv.conf
+	local n t r=/etc/resolv.conf
 	File.backup "$R"
 
 	# set known public dns
-	T="cloudflare + freenom.world"
-	N="search .\noptions timeout:2 rotate\n"
-	N+="nameserver 1.1.1.1      # cloudflare\n"
-	N+="nameserver 80.80.80.80  # freenom.world\n"
-	N+="nameserver 1.0.0.1      # cloudflare\n"
-	N+="nameserver 80.80.81.81  # freenom.world"
+	t="cloudflare + freenom.world"
+	n="search .\noptions timeout:2 rotate\n"
+	n+="nameserver 1.1.1.1      # cloudflare\n"
+	n+="nameserver 80.80.80.80  # freenom.world\n"
+	n+="nameserver 1.0.0.1      # cloudflare\n"
+	n+="nameserver 80.80.81.81  # freenom.world"
 
 	# verify needed packages
 	Pkg.requires e2fsprogs
 
 	# write to /etc/resolv.conf
-	[ -s "${R}" ] && cmd chattr -i "${R}"	# allow file modification
-	echo -e "# public dns\n${N}" > "${R}"
-	cmd chattr +i "${R}"					# disallow file modification
+	[ -s "$r" ] && cmd chattr -i "$r"		# allow file modification
+	echo -e "# public dns\n$n" > "$r"
+	cmd chattr +i "$r"					# disallow file modification
 
-	Msg.info "Configuration of ${T} public dns completed! Now ${R} has:"
-	sed 's|^|> |' < ${R}
+	Msg.info "Configuration of $t public dns completed! Now $r has:"
+	sed 's|^|> |' < $r
 }	# end resolv_via_resolvconf
 
 

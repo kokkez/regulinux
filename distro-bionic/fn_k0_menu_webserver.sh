@@ -4,8 +4,8 @@
 # ------------------------------------------------------------------------------
 
 menu_webserver() {
-	HTTP_SERVER="${1:-${HTTP_SERVER}}"
-	TARGET="${2:-${TARGET}}"
+	HTTP_SERVER="${1:-$HTTP_SERVER}"
+	TARGET="${2:-$TARGET}"
 
 	# abort if the system is not set up properly
 	done_deps || return

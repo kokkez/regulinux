@@ -6,11 +6,11 @@ setup_networking() {
 	# abort if already using classic networking
 	[ -e "/run/network/ifstate" ] && return
 
-	# get some required values
-	local IF IP GW=$(cmd ip route get 1.1.1.1)
-	IF=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "${GW}")
-	IP=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "${GW}")
-	GW=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "${GW}")
+	# detect: interface, address, gateway
+	local i a g=$(cmd ip route get 1.1.1.1)
+	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
+	a=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
+	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
 
 	# install required packages
 	Pkg.requires ifupdown
@@ -27,27 +27,27 @@ auto lo
 iface lo inet loopback
 
 # ethernet interface
-auto ${IF}
-iface ${IF} inet static
-  address ${IP}/24
-  gateway ${GW}
+auto $i
+iface $i inet static
+  address $a/24
+  gateway $g
 EOF
 	}
 
 	# activating the configuration
-	cmd ifdown --force ${IF} lo && cmd ifup -a
+	cmd ifdown --force $i lo && cmd ifup -a
 	cmd systemctl unmask networking
 	cmd systemctl enable networking
 	cmd systemctl restart networking
 
 	# disable and remove the unwanted services
-	IF="systemd-networkd.socket systemd-networkd networkd-dispatcher systemd-networkd-wait-online"
-	cmd systemctl stop ${IF}
-	cmd systemctl disable ${IF}
-	cmd systemctl mask ${IF}
+	i="systemd-networkd.socket systemd-networkd networkd-dispatcher systemd-networkd-wait-online"
+	cmd systemctl stop $i
+	cmd systemctl disable $i
+	cmd systemctl mask $i
 	cmd apt -y purge nplan netplan.io
 
-	Msg.info "Configuration of netplan was fully disabled"
+	Msg.info "Disabling of netplan configuration is completed"
 	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
 }	# end setup_networking
 

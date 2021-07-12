@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_nextcloud() {
-	HTTP_SERVER="${1:-${HTTP_SERVER}}"
+	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if nextcloud is already installed
 	[ -r /var/www/nextcloud/config/config.php ] && {

@@ -6,9 +6,9 @@ install_nextcloud() {
 	local p u v="19.0.6"	# version to install
 
 	# test that php version is at least 7.2
-	p="$(php_version minor)"
+	p="$( php_version minor )"
 	dpkg --compare-versions "$p" "lt" "7.2" && {
-		Msg.warn "Nextcloud ${v} require PHP7.2 but PHP$p is installed..."
+		Msg.warn "Nextcloud $v require PHP7.2 but PHP$p is installed..."
 		return
 	}
 

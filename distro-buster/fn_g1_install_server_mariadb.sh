@@ -13,7 +13,7 @@ install_server_mariadb() {
 	}
 
 	# install required packages
-	Msg.info "Installing ${p} for ${ENV_os}..."
+	Msg.info "Installing $p for ${ENV_os}..."
 	Pkg.install mariadb-client mariadb-server
 
 	Msg.info "Configuring $p"
@@ -46,5 +46,5 @@ EOF
 
 	cmd systemctl daemon-reload
 	cmd systemctl restart mysql
-	Msg.info "Installation of ${p} completed!"
+	Msg.info "Installation of $p completed!"
 }	# end install_server_mariadb

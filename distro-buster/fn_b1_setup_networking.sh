@@ -6,17 +6,17 @@ setup_networking() {
 	# check for using classic networking
 	[ -e "/run/network/ifstate" ] || return
 
-	# get some required values
-	local IF IP GW=$(cmd ip route get 1.1.1.1)
-	IF=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "${GW}")
-	IP=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "${GW}")
-	GW=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "${GW}")
+	# detect: interface, address, gateway
+	local i a g=$(cmd ip route get 1.1.1.1)
+	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
+	a=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
+	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
 
 	cd /etc/network
 
 	# abort if already using static ip address
 	cmd grep -q 'inet static' ./interfaces && {
-		Msg.info "Network already configured with static IP: ${IP}"
+		Msg.info "Network already configured with static IP: $a"
 		return
 	}
 
@@ -33,16 +33,16 @@ auto lo
 iface lo inet loopback
 
 # ethernet interface
-auto ${IF}
-iface ${IF} inet static
-  address ${IP}/24
-  gateway ${GW}
+auto $i
+iface $i inet static
+  address $a/24
+  gateway $g
 EOF
 
 	# activating the configuration
-#	cmd ifdown --force ${IF} lo && cmd ifup -a
+#	cmd ifdown --force $i lo && cmd ifup -a
 	cmd systemctl restart networking
 
-	Msg.info "Networking changed to run with static IP: ${IP}"
+	Msg.info "Networking changed to run with static IP: $a"
 	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
 }	# end setup_networking
