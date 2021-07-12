@@ -1,0 +1,5 @@
+# paths relative to this folder
+test-*
+tests/*
+test-file-paths.sh
+test-os-menu.sh
