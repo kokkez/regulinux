@@ -136,8 +136,8 @@ Rule.mail() {
 Rule.mysql() {
 	notice "Firewall: arrange MYSQL rules"
 	# Accept MYSQL connections from slaves
-	$v4 -A INPUT -p tcp -m state --state NEW --dport 3306 -s ethika.rete.us,malika.rete.us -j ACCEPT
-	$v6 -A INPUT -p tcp -m state --state NEW --dport 3306 -s ethika.rete.us,malika.rete.us -j ACCEPT
+	$v4 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
+	$v6 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
 }
 Rule.assp() {
 	notice "Firewall: arrange ASSP rules"
@@ -197,9 +197,10 @@ Fw.configure() {
 	$v6 -A INPUT -i lo -j ACCEPT
 
 #	notice "Firewall: manage IPv4 & IPv6 policies"
-	for svc in $ACCEPTS ; do
-		echo "[Rule.$svc]"
-#		cmd "Rule.$svc"
+	local s
+	for s in $ACCEPTS ; do
+#		echo "[Rule.$s]"
+		cmd "Rule.$s"
 	done
 
 	notice "Firewall: manage IPv4 & IPv6 icmp traffic"

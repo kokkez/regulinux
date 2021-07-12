@@ -58,12 +58,12 @@ openssl s_client -showcerts -connect localhost:465
 fail2ban-client status
 #
 systemctl restart nginx php7.{3,4}-fpm
-bash ~/lin*/arrange.sh deps
-bash ~/lin*/arrange.sh mailserver ispconfig
-bash ~/lin*/arrange.sh dbserver ispconfig
-bash ~/lin*/arrange.sh ispconfig nginx
-bash ~/lin*/arrange.sh resolv
-bash ~/lin*/arrange.sh ssh
-bash ~/lin*/arrange.sh
-bash ~/lin*/arrange.sh upgrade
+bash ~/lin*/os.sh deps
+bash ~/lin*/os.sh mailserver ispconfig
+bash ~/lin*/os.sh dbserver ispconfig
+bash ~/lin*/os.sh ispconfig nginx
+bash ~/lin*/os.sh resolv
+bash ~/lin*/os.sh ssh
+bash ~/lin*/os.sh
+bash ~/lin*/os.sh upgrade
 ## namium @ provider [ namium ] ##
