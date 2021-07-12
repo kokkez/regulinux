@@ -30,7 +30,7 @@ install_openssh() {
 	grep -q '/var' $x && {
 		Msg.info "Fixing a little systemd bug that prevent SSHd to start"
 		sed -i 's|/var||' $x
-#		cmd mkdir -p -m0755 /var/run/sshd
+		cmd mkdir -p -m0755 /var/run/sshd
 	}
 
 	# activate on firewall & restart SSH
