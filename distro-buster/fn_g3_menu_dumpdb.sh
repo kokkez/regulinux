@@ -18,8 +18,7 @@ menu_dumpdb() {
 	(( $# )) && q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder
-	c="/var/backups/dumpdbs"
-	mkdir -p "$c"
+	mkdir -p "/var/backups/dumpdbs" && c="$_"
 
 	# set static blacklist
 	b="information_schema|mysql|performance_schema"
@@ -28,7 +27,7 @@ menu_dumpdb() {
 	# mysql -B : --batch
 	# mysql -N : --skip-column-names
 	for d in $(cmd mysql -BNe "$q" | grep -vP "$b"); do
-		z="${c}/${d}.sql.gz"
+		z="$c/${d}.sql.gz"
 		cmd mysqldump --single-transaction --routines --quick --force $d \
 			| cmd gzip --best --rsyncable > $z
 		Msg.info "$( Date.fmt ) database '$d' saved to: '$z'"
