@@ -4,7 +4,7 @@
 
 install_firewall() {
 	# setup firewall via iptables
-	# $1 - ssh port, numerical
+	# $1 - ssh port number, optional
 	local p f=~/firewall.sh				# path to the firewall script
 
 	Pkg.installed "iptables" || {
@@ -21,17 +21,16 @@ install_firewall() {
 	esac;
 
 	# install the firewall script
-	cd ~
 	rm -rf $f
-	File.into . ssh/firewall.sh
+	File.into ~ ssh/firewall.sh
 	sed -ri $f \
 		-e "s|^(SSHPORT=).*|\1$p|" \
-		-e "s|^(ACCEPTS=).*|\1\"${IPT_RULES}\"|"
+		-e "s|^(ACCEPTS=).*|\1\"$IPT_RULES\"|"
 	chmod +x $f							# make it executable
 
 	# set these rules to load on startup
-	cd /etc/network/if-pre-up.d
-	rm -rf iptables
-	File.into . ssh/iptables
-	chmod +x iptables					# make it executable
+	p=/etc/network/if-pre-up.d
+	rm -rf $p/iptables
+	File.into $p ssh/iptables
+	chmod +x $p/iptables				# make it executable
 }	# end install_firewall
