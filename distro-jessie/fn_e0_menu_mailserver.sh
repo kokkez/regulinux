@@ -2,8 +2,9 @@
 # install mailserver
 # ------------------------------------------------------------------------------
 
-menu_mailserver() {
-	TARGET="${1-${TARGET}}"
+Menu.mailserver() {
+	# $1: target system to build, optional
+	TARGET="${1:-$TARGET}"
 
 	# verify that the system was set up properly
 	done_deps || return
@@ -11,13 +12,13 @@ menu_mailserver() {
 	# postfix is valid for all TARGETs
 	install_postfix
 
-	if [ "${TARGET}" = "ispconfig" ]; then
+	if [ "$TARGET" = "ispconfig" ]; then
 		config_postfix_ispconfig	# postfix with dovecot for ispconfig
 		install_dovecot
 
-	elif [ "${TARGET}" = "assp" ]; then
+	elif [ "$TARGET" = "assp" ]; then
 		virtualuser_get
 		config_postfix_assp			# configure for assp
 		config_postfix_sasl2_sql
 	fi;
-}	# end menu_mailserver
+}	# end Menu.mailserver

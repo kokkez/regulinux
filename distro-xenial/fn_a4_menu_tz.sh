@@ -2,7 +2,7 @@
 # set the timezone & the localtime
 # ------------------------------------------------------------------------------
 
-menu_tz() {
+Menu.tz() {
 	local A Z T=${1:-${TIME_ZONE}}
 
 	[ -f "/usr/share/zoneinfo/${T}" ] || {
@@ -32,4 +32,4 @@ EOF
 	Z=$(unset TZ; LANG=C date -d "$A")
 	Msg.debug "Local time is now:      ${Z}"
 	Msg.debug "Universal Time is now:  ${T}"
-}	# end menu_tz
+}	# end Menu.tz

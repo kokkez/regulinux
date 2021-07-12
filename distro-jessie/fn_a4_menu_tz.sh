@@ -2,7 +2,7 @@
 # set the timezone & the localtime
 # ------------------------------------------------------------------------------
 
-menu_tz() {
+Menu.tz() {
 	local TIZO=${1:-${TIME_ZONE}}
 
 	[ -f "/usr/share/zoneinfo/${TIZO}" ] || {
@@ -32,4 +32,4 @@ EOF
 	TZdate=$(unset TZ; LANG=C date -d "$TZBase")
 	Msg.debug "Local time is now:      ${TZdate}"
 	Msg.debug "Universal Time is now:  ${UTdate}"
-}	# end menu_tz
+}	# end Menu.tz

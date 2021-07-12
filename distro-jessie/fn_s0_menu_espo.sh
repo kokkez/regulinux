@@ -3,7 +3,7 @@
 # https://www.espocrm.com/
 # ------------------------------------------------------------------------------
 
-menu_espo() {
+Menu.espo() {
 	local u v="5.0.3"						# use with php 5.6 or 7
 
 	Msg.info "Installing EspoCRM ${v}..."
@@ -49,4 +49,4 @@ EOF
 	}
 
 	Msg.info "Now install EspoCRM $v via browser..."
-}	# end menu_espo
+}	# end Menu.espo

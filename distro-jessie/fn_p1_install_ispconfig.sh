@@ -33,7 +33,7 @@ install_ispconfig() {
 			-e "s/^(ssl_cert_organisation_unit=).*/\1${CERT_OU}/" \
 			-e "s/^(ssl_cert_common_name=).*/\1${CERT_CN}/" \
 			-e "s/^(ssl_cert_email=).*/\1${CERT_E}/" \
-			-e "s/^(mysql_ispconfig_password=).*/\1$(menu_password)/" \
+			-e "s/^(mysql_ispconfig_password=).*/\1$( Menu.password )/" \
 			-e "s/^(join_multiserver_setup=).*/\1${ISP3_MULTISERVER}/" \
 			-e "s/^(mysql_master_hostname=).*/\1${ISP3_MASTERHOST}/g" \
 			-e "s/^(mysql_master_root_user=).*/\1${ISP3_MASTERUSER}/g" \

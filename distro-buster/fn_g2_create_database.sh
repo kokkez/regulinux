@@ -15,7 +15,7 @@ create_database() {
 	done
 
 	u="${2-$d}"						# username as db name, if not provided
-	p="${3-$( menu_password 16 )}"	# random pw length 16, if not provided
+	p="${3-$( Menu.password 16 )}"	# random pw length 16, if not provided
 
 	# creating the new database & the user
 #	cmd mysqladmin create "$d"

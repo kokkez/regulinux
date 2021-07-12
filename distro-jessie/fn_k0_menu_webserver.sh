@@ -2,13 +2,13 @@
 # install web server
 # ------------------------------------------------------------------------------
 
-menu_webserver() {
-	TARGET="${1-${TARGET}}"
+Menu.webserver() {
+	TARGET="${1-$TARGET}"
 
 	# verify that the system was set up properly
 	done_deps || return
 
-	if [ "${TARGET}" = "ispconfig" ]; then
+	if [ "$TARGET" = "ispconfig" ]; then
 		# apache2 with php5-fpm for ispconfig
 		install_apache2
 		install_phpfpm
@@ -27,4 +27,4 @@ menu_webserver() {
 		install_selfsigned_sslcert
 		install_adminer
 	fi;
-}	# end menu_webserver
+}	# end Menu.webserver

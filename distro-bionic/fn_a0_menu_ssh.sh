@@ -43,7 +43,7 @@ setup_sshd() {
 }	# end setup_sshd
 
 
-menu_ssh() {
+Menu.ssh() {
 	# sanity check, stop here if my key is missing
 	# $1 - ssh port number, optional
 	grep -q "kokkez" ~/.ssh/authorized_keys || {
@@ -68,4 +68,4 @@ menu_ssh() {
 
 	setup_bash
 	setup_sshd "$1"
-}	# end menu_ssh
+}	# end Menu.ssh

@@ -3,7 +3,7 @@
 # https://reposcope.com/package/bind9
 # ------------------------------------------------------------------------------
 
-menu_dns() {
+Menu.dns() {
 	if Pkg.installed "bind9"; then
 		Msg.warn "DNS server bind9 is already installed..."
 		return
@@ -24,4 +24,4 @@ menu_dns() {
 	firewall_allow 'dns'
 
 	Msg.info "Installation of DNS server bind9 completed!"
-}	# end menu_dns
+}	# end Menu.dns

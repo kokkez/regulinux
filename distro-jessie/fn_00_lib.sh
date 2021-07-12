@@ -2,14 +2,14 @@
 # customized functions for jessie
 # ------------------------------------------------------------------------------
 
-menu_upgrade() {
+Menu.upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
 	# do the apt-get upgrade
 	export DEBIAN_FRONTEND=noninteractive
 	apt-get -qy dist-upgrade
-}	# end menu_upgrade
+}	# end Menu.upgrade
 
 
 svc_evoke() {

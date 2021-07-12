@@ -2,9 +2,9 @@
 # preparing a basic OS, ready to host applications
 # ------------------------------------------------------------------------------
 
-menu_deps() {
-	# $1: ssh port number
-	menu_ssh "$1"
+Menu.deps() {
+	# $1: ssh port number, optional
+	Menu.ssh "$1"
 
 	setup_networking
 	setup_resolv
@@ -17,5 +17,5 @@ menu_deps() {
 	# activating firewall & allowing SSH port
 	install_firewall "$1"
 	firewall_allow 'ssh'
-}	# end menu_deps
+}	# end Menu.deps
 

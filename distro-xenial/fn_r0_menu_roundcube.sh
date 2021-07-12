@@ -12,7 +12,7 @@
 # Roundcube 1.4.8:  2020-09-21 security update
 # ------------------------------------------------------------------------------
 
-menu_roundcube() {
+Menu.roundcube() {
 	local U P D=/var/www/roundcube V=1.4.8 # version to install
 
 	# test if not already installed
@@ -23,7 +23,7 @@ menu_roundcube() {
 
 	Msg.info "Installing Roundcube ${V}..."
 	mkdir -p ${D}
-	P=$(menu_password 32) # creating a random password
+	P=$( Menu.password 32 )		# creating a random password
 
 	# download the right version
 	U=https://github.com/roundcube/roundcubemail/releases/download/${V}/roundcubemail-${V}-complete.tar.gz
@@ -60,7 +60,7 @@ menu_roundcube() {
 
 	# install the config file
 	cd ${D}/config
-	U=$(menu_password 24 1)	# strong password
+	U=$( Menu.password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${P}|;s|DESKEY|${U}|" config.inc.php
 
@@ -123,4 +123,4 @@ EOF
 	a2enmod deflate expires headers
 	svc_evoke apache2 restart
 	Msg.info "Installation of Roundcube ${V} completed!"
-}	# end menu_roundcube
+}	# end Menu.roundcube

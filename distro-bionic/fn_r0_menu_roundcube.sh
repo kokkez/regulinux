@@ -8,7 +8,7 @@
 # Roundcube 1.4.11: 2021-06-20
 # ------------------------------------------------------------------------------
 
-menu_roundcube() {
+Menu.roundcube() {
 	local u p d=/var/www/roundcube v=1.4.11 # version to install
 
 	# test if not already installed
@@ -19,7 +19,7 @@ menu_roundcube() {
 
 	Msg.info "Installing Roundcube ${v}..."
 	mkdir -p $d
-	p=$( menu_password 32 )		# creating a random password
+	p=$( Menu.password 32 )		# creating a random password
 
 	# download the right version
 	u=https://github.com/roundcube/roundcubemail/releases/download/$v/roundcubemail-${v}-complete.tar.gz
@@ -56,7 +56,7 @@ menu_roundcube() {
 
 	# install the config file
 	cd $d/config
-	u=$( menu_password 24 1 )	# strong password
+	u=$( Menu.password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${p}|;s|DESKEY|${u}|" config.inc.php
 
@@ -122,4 +122,4 @@ EOF
 	fi;
 
 	Msg.info "Installation of Roundcube $v completed!"
-}	# end menu_roundcube
+}	# end Menu.roundcube

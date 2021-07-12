@@ -2,7 +2,7 @@
 # install nextcloud with php 7.3 for debian 10 buster	
 # ------------------------------------------------------------------------------
 
-menu_nextcloud() {
+Menu.nextcloud() {
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if nextcloud is already installed
@@ -17,9 +17,9 @@ menu_nextcloud() {
 	# install prerequisites
 	TARGET="cloud"
 	CERT_OU="cloud-server"
-	menu_mailserver			# mailserver: postfix
-	menu_dbserver			# database server: mariadb
-	menu_webserver			# webserver: nginx/apache2 with php-fpm & adminer
+	Menu.mailserver			# mailserver: postfix
+	Menu.dbserver			# database server: mariadb
+	Menu.webserver			# webserver: nginx/apache2 with php-fpm & adminer
 
 	install_nextcloud		# install nextcloud
-}	# end menu_nextcloud
+}	# end Menu.nextcloud

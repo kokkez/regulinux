@@ -333,7 +333,7 @@
 	}	# end File.download
 
 
-	menu_password() {
+	Menu.password() {
 		# generate a random password (min 6 max 32 chars)
 		# $1 number of characters (defaults to 24)
 		# $2 flag for strong password (defaults no)
@@ -346,19 +346,19 @@
 		[ -n "$2" ] && c="!#\$%&*+\-.:<=>?@[]^~$c"
 
 		echo $( cmd tr -dc "$c" < /dev/urandom | head -c $n )
-	}	# end menu_password
+	}	# end Menu.password
 
 
-	menu_iotest() {
+	Menu.iotest() {
 		# classic disk I/O test
 		Msg.info "Performing classic I/O test..."
 		#cd ~
 		cmd dd if=/dev/zero of=~/tmpf bs=64k count=16k conv=fdatasync && rm -rf ~/tmpf
-	}	# end menu_iotest
+	}	# end Menu.iotest
 
 
 	done_deps() {
-		# test that the step "menu_deps" was already executed
+		# test that the step "Menu.deps" was already executed
 
 		# simply check that /etc/apt/apt.conf.d/99norecommend exists
 		[ -f "/etc/apt/apt.conf.d/99norecommend" ] || {
@@ -504,65 +504,65 @@
 
 		# One time actions
 		s=""
-		Cmd.usable "menu_ssh" && {
+		Cmd.usable "Menu.ssh" && {
 			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
-		Cmd.usable "menu_deps" && {
+		Cmd.usable "Menu.deps" && {
 			s+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
 
 		# Standalone utilities
 		s=""
-		Cmd.usable "menu_upgrade" && {
+		Cmd.usable "Menu.upgrade" && {
 			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
-		Cmd.usable "menu_password" && {
+		Cmd.usable "Menu.password" && {
 			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
-		Cmd.usable "menu_iotest" && {
+		Cmd.usable "Menu.iotest" && {
 			s+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the server\n"; }
-		Cmd.usable "menu_resolv" && {
+		Cmd.usable "Menu.resolv" && {
 			s+="   . $(Dye.fg.orange resolv)      set $(Dye.fg.white /etc/resolv.conf) with public dns\n"; }
-		Cmd.usable "menu_mykeys" && {
+		Cmd.usable "Menu.mykeys" && {
 			s+="   . $(Dye.fg.orange mykeys)      set my authorized_keys, for me & backuppers\n"; }
-		Cmd.usable "menu_tz" && {
+		Cmd.usable "Menu.tz" && {
 			s+="   . $(Dye.fg.orange tz)          set the server timezone to $(Dye.fg.white $TIME_ZONE)\n"; }
-		Cmd.usable "menu_motd" && {
+		Cmd.usable "Menu.motd" && {
 			s+="   . $(Dye.fg.orange motd)        customize the dynamic Message of the Day (motd)\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Standalone utilities) ---------------------------------------- (in no particular order) -- ]\n$s"; }
 
 		# Main applications
 		s=""
-		Cmd.usable "menu_mailserver" && {
+		Cmd.usable "Menu.mailserver" && {
 			s+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
-		Cmd.usable "menu_dbserver" && {
+		Cmd.usable "Menu.dbserver" && {
 			s+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw stored in $(Dye.fg.white ~/.my.cnf)\n"; }
-		Cmd.usable "menu_webserver" && {
+		Cmd.usable "Menu.webserver" && {
 			s+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Main applications) --------------------------------------------- (in recommended order) -- ]\n$s"; }
 
 		# Target system
 		s=""
-		Cmd.usable "menu_dns" && {
+		Cmd.usable "Menu.dns" && {
 			s+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
-		Cmd.usable "menu_assp1" && {
+		Cmd.usable "Menu.assp1" && {
 			s+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
-		Cmd.usable "menu_ispconfig" && {
+		Cmd.usable "Menu.ispconfig" && {
 			s+="   . $(Dye.fg.orange ispconfig)   historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Target system) ----------------------------------------------- (in no particular order) -- ]\n$s"; }
 
 		# Others applications
 		s=""
-		Cmd.usable "menu_dumpdb" && {
+		Cmd.usable "Menu.dumpdb" && {
 			s+="   . $(Dye.fg.orange dumpdb)      to backup all databases, or the one given in $(Dye.fg.white \$1)\n"; }
-		Cmd.usable "menu_roundcube" && {
+		Cmd.usable "Menu.roundcube" && {
 			s+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
-		Cmd.usable "menu_nextcloud" && {
+		Cmd.usable "Menu.nextcloud" && {
 			s+="   . $(Dye.fg.orange nextcloud)   on-premises file share and collaboration platform\n"; }
-		Cmd.usable "menu_espo" && {
+		Cmd.usable "Menu.espo" && {
 			s+="   . $(Dye.fg.orange espo)        EspoCRM full featured CRM web application\n"; }
-		Cmd.usable "menu_acme" && {
+		Cmd.usable "Menu.acme" && {
 			s+="   . $(Dye.fg.orange acme)        shell script for Let's Encrypt free SSL certificates\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Others applications) ----------------------------------- (depends on main applications) -- ]\n$s"; }

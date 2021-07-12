@@ -2,7 +2,7 @@
 # customize the Mot Of The Day screen
 # ------------------------------------------------------------------------------
 
-menu_motd() {
+Menu.motd() {
 	[ -s "/etc/update-motd.d/*-footer" ] && return
 
 	# verify needed packages
@@ -20,4 +20,4 @@ menu_motd() {
 	ln -nfs /run/motd /etc/motd
 
 	Msg.info "Customization of MOTD completed!"
-}	# end menu_motd
+}	# end Menu.motd

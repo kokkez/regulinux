@@ -11,8 +11,8 @@ install_server_mysql() {
 
 		# preseed mysql-server
 		debconf-set-selections <<EOF
-$p mysql-server/root_password password ${DB_ROOTPW}
-$p mysql-server/root_password_again password ${DB_ROOTPW}
+$p mysql-server/root_password password $DB_ROOTPW
+$p mysql-server/root_password_again password $DB_ROOTPW
 EOF
 		Pkg.install bsdutils mysql-client mysql-server
 	}
@@ -33,7 +33,7 @@ EOF
 	File.into conf.d mysql/custom.cnf
 
 	# lite version of mysql_secure_installation
-#	UPDATE mysql.user SET Password=PASSWORD('${DB_ROOTPW}') WHERE User='root';
+#	UPDATE mysql.user SET Password=PASSWORD('$DB_ROOTPW') WHERE User='root';
 	cmd mysql <<EOF
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost','127.0.0.1','::1');

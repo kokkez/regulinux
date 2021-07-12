@@ -2,19 +2,19 @@
 # cleanup OS minimizing the installed packages
 # ------------------------------------------------------------------------------
 
-menu_deps() {
+Menu.deps() {
 	# $1: ssh port number
-	menu_resolv
+	Menu.resolv
 
 	shell_bash
-	menu_tz
+	Menu.tz
 	OS.minimalize
 	install_syslogd
 	install_firewall "$1"
 
-	menu_motd
-	menu_ssh "$1"
+	Menu.motd
+	Menu.ssh "$1"
 
-	menu_resolv
-}	# end menu_deps
+	Menu.resolv
+}	# end Menu.deps
 

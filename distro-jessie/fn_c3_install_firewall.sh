@@ -12,7 +12,7 @@ install_firewall() {
 	p=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
 	# determining default iptables rules
-	case ${TARGET} in
+	case $TARGET in
 		"ispconfig") IPT_RULES="ssh ftp http ssltls mail ispconfig" ;;
 		"cloud")     IPT_RULES="ssh http" ;;
 		"assp")      IPT_RULES="ssh http smtp ssltls mysql assp" ;;

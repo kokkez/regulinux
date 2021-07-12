@@ -6,7 +6,7 @@
 # 7 13,20 * * * root bash ~/lin*/os.sh dumpdb > /dev/null 2>&1
 # ------------------------------------------------------------------------------
 
-menu_dumpdb() {
+Menu.dumpdb() {
 	# $1 - db name, optional, if provided will be backed up only that db
 
 	# sanity check
@@ -32,4 +32,4 @@ menu_dumpdb() {
 			| cmd gzip --best --rsyncable > $z
 		Msg.info "$( Date.fmt ) database '$d' saved to: '$z'"
 	done
-}	# end menu_dumpdb
+}	# end Menu.dumpdb

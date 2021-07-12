@@ -2,7 +2,7 @@
 # install ISPConfig 3 control panel
 # ------------------------------------------------------------------------------
 
-menu_ispconfig() {
+Menu.ispconfig() {
 	HTTP_SERVER="${1:-${HTTP_SERVER}}"
 
 	# abort if ispconfig is already installed
@@ -16,9 +16,9 @@ menu_ispconfig() {
 
 	# install prerequisites
 	TARGET="ispconfig"
-	menu_mailserver			# mailserver: postfix + dovecot
-	menu_dbserver			# database server: mariadb
-	menu_webserver			# webserver: nginx/apache2 with php-fpm & adminer
+	Menu.mailserver			# mailserver: postfix + dovecot
+	Menu.dbserver			# database server: mariadb
+	Menu.webserver			# webserver: nginx/apache2 with php-fpm & adminer
 
 	# install needed software for ispconfig
 	install_pureftpd
@@ -28,4 +28,4 @@ menu_ispconfig() {
 
 	# install ispconfig panel
 	install_ispconfig
-}	# end menu_ispconfig
+}	# end Menu.ispconfig

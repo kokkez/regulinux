@@ -2,7 +2,7 @@
 # install my authorized_keys, copying or appending them
 # ------------------------------------------------------------------------------
 
-menu_mykeys() {
+Menu.mykeys() {
 	mkdir -p ~/.ssh && cd "$_"
 	cmd chmod 0700 ~/.ssh
 
@@ -14,4 +14,4 @@ menu_mykeys() {
 
 	cmd chmod 0600 authorized_keys
 	Msg.info "Installation of my authorized_keys completed!"
-}	# end menu_mykeys
+}	# end Menu.mykeys

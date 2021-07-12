@@ -2,7 +2,7 @@
 # install ISPConfig 3 control panel
 # ------------------------------------------------------------------------------
 
-menu_ispconfig() {
+Menu.ispconfig() {
 	# abort if ispconfig 3.1.x was already installed
 	[ -d /usr/local/ispconfig ] && {
 		Msg.warn "ISPConfig3 is already installed..."
@@ -14,10 +14,10 @@ menu_ispconfig() {
 
 	# install prerequisites
 	TARGET="ispconfig"
-	menu_mailserver			# mailserver for ispconfig
-	menu_dbserver			# database server mysql
-	menu_webserver			# webserver: apache with mod-php
+	Menu.mailserver			# mailserver for ispconfig
+	Menu.dbserver			# database server mysql
+	Menu.webserver			# webserver: apache with mod-php
 
 	# install ispconfig 3
 	install_ispconfig		# install ispconfig panel
-}	# end menu_ispconfig
+}	# end Menu.ispconfig

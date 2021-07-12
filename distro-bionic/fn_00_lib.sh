@@ -2,14 +2,14 @@
 # customized functions for ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
-menu_upgrade() {
+Menu.upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
 	# do the apt upgrade
 	export DEBIAN_FRONTEND=noninteractive
 	cmd apt -qy full-upgrade
-}	# end menu_upgrade
+}	# end Menu.upgrade
 
 # ------------------------------------------------------------------------------
 

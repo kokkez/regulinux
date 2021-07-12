@@ -2,7 +2,7 @@
 # install nextcloud for debian 8 with php 5.6
 # ------------------------------------------------------------------------------
 
-menu_nextcloud() {
+Menu.nextcloud() {
 	[ -r /var/www/nextcloud/config/config.php ] && {
 		Msg.warn "Nextcloud is already installed..."
 		return
@@ -14,9 +14,9 @@ menu_nextcloud() {
 	# install prerequisites
 	TARGET="cloud"
 	CERT_OU="cloud-server"
-	menu_mailserver			# mailserver for nextcloud
-	menu_dbserver "mysql"	# database server mysql
-	menu_webserver			# webserver: apache with mod-php
+	Menu.mailserver			# mailserver for nextcloud
+	Menu.dbserver "mysql"	# database server mysql
+	Menu.webserver			# webserver: apache with mod-php
 
 	install_nextcloud		# install nextcloud
-}	# end menu_nextcloud
+}	# end Menu.nextcloud

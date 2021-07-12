@@ -44,7 +44,7 @@ acme_webserver_conf() {
 }	# end acme_webserver_conf
 
 
-menu_acme() {
+Menu.acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
 		Msg.warn "The acme.sh script is already installed..."
@@ -77,4 +77,4 @@ menu_acme() {
 	sslcert_paths "$k" "$c"
 
 	Msg.info "Installation of acme.sh completed!"
-}	# end menu_acme
+}	# end Menu.acme

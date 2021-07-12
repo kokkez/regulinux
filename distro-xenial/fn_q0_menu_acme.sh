@@ -76,7 +76,7 @@ acme_ic30() {
 }	# end acme_ic30
 
 
-menu_acme() {
+Menu.acme() {
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
 		Msg.warn "The acme.sh script is already installed..."
@@ -135,4 +135,4 @@ menu_acme() {
 	service apache2 restart		# restarting apache
 
 	Msg.info "Installation of acme.sh completed!"
-}	# end menu_acme
+}	# end Menu.acme

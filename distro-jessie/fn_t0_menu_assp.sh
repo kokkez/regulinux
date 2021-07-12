@@ -2,7 +2,7 @@
 # install the AntiSpam SMTP Proxy version 1 (min 384ram 1core)
 # ------------------------------------------------------------------------------
 
-menu_assp1() {
+Menu.assp1() {
 	[ -d /home/assp ] && {
 		Msg.warn "ASSP v1 is already installed..."
 		return
@@ -14,9 +14,9 @@ menu_assp1() {
 	# install prerequisites
 	TARGET="assp"
 	CERT_OU="antispam-server"
-	menu_mailserver			# mailserver for assp: postfix & sasl2_sql
-	menu_dbserver			# install database server mysql
-	menu_webserver			# webserver for assp: apache with mod-php
+	Menu.mailserver			# mailserver for assp: postfix & sasl2_sql
+	Menu.dbserver			# install database server mysql
+	Menu.webserver			# webserver for assp: apache with mod-php
 
 	install_assp "v1"		# install ASSP version 1
-}	# end menu_assp1
+}	# end Menu.assp1

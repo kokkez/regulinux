@@ -12,7 +12,7 @@
 # Roundcube 1.3.15: 2020-09-21 security update
 # ------------------------------------------------------------------------------
 
-menu_roundcube() {
+Menu.roundcube() {
 	local p d=/var/www/roundcube v=1.3.15	# version to install
 
 	# test if not already installed
@@ -23,7 +23,7 @@ menu_roundcube() {
 
 	Msg.info "Installing Roundcube ${v}..."
 	mkdir -p $d
-	p=$(menu_password 32)					# random password
+	p=$( Menu.password 32 )		# random password
 
 	# install requirements
 	#Pkg.requires php5 php-pear php5-mysqlnd php5-mcrypt php5-intl php-mail-mime php-net-smtp php5-ldap
@@ -64,7 +64,7 @@ menu_roundcube() {
 
 	# install the config file
 	cd $d/config
-	v=$(menu_password 24 1)	# strong password
+	v=$( Menu.password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i "s|RPW|${p}|;s|DESKEY|${v}|" config.inc.php
 
@@ -126,4 +126,4 @@ EOF
 	# activating some modules of apache2 then reload its configurations
 	a2enmod deflate expires headers
 	svc_evoke apache2 restart
-}	# end menu_roundcube
+}	# end Menu.roundcube
