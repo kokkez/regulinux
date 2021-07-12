@@ -352,7 +352,6 @@
 	Menu.iotest() {
 		# classic disk I/O test
 		Msg.info "Performing classic I/O test..."
-		#cd ~
 		cmd dd if=/dev/zero of=~/tmpf bs=64k count=16k conv=fdatasync && rm -rf ~/tmpf
 	}	# end Menu.iotest
 

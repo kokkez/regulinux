@@ -3,6 +3,8 @@
 # ------------------------------------------------------------------------------
 
 install_apache2_modphp() {
+	Msg.info "Installing apache2 for ${ENV_os}..."
+
 	Pkg.requires apache2 libapache2-mod-php5 php5 php5-mysqlnd
 
 	# adjust expose_php & date.timezone in all php.ini

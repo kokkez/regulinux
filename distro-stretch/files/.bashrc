@@ -116,5 +116,5 @@ fi
 export TERM=xterm-color
 
 # aliasizing "os" for ~/linux-*/os.sh
-[ -s ~/lin*/os.sh ] && os() { bash ~/lin*/os.sh "${@}"; }
+[ -s ~/lin*/os.sh ] && os() { bash ~/lin*/os.sh "$@"; }
 
