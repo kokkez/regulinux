@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_deps() {
-	# $1: ssh port number
+	# $1: ssh port number, optional
 	menu_ssh "$1"
 
 	setup_networking
@@ -16,6 +16,6 @@ menu_deps() {
 
 	# activating firewall & allowing SSH port
 	install_firewall "$1"
-	firewall_allow "$1"
+	firewall_allow 'ssh'
 }	# end menu_deps
 

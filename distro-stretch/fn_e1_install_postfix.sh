@@ -43,7 +43,7 @@ EOF
 	cmd newaliases
 
 	# activating ports on firewall
-	firewall_allow "ssltls"
+	firewall_allow 'ssltls'
 
 	Msg.info "Installation of postfix & aliases completed!"
 }	# end install_postfix

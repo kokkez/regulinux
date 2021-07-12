@@ -45,7 +45,7 @@ setup_sshd() {
 
 menu_ssh() {
 	# sanity check, stop here if my key is missing
-	# $1 - ssh port, optional
+	# $1 - ssh port number, optional
 	grep -q "kokkez" ~/.ssh/authorized_keys || {
 		Msg.error "Missing 'kokkez' private key in '~/.ssh/authorized_keys'"
 	}

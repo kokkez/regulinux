@@ -53,7 +53,7 @@ install_ispconfig() {
 	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
 
 	# activating ports on firewall
-	firewall_allow "ispconfig"
+	firewall_allow 'ispconfig'
 
 	# cleanup
 	rm -rf /tmp/*

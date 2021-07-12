@@ -37,7 +37,7 @@ EOF
 	}
 
 	# activating ports on firewall
-	firewall_allow "http"
+	firewall_allow 'http'
 
 	Msg.info "Configuration of apache2 completed!"
 }	# end install_apache2

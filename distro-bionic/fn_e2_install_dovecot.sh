@@ -20,7 +20,7 @@ install_dovecot() {
 	Pkg.install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
 
 	# activating ports on firewall
-	firewall_allow "mail"
+	firewall_allow 'mail'
 
 	Msg.info "Installation of dovecot completed!"
 }	# end install_dovecot

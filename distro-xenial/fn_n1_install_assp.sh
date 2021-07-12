@@ -73,7 +73,7 @@ install_assp() {
 	cmd mysql 'assp' < ${ENV_files}/assp/assp.sql
 
 	# activating ports on firewall
-	firewall_allow "smtp assp"
+	firewall_allow 'smtp assp'
 
 	# courtesy symlink into ~
 	ln -nfs /home/assp ~

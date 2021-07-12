@@ -16,6 +16,6 @@ menu_deps() {
 
 	# activating firewall & allowing SSH port
 	install_firewall "$1"
-	firewall_allow "$1"
+	firewall_allow 'ssh'
 }	# end menu_deps
 

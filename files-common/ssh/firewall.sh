@@ -7,7 +7,7 @@
 # Default-Start:
 # Default-Stop:
 # Short-Description: Firewall manager
-# Description:       Firewall script for OpenVZ containers
+# Description:       Firewall script for VPSes
 ### END INIT INFO
 
 
@@ -158,9 +158,9 @@ Rule.ssh() {
 Ssh.restart() {
 	# set port in /etc/ssh/sshd_config, then restart daemon
 	sed -ri /etc/ssh/sshd_config \
-		-e "s|^Port.*|Port ${SSHPORT}|"
+		-e "s|^Port.*|Port $SSHPORT|"
 	sed -ri $0 \
-		-e"s|^SSHPORT=.*|SSHPORT=${SSHPORT}|"
+		-e"s|^SSHPORT=.*|SSHPORT=$SSHPORT|"
 	cmd systemctl restart ssh
 }
 Fw.configure() {
@@ -197,10 +197,10 @@ Fw.configure() {
 	$v6 -A INPUT -i lo -j ACCEPT
 
 #	notice "Firewall: manage IPv4 & IPv6 policies"
-	local s
-	for s in $ACCEPTS ; do
-#		echo "[Rule.$s]"
-		cmd "Rule.$s"
+	local w
+	for w in $ACCEPTS ; do
+#		echo "[Rule.$w]"
+		cmd "Rule.$w"
 	done
 
 	notice "Firewall: manage IPv4 & IPv6 icmp traffic"

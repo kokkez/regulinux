@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 menu_ssh() {
-	TARGET="${2:-${TARGET}}"
+	# $1: ssh port number, optional
 
 	menu_mykeys
 	install_openssh "$1"

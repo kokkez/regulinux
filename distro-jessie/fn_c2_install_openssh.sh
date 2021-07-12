@@ -17,15 +17,15 @@ install_openssh() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	x=ssh-user-sessions.service
 	[ -s /etc/systemd/system/$x ] || {
-		Msg.info "Mitigating the SSH hang on reboot's problem"
+		Msg.info "Mitigating the problem of SSH hangs on reboot"
 		File.into /etc/systemd/system ssh/$x
-		cmd systemctl enable $x
 		cmd systemctl daemon-reload
+		cmd systemctl enable $x
 		cmd systemctl start $x
 	}
 
 	# activate on firewall & restart SSH
-	firewall_allow "$p"
+	firewall_allow 'ssh'
 	svc_evoke ssh restart
 	Msg.info "The SSH server is listening on port: $p"
 }	# end install_openssh

@@ -31,7 +31,7 @@ install_pureftpd() {
 	}
 
 	# activating ports on firewall
-	firewall_allow "ftp"
+	firewall_allow 'ftp'
 
 	cmd systemctl restart pure-ftpd-mysql
 	Msg.info "Installation of PureFTPd completed!"

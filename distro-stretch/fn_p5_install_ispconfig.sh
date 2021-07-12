@@ -83,7 +83,7 @@ smtp_fallback_relay = [smtp-m.rete.us]:587
 	}
 
 	# activating ports on firewall
-	firewall_allow "ispconfig"
+	firewall_allow 'ispconfig'
 
 	# cleanup
 	rm -rf /tmp/*
