@@ -5,7 +5,7 @@
 
 resolv_via_resolvconf() {
 	local n t r=/etc/resolv.conf
-	File.backup "$R"
+	File.backup "$r"
 
 	# set known public dns
 	t="cloudflare + freenom.world"
