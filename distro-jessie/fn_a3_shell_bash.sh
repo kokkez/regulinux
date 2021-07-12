@@ -7,6 +7,7 @@ shell_bash() {
 	dpkg-reconfigure -f noninteractive dash
 
 	[ -f ~/.bashrc ] || File.into ~ .bashrc
+	. ~/.bashrc
 
 	Msg.info "Bash is now set as the default shell"
 }	# end shell_bash
