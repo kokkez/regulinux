@@ -16,22 +16,22 @@ install_fail2ban() {
 	Msg.info "Configuring fail2ban..."
 
 	# make fail2ban do some monitoring
-	cd /etc/fail2ban
-	File.into . fail2ban/jail.local
-	sed -i "s|HOST_NICK|${HOST_NICK}|" jail.local
+	local p="/etc/fail2ban"
+	File.into $p fail2ban/jail.local
+	sed -i $p/jail.local -e "s|HOST_NICK|$HOST_NICK|"
 
 	# creating filter files
-	cd filter.d
-	[ -r pureftpd.conf ] || {
-		File.into . fail2ban/pureftpd.conf
+	p+="/filter.d"
+	[ -r $p/pureftpd.conf ] || {
+		File.into $p fail2ban/pureftpd.conf
 	}
-	[ -r dovecot-pop3imap.conf ] || {
-		File.into . fail2ban/dovecot-pop3imap.conf
+	[ -r $p/dovecot-pop3imap.conf ] || {
+		File.into $p fail2ban/dovecot-pop3imap.conf
 	}
 	# add the missing "ignoreregex" line in postfix-sasl filter
-	[ -r postfix-sasl.conf ] && {
-		grep -q "ignoreregex" postfix-sasl.conf || {
-			echo "ignoreregex =" >> postfix-sasl.conf
+	[ -r $p/postfix-sasl.conf ] && {
+		grep -q "ignoreregex" $p/postfix-sasl.conf || {
+			echo "ignoreregex =" >> $p/postfix-sasl.conf
 		}
 	}
 

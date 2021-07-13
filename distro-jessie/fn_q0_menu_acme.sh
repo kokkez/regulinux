@@ -53,8 +53,8 @@ acme_ic31() {
 	# detected ispconfig 3.1
 	cd /usr/local/ispconfig/interface/acme/.well-known/acme-challenge
 	acme_index "index.php"
-	cd /etc/apache2/sites-available
-	sed -i '/nge>/a\\tFallbackResource index.php' ispconfig.conf
+	sed -i /etc/apache2/sites-available/ispconfig.conf
+		-e '/nge>/a\\tFallbackResource index.php'
 }	# end acme_ic31
 
 
@@ -96,41 +96,42 @@ Menu.acme() {
 	svc_evoke apache2 restart	# require an apache restart
 
 	# issue the cert
-	KEY=/etc/ssl/myserver/server.key
-	CRT=/etc/ssl/myserver/server.cert
+	local k c p
+	k=/etc/ssl/myserver/server.key
+	c=/etc/ssl/myserver/server.cert
 	mkdir -p /etc/ssl/myserver
 
-	bash ~/.acme.sh/acme.sh --issue --stateless -d "${HOST_FQDN}"
-	[ "$?" -eq 0 ] || return	# dont comtinue on error
+	bash ~/.acme.sh/acme.sh --issue --stateless -d "$HOST_FQDN"
+	[ "$?" -eq 0 ] || return	# abort on error
 
-	bash ~/.acme.sh/acme.sh --installcert -d "${HOST_FQDN}" \
-		--keypath "${KEY}" \
-		--fullchainpath "${CRT}" \
+	bash ~/.acme.sh/acme.sh --installcert -d "$HOST_FQDN" \
+		--keypath "$k" \
+		--fullchainpath "$c" \
 		--reloadcmd "systemctl restart apache2"
 
 	# edit /etc/apache2/sites-available/default-ssl
 	cd /etc/apache2
-	CNF=sites-available/default-ssl
-	[ -s "${CNF}.conf" ] && CNF="${CNF}.conf"
-	[ -s "${CNF}" ] && {
+	p=sites-available/default-ssl
+	[ -s "$p.conf" ] && p="$p.conf"
+	[ -s "$p" ] && {
 		#	SSLCertificateFile		/etc/ssl/myserver/server.cert
 		#	SSLCertificateKeyFile	/etc/ssl/myserver/server.key
-		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${CRT}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${KEY}|"
+		sed -ri $p \
+			-e "s|^(\s*SSLCertificateFile).*|\1 $c|" \
+			-e "s|^(\s*SSLCertificateKeyFile).*|\1 $k|"
 
 		# enable related apache2 modules & site
 		[ -L sites-enabled/0000-default-ssl.conf ] || {
-			ln -s ../${CNF} sites-enabled/0000-default-ssl.conf
+			ln -s ../$p sites-enabled/0000-default-ssl.conf
 			rm -rf sites-enabled/default-ssl*
 		}
 		a2enmod rewrite headers ssl
 	}
-	CNF=sites-available/ispconfig.vhost
-	[ -s "${CNF}" ] && {
-		sed -ri ${CNF} \
-			-e "s|^(\s*SSLCertificateFile).*|\1 ${CRT}|" \
-			-e "s|^(\s*SSLCertificateKeyFile).*|\1 ${KEY}|"
+	p=sites-available/ispconfig.vhost
+	[ -s "$p" ] && {
+		sed -ri $p \
+			-e "s|^(\s*SSLCertificateFile).*|\1 $c|" \
+			-e "s|^(\s*SSLCertificateKeyFile).*|\1 $k|"
 	}
 	service apache2 restart		# restarting apache
 

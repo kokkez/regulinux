@@ -16,24 +16,24 @@ install_fail2ban() {
 	Msg.info "Configuring fail2ban..."
 
 	# make fail2ban do some monitoring
-	cd /etc/fail2ban
-	File.into . fail2ban/jail.local
-	sed -i "s|HOST_NICK|${HOST_NICK}|" jail.local
+	local p="/etc/fail2ban"
+	File.into $p fail2ban/jail.local
+	sed -i $p/jail.local -e "s|HOST_NICK|$HOST_NICK|"
 
 	# creating filter files
-	cd filter.d
-	[ -r postfix-failedauth.conf ] || {
-		File.into . fail2ban/postfix-failedauth.conf
+	p+="/filter.d"
+	[ -r $p/postfix-failedauth.conf ] || {
+		File.into $p fail2ban/postfix-failedauth.conf
 	}
-	[ -r dovecot-pop3imap.conf ] || {
-		File.into . fail2ban/dovecot-pop3imap.conf
+	[ -r $p/dovecot-pop3imap.conf ] || {
+		File.into $p fail2ban/dovecot-pop3imap.conf
 	}
 
 	# fix a systemd bug found on xenial 16.04
-	local X=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
-	grep -q '/var' ${X} && {
+	p=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+	grep -q '/var' $p && {
 		Msg.info "Fixing a little systemd bug that prevent fail2ban to start"
-		sed -i 's|/var||' ${X}
+		sed -i $p -e 's|/var||'
 	}
 
 	cmd systemctl restart fail2ban

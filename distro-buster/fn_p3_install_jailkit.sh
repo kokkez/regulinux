@@ -13,7 +13,7 @@ install_jailkit() {
 	Cmd.usable "jk_list" || {
 		Msg.info "Installing Jailkit..."
 		Pkg.requires python
-		dpkg -i ${ENV_files}/jailkit_2.19-1_amd64.deb
+		dpkg -i $( File.path jailkit_2.19-1_amd64.deb )
 		Msg.info "Installation of Jailkit completed!"
 	}
 }	# end install_jailkit

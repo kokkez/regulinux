@@ -61,7 +61,7 @@ config_postfix_assp() {
 	# set master.cf to listen on 127.0.0.1:1025
 	[ -r master.cf ] && {
 		File.backup master.cf
-		sed -i 's|^smtp      inet|1025      inet|' master.cf
+		sed -i master.cf -e 's|^smtp      inet|1025      inet|'
 	}
 
 	svc_evoke postfix restart

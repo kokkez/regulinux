@@ -10,7 +10,7 @@ install_apache2_modphp() {
 	# adjust expose_php & date.timezone in all php.ini
 	sed -ri /etc/php5/*/php.ini \
 		-e 's|^(expose_php =) On|\1 Off|' \
-		-e "s|^;(date\.timezone =).*|\1 '${TIME_ZONE}'|"
+		-e "s|^;(date\.timezone =).*|\1 '$TIME_ZONE'|"
 
 	# activating ports on firewall
 	firewall_allow 'http'

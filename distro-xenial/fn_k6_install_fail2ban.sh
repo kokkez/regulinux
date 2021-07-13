@@ -13,7 +13,7 @@ install_fail2ban() {
 	# make fail2ban do some monitoring
 	cd /etc/fail2ban
 	File.into . fail2ban/jail.local
-	sed -i "s|SSHD_PORT|${SSHD_PORT}|" jail.local
+	sed -i jail.local -e "s|SSHD_PORT|$SSHD_PORT|"
 
 	# creating filter files
 	cd filter.d
@@ -27,10 +27,10 @@ install_fail2ban() {
 	}
 
 	# fix a systemd bug of xenial 16.04
-	local X=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
-	grep -q '/var' ${X} && {
+	local p=/usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+	grep -q '/var' $p && {
 		Msg.info "Fixing a little systemd bug that prevent fail2ban to start"
-		sed -i 's|/var||' ${X}
+		sed -i $p -e 's|/var||'
 	}
 
 	svc_evoke fail2ban restart

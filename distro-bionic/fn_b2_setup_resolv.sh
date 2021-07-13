@@ -35,8 +35,8 @@ resolv_via_systemd() {
 	[ -s "$f/dns_servers.conf" ] && return
 
 	# copying files
-	mkdir -p "$f" && cd "$_"
-	File.into . resolved.conf.d/*
+	mkdir -p "$f"
+	File.into $f resolved.conf.d/*
 
 	# fully activate systemd-resolved
 	cmd systemctl unmask systemd-resolved

@@ -10,9 +10,6 @@
 	ENV_release="unknown"				# linux <product>-<version>
 	ENV_codename="unknown"				# codename of the distribution
 	ENV_arch="unknown"					# kernel architecture
-	ENV_bits="unknown"					# kernel bits (numeric)
-	ENV_files=""
-	MyDISTRO=""
 
 	TARGET="unknown"
 	TIME_ZONE="Europe/Rome"
@@ -24,7 +21,7 @@
 	ROOT_MAIL="k-${HOST_NICK}@rete.us"
 	LENC_MAIL="k-letsencrypt@rete.us"	# letsencrypt account email
 
-	MAIL_NAME="${HOST_FQDN}"
+	MAIL_NAME="$HOST_FQDN"
 	DB_ROOTPW=""
 	ASSP_ADMINPW="zeroSpam4me"
 
@@ -179,8 +176,8 @@
 		# return an empty string if nothing is found
 		# $1 - relative path to search
 		Arg.expect "$1" || return
-		cmd readlink -e "$ENV_distro/files/$1" \
-			|| cmd readlink -e "$ENV_files/$1" \
+		cmd readlink -e "$ENV_dir/distro-$ENV_codename/files/$1" \
+			|| cmd readlink -e "$ENV_dir/files-common/$1" \
 			|| return 1
 	}	# end File.path
 
@@ -203,8 +200,8 @@
 		# return the full path to all files matching $1
 		# $1 - file path relative to one of the "files-common" folders
 		Arg.expect "$1" || return
-		local f=$( cmd find $ENV_distro/files -wholename "*$1" )
-		[ -z "$f" ] && f=$( cmd find $ENV_files -wholename "*$1" )
+		local f=$( cmd find $ENV_dir/distro-$ENV_codename/files -wholename "*$1" )
+		[ -z "$f" ] && f=$( cmd find $ENV_dir/files-common -wholename "*$1" )
 		echo "$f"
 	}	# end File.paths
 
@@ -453,7 +450,6 @@
 		# setup some environment variables
 		ENV_release="${ENV_product}-${ENV_version}"
 		ENV_arch=$( cmd uname -m )
-		ENV_bits=$( cmd getconf LONG_BIT )
 
 		case $ENV_release in
 		#	"debian-7")     ENV_codename="wheezy"  ;;
@@ -479,17 +475,14 @@
 
 		# setup other environment variables
 		ENV_os="$ENV_release ($ENV_codename)"
-		ENV_files="$ENV_dir/files-common"
-		ENV_distro="$ENV_dir/distro-$ENV_codename"
-		MyDISTRO="$ENV_distro/files"
 
 		# removing unneeded distros
-		for x in $ENV_dir/distro-*; do
-			[ "$x" = "$ENV_distro" ] || rm -rf "$x"
+		for x in $ENV_dir/distro-*
+			do [ "$x" = "$ENV_dir/distro-$ENV_codename" ] || rm -rf "$x"
 		done
 
 		# sourcing all scripts
-		for x in $ENV_distro/fn_*
+		for x in $ENV_dir/distro-$ENV_codename/fn_*
 			do . "$x"
 		done
 

@@ -13,7 +13,7 @@ install_modphp_apache2() {
 	Pkg.install php libapache2-mod-php php-mysql php-gd
 
 	# adjust date.timezone in all php.ini
-	sed -ri  /etc/php/*/*/php.ini \
+	sed -ri /etc/php/*/*/php.ini \
 		-e "s|^;(date\.timezone =).*|\1 '$TIME_ZONE'|"
 
 	Msg.info "Installation of PHP as MOD-PHP for apache2 completed!"

@@ -5,7 +5,7 @@
 acme_get() {
 	# get acme.sh script (https://github.com/Neilpang/acme.sh)
 	cd; wget -O -  https://get.acme.sh | bash
-	bash ~/.acme.sh/acme.sh --registeraccount --accountemail ${LENC_MAIL} --log --log-level 2
+	bash ~/.acme.sh/acme.sh --registeraccount --accountemail $LENC_MAIL --log --log-level 2
 }	# end acme_get
 
 
@@ -24,19 +24,20 @@ acme_webserver_conf() {
 	# $1 - the webroot for acme.sh
 
 	# creating the full path to the challenge folder
-	mkdir -p "${1}/.well-known/acme-challenge"
+	mkdir -p "$1/.well-known/acme-challenge"
+	local d
 
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		cd /etc/nginx/snippets
-		File.into . acme/acme-webroot-nginx.conf
-		sed -i "s|WEBROOT|${1}|g" acme-webroot-nginx.conf
+		d=/etc/nginx/snippets
+		File.into $d acme/acme-webroot-nginx.conf
+		sed -i $d/acme-webroot-nginx.conf -e "s|WEBROOT|$1|g"
 		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
 		(( ${#1} < 22 )) && {
-			cd /etc/apache2/conf-available
-			File.into . acme/acme-webroot-apache2.conf
-			sed -i "s|WEBROOT|${1}|g" acme-webroot-apache2.conf
+			d=/etc/apache2/conf-available
+			File.into $d acme/acme-webroot-apache2.conf
+			sed -i $d/acme-webroot-apache2.conf -e "s|WEBROOT|$1|g"
 			ln -nfs '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}
 		cmd systemctl restart apache2
@@ -56,7 +57,7 @@ Menu.acme() {
 	acme_get
 
 	# get the webroot
-	local k c w=$(acme_webroot)
+	local k c w=$( acme_webroot )
 	acme_webserver_conf "$w"
 
 	# issue the cert

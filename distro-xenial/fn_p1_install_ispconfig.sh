@@ -49,7 +49,7 @@ install_ispconfig() {
 	[ -n "$u" ] && cmd mysql 'dbispconfig' < $u
 
 	# commenting lines in 2 new files of postfix
-	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
+	sed -i /etc/postfix/tag_as_*.re -e 's|^#*|#|'
 
 	# activating ports on firewall
 	firewall_allow 'ispconfig'

@@ -41,7 +41,7 @@ Menu.roundcube() {
 	echo -e "User-agent: *\nDisallow: /" > $d/robots.txt
 
 	# creating a new database, then populate it from file
-	create_database "roundcube" "roundcube" "${p}"
+	create_database "roundcube" "roundcube" "$p"
 	cmd mysql 'roundcube' < SQL/mysql.initial.sql
 
 	# install & configure plugins for ISPConfig3
@@ -52,7 +52,7 @@ Menu.roundcube() {
 	# install the config file
 	cd $d/plugins/ispconfig3_account/config
 	File.place roundcube/config.inc.php.plugin config.inc.php
-	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
+	sed -i config.inc.php -e "s|RPW|$p|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|"
 
 	# install & configure contextmenu plugin
 	cd /tmp
@@ -66,7 +66,7 @@ Menu.roundcube() {
 	cd $d/config
 	v=$( Menu.password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
-	sed -i "s|RPW|${p}|;s|DESKEY|${v}|" config.inc.php
+	sed -i config.inc.php -e "s|RPW|$p|;s|DESKEY|$v|"
 
 	# install into sites-available of apache2
 	[ -d /etc/apache2 ] && {

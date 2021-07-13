@@ -19,9 +19,9 @@ install_openssh() {
 	[ -s /etc/systemd/system/$x ] || {
 		Msg.info "Mitigating the problem of SSH hangs on reboot"
 		File.into /etc/systemd/system ssh/$x
-		cmd systemctl daemon-reload
 		cmd systemctl enable $x
 		cmd systemctl start $x
+		cmd systemctl daemon-reload
 	}
 
 	# fix a systemd bug of xenial 16.04
@@ -29,7 +29,7 @@ install_openssh() {
 	x=/usr/lib/tmpfiles.d/sshd.conf
 	grep -q '/var' $x && {
 		Msg.info "Fixing a little systemd bug that prevent SSHd to start"
-		sed -i 's|/var||' $x
+		sed -i $x -e 's|/var||'
 #		cmd mkdir -p -m0755 /var/run/sshd
 	}
 

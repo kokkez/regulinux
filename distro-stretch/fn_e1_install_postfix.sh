@@ -39,7 +39,7 @@ EOF
 
 	# install /etc/aliases
 	File.into /etc postfix/aliases
-	sed -i "s|ROOT_MAIL|${ROOT_MAIL}|" /etc/aliases
+	sed -i /etc/aliases -e "s|ROOT_MAIL|$ROOT_MAIL|"
 	cmd newaliases
 
 	# activating ports on firewall

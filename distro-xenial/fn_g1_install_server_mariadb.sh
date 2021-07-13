@@ -14,8 +14,8 @@ install_server_mariadb() {
 	Msg.info "Configuring $p"
 
 	# set debian passwords
-	cd /etc/mysql
-	sed -ri "s/^pass.*/password = $DB_ROOTPW/g" debian.cnf
+	sed -ri /etc/mysql/debian.cnf \
+		-e "s/^pass.*/password = $DB_ROOTPW/g"
 
 	# higher limits to prevent error: Error in accept: Too many open files
 	cd /etc/security

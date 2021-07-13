@@ -30,7 +30,7 @@ install_adminer() {
 
 	# install the index.php file
 	File.into . adminer/index.php
-	sed -i "s|FILE|$a|" index.php
+	sed -i index.php -e "s|FILE|$a|"
 
 	# install css file & tables-filter plugin
 	File.into . adminer/adminer.css

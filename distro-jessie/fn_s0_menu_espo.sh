@@ -26,12 +26,12 @@ Menu.espo() {
 	mkdir -p data/cache data/cache/application data/logs
 	chown -R 33:0 . # set user to www-data
 	find . -type d -exec chmod 755 {} + && find . -type f -exec chmod 644 {} +;
-	sed -ri 's|^#\s*(RewriteBase).*|\1 /espo/api/v1/|' api/v1/.htaccess
+	sed -ri api/v1/.htaccess -e 's|^#\s*(RewriteBase).*|\1 /espo/api/v1/|'
 
 	# apache configuration
 	cd /etc/apache2
 	File.into sites-available espocrm.conf
-	sed -i "s|ALLOWALL|Require all granted|" sites-available/espocrm.conf
+	sed -i sites-available/espocrm.conf -e "s|ALLOWALL|Require all granted|"
 	[ -L sites-enabled/120-espocrm.conf ] || {
 		ln -s ../sites-available/espocrm.conf sites-enabled/120-espocrm.conf
 	}

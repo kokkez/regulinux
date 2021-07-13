@@ -4,6 +4,7 @@
 # ------------------------------------------------------------------------------
 
 Menu.webserver() {
+	# $2: target system to build, optional
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 	TARGET="${2:-$TARGET}"
 

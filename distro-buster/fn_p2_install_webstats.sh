@@ -14,7 +14,7 @@ install_webstats() {
 	Pkg.install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl
 
 	# stop awstats cronjobs
-	sed -i 's/^/#/;s/^##/#/g' /etc/cron.d/awstats
+	sed -i /etc/cron.d/awstats -e 's/^/#/;s/^##/#/g'
 
 	Msg.info "Installation of web statistics packages completed!"
 }	# end install_webstats

@@ -13,7 +13,7 @@ install_fail2ban() {
 	# make fail2ban do some monitoring
 	cd /etc/fail2ban
 	File.into . fail2ban/jail.local
-	sed -i "s|SSHD_PORT|${SSHD_PORT}|" jail.local
+	sed -i jail.local -e "s|SSHD_PORT|$SSHD_PORT|"
 
 	# creating filter files
 	cd filter.d

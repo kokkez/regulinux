@@ -32,7 +32,7 @@ install_nginx() {
 	# add a generic includer to "default" in sites-available
 	f=/etc/nginx/sites-available/default
 	grep -q '\-nginx.conf' $f || {
-		sed -ri 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|' $f
+		sed -ri $f -e 's|^}|\n\tinclude snippets/*-nginx.conf;\n}|'
 	}
 	# enabling SSL
 	sed -i $f \

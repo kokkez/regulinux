@@ -30,7 +30,7 @@ install_adminer() {
 
 	# install the index.php file
 	File.into . adminer/index.php
-	sed -i "s|FILE|${d}|" index.php
+	sed -i index.php -e "s|FILE|${d}|"
 
 	# install css file & plugins
 	File.into . adminer/adminer.css

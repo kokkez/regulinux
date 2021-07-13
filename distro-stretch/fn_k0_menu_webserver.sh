@@ -4,14 +4,15 @@
 # ------------------------------------------------------------------------------
 
 Menu.webserver() {
-	HTTP_SERVER="${1:-${HTTP_SERVER}}"
+	# $2: target system to build, optional
+	HTTP_SERVER="${1:-$HTTP_SERVER}"
 	TARGET="${2:-$TARGET}"
 
 	# abort if the system is not set up properly
 	done_deps || return
 
 	# install webserver (nginx or apache2)
-	if [ "${HTTP_SERVER}" = "nginx" ]; then
+	if [ "$HTTP_SERVER" = "nginx" ]; then
 		install_nginx
 		install_phpfpm_nginx				# php-fpm for all targets
 	else

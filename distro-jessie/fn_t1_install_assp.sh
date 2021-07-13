@@ -48,12 +48,14 @@ install_assp() {
 	# force unix EOLs & adjust some values
 	cd /home/assp
 	File.place assp/assp1.cfg ./assp.cfg
-	sed -i 's|\r||g' rc/_etc_*
-	sed -i 's|srv|home|;s|assp\.pid|pid|' rc/_etc_default_assp.debian
+	sed -i rc/_etc_* \
+		-e 's|\r||g'
+	sed -i rc/_etc_default_assp.debian \
+		-e's|srv|home|;s|assp\.pid|pid|'
 	sed -i assp.cfg \
-		-e "s|HOST_NICK|${HOST_NICK}|g" \
+		-e "s|HOST_NICK|$HOST_NICK|g" \
 		-e "s|LOG_PREFIX|${HOST_NICK:0:3}|g" \
-		-e "s|IP_ADDRESS|$(cmd hostname -i)|g"
+		-e "s|IP_ADDRESS|$( cmd hostname -i )|g"
 
 	# configure assp for autostart
 	cp rc/_etc_def* /etc/default/assp
@@ -69,8 +71,8 @@ install_assp() {
 	}
 
 	# creating a new database, then load from file
-	create_database "assp" "assp" "${ASSP_ADMINPW}"
-	cmd mysql 'assp' < ${ENV_files}/assp/assp.sql
+	create_database "assp" "assp" "$ASSP_ADMINPW"
+	cmd mysql 'assp' < $( File.path assp/assp.sql )
 
 	# activating ports on firewall
 	firewall_allow 'smtp assp'

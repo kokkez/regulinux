@@ -50,13 +50,12 @@ install_ispconfig() {
 	# load a customized database into dbispconfig
 	u=$( File.path ispconfig/dbispconfig-${v}.sql )
 	[ -n "$u" ] && {
-		[ "$HTTP_SERVER" = "nginx" ] && sed -i 's|=apache\\|=nginx\\|g' $u
+		[ "$HTTP_SERVER" = "nginx" ] && sed -i $u -e 's|=apache\\|=nginx\\|g'
 		cmd mysql 'dbispconfig' < $u
 	}
 
-	# postfix
-	# comment lines in 2 files of postfix
-	sed -i 's|^#*|#|' /etc/postfix/tag_as_*.re
+	# postfix: comment lines in 2 files of postfix
+	sed -i /etc/postfix/tag_as_*.re -e 's|^#*|#|'
 	cmd postconf mydestination='$myorigin, localhost'
 	cmd postconf -# relayhost smtpd_restriction_classes greylisting
 	u=/etc/postfix/main.cf

@@ -20,9 +20,9 @@ create_database() {
 	# creating the new database & the user
 #	cmd mysqladmin create "$d"
 	cmd mysql <<< "CREATE DATABASE $d;"
-	cmd mysql <<< "GRANT ALL ON ${d}.* TO ${u}@localhost IDENTIFIED BY '$p';"
-#	cmd mysql <<< "REVOKE ALL ON ${d}.* FROM ${u}@localhost;"
-#	cmd mysql <<< "DROP USER ${u}@localhost;"
+	cmd mysql <<< "GRANT ALL ON $d.* TO $u@localhost IDENTIFIED BY '$p';"
+#	cmd mysql <<< "REVOKE ALL ON $d.* FROM $u@localhost;"
+#	cmd mysql <<< "DROP USER $u@localhost;"
 
 	# appending info in ~
 	echo -e "[$d]\nusername = $u\npassword = $p\n" >> ~/.dbdata.txt

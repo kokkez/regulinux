@@ -14,7 +14,7 @@ install_postfix() {
 	# preseed postfix
 	debconf-set-selections <<EOF
 postfix postfix/main_mailer_type select Internet Site
-postfix postfix/mailname string ${MAIL_NAME}
+postfix postfix/mailname string $MAIL_NAME
 postfix postfix/destinations string \$myorigin,localhost
 EOF
 
@@ -25,13 +25,13 @@ EOF
 
 	# set basic parameters in main.cf
 	cmd postconf \
-		myhostname=${MAIL_NAME} \
+		myhostname=$MAIL_NAME \
 		myorigin=\$myhostname \
 		mydestination=\$myorigin,localhost
 
 	# install /etc/aliases
 	File.into /etc postfix/aliases
-	sed -i "s|ROOT_MAIL|${ROOT_MAIL}|" /etc/aliases
+	sed -i /etc/aliases -e "s|ROOT_MAIL|$ROOT_MAIL|"
 	cmd newaliases
 
 	# activating ports on firewall

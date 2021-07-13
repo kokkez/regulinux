@@ -220,8 +220,8 @@ Fw.configure() {
 
 	# save in files
 	[ $? -eq 0 ] && {
-		cmd $v4-save > /etc/iptables.v4.rules
-		cmd $v6-save > /etc/iptables.v6.rules
+		$v4-save > /etc/iptables.v4.rules
+		$v6-save > /etc/iptables.v6.rules
 		notice "Firewall: rules saved successfully!"
 		Ssh.restart
 	} || {

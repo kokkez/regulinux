@@ -19,9 +19,9 @@ install_openssh() {
 	[ -s /etc/systemd/system/$x ] || {
 		Msg.info "Mitigating the problem of SSH hangs on reboot"
 		File.into /etc/systemd/system ssh/$x
-		cmd systemctl daemon-reload
 		cmd systemctl enable $x
 		cmd systemctl start $x
+		cmd systemctl daemon-reload
 	}
 
 	# activate on firewall & restart SSH

@@ -13,12 +13,12 @@ Menu.roundcube() {
 		return
 	}
 
-	Msg.info "Installing Roundcube ${v}..."
+	Msg.info "Installing Roundcube $v..."
 	mkdir -p $d
 	p=$( Menu.password 32 )		# creating a random password
 
 	# download the right version
-	u=https://github.com/roundcube/roundcubemail/releases/download/$v/roundcubemail-${v}-complete.tar.gz
+	u=https://github.com/roundcube/roundcubemail/releases/download/$v/roundcubemail-$v-complete.tar.gz
 	cd /tmp
 	File.download "$u" roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
@@ -40,7 +40,7 @@ Menu.roundcube() {
 	# install the config file
 	cd $d/plugins/ispconfig3_account/config
 	File.place roundcube/config.inc.php.plugin config.inc.php
-	sed -i "s|RPW|${p}|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|" config.inc.php
+	sed -i config.inc.php -e "s|RPW|$p|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|"
 
 	# contextmenu plugin
 	cd /tmp
@@ -54,7 +54,7 @@ Menu.roundcube() {
 	cd $d/config
 	u=$( Menu.password 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
-	sed -i "s|RPW|${p}|;s|DESKEY|${u}|" config.inc.php
+	sed -i config.inc.php -e "s|RPW|$p|;s|DESKEY|$u|"
 
 	# set permissions
 	cd $d
@@ -65,7 +65,7 @@ Menu.roundcube() {
 
 	# if ispconfig is installed, add the remote user into the db
 	has_ispconfig && {
-		sed -e "s|RPW|${p}|" <<'EOF' | mysql
+		sed -e "s|RPW|$p|" <<'EOF' | mysql
 USE dbispconfig;
 INSERT INTO remote_user (
  sys_userid,
@@ -93,7 +93,7 @@ EOF
 	}
 
 	# install crontab to keep the database cleaned
-	[ -s /etc/crontab ] && grep -q ROUNDCUBE /etc/crontab || {
+	[ -s /etc/crontab ] && grep -q 'ROUNDCUBE' /etc/crontab || {
 		File.backup /etc/crontab
 		cat >> /etc/crontab <<EOF
 

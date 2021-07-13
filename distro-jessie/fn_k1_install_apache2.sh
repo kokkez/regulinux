@@ -32,13 +32,14 @@ install_apache2() {
 	Msg.info "Configuring apache2 with ${p}..."
 
 	# comment out the line application/x-ruby rb in /etc/mime.types
-	sed -ri 's|^(application/x-ruby)|#\1|' /etc/mime.types
+	sed -ri /etc/mime.types -e 's|^(application/x-ruby)|#\1|'
 
 	cd /etc/apache2
 
 	# setting up the default DirectoryIndex
 	[ -r mods-available/dir.conf ] && {
-		sed -ri 's|^(\s*DirectoryIndex).*|\1 index.php index.html|' mods-available/dir.conf
+		sed -ri mods-available/dir.conf \
+			-e 's|^(\s*DirectoryIndex).*|\1 index.php index.html|'
 	}
 
 	# shut off ServerTokens and ServerSignature
@@ -50,13 +51,13 @@ install_apache2() {
 
 	# edit deprecated comments in some php ini files
 	[ -r /etc/php5/conf.d/ming.ini ] && {
-		sed -i 's|^#|;|' /etc/php5/conf.d/ming.ini
+		sed -i /etc/php5/conf.d/ming.ini -e 's|^#|;|'
 	}
 
 	# adjust expose_php & date.timezone in all php.ini
 	sed -ri /etc/php5/*/php.ini \
 		-e "s|^(expose_php =) On|\1 Off|" \
-		-e "s|^;(date\.timezone =).*|\1 '${TIME_ZONE}'|"
+		-e "s|^;(date\.timezone =).*|\1 '$TIME_ZONE'|"
 
 	# activating ports on firewall
 	firewall_allow 'http'
