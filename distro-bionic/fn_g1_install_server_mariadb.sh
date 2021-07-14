@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 install_server_mariadb() {
-	local p="mariadb-server"
+	local d p="mariadb-server"
 
 	# abort if mariadb is already installed
 	Pkg.installed "$p" && {
@@ -20,22 +20,22 @@ install_server_mariadb() {
 
 	# set debian passwords
 	sed -ri /etc/mysql/debian.cnf \
-		-e "s/^pass.*/password = $DB_ROOTPW/g"
+		-e "s/^pass.*/password = $DB_rootpw/g"
 
 	# higher limits to prevent error: Error in accept: Too many open files
-	cd /etc/security
-	grep -q '^mysql' limits.conf || {
-		echo -e "mysql soft nofile 65535\nmysql hard nofile 65535" >> limits.conf
+	d=/etc/security
+	grep -q '^mysql' $d/limits.conf || {
+		echo -e "mysql soft nofile 65535\nmysql hard nofile 65535" >> $d/limits.conf
 	}
-	mkdir -p /etc/systemd/system/mariadb.service.d && cd "$_"
-	[ -s limits.conf ] || File.into . mysql/limits.conf
+	mkdir -p /etc/systemd/system/mariadb.service.d && d="$_"
+	[ -s $d/limits.conf ] || File.into $d mysql/limits.conf
 
 	# install a custom configuration file
 	File.into /etc/mysql/mariadb.conf.d mysql/60-server.cnf
 
 	# lite version of mysql_secure_installation
 	cmd mysql <<EOF
-UPDATE mysql.user SET Password=PASSWORD('$DB_ROOTPW') WHERE User='root';
+UPDATE mysql.user SET Password=PASSWORD('$DB_rootpw') WHERE User='root';
 UPDATE mysql.user SET plugin='' WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost','127.0.0.1','::1');

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install one single database
+# create one single empty sql database, then save infos in ~/.dbdata.txt
 # ------------------------------------------------------------------------------
 
 create_database() {
@@ -10,12 +10,14 @@ create_database() {
 	local u p k d="${1:-myuserdb}"
 
 	# detect an available database name
-	[ -d "/var/lib/mysql/$d" ] && for k in {1..99}; do
-		[ -d "/var/lib/mysql/${d}_$k" ] || { d="${d}_$k"; break; }
-	done
+	[ -d "/var/lib/mysql/$d" ] && {
+		for k in {1..99}; do
+			[ -d "/var/lib/mysql/${d}_$k" ] || { d="${d}_$k"; break; }
+		done
+	}
 
-	u="${2-$d}"						# username as db name, if not provided
-	p="${3-$( Menu.password 16 )}"	# random pw length 16, if not provided
+	u="${2:-$d}"					# username as db name, if not provided
+	p="${3:-$( Menu.password 16 )}"	# random pw length 16, if not provided
 
 	# creating the new database & the user
 #	cmd mysqladmin create "$d"

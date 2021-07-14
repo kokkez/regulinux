@@ -68,7 +68,7 @@ Menu.roundcube() {
 	chmod -R u+rwX,go+rX,go-w .
 
 	# if ispconfig is installed, add the remote user into the db
-	has_ispconfig && {
+	ISPConfig.installed && {
 		sed -e "s|RPW|$p|" <<'EOF' | mysql
 USE dbispconfig;
 INSERT INTO remote_user (

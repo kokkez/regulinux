@@ -6,7 +6,7 @@ Menu.ispconfig() {
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if ispconfig is already installed
-	has_ispconfig && {
+	ISPConfig.installed && {
 		Msg.warn "ISPConfig3 is already installed..."
 		return
 	}

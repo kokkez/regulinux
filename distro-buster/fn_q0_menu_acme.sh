@@ -5,13 +5,13 @@
 acme_get() {
 	# get acme.sh script (https://github.com/Neilpang/acme.sh)
 	cd; wget -O -  https://get.acme.sh | bash
-	bash ~/.acme.sh/acme.sh --registeraccount --accountemail ${LENC_MAIL} --log --log-level 2
+	bash ~/.acme.sh/acme.sh --registeraccount --accountemail $LENC_MAIL --log --log-level 2
 }	# end acme_get
 
 
 acme_webroot() {
 	# returns the webroot for the acme.sh script
-	has_ispconfig && {
+	ISPConfig.installed && {
 		echo "/usr/local/ispconfig/interface/acme"	# ispconfig 3.1 webroot
 	} || {
 		echo "/var/www/acme-webroot"				# default webroot
@@ -25,18 +25,19 @@ acme_webserver_conf() {
 
 	# creating the full path to the challenge folder
 	mkdir -p "$1/.well-known/acme-challenge"
+	local d
 
 	if [ "${HTTP_SERVER}" = "nginx" ]; then
-		cd /etc/nginx/snippets
-		File.into . acme/acme-webroot-nginx.conf
-		sed -i acme-webroot-nginx.conf -e "s|WEBROOT|$1|g"
+		d=/etc/nginx/snippets
+		File.into $d acme/acme-webroot-nginx.conf
+		sed -i $d/acme-webroot-nginx.conf -e "s|WEBROOT|$1|g"
 		cmd systemctl restart nginx
 	else
 		HTTP_SERVER="apache2"
 		(( ${#1} < 22 )) && {
-			cd /etc/apache2/conf-available
-			File.into . acme/acme-webroot-apache2.conf
-			sed -i acme-webroot-apache2.conf -e "s|WEBROOT|$1|g"
+			d=/etc/apache2/conf-available
+			File.into $d acme/acme-webroot-apache2.conf
+			sed -i $d/acme-webroot-apache2.conf -e "s|WEBROOT|$1|g"
 			ln -nfs '../conf-available/acme-webroot-apache2.conf' /etc/apache2/conf-enabled/webroot-apache2.conf
 		}
 		cmd systemctl restart apache2

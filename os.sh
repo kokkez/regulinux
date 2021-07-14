@@ -15,10 +15,10 @@
 #	main program
 #	----------------------------------------------------------------------------
 	# on exit and CTRL C execute some cleanup
-	trap Env.clean EXIT
+	trap ENV.clean EXIT
 
 	PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
-	export PATH=${PATH}
+	export PATH=$PATH
 
 	# environment initialization
 	ENV.init

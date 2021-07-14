@@ -22,7 +22,7 @@
 	LENC_MAIL="k-letsencrypt@rete.us"	# letsencrypt account email
 
 	MAIL_NAME="$HOST_FQDN"
-	DB_ROOTPW=""
+	DB_rootpw=""
 	ASSP_ADMINPW="zeroSpam4me"
 
 	CERT_C="IT"
@@ -105,12 +105,6 @@
 	}	# end Date.fmt
 
 
-	numeric_version() {
-		# return the cleaned numeric version of a program
-		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
-	}	# end numeric_version
-
-
 	Dir.delete() {
 		# if directory exists then delete it
 		# $1: path to folder
@@ -171,24 +165,24 @@
 
 
 	File.path() {
-		# return the full path to a single file in "files-common", looking
-		# first into distro-xxx/files
+		# return the full path to a single file into one of the "files" folders,
+		# looking first into distro-xx/files
 		# return an empty string if nothing is found
 		# $1 - relative path to search
 		Arg.expect "$1" || return
 		cmd readlink -e "$ENV_dir/distro-$ENV_codename/files/$1" \
-			|| cmd readlink -e "$ENV_dir/files-common/$1" \
+			|| cmd readlink -e "$ENV_dir/files/$1" \
 			|| return 1
 	}	# end File.path
 
 
 	File.place() {
-		# copy a single file, from one of the "files-common" folders, to
-		# the destination path in $2
-		# $1 - file path relative to one of the "files-common" folders
+		# copy a single file, from one of the "files" folders, to
+		# the destination path in $2, with precedence to "distro-xx/files"
+		# $1 - file path relative to one of the "files" folders
 		# $2 - destination full path
 		Arg.expect "$1" "$2" || return
-		local f=$( File.path $1 ) d="$2"
+		local f=$( File.path "$1" ) d="$2"
 		[ -n "$f" ] && {
 			[ -d "$d" ] && d="$d/$1"	# build destination
 			File.recopy "$f" "$d"		# backup & copy
@@ -198,22 +192,25 @@
 
 	File.paths() {
 		# return the full path to all files matching $1
-		# $1 - file path relative to one of the "files-common" folders
+		# $1 - file path relative to one of the "files" folders
 		Arg.expect "$1" || return
 		local f=$( cmd find $ENV_dir/distro-$ENV_codename/files -wholename "*$1" )
-		[ -z "$f" ] && f=$( cmd find $ENV_dir/files-common -wholename "*$1" )
+		[ -z "$f" ] && f=$( cmd find $ENV_dir/files -wholename "*$1" )
 		echo "$f"
 	}	# end File.paths
 
 
 	File.into() {
-		# copy to the destination folder in $1, the files from ${@:2}
-		# that can comes exclusively from one of the "files-common" folders
+		# copy into the destination folder in $1, the files from ${@:2}
+		# that can comes exclusively from one of the "files" folders,
+		# with precedence to "distro-xx/files"
+		# $1     - destination folder path
+		# ${@:2} - file path relative to one of the "files" folders
 		Arg.expect "$1" "$2" || return
 
 		# detect the real destination
-		local a f d=$( cmd readlink -e $1 )
-		[ -d "$d" ] || return
+		local a f d=$( cmd readlink -e "$1" )
+		[ -d "$d" ] || return				# abort if dest. is not a folder
 
 		for a in "${@:2}"; do				# iterating from 2nd arguments
 			for f in $( File.paths "$a" )	# iterating files
@@ -239,14 +236,6 @@
 		# redirects stderr to the black hole
 		[ -n "${1}" ] && dpkg -l "${1}" 2> /dev/null | grep -q ^ii
 	}	# end Pkg.installed
-
-
-	Pkg.installable() {
-		# test argument $1 for: not empty & package installable
-		Arg.expect "$1" || return
-		Pkg.update	# update packages lists
-		[ $( cmd apt-cache search "^$1$" | wc -l ) -gt 0 ] || return 1
-	}	# end Pkg.installable
 
 
 	Pkg.install() {
@@ -342,7 +331,7 @@
 		# add special chars for strong password
 		[ -n "$2" ] && c="!#\$%&*+\-.:<=>?@[]^~$c"
 
-		echo $( cmd tr -dc "$c" < /dev/urandom | head -c $n )
+		echo $( cmd tr -dc "$c" < /dev/urandom | cmd head -c $n )
 	}	# end Menu.password
 
 
@@ -365,7 +354,8 @@
 
 
 	Port.audit() {
-		# set port in $1 to be strictly numeric & in range
+		# set port in $1 to be strictly numeric & in a known range
+		# $1 - port number, optional, defaults to 22 (ssh)
 		local t l p=$( cmd awk '{print int($1)}' <<< ${1:-22} )
 		(( p == 22 )) || {
 			# limit min & max range
@@ -380,28 +370,37 @@
 	}	# end Port.audit
 
 
-	php_version() {
+	Version.numeric() {
+		# return the cleaned numeric version of a program
+		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
+	}	# end Version.numeric
+
+
+	Version.php() {
 		# return the dotted number of the cli version of PHP
-		# $1 = word to specify the wanted result like this
-		# 7.2.24 = major will return 7, minor will return 7.2, otherwise 7.2.24
+		# $1 - word to specify the wanted result like this: given 7.2.24
+		#  major will return 7
+		#  minor will return 7.2
+		#  otherwise 7.2.24
 		local v=$( cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}' )
 		[ "$1" = "major" ] && v=$( cmd awk -F. '{print $1}' <<< "$v" )
 		[ "$1" = "minor" ] && v=$( cmd awk -F. '{print $1"."$2}' <<< "$v" )
 		echo "$v"
-	}	# end php_version
+	}	# end Version.php
 
 
-	has_ispconfig() {
+	ISPConfig.installed() {
 		# exits with 0 (success) if ispconfig is installed
+		# no arguments expected
 		[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ]
-	}	# end has_ispconfig
+	}	# end ISPConfig.installed
 
 
 
 #	MAIN MENU
 #	----------------------------------------------------------------------------
 
-	Env.clean() {
+	ENV.clean() {
 		# do apt cleanup if $1 is not empty
 		[ -n "${DOCLEANAPT}" ] && {
 			unset DOCLEANAPT
@@ -411,7 +410,7 @@
 			apt-get -qy clean				# erase downloaded archive files
 			rm -rf /var/lib/apt/lists/*		# delete the entire cache
 		}
-	}	# end Env.clean
+	}	# end ENV.clean
 
 
 	ENV.init() {
@@ -481,7 +480,12 @@
 			do [ "$x" = "$ENV_dir/distro-$ENV_codename" ] || rm -rf "$x"
 		done
 
-		# sourcing all scripts
+		# sourcing all common functions
+		for x in $ENV_dir/functions/fn_*
+			do . "$x"
+		done
+
+		# sourcing all distro's functions, that can redefine the previous
 		for x in $ENV_dir/distro-$ENV_codename/fn_*
 			do . "$x"
 		done

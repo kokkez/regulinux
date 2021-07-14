@@ -25,7 +25,7 @@ install_ispconfig() {
 		sed -ri autoinstall.ini \
 			-e "s/^(install_mode=).*/\1${m:-standard}/" \
 			-e "s/^(hostname=).*/\1${HOST_FQDN}/" \
-			-e "s/^(mysql_root_password=).*/\1${DB_ROOTPW}/g" \
+			-e "s/^(mysql_root_password=).*/\1${DB_rootpw}/g" \
 			-e "s/^(ssl_cert_country=).*/\1${CERT_C}/" \
 			-e "s/^(ssl_cert_state=).*/\1${CERT_ST}/" \
 			-e "s/^(ssl_cert_locality=).*/\1${CERT_L}/" \
