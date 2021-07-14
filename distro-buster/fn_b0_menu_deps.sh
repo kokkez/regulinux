@@ -15,7 +15,7 @@ Menu.deps() {
 	install_syslogd
 
 	# activating firewall & allowing SSH port
-	install_firewall "$1"
+	Install.firewall "$1"
 	firewall_allow 'ssh'
 }	# end Menu.deps
 

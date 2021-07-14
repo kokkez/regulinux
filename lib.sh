@@ -14,7 +14,6 @@
 	TARGET="unknown"
 	TIME_ZONE="Europe/Rome"
 	SSHD_PORT="64128"
-	IPT_RULES="ssh"
 
 	HOST_NICK=$(command hostname -s)
 	HOST_FQDN=$(command hostname -f)

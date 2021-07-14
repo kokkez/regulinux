@@ -17,7 +17,7 @@ Menu.mailserver() {
 		install_dovecot
 
 	elif [ "$TARGET" = "assp" ]; then
-		virtualuser_get
+		User.vmail.set
 		config_postfix_assp			# configure for assp
 		config_postfix_sasl2_sql
 	fi;

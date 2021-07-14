@@ -10,7 +10,7 @@ Menu.deps() {
 	Menu.tz
 	OS.minimalize
 	install_syslogd
-	install_firewall "$1"
+	Install.firewall "$1"
 
 	Menu.motd
 	Menu.ssh "$1"
