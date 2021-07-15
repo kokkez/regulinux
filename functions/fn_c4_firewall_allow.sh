@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# append keywords (ports) to the firewall script to allow connections
+# open port[s] via iptables appending keyword[s] to the firewall script
 # ------------------------------------------------------------------------------
 
-firewall_allow() {
+Firewall.allow() {
 	# append keywords to var "ACCEPTS" in ~/firewall.sh
 	# $1 - keyword mapped to a Rule.<keyword> function in ~/firewall.sh
 	Arg.expect "$1" || return 0
@@ -21,8 +21,8 @@ firewall_allow() {
 	done
 
 	# save the new value back in ~/firewall.sh
-	Msg.info "Allowing on firewall: ${ACCEPTS## }"
+	Msg.info "Allowing on firewall:${ACCEPTS}"
 	sed -ri $f -e "s|^(ACCEPTS=).*|\1\"${ACCEPTS## }\"|"
 
 	$f start							# load configured rules on firewall
-};	# end firewall_allow
+};	# end Firewall.allow

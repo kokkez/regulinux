@@ -60,7 +60,7 @@ install_apache2() {
 		-e "s|^;(date\.timezone =).*|\1 '$TIME_ZONE'|"
 
 	# activating ports on firewall
-	firewall_allow 'http'
+	Firewall.allow 'http'
 
 	svc_evoke apache2 restart
 	Msg.info "Installation of apache2 with $p completed!"

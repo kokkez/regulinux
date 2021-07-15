@@ -12,10 +12,10 @@ Menu.deps() {
 	OS.minimalize
 
 	install_motd
-	install_syslogd
+	Install.syslogd
 
 	# activating firewall & allowing SSH port
 	Install.firewall "$1"
-	firewall_allow 'ssh'
+	Firewall.allow 'ssh'
 }	# end Menu.deps
 

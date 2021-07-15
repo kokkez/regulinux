@@ -25,7 +25,7 @@ install_openssh() {
 	}
 
 	# activate on firewall & restart SSH
-	firewall_allow 'ssh'
+	Firewall.allow 'ssh'
 	svc_evoke ssh restart
 	Msg.info "The SSH server is listening on port: $p"
 }	# end install_openssh

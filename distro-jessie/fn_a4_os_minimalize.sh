@@ -23,11 +23,11 @@ postfix postfix/destinations string ${HOST_FQDN}, localhost
 EOF
 
 	# purging foreign architectures (i*86, ...)
-	local i x
+	local x
 	for x in $(cmd dpkg --print-foreign-architectures); do
 		apt-get purge -qqy ".*:$x"
 		dpkg --remove-architecture $x
-		Msg.info "Architecture '$x' removed"
+		Msg.info "Purging architecture '$x' completed"
 	done;
 
 	cd /tmp
@@ -43,12 +43,12 @@ EOF
 	# on full virtualization we need to keep kernel and grub
 	dpkg-query -Wf '${Package} ${Priority}\n' | awk '$1~/^grub|^initram|^linux/{print $1,"install"}' | dpkg --set-selections
 
-	# set to purge packages where status != install
-	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
-
 	# set to install some custom packages
 	x=$( File.path pkgs.custom.txt )
 	[ -s "$x" ] && dpkg --set-selections < "$x"
+
+	# set to purge packages where status != install
+	dpkg --get-selections | awk '$2!~/^in/{print $1,"purge"}' | dpkg --set-selections
 
 	# fix dependencies: loop until no more dependencies were founds
 	x="-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1"

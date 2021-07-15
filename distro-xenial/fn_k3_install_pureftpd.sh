@@ -27,7 +27,7 @@ install_pureftpd() {
 	}
 
 	# activating ports on firewall
-	firewall_allow 'ftp'
+	Firewall.allow 'ftp'
 
 	svc_evoke pure-ftpd-mysql restart
 	Msg.info "Installation of PureFTPd completed!"

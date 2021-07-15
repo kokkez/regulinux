@@ -21,7 +21,7 @@ Menu.dns() {
 	File.into ~ getSlaveZones.sh
 
 	# activating ports on firewall
-	firewall_allow 'dns'
+	Firewall.allow 'dns'
 
 	Msg.info "Installation of DNS server bind9 completed!"
 }	# end Menu.dns

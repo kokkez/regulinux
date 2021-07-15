@@ -3,7 +3,9 @@
 # which allocates ~30MB privvmpages on an OpenVZ system
 # ------------------------------------------------------------------------------
 
-install_syslogd() {
+Install.syslogd() {
+	# install syslogd to replace rsyslogd
+	# no arguments expected
 	Pkg.installed "inetutils-syslogd" || {
 		Msg.info "Installing inetutils-syslogd..."
 		Pkg.purge "rsyslogd"
@@ -13,14 +15,13 @@ install_syslogd() {
 	Msg.info "Configuring inetutils-syslogd..."
 
 	# there is no need to log to so many files
-	cd /var/log
-	local e
-	for e in *.log mail.* debug syslog fsck news
+	local e p=/var/log
+	for e in $p/*.log $p/mail.* $p/debug $p/syslog $p/fsck $p/news
 		do rm -rf "$e"
 	done
 
 	# dash before path means to not flush immediately at every logged line
-	cat <<EOF > /etc/syslog.conf
+	cat > /etc/syslog.conf <<EOF
 *.*;auth,authpriv,cron,kern,mail.none	-/var/log/syslog
 auth,authpriv.*							-/var/log/auth.log
 cron.*									-/var/log/cron.log
@@ -31,12 +32,13 @@ mail.*									-/var/log/mail.log
 EOF
 
 	# install /etc/logrotate.d/inetutils-syslogd
-	mkdir -p /etc/logrotate.d && cd "$_"
-	rm -f inetutils-syslogd
-	File.into . inetutils-syslogd
+	p=/etc/logrotate.d
+	mkdir -p $p
+	rm -f $p/inetutils-syslogd
+	File.into $p inetutils-syslogd
 
 	> /var/log/syslog
-	svc_evoke inetutils-syslogd restart
+	cmd systemctl restart inetutils-syslogd
 	cmd logrotate -f /etc/logrotate.conf > /dev/null 2>&1
 	Msg.info "Configuration of inetutils-syslogd completed!"
-}	# end install_syslogd
+}	# end Install.syslogd
