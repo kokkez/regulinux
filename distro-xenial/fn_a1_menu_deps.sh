@@ -12,7 +12,7 @@ Menu.deps() {
 	Install.syslogd
 	Install.firewall "$1"
 
-	Menu.motd
+	Install.motd
 	Menu.ssh "$1"
 
 	Menu.resolv

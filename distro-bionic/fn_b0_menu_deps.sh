@@ -11,7 +11,7 @@ Menu.deps() {
 	setup_tz
 	OS.minimalize
 
-	install_motd
+	Install.motd
 	Install.syslogd
 
 	# activating firewall & allowing SSH port

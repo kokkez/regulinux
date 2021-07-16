@@ -2,7 +2,7 @@
 # install some web statistics packages
 # ------------------------------------------------------------------------------
 
-install_webstats() {
+Install.webstats() {
 	# abort if web statistics packages are already installed
 	Pkg.installed "vlogger" && {
 		Msg.warn "Web statistics packages are already installed..."
@@ -17,4 +17,4 @@ install_webstats() {
 	sed -i /etc/cron.d/awstats -e 's/^/#/;s/^##/#/g'
 
 	Msg.info "Installation of web statistics packages completed!"
-}	# end install_webstats
+}	# end Install.webstats

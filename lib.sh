@@ -446,7 +446,7 @@
 		fi;
 
 		# setup some environment variables
-		ENV_release="${ENV_product}-${ENV_version}"
+		ENV_release="${ENV_product}-$ENV_version"
 		ENV_arch=$( cmd uname -m )
 
 		case $ENV_release in

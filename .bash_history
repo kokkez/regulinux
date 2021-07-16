@@ -25,7 +25,7 @@ apt-get dist-upgrade
 dpkg -C             # perform database sanity and consistency checks
 ##apt-get install --reinstall module-init-tools
 apt-mark showhold   # check what packages are held back
-sed -i "s/jessie/stretch/g" /etc/apt/sources.list   # change repository
+sed -i /etc/apt/sources.list -e "s/jessie/stretch/g"   # change repository
 apt-get update
 apt list --upgradable
 apt-get upgrade
@@ -43,7 +43,7 @@ deb http://archive.canonical.com/ubuntu trusty partner
 EOF
 apt-get update && apt-get dist-upgrade
 apt-get install dialog apt-utils update-manager-core
-sed -i -e "s/^Pro.*/Prompt=lts/" /etc/update-manager/release-upgrades
+sed -i /etc/update-manager/release-upgrades -e "s/^Pro.*/Prompt=lts/"
 init 6
 do-release-upgrade --help
 do-release-upgrade -d

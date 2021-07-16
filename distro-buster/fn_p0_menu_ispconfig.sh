@@ -22,7 +22,7 @@ Menu.ispconfig() {
 
 	# install needed software for ispconfig
 	install_pureftpd
-	install_webstats
+	Install.webstats
 #	install_jailkit
 	install_fail2ban
 

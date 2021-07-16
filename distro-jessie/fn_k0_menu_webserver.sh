@@ -16,7 +16,7 @@ Menu.webserver() {
 		install_selfsigned_sslcert
 		install_pureftpd
 		install_adminer
-		install_webstats
+		Install.webstats
 
 		install_jailkit
 		install_fail2ban
