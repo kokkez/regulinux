@@ -13,7 +13,7 @@ Menu.espo() {
 		php5-mcrypt php5-imap php5-curl
 
 	# new database with related user, info saved in ~/.dbdata.txt
-	create_database "espocrm" "espocrm"
+	Create.database "espocrm" "espocrm"
 
 	# go, install EspoCRM
 	cd /var/www

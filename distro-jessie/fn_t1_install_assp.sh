@@ -71,7 +71,7 @@ install_assp() {
 	}
 
 	# creating a new database, then load from file
-	create_database "assp" "assp" "$ASSP_ADMINPW"
+	Create.database "assp" "assp" "$ASSP_ADMINPW"
 	cmd mysql 'assp' < $( File.path assp/assp.sql )
 
 	# activating ports on firewall

@@ -1,21 +1,23 @@
 # ------------------------------------------------------------------------------
-# install one single database
+# create one single empty sql database, then save infos in ~/.dbdata.txt
 # ------------------------------------------------------------------------------
 
-create_database() {
+Create.database() {
 	# creating a new database
 	# $1 database name
-	# $2 username
-	# $3 password
+	# $2 username, optional, db name will be used
+	# $3 password, optional, will be generated a random pw, length 16
 	local u p k d="${1:-myuserdb}"
 
 	# detect an available database name
-	[ -d "/var/lib/mysql/$d" ] && for k in {1..99}; do
-		[ -d "/var/lib/mysql/${d}_$k" ] || { d="${d}_$k"; break; }
-	done
+	[ -d "/var/lib/mysql/$d" ] && {
+		for k in {1..99}; do
+			[ -d "/var/lib/mysql/${d}_$k" ] || { d="${d}_$k"; break; }
+		done
+	}
 
-	u="${2-$d}"						# username as db name, if not provided
-	p="${3-$( Menu.password 16 )}"	# random pw length 16, if not provided
+	u="${2:-$d}"					# username as db name, if not provided
+	p="${3:-$( Menu.password 16 )}"	# random pw length 16, if not provided
 
 	# creating the new database & the user
 #	cmd mysqladmin create "$d"
@@ -28,4 +30,4 @@ create_database() {
 	echo -e "[$d]\nusername = $u\npassword = $p\n" >> ~/.dbdata.txt
 
 	Msg.info "Creation of the new database '$d' completed!"
-}	# end create_database
+}	# end Create.database

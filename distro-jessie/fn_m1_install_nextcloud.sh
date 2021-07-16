@@ -12,7 +12,7 @@ install_nextcloud() {
 		php-{apc,pclzip} memcached bzip2
 
 	# new database with related user, info saved in ~/.dbdata.txt
-	create_database "nextcloud" "nextcloud"
+	Create.database "nextcloud" "nextcloud"
 
 	# copy script to facilitate with permissions
 	File.into ~/ nextcloud/nextcloud-*

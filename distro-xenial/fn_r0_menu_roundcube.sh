@@ -37,7 +37,7 @@ Menu.roundcube() {
 	echo -e "User-agent: *\nDisallow: /" > $d/robots.txt
 
 	# creating a new database, then populate it from file
-	create_database "roundcube" "roundcube" "$p"
+	Create.database "roundcube" "roundcube" "$p"
 	cmd mysql 'roundcube' < SQL/mysql.initial.sql
 
 	# install & configure plugins for ISPConfig3
