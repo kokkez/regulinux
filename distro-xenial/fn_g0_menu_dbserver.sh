@@ -6,7 +6,7 @@ Menu.dbserver() {
 	# $1: target system to build, optional
 	TARGET="${1:-$TARGET}"
 
-	# verify that the system was set up properly
+	# abort if the system is not set up properly
 	done_deps || return
 
 	# save the root password of the DB in ~/.my.cnf
