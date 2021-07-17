@@ -23,8 +23,8 @@ Repo.php() {
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 	cat > "$p" <<EOF
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
-deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
+deb http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
 EOF
 	# forcing apt update
 	Pkg.update 'coerce'
@@ -54,16 +54,16 @@ sslcert_paths() {
 	Arg.expect "$1" "$2" || return
 
 	# default certificate paths
-	sslcert_symlink "/etc/ssl/private/ssl-cert-snakeoil.key" "$1"
-	sslcert_symlink "/etc/ssl/certs/ssl-cert-snakeoil.pem" "$2"
+	sslcert_symlink '/etc/ssl/private/ssl-cert-snakeoil.key' "$1"
+	sslcert_symlink '/etc/ssl/certs/ssl-cert-snakeoil.pem' "$2"
 
 	# postfix certificate paths
-	sslcert_symlink "/etc/postfix/smtpd.key" "$1"
-	sslcert_symlink "/etc/postfix/smtpd.cert" "$2"
+	sslcert_symlink '/etc/postfix/smtpd.key' "$1"
+	sslcert_symlink '/etc/postfix/smtpd.cert' "$2"
 
 	# ispconfig certificate paths
-	sslcert_symlink "/usr/local/ispconfig/interface/ssl/ispserver.key" "$1"
-	sslcert_symlink "/usr/local/ispconfig/interface/ssl/ispserver.crt" "$2"
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.key' "$1"
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.crt' "$2"
 
 	# adjust default-ssl symlink for apache
 	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {

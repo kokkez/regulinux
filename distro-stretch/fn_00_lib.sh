@@ -23,8 +23,8 @@ Repo.php() {
 	File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 	cat > "$p" <<EOF
 # https://www.patreon.com/oerdnj
-deb http://packages.sury.org/php stretch main
-#deb-src http://packages.sury.org/php stretch main
+deb http://packages.sury.org/php $ENV_codename main
+#deb-src http://packages.sury.org/php $ENV_codename main
 EOF
 	# forcing apt update
 	Pkg.update 'coerce'
