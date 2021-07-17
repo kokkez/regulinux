@@ -14,7 +14,7 @@ install_phpfpm_apache2() {
 	}
 
 	# add external repository for updated php
-	add_php_repository
+	Repo.php
 
 	# install php packages with some modules
 	Pkg.install libapache2-mod-fcgid \

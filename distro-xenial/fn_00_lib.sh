@@ -28,20 +28,19 @@ Menu.upgrade() {
 
 # ------------------------------------------------------------------------------
 
-add_php_repository() {
-	# append external repository to sources.list for updated php
-	cd /etc/apt
-	grep -q 'Ondrej Sury' sources.list || {
-		Pkg.requires gnupg
-		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
-		cat >> sources.list <<EOF
+Repo.php() {
+	# add external repository for updated php
+	local p='/etc/apt/sources.list.d/php.list'
+	[ -s "$p" ] && return
 
+	# add required software & the repo key
+	Pkg.requires gnupg
+	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
+	cat > "$p" <<EOF
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
-deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+deb http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
 EOF
-	}
-
 	# forcing apt update
 	Pkg.update 'coerce'
-}	# end add_php_repository
+}	# end Repo.php

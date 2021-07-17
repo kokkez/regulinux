@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for ubuntu 18.04 bionic
+# custom functions specific to ubuntu 18.04 bionic
 # ------------------------------------------------------------------------------
 
 Menu.upgrade() {
@@ -13,22 +13,22 @@ Menu.upgrade() {
 
 # ------------------------------------------------------------------------------
 
-add_php_repository() {
-	local P="/etc/apt/sources.list.d/php.list"
-
+Repo.php() {
 	# add external repository for updated php
-	[ -s ${P} ] || {
-		Pkg.requires gnupg
-		apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
-		cat > ${P} <<EOF
+	local p='/etc/apt/sources.list.d/php.list'
+	[ -s "$p" ] && return
+
+	# add required software & the repo key
+	Pkg.requires gnupg
+	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
+	cat > "$p" <<EOF
 # Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
 deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 # deb-src http://ppa.launchpad.net/ondrej/php/ubuntu bionic main
 EOF
-		# forcing apt update
-		Pkg.update 'coerce'
-	}
-}	# end add_php_repository
+	# forcing apt update
+	Pkg.update 'coerce'
+}	# end Repo.php
 
 # ------------------------------------------------------------------------------
 

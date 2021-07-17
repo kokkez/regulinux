@@ -13,22 +13,22 @@ Menu.upgrade() {
 
 # ------------------------------------------------------------------------------
 
-add_php_repository() {
-	local P="/etc/apt/sources.list.d/php.list"
+Repo.php() {
+	# add external repository for updated php
+	local p='/etc/apt/sources.list.d/php.list'
+	[ -s "$p" ] && return
 
 	# add external repository for updated php
-	[ -s ${P} ] || {
-		Pkg.requires apt-transport-https lsb-release ca-certificates
-		File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-		cat > ${P} <<EOF
+	Pkg.requires apt-transport-https lsb-release ca-certificates
+	File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
+	cat > "$p" <<EOF
 # https://www.patreon.com/oerdnj
 deb http://packages.sury.org/php stretch main
 #deb-src http://packages.sury.org/php stretch main
 EOF
-		# forcing apt update
-		Pkg.update 'coerce'
-	}
-}	# end add_php_repository
+	# forcing apt update
+	Pkg.update 'coerce'
+}	# end Repo.php
 
 # ------------------------------------------------------------------------------
 

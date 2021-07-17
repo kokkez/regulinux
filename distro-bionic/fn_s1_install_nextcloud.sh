@@ -15,7 +15,7 @@ install_nextcloud() {
 	Msg.info "Installing Nextcloud ${v}..."
 
 	# install some php libraries before install Nextcloud
-	add_php_repository
+	Repo.php
 	Pkg.install php${p}-{apcu,apcu-bc,bcmath,cli,curl,gd,gmp,imap,intl,mbstring,xml,xmlrpc,zip} \
 		php-{imagick,pear,redis} imagemagick bzip2 mcrypt redis-server
 

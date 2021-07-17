@@ -20,5 +20,8 @@ Install.motd() {
 	# remove /etc/motd on pure debian
 	[ "$ENV_product" = "debian" ] && rm -f /etc/motd
 
+	# relink /etc/motd on debian jessie
+	[ "$ENV_release" = "debian-8" ] && ln -nfs /run/motd /etc/motd
+
 	Msg.info "Customization of MOTD completed!"
 }	# end Install.motd

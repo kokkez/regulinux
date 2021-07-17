@@ -11,7 +11,7 @@ install_php7x_fpm() {
 	}
 
 	# add external repository for updated php
-	add_php_repository
+	Repo.php
 
 	# now install php packages, versions 5.6 & 7.4, with some modules
 	Pkg.install libapache2-mod-fcgid \
