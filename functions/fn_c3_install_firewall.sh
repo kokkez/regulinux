@@ -15,22 +15,22 @@ Install.firewall() {
 
 	# determining default iptables rules
 	case $TARGET in
-		"ispconfig") r+="ftp http ssltls mail ispconfig" ;;
-		"cloud")     r+="http" ;;
-		"assp")      r+="http smtp ssltls mysql assp" ;;
+		"ispconfig") r+=' ftp http ssltls mail ispconfig' ;;
+		"cloud")     r+=' http' ;;
+		"assp")      r+=' http smtp ssltls mysql assp' ;;
 	esac;
 
 	# install the firewall script
-	rm -rf $f
+	rm -rf "$f"
 	File.into ~ ssh/firewall.sh
-	sed -ri $f \
-		-e "s|^(SSHPORT=).*|\1$p|" \
-		-e "s|^(ACCEPTS=).*|\1\"$r\"|"
-	chmod +x $f							# make it executable
+	sed -ri "$f" \
+		-e "s|^(SSHPORT=).*|\1'$p'|" \
+		-e "s|^(ACCEPTS=).*|\1'$r'|"
+	chmod +x "$f"						# make it executable
 
 	# set these rules to load on startup
 	p=/etc/network/if-pre-up.d
-	rm -rf $p/iptables
-	File.into $p ssh/iptables
-	chmod +x $p/iptables				# make it executable
+	rm -rf "$p/iptables"
+	File.into "$p" ssh/iptables
+	chmod +x "$p/iptables"				# make it executable
 }	# end Install.firewall

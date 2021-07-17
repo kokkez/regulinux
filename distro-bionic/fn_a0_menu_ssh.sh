@@ -8,7 +8,7 @@ setup_bash() {
 	. ~/.bashrc
 
 	# set bash as the default shell
-	debconf-set-selections <<< "dash dash/sh boolean false"
+	debconf-set-selections <<< 'dash dash/sh boolean false'
 	dpkg-reconfigure -f noninteractive dash
 
 	Msg.info "Default shell switched to BASH"
@@ -31,9 +31,9 @@ setup_sshd() {
 	x='ssh-session-cleanup.service'
 	[ -s "/etc/systemd/system/$x" ] || {
 		cp "/usr/share/doc/openssh-client/examples/$x" '/etc/systemd/system/'
-		cmd systemctl daemon-reload
 		cmd systemctl enable $x
 		cmd systemctl start $x
+		cmd systemctl daemon-reload
 		# edit script to catch all sshd demons: shell & winscp
 		sed -ri /usr/lib/openssh/ssh-session-cleanup \
 			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
@@ -50,8 +50,8 @@ Menu.ssh() {
 	# sanity check, stop here if my key is missing
 	# $1 - ssh port number, optional
 	local p=~/.ssh
-	grep -q 'kokkez' "$p/authorized_keys" || {
-		Msg.error "Missing 'kokkez' private key in '$p/authorized_keys'"
+	grep -q '^ssh\-rsa' "$p/authorized_keys" || {
+		Msg.error "Missing 'ssh-rsa' private key in '$p/authorized_keys'"
 	}
 
 	mkdir -p "$p"
