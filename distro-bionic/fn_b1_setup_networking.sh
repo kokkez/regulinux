@@ -4,21 +4,24 @@
 
 setup_networking() {
 	# abort if already using classic networking
-	[ -e "/run/network/ifstate" ] && return
+	[ -e '/run/network/ifstate' ] && return
 
 	# detect: interface, address, gateway
-	local i a g=$(cmd ip route get 1.1.1.1)
+	local p i a g="$(cmd ip route get 1.1.1.1)"
 	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
 	a=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
 	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
+	p='/etc/network/interfaces'
 
 	# install required packages
 	Pkg.requires ifupdown
 
 	# setup /etc/network/interfaces file
-	cd /etc/network
-	cmd grep -q 'auto lo' ./interfaces || {
-		cmd cat >> ./interfaces <<EOF
+	cmd grep -q 'auto lo' "$p" || {
+		# backup original file
+		File.backup "$p"
+
+		cmd cat > "$p" <<EOF
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 

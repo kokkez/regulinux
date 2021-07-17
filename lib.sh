@@ -143,9 +143,9 @@
 
 	File.backup() {
 		# if backup exists do nothing
-		Arg.expect "$1" && [ -e "${1}.backup" ] && return
+		Arg.expect "$1" && [ -e "$1.backup" ] && return
 		# if original is not empty, copy it to backup
-		[ -s "$1" ] && cp "$1" "${1}.backup"
+		[ -s "$1" ] && cp "$1" "$1.backup"
 	}	# end File.backup
 
 
