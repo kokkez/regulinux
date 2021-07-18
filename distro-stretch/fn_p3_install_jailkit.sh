@@ -3,7 +3,8 @@
 # ------------------------------------------------------------------------------
 
 install_jailkit() {
-	# important: Jailkit must be installed before ISPConfig3, it cannot be installed afterwards
+	# important: Jailkit must be installed before ISPConfig3,
+	# it cannot be installed afterwards
 	ISPConfig.installed && {
 		Msg.warn "ISPConfig3 is already installed, Jailkit will be skipped..."
 		return

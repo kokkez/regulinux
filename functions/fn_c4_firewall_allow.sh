@@ -22,7 +22,7 @@ Firewall.allow() {
 
 	# save the new value back in ~/firewall.sh
 	Msg.info "Allowing on firewall:${ACCEPTS}"
-	sed -ri $f -e "s|^(ACCEPTS=).*|\1\"${ACCEPTS## }\"|"
+	sed -ri $f -e "s|^(ACCEPTS=).*|\1'${ACCEPTS## }'|"
 
 	$f start							# load configured rules on firewall
 };	# end Firewall.allow

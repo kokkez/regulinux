@@ -3,12 +3,13 @@
 # ------------------------------------------------------------------------------
 
 setup_bash() {
-	# set bash as the default shell
-	debconf-set-selections <<< "dash dash/sh boolean false"
-	dpkg-reconfigure -f noninteractive dash
-
+	# copy .bashrc in home folder, if missing
 	[ -f ~/.bashrc ] || File.into ~ .bashrc
 	. ~/.bashrc
+
+	# set bash as the default shell
+	debconf-set-selections <<< 'dash dash/sh boolean false'
+	dpkg-reconfigure -f noninteractive dash
 
 	Msg.info "Default shell switched to BASH"
 }	# end setup_bash
@@ -27,12 +28,12 @@ setup_sshd() {
 		-e 's|^#?(PubkeyAuthentication).*|\1 yes|'
 
 	# mitigating ssh hang on reboot on systemd capables OSes
-	x=ssh-session-cleanup.service
-	[ -s /etc/systemd/system/$x ] || {
-		cp /usr/share/doc/openssh-client/examples/$x /etc/systemd/system/
-		cmd systemctl daemon-reload
+	x='ssh-session-cleanup.service'
+	[ -s "/etc/systemd/system/$x" ] || {
+		cp "/usr/share/doc/openssh-client/examples/$x" '/etc/systemd/system/'
 		cmd systemctl enable $x
 		cmd systemctl start $x
+		cmd systemctl daemon-reload
 		# edit script to catch all sshd demons: shell & winscp
 		sed -ri /usr/lib/openssh/ssh-session-cleanup \
 			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
@@ -48,23 +49,26 @@ setup_sshd() {
 Menu.ssh() {
 	# sanity check, stop here if my key is missing
 	# $1 - ssh port number, optional
-	grep -q "kokkez" ~/.ssh/authorized_keys || {
-		Msg.error "Missing 'kokkez' private key in '~/.ssh/authorized_keys'"
+	local p=~/.ssh
+	grep -q '^ssh\-rsa' "$p/authorized_keys" || {
+		Msg.error "Missing 'ssh-rsa' private key in '$p/authorized_keys'"
 	}
-	mkdir -p ~/.ssh && cd "$_"
-	cmd chmod 0700 ~/.ssh
-	cmd chmod 0600 authorized_keys
+
+	mkdir -p "$p"
+	cmd chmod 0700 "$p"
+	cmd chmod 0600 "$p/authorized_keys"
 	Msg.info "Setup of authorized_keys completed!"
 
 	# install sources.list
 	File.into /etc/apt sources.list
-	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
+	Msg.info "Installation of 'sources.list' for ${ENV_os} completed!"
 
 	# copy preferences for htop
-	[ -d ~/.config/htop ] || {
-		mkdir -p ~/.config/htop && cd "$_"
-		File.into . htop/*
-		cmd chmod 0700 ~/.config ~/.config/htop
+	p=~/.config/htop
+	[ -d "$p" ] || {
+		mkdir -p "$p"
+		File.into "$p" htop/*
+		cmd chmod 0700 "${p%/*}" "$p"
 		Msg.info "Installation of preferences for htop completed!"
 	}
 

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for debian 9 stretch
+# custom functions specific to debian 9 stretch
 # ------------------------------------------------------------------------------
 
 Menu.upgrade() {
@@ -54,16 +54,16 @@ sslcert_paths() {
 	Arg.expect "$1" "$2" || return
 
 	# default certificate paths
-	sslcert_symlink "/etc/ssl/private/ssl-cert-snakeoil.key" "$1"
-	sslcert_symlink "/etc/ssl/certs/ssl-cert-snakeoil.pem" "$2"
+	sslcert_symlink '/etc/ssl/private/ssl-cert-snakeoil.key' "$1"
+	sslcert_symlink '/etc/ssl/certs/ssl-cert-snakeoil.pem' "$2"
 
 	# postfix certificate paths
-	sslcert_symlink "/etc/postfix/smtpd.key" "$1"
-	sslcert_symlink "/etc/postfix/smtpd.cert" "$2"
+	sslcert_symlink '/etc/postfix/smtpd.key' "$1"
+	sslcert_symlink '/etc/postfix/smtpd.cert' "$2"
 
 	# ispconfig certificate paths
-	sslcert_symlink "/usr/local/ispconfig/interface/ssl/ispserver.key" "$1"
-	sslcert_symlink "/usr/local/ispconfig/interface/ssl/ispserver.crt" "$2"
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.key' "$1"
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.crt' "$2"
 
 	# adjust default-ssl symlink for apache
 	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {

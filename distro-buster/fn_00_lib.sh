@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# customized functions for debian 10 buster
+# custom functions specific to debian 10 buster
 # ------------------------------------------------------------------------------
 
 Menu.upgrade() {
