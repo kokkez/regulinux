@@ -5,8 +5,8 @@
 Menu.webserver() {
 	TARGET="${1-$TARGET}"
 
-	# verify that the system was set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	if [ "$TARGET" = "ispconfig" ]; then
 		# apache2 with php5-fpm for ispconfig

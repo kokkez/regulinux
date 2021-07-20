@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 OS.minimalize() {
-	# always use --no-install-recommends (also used as a check in "done_deps")
+	# always use --no-install-recommends (also used as a check in "Deps.performed")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
 APT::Install-Recommends "0";
 APT::Install-Suggests "0";

@@ -9,8 +9,8 @@ Menu.ispconfig() {
 		return
 	}
 
-	# verify that the system was set up
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install prerequisites
 	TARGET="ispconfig"

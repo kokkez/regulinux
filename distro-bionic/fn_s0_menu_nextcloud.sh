@@ -6,13 +6,13 @@ Menu.nextcloud() {
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if nextcloud is already installed
-	[ -r /var/www/nextcloud/config/config.php ] && {
+	[ -r '/var/www/nextcloud/config/config.php' ] && {
 		Msg.warn "Nextcloud is already installed..."
 		return
 	}
 
-	# abort if the system is not set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install prerequisites
 	TARGET="cloud"

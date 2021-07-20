@@ -341,15 +341,15 @@
 	}	# end Menu.iotest
 
 
-	done_deps() {
+	Deps.performed() {
 		# test that the step "Menu.deps" was already executed
 
 		# simply check that /etc/apt/apt.conf.d/99norecommend exists
-		[ -f "/etc/apt/apt.conf.d/99norecommend" ] || {
-			Msg.warn "Need to execute '$(cmd basename "$0") deps' step before..."
+		[ -f '/etc/apt/apt.conf.d/99norecommend' ] || {
+			Msg.warn "Need to execute the step 'os deps' before..."
 			return 1
 		}
-	}	# end done_deps
+	}	# end Deps.performed
 
 
 	Port.audit() {
@@ -393,6 +393,19 @@
 		# no arguments expected
 		[ -s '/usr/local/ispconfig/server/lib/config.inc.php' ]
 	}	# end ISPConfig.installed
+
+
+	Element.in() {
+		# check that $1 is an argument of this Fn, starting from $2
+		# no arguments can contains spaces 
+		# $1 - element to check
+		# $2+ - arguments separated by space, our array of elements
+		local e w="$1"
+		shift
+		for e; do [[ "$e" == "$w" ]] && return 0; done
+		# default return falsy
+		return 1
+	};	# end of Element.in
 
 
 

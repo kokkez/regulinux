@@ -4,10 +4,10 @@
 
 Menu.mailserver() {
 	# $1: target system to build, optional
-	TARGET="${1-$TARGET}"
+	TARGET="${1:-$TARGET}"
 
-	# verify that the system was set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# postfix is valid for all TARGETs
 	install_postfix

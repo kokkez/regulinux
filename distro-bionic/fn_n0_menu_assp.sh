@@ -3,13 +3,14 @@
 # ------------------------------------------------------------------------------
 
 Menu.assp1() {
+	# abort if assp is already installed
 	[ -d /home/assp ] && {
 		Msg.warn "ASSP v1 is already installed..."
 		return
 	}
 
-	# verify that the system was set up
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install prerequisites
 	TARGET="assp"

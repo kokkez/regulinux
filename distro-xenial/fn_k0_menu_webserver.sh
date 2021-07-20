@@ -6,8 +6,8 @@ Menu.webserver() {
 	# $1: target system to build, optional
 	TARGET="${1:-$TARGET}"
 
-	# verify that the system was set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install apache2 webserver
 	install_apache2

@@ -4,13 +4,14 @@
 # ------------------------------------------------------------------------------
 
 Menu.dns() {
+	# abort if bind9 is already installed
 	if Pkg.installed "bind9"; then
 		Msg.warn "DNS server bind9 is already installed..."
 		return
 	fi;
 
-	# abort if the system is not set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install the DNS server
 	Msg.info "Installing DNS server bind9 for ${ENV_os}..."

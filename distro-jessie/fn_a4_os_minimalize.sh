@@ -7,7 +7,7 @@ OS.minimalize() {
 	File.into /etc/apt sources.list
 	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."
 
-	# always use --no-install-recommends (also used as a check in "done_deps")
+	# always use --no-install-recommends (also used as a check in "Deps.performed")
 	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
 APT::Install-Recommends "0";
 APT::Install-Suggests "0";

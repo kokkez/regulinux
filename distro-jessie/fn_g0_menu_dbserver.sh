@@ -6,8 +6,8 @@ Menu.dbserver() {
 	# $1: target system to build, optional
 	TARGET="${1:-$TARGET}"
 
-	# verify that the system was set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# save the root password of the DB in ~/.my.cnf
 	# it also set the variable DB_rootpw

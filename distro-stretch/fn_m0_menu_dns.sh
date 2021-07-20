@@ -9,8 +9,8 @@ Menu.dns() {
 		return
 	fi;
 
-	# abort if the system is not set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install the DNS server
 	Msg.info "Installing DNS server bind9 for ${ENV_os}..."

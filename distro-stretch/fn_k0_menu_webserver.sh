@@ -8,8 +8,8 @@ Menu.webserver() {
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 	TARGET="${2:-$TARGET}"
 
-	# abort if the system is not set up properly
-	done_deps || return
+	# abort if "Menu.deps" was not executed
+	Deps.performed || return
 
 	# install webserver (nginx or apache2)
 	if [ "$HTTP_SERVER" = "nginx" ]; then
