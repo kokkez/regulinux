@@ -414,7 +414,7 @@
 
 	ENV.clean() {
 		# do apt cleanup if $1 is not empty
-		[ -n "${DOCLEANAPT}" ] && {
+		[ -n "$DOCLEANAPT" ] && {
 			unset DOCLEANAPT
 			apt-get -qy purge				# remove packages and config files
 			apt-get -qy autoremove			# remove unused packages automatically

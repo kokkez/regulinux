@@ -10,11 +10,13 @@ install_dovecot() {
 
 	Msg.info "Installing Dovecot for ${ENV_os}..."
 
-	# preseed dovecot
-#	debconf-set-selections <<EOF
-#dovecot-core dovecot-core/create-ssl-cert boolean true
-#dovecot-core dovecot-core/ssl-cert-name string ${HOST_FQDN}
-#EOF
+	# preseed dovecot on jessie
+	[ "$ENV_release" = "debian-8" ] && {
+		debconf-set-selections <<EOF
+dovecot-core dovecot-core/create-ssl-cert boolean true
+dovecot-core dovecot-core/ssl-cert-name string $HOST_FQDN
+EOF
+	}
 
 	# install required & useful packages
 	Pkg.install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
