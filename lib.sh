@@ -85,14 +85,14 @@
 				&& Msg.warn "Missing argument #$i to ${FUNCNAME[1]}()" \
 				&& return 1
 		done
-		#return 0
+		return 0
 	};
 
 
 	cmd() {
 		# try to run the real command, not an aliased version
 		# on missing command, or error, it return silently
-		Arg.expect "$1" || return 0
+		Arg.expect "$1" || return
 		local c="$( command -v $1 )"
 		shift && [ -n "$c" ] && "$c" "$@"
 	}	# end cmd
