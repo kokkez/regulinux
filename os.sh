@@ -9,7 +9,7 @@
 	# $0 refers to the calling script
 	# ${BASH_SOURCE[0]} refers to this particular file
 	ENV_dir=$( cd "${BASH_SOURCE[0]%/*}" && pwd )
-	. "${ENV_dir}/lib.sh"
+	. "$ENV_dir/lib.sh"
 
 
 #	main program

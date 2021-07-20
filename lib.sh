@@ -85,7 +85,7 @@
 				&& Msg.warn "Missing argument #$i to ${FUNCNAME[1]}()" \
 				&& return 1
 		done
-		return 0
+		#return 0
 	};
 
 

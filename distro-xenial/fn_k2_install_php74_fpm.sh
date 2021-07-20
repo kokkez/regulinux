@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 install_php74_fpm() {
-	local v=7.4
+	local v=7.0
 
 	# abort if package was already installed
 	Pkg.installed "libapache2-mod-fcgid" && {
@@ -13,7 +13,7 @@ install_php74_fpm() {
 	}
 
 	# add external repository for updated php
-	Repo.php
+#	Repo.php
 
 	# now install php packages, versions 7.4, with some modules
 	Pkg.install libapache2-mod-fcgid \

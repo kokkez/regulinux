@@ -4,7 +4,7 @@
 
 Menu.mailserver() {
 	# $1: target system to build, optional
-	TARGET="${1-$TARGET}"
+	TARGET="${1:-$TARGET}"
 
 	# abort if the system is not set up properly
 	done_deps || return

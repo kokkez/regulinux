@@ -9,7 +9,7 @@
 Menu.dumpdb() {
 	# $1 - db name, optional, if provided will be backed up only that db
 
-	# sanity check
+	# stop here if mysql cannot be called
 	Cmd.usable "mysql" || return
 
 	local b c d z q="SHOW DATABASES;"
@@ -18,18 +18,19 @@ Menu.dumpdb() {
 	(( $# )) && q="SHOW DATABASES LIKE '%${*}%';"
 
 	# creating the container folder
-	mkdir -p "/var/backups/dumpdbs" && c="$_"
+	c='/var/backups/dumpdbs'
+	mkdir -p "$c"
 
 	# set static blacklist
-	b="information_schema|mysql|performance_schema"
+	b='information_schema|mysql|performance_schema'
 
 	# show databases NOT blacklisted, silently & without labels
 	# mysql -B : --batch
 	# mysql -N : --skip-column-names
 	for d in $(cmd mysql -BNe "$q" | grep -vP "$b"); do
-		z="$c/${d}.sql.gz"
-		cmd mysqldump --single-transaction --routines --quick --force $d \
-			| cmd gzip --best --rsyncable > $z
+		z="$c/$d.sql.gz"
+		cmd mysqldump --single-transaction --routines --quick --force "$d" \
+			| cmd gzip --best --rsyncable > "$z"
 		Msg.info "$( Date.fmt ) database '$d' saved to: '$z'"
 	done
 }	# end Menu.dumpdb
