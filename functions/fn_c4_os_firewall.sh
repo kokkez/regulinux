@@ -127,6 +127,7 @@ Fw.write() {
 		Fw.notice "writing port '$1', overwriting '$a'"
 		sed -ri '/etc/ssh/sshd_config' -e "s|^#?Port.*|Port $1|"
 		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*SSHD_PORT=).*|\1'$1'|"
+		SSHD_PORT="$1"
 		cmd systemctl restart ssh
 		Fw.notice "restarting SSH completed!"
 	}
@@ -135,6 +136,7 @@ Fw.write() {
 	[ -z "$2" ] || [ "$2" = "$a" ] || {
 		Fw.notice "writing keywords '$2', overwriting '$a'"
 		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"
+		FW_allowed="$2"
 	}
 };	# end Fw.write
 
@@ -150,7 +152,6 @@ Fw.allow() {
 	done
 
 	# save the new value back into the main lib.sh file
-	Fw.notice "Allowing sevices:$a"
 	Fw.write "$SSHD_PORT" "${a:1}"
 
 	# load configured rules on system
