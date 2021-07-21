@@ -34,11 +34,11 @@ setup_sshd() {
 		cmd systemctl enable $x
 		cmd systemctl start $x
 		cmd systemctl daemon-reload
-		# edit script to catch all sshd demons: shell & winscp
-		sed -ri /usr/lib/openssh/ssh-session-cleanup \
-			-e 's|^(ssh_session_pattern).*|\1="sshd: \\\S.*@\\\w+"|'
-		Msg.info "Mitigation of 'SSH hangs on reboot' completed"
 	}
+	# edit script to catch all sshd demons: shell & winscp
+	sed -ri '/usr/lib/openssh/ssh-session-cleanup' \
+		-e 's|^(ssh_session_pattern=).*|\1"sshd: \\\S.*@\\\w+"|'
+	Msg.info "Mitigation of 'SSH hangs on reboot' completed"
 
 	# restart SSH server
 	cmd systemctl restart ssh
