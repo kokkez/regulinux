@@ -146,7 +146,7 @@ Fw.allow() {
 	# unique-ize valid arguments
 	local a w
 	for w in $FW_allowed $@; do
-		! Element.in $w $a && Cmd.usable "^Fw.rule.$w" && a+=" $w"
+		! Element.in $w $a && Cmd.usable "Fw.rule.$w" && a+=" $w"
 	done
 
 	# save the new value back into the main lib.sh file
@@ -254,13 +254,13 @@ Install.firewall() {
 
 	# determining default iptables rules
 	case $TARGET in
-		'ispconfig') r='ftp http smtps mail ispconfig' ;;
-		'cloud')     r='http' ;;
-		'assp')      r='http smtp smtps mysql assp' ;;
+		'ispconfig') r=' ftp http smtps mail ispconfig' ;;
+		'cloud')     r=' http' ;;
+		'assp')      r=' http smtp smtps mysql assp' ;;
 	esac
 
 	# write port & keywords values into files
-	Fw.write "$p" "ssh $r"
+	Fw.write "$p" "ssh$r"
 
 	# make rules persistent, so can load on every boot
 	p=/etc/network/if-pre-up.d
