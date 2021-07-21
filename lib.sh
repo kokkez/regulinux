@@ -5,38 +5,38 @@
 
 #	DEFAULT VARIABLES
 #	----------------------------------------------------------------------------
-	ENV_product="unknown"				# linux distribution
-	ENV_version="unknown"				# version of the distribution
-	ENV_release="unknown"				# linux <product>-<version>
-	ENV_codename="unknown"				# codename of the distribution
-	ENV_arch="unknown"					# kernel architecture
+	ENV_product='unknown'				# linux distribution
+	ENV_version='unknown'				# version of the distribution
+	ENV_release='unknown'				# linux <product>-<version>
+	ENV_codename='unknown'				# codename of the distribution
+	ENV_arch='unknown'					# kernel architecture
 
-	TARGET="unknown"
-	TIME_ZONE="Europe/Rome"
-	SSHD_PORT="64128"
+	TARGET='unknown'
+	TIME_ZONE='Europe/Rome'
+	SSHD_PORT='64128'
 
-	HOST_NICK=$(command hostname -s)
-	HOST_FQDN=$(command hostname -f)
-	ROOT_MAIL="k-${HOST_NICK}@rete.us"
+	HOST_NICK="$(command hostname -s)"
+	HOST_FQDN="$(command hostname -f)"
+	ROOT_MAIL="k-$HOST_NICK@rete.us"
 	LENC_MAIL="k-letsencrypt@rete.us"	# letsencrypt account email
 
 	MAIL_NAME="$HOST_FQDN"
 	DB_rootpw=""
 	ASSP_ADMINPW="zeroSpam4me"
 
-	CERT_C="IT"
-	CERT_ST="Reggio Emilia"
-	CERT_L="Bagnolo in Piano"
-	CERT_O="italmedia.net"
-	CERT_OU="internet-server"
-	CERT_CN="${HOST_FQDN}"
-	CERT_E="${ROOT_MAIL}"
+	CERT_C='IT'
+	CERT_ST='Reggio Emilia'
+	CERT_L='Bagnolo in Piano'
+	CERT_O='italmedia.net'
+	CERT_OU='internet-server'
+	CERT_CN="$HOST_FQDN"
+	CERT_E="$ROOT_MAIL"
 
-	HTTP_SERVER="apache2"
-	ISP3_MULTISERVER="n"   # "n" or "y"
-	ISP3_MASTERHOST=""     # fqdn of the master ispconfig multiserver db, or empty
-	ISP3_MASTERUSER="root" # username of the master db, usually root
-	ISP3_MASTERPASS=""     # password of the master db, if empty will be asked
+	HTTP_SERVER='apache2'
+	ISP3_MULTISERVER='n'   # "n" or "y"
+	ISP3_MASTERHOST=''     # fqdn of the master ispconfig multiserver db, or empty
+	ISP3_MASTERUSER='root' # username of the master db, usually root
+	ISP3_MASTERPASS=''     # password of the master db, if empty will be asked
 
 	# -- bash colors -----------------------------------------------------------
 	Dye.as() {
