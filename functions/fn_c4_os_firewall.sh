@@ -132,7 +132,7 @@ Fw.write() {
 	}
 
 	a=$( cmd awk -F\' '/^\s*FW_allowed=/{print $2}' ~/lin*/lib.sh )
-	[ -n "$2" ] && [ "$2" = "$a" ] || {
+	[ -z "$2" ] || [ "$2" = "$a" ] || {
 		Fw.notice "writing keywords '$2', overwriting '$a'"
 		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"
 	}
@@ -254,13 +254,13 @@ Install.firewall() {
 
 	# determining default iptables rules
 	case $TARGET in
-		"ispconfig") r='ssh ftp http smtps mail ispconfig' ;;
-		"cloud")     r='ssh http' ;;
-		"assp")      r='ssh http smtp smtps mysql assp' ;;
-	esac;
+		'ispconfig') r='ftp http smtps mail ispconfig' ;;
+		'cloud')     r='http' ;;
+		'assp')      r='http smtp smtps mysql assp' ;;
+	esac
 
 	# write port & keywords values into files
-	Fw.write "$p" "$r"
+	Fw.write "$p" "ssh $r"
 
 	# make rules persistent, so can load on every boot
 	p=/etc/network/if-pre-up.d
