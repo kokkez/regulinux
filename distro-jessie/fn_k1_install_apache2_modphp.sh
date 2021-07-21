@@ -13,7 +13,7 @@ install_apache2_modphp() {
 		-e "s|^;(date\.timezone =).*|\1 '$TIME_ZONE'|"
 
 	# activating ports on firewall
-	Firewall.allow 'http'
+	Fw.allow 'http'
 
 	Msg.info "Configuration of mod-php5 completed!"
 }	# end install_apache2_modphp

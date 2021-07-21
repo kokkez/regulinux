@@ -3,9 +3,11 @@
 # ------------------------------------------------------------------------------
 
 Fw.notice() {
-	Dye.as 1 37 $( Dye.as 2 32 '>> ' ) "$@"
-}
-
+	echo -e \
+		$( Dye.fg.green 'FireWall' ) \
+		$( Dye.fg.green.lite '>>' ) \
+		$( Dye.fg.white "$@" )
+};	# end Fw.notice
 
 # distinguish classic vs legacy version of the iptables commands
 Element.in "$ENV_codename" 'buster' && {
@@ -26,60 +28,60 @@ Element.in "$ENV_codename" 'buster' && {
 Fw.rule.vpn() {
 	# accept VPN connections
 	# remember to customize the port before use
-	Fw.notice "Firewall: appending VPN rules"
+	Fw.notice "appending VPN rules"
 	Fw.ip4 -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o venet0 -j MASQUERADE
 	Fw.ip4 -I INPUT 1 -i tun0 -j ACCEPT
 	Fw.ip4 -I FORWARD 1 -i venet0 -o tun0 -j ACCEPT
 	Fw.ip4 -I FORWARD 1 -i tun0 -o venet0 -j ACCEPT
 	Fw.ip4 -I INPUT 1 -i venet0 -p udp --dport 1194 -j ACCEPT
-}
+};	# end Fw.rule.vpn
 Fw.rule.dns() {
 	# accept DNS connections
-	Fw.notice "Firewall: appending DNS rules"
+	Fw.notice "appending DNS rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 53 -j ACCEPT
 	Fw.ip4 -A INPUT -p udp -m state --state NEW --dport 53 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 53 -j ACCEPT
 	Fw.ip6 -A INPUT -p udp -m state --state NEW --dport 53 -j ACCEPT
-}
+};	# end Fw.rule.dns
 Fw.rule.ftp() {
 	# accept FTP connections (+ pure-ftpd passive ports)
-	Fw.notice "Firewall: appending FTP rules"
+	Fw.notice "appending FTP rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 21 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 40010:40910 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 21 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 40010:40910 -j ACCEPT
-}
+};	# end Fw.rule.ftp
 Fw.rule.ispconfig() {
 	# accept HTTP connections
-	Fw.notice "Firewall: appending ISPConfig rules"
+	Fw.notice "appending ISPConfig rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 8080 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 8080 -j ACCEPT
-}
+};	# end Fw.rule.ispconfig
 Fw.rule.http() {
 	# accept HTTP and HTTPS connections (standard ports for websites)
-	Fw.notice "Firewall: appending HTTP and HTTPS rules"
+	Fw.notice "appending HTTP and HTTPS rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 80 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 443 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 80 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 443 -j ACCEPT
-}
+};	# end Fw.rule.http
 Fw.rule.smtp() {
 	# accept plain SMTP connections (port 25 for email sending)
-	Fw.notice "Firewall: appending SMTP rules for port 25"
+	Fw.notice "appending SMTP rules for port 25"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 25 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 25 -j ACCEPT
-}
-Fw.rule.ssltls() {
+};	# end Fw.rule.smtp
+Fw.rule.smtps() {
 	# accept secured SMTP connections (SSL/TLS ports for email sending)
-	Fw.notice "Firewall: appending SMTP rules with SSL/TLS"
+	Fw.notice "appending SMTP rules for ports with SSL/TLS"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 465 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 587 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 465 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 587 -j ACCEPT
-}
+};	# end Fw.rule.smtps
 Fw.rule.mail() {
 	# accept MAIL connections (standard ports for email receiving)
-	Fw.notice "Firewall: appending MAIL rules for mail receiving"
+	Fw.notice "appending MAIL rules for mail receiving"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 110 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 143 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 993 -j ACCEPT
@@ -88,55 +90,76 @@ Fw.rule.mail() {
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 143 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 993 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 995 -j ACCEPT
-}
+};	# end Fw.rule.mail
 Fw.rule.mysql() {
 	# accept MYSQL connections from slaves
-	Fw.notice "Firewall: appending MYSQL rules"
+	Fw.notice "appending MYSQL rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
-}
+};	# end Fw.rule.mysql
 Fw.rule.assp() {
 	# accept http/smtp connections for ASSP on special ports
-	Fw.notice "Firewall: appending ASSP rules"
+	Fw.notice "appending ASSP rules"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 22222 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 55555 -j ACCEPT
 #	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 58725 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 22222 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 55555 -j ACCEPT
 #	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 58725 -j ACCEPT
-}
+};	# end Fw.rule.assp
 Fw.rule.ssh() {
 	# accept SSH connections on special port
-	Fw.notice "Firewall: appending SSH rules (Port: $SSHD_PORT)"
-	local p=$( Port.audit $SSHD_PORT )
-	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport $p -j ACCEPT
-	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport $p -j ACCEPT
-}
+	Fw.notice "appending SSH rules (Port: $SSHD_PORT)"
+	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport $SSHD_PORT -j ACCEPT
+	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport $SSHD_PORT -j ACCEPT
+};	# end Fw.rule.ssh
 
 
-Fw.save() {
-	(( $1 != 0 )) && {
-		Fw.notice "Firewall: an error has occurred ( $1 )"
-		return
+Fw.write() {
+	# write on files the SSH port number & the firewall allowed keywords
+	# $1 - ssh port number
+	# $2 - words mapped to Fw.rule.<keyword> functions, as single argument
+	Arg.expect "$1" || return
+
+	local a=$( cmd awk '/^\s*Port /{print $2}' /etc/ssh/sshd_config )
+	[ "$1" = "$a" ] || {
+		# write port in /etc/ssh/sshd_config, then restart daemon
+		Fw.notice "writing port '$1', overwriting '$a'"
+		sed -ri '/etc/ssh/sshd_config' -e "s|^#?Port.*|Port $1|"
+		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*SSHD_PORT=).*|\1'$1'|"
+		cmd systemctl restart ssh
+		Fw.notice "restarting SSH completed!"
 	}
 
-	# save rules for persistent loading at boot
-	Fw.ip4save > /etc/iptables.v4.rules
-	Fw.ip6save > /etc/iptables.v6.rules
-	Fw.notice "Firewall: rules saving completed!"
+	a=$( cmd awk -F\' '/^\s*FW_allowed=/{print $2}' ~/lin*/lib.sh )
+	[ -n "$2" ] && [ "$2" = "$a" ] || {
+		Fw.notice "writing keywords '$2', overwriting '$a'"
+		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"
+	}
+};	# end Fw.write
 
-	# set port in /etc/ssh/sshd_config, then restart daemon
-	sed -ri '/etc/ssh/sshd_config' \
-		-e "s|^#?Port.*|Port $SSHD_PORT|"
-	sed -ri "$ENV_dir/lib.sh" \
-		-e"s|^(\s*SSHD_PORT=).*|\1'$SSHD_PORT'|"
-	cmd systemctl restart ssh
-	Msg.info "Restarting SSH completed!"
-}
+Fw.allow() {
+	# append keywords to var $FW_allowed in lib.sh
+	# $1 - keyword mapped to a Fw.rule.<keyword> function
+	Arg.expect "$1" || return
+
+	# unique-ize valid arguments
+	local a w
+	for w in $FW_allowed $@; do
+		! Element.in $w $a && Cmd.usable "^Fw.rule.$w" && a+=" $w"
+	done
+
+	# save the new value back into the main lib.sh file
+	Fw.notice "Allowing sevices:$a"
+	Fw.write "$SSHD_PORT" "${a:1}"
+
+	# load configured rules on system
+	Menu.firewall 'start'
+};	# end Fw.allow
 
 Fw.configure() {
 	# fully configure the firewall, no arguments expected
-	Fw.notice "Firewall: setup basic IPv4 & IPv6 policies"
+	Fw.notice "setup basic IPv4 & IPv6 policies"
 	Fw.ip4 -P INPUT DROP
 	Fw.ip4 -P FORWARD DROP
 	# accepts all established inbound connections
@@ -153,7 +176,7 @@ Fw.configure() {
 	Fw.ip4 -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
 	Fw.ip4 -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
 
-#	Fw.notice "Firewall: setup IPv6 basic policies"
+#	Fw.notice "setup IPv6 basic policies"
 	# these appear before any other rules
 	Fw.ip6 -A INPUT -m rt --rt-type 0 --rt-segsleft 0 -j DROP
 	Fw.ip6 -A FORWARD -m rt --rt-type 0 --rt-segsleft 0 -j DROP
@@ -166,21 +189,22 @@ Fw.configure() {
 	# accept all traffic from/to the local interface.
 	Fw.ip6 -A INPUT -i lo -j ACCEPT
 
-#	Fw.notice "Firewall: setup custom IPv4 & IPv6 policies"
+	SSHD_PORT=$( Port.audit $SSHD_PORT )
+#	Fw.notice "setup custom IPv4 & IPv6 policies"
 	local w
-	for w in $ACCEPTS ; do
+	for w in $FW_allowed; do
 #		echo "[Fw.rule.$w]"
 		cmd "Fw.rule.$w"
 	done
 
-	Fw.notice "Firewall: setup IPv4 & IPv6 icmp traffic"
+	Fw.notice "setup IPv4 & IPv6 icmp traffic"
 	# accepts IPv4 icmp
 	Fw.ip4 -A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j ACCEPT
 	# unlike with IPv4, is not a good idea to block ICMPv6 traffic as IPv6 is much more heavily dependent on it
 	Fw.ip6 -A INPUT -p icmpv6 -m limit --limit 1/s --limit-burst 1 -j ACCEPT
 #	Fw.ip6 -A INPUT -p tcp -m tcp ! --syn -j ACCEPT
 
-	Fw.notice "Firewall: logging IPv4 denied traffic"
+	Fw.notice "logging IPv4 denied traffic"
 	# logging IPv4 omly
 	Fw.ip4 -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 4
 
@@ -188,36 +212,77 @@ Fw.configure() {
 	Fw.ip4 -A INPUT -j DROP
 	Fw.ip6 -A INPUT -j DROP
 
-	# saving rules for persistent loading at boot, then setup ssh
-	Fw.save "$?"
-}
+	# error checking before saving
+	w="$?"
+	(( $w != 0 )) && Fw.notice "an error has occurred ( $w )" && return
+
+	# saving rules for persistent loading at boot
+	Fw.ip4save > /etc/iptables.v4.rules
+	Fw.ip6save > /etc/iptables.v6.rules
+	Fw.notice "rules saving completed!"
+
+	# set port in /etc/ssh/sshd_config, then restart daemon
+	Fw.write "$SSHD_PORT"
+};	# end Fw.configure
 
 Fw.flush() {
-	Fw.notice "Firewall: flushing current rules from memory and allowing all traffic"
+	Fw.notice "flushing current rules from memory and allowing all traffic"
 	Fw.ip4 -F
 	Fw.ip4 -P OUTPUT ACCEPT
 	Fw.ip6 -F
 	Fw.ip6 -P OUTPUT ACCEPT
-}
+};	# end Fw.flush
 
 Fw.status() {
-	Fw.notice "Firewall: current IPv4 rules"
+	Fw.notice "current IPv4 rules"
 	Fw.ip4 -nvL
 	echo
-	Fw.notice "Firewall: current IPv6 rules"
+	Fw.notice "current IPv6 rules"
 	Fw.ip6 -nvL
 	echo
-}
+};	# end Fw.status
+
+Install.firewall() {
+	# setup firewall via iptables
+	# $1 - ssh port number, optional
+
+	Pkg.installed "iptables" || {
+		Msg.error "Seems that iptables was missing"
+	}
+
+	local r p=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
+
+	# determining default iptables rules
+	case $TARGET in
+		"ispconfig") r='ssh ftp http smtps mail ispconfig' ;;
+		"cloud")     r='ssh http' ;;
+		"assp")      r='ssh http smtp smtps mysql assp' ;;
+	esac;
+
+	# write port & keywords values into files
+	Fw.write "$p" "$r"
+
+	# make rules persistent, so can load on every boot
+	p=/etc/network/if-pre-up.d
+	rm -rf "$p/iptables"
+	File.into "$p" ssh/iptables
+	chmod +x "$p/iptables"				# make it executable
+
+	# newer linux probably want to use iptables-legacy
+	Element.in "$ENV_codename" 'buster' && {
+		sed -i "$p/iptables" -e "s|s-rest|s-legacy-rest|g"
+	}
+}	# end Install.firewall
 
 Menu.firewall() {
 	case "$1" in
 		'start'|'restart')
-			Fw.notice "Starting firewall..."
+			Fw.notice "Starting up..."
 			Fw.flush
 			Fw.configure
 			;;
 		'stop')
-			Fw.notice "Stopping firewall..."
+			Fw.notice "Stopping down..."
 			Fw.ip4 -F
 			Fw.ip6 -F
 			exit 0
@@ -226,43 +291,9 @@ Menu.firewall() {
 			Fw.flush
 			;;
 		*)
-			Fw.notice "Firewall status..."
+			Fw.notice "$ENV_os"
 			Fw.status
-			Fw.notice "Usage: $0 { start | restart | stop | status | flush }"
+			Fw.notice "Usage: os firewall { start | restart | stop | flush | status }"
 			;;
 	esac
 }	# end Menu.firewall
-
-
-Install.firewall() {
-	# setup firewall via iptables
-	# $1 - ssh port number, optional
-	local p r='ssh' f=~/firewall.sh		# path to the firewall script
-
-	Pkg.installed "iptables" || {
-		Msg.error "Seems that iptables was missing"
-	}
-
-	p=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
-
-	# determining default iptables rules
-	case $TARGET in
-		"ispconfig") r+=' ftp http ssltls mail ispconfig' ;;
-		"cloud")     r+=' http' ;;
-		"assp")      r+=' http smtp ssltls mysql assp' ;;
-	esac;
-
-	# install the firewall script
-	rm -rf "$f"
-	File.into ~ ssh/firewall.sh
-	sed -ri "$f" \
-		-e "s|^(SSHPORT=).*|\1'$p'|" \
-		-e "s|^(ACCEPTS=).*|\1'$r'|"
-	chmod +x "$f"						# make it executable
-
-	# set these rules to load on startup
-	p=/etc/network/if-pre-up.d
-	rm -rf "$p/iptables"
-	File.into "$p" ssh/iptables
-	chmod +x "$p/iptables"				# make it executable
-}	# end Install.firewall

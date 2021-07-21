@@ -14,6 +14,7 @@
 	TARGET='unknown'
 	TIME_ZONE='Europe/Rome'
 	SSHD_PORT='64128'
+	FW_allowed='ssh'
 
 	HOST_NICK="$(command hostname -s)"
 	HOST_FQDN="$(command hostname -f)"
@@ -533,8 +534,6 @@
 			s+="   . $(Dye.fg.orange mykeys)      set my authorized_keys, for me & backuppers\n"; }
 		Cmd.usable "Menu.tz" && {
 			s+="   . $(Dye.fg.orange tz)          set the server timezone to $(Dye.fg.white $TIME_ZONE)\n"; }
-		Cmd.usable "Menu.motd" && {
-			s+="   . $(Dye.fg.orange motd)        customize the dynamic Message of the Day (motd)\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Standalone utilities) ---------------------------------------- (in no particular order) -- ]\n$s"; }
 
@@ -562,6 +561,8 @@
 
 		# Others applications
 		s=""
+		Cmd.usable "Menu.firewall" && {
+			s+="   . $(Dye.fg.orange firewall)    to setup the firewall, via iptables, v4 and v6\n"; }
 		Cmd.usable "Menu.dumpdb" && {
 			s+="   . $(Dye.fg.orange dumpdb)      to backup all databases, or the one given in $(Dye.fg.white \$1)\n"; }
 		Cmd.usable "Menu.roundcube" && {

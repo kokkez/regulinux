@@ -37,7 +37,7 @@ EOF
 	}
 
 	# activating ports on firewall
-	Firewall.allow 'http'
+	Fw.allow 'http'
 
 	Msg.info "Configuration of apache2 completed!"
 }	# end install_apache2

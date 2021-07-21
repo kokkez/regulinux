@@ -44,7 +44,7 @@ install_nginx() {
 	File.islink "default" && mv "default" "0000-default"
 
 	# activating ports on firewall
-	Firewall.allow 'http'
+	Fw.allow 'http'
 
 	Msg.info "Configuration of nginx completed!"
 }	# end install_nginx

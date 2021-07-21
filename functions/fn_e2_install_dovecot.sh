@@ -22,7 +22,7 @@ EOF
 	Pkg.install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
 
 	# activating ports on firewall
-	Firewall.allow 'mail'
+	Fw.allow 'mail'
 
 	Msg.info "Installation of dovecot completed!"
 }	# end install_dovecot
