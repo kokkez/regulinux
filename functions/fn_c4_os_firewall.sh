@@ -26,8 +26,7 @@ Element.in "$ENV_codename" 'buster' && {
 
 
 Fw.rule.vpn() {
-	# accept VPN connections
-	# remember to customize the port before use
+	# accept VPN connections (remember to customize the port before use)
 	Fw.notice "appending VPN rules"
 	Fw.ip4 -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o venet0 -j MASQUERADE
 	Fw.ip4 -I INPUT 1 -i tun0 -j ACCEPT
@@ -73,7 +72,7 @@ Fw.rule.smtp() {
 };	# end Fw.rule.smtp
 Fw.rule.smtps() {
 	# accept secured SMTP connections (SSL/TLS ports for email sending)
-	Fw.notice "appending SMTP rules for ports with SSL/TLS"
+	Fw.notice "appending SMTP rules for SSL/TLS ports"
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 465 -j ACCEPT
 	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 587 -j ACCEPT
 	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 465 -j ACCEPT

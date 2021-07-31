@@ -8,7 +8,7 @@ Install.motd() {
 	# abort if MOTD is already installed
 	[ -s "$p/*-footer" ] && return
 
-	# verify needed packages
+	# install needed packages, if missing
 	Pkg.requires figlet lsb-release
 
 	# copying files & make them executables

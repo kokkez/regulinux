@@ -513,6 +513,8 @@
 
 		# One time actions
 		s=""
+		Cmd.usable "Menu.root" && {
+			s+="   . $(Dye.fg.orange root)        setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.ssh" && {
 			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.deps" && {
@@ -542,7 +544,7 @@
 		Cmd.usable "Menu.mailserver" && {
 			s+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
 		Cmd.usable "Menu.dbserver" && {
-			s+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw stored in $(Dye.fg.white ~/.my.cnf)\n"; }
+			s+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw stored in $(Dye.fg.white '~/.my.cnf')\n"; }
 		Cmd.usable "Menu.webserver" && {
 			s+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
 		[ -z "$s" ] || {

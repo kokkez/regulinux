@@ -15,7 +15,7 @@ resolv_via_resolvconf() {
 	n+="nameserver 1.0.0.1      # cloudflare\n"
 	n+="nameserver 80.80.81.81  # freenom.world"
 
-	# verify needed packages
+	# install needed packages, if missing
 	Pkg.requires e2fsprogs
 
 	# write to /etc/resolv.conf
@@ -24,7 +24,7 @@ resolv_via_resolvconf() {
 	cmd chattr +i "$r"					# disallow file modification
 
 	Msg.info "Configuration of $t public dns completed! Now $r has:"
-	sed 's|^|> |' < $r
+	sed 's|^|> |' < "$r"
 }	# end resolv_via_resolvconf
 
 

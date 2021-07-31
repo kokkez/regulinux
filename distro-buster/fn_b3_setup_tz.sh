@@ -9,7 +9,7 @@ setup_tz() {
 		Msg.error "The requested timezone does not exists: $t"
 	}
 
-	# verify needed packages
+	# install needed packages, if missing
 	Pkg.requires dbus
 
 	cmd timedatectl set-timezone "$t"
