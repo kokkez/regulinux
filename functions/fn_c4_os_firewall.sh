@@ -9,21 +9,11 @@ Fw.notice() {
 		$( Dye.fg.white "$@" )
 };	# end Fw.notice
 
-# distinguish classic vs legacy version of the iptables commands
-Element.in "$ENV_codename" 'buster' && {
-	# legacy version of the commands
-	Fw.ip4()     { cmd iptables-legacy "$@"; }
-	Fw.ip6()     { cmd ip6tables-legacy "$@"; }
-	Fw.ip4save() { cmd iptables-legacy-save "$@"; }
-	Fw.ip6save() { cmd ip6tables-legacy-save "$@"; }
-} || {
-	# classic version of the commands
-	Fw.ip4()     { cmd iptables "$@"; }
-	Fw.ip6()     { cmd ip6tables "$@"; }
-	Fw.ip4save() { cmd iptables-save "$@"; }
-	Fw.ip6save() { cmd ip6tables-save "$@"; }
-}
-
+# classic version of the commands
+Fw.ip4()     { cmd iptables "$@"; }
+Fw.ip6()     { cmd ip6tables "$@"; }
+Fw.ip4save() { cmd iptables-save "$@"; }
+Fw.ip6save() { cmd ip6tables-save "$@"; }
 
 Fw.rule.vpn() {
 	# accept VPN connections (remember to customize the port before use)
@@ -250,28 +240,15 @@ Install.firewall() {
 		Msg.error "Seems that iptables was missing"
 	}
 
-	local r p=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
-
-	# determining default iptables rules
-	case $TARGET in
-		'ispconfig') r=' ftp http smtps mail ispconfig' ;;
-		'cloud')     r=' http' ;;
-		'assp')      r=' http smtp smtps mysql assp' ;;
-	esac
-
-	# write port & keywords values into files
-	Fw.write "$p" "ssh$r"
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
 	# make rules persistent, so can load on every boot
-	p=/etc/network/if-pre-up.d
+	local p=/etc/network/if-pre-up.d
 	rm -rf "$p/iptables"
 	File.into "$p" ssh/iptables
-	chmod +x "$p/iptables"				# make it executable
+	chmod +x "$p/iptables"						# make it executable
 
-	# newer linux probably want to use iptables-legacy
-	Element.in "$ENV_codename" 'buster' && {
-		sed -i "$p/iptables" -e "s|s-rest|s-legacy-rest|g"
-	}
+	Fw.allow 'ssh'								# allow SSH by default
 }	# end Install.firewall
 
 Menu.firewall() {

@@ -32,6 +32,22 @@ EOF
 
 # ------------------------------------------------------------------------------
 
+# legacy version of the iptables commands, needed by firewall
+Fw.ip4() {
+	cmd iptables-legacy "$@"
+}
+Fw.ip6() {
+	cmd ip6tables-legacy "$@"
+}
+Fw.ip4save() {
+	cmd iptables-legacy-save "$@"
+}
+Fw.ip6save() {
+	cmd ip6tables-legacy-save "$@"
+}
+
+# ------------------------------------------------------------------------------
+
 sslcert_symlink() {
 	# create the symlink pointing to a real file
 	# $1 - path to the file to convert to symlink
