@@ -16,6 +16,5 @@ Menu.deps() {
 
 	# activating firewall & allowing SSH port
 	Install.firewall "$1"
-	Fw.allow 'ssh'
 }	# end Menu.deps
 

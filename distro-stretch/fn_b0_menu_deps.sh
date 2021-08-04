@@ -14,8 +14,7 @@ Menu.deps() {
 	Install.motd
 	Install.syslogd
 
-	# activating firewall & allowing SSH port
+	# activating firewall, allowing SSH port
 	Install.firewall "$1"
-	Fw.allow 'ssh'
 }	# end Menu.deps
 
