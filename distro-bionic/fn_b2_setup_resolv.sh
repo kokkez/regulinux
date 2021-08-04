@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_resolvconf() {
-	local n t r=/etc/resolv.conf
+	local n t r='/etc/resolv.conf'
 	File.backup "$r"
 
 	# set known public dns
@@ -24,19 +24,19 @@ resolv_via_resolvconf() {
 	cmd chattr +i "$r"					# disallow file modification
 
 	Msg.info "Configuration of $t public dns completed! Now $r has:"
-	sed 's|^|> |' < $r
+	sed 's|^|> |' < "$r"
 }	# end resolv_via_resolvconf
 
 
 resolv_via_systemd() {
-	local f=/etc/systemd/resolved.conf.d
+	local f='/etc/systemd/resolved.conf.d'
 
 	# if 'dns_servers.conf' already exists, then exit here
 	[ -s "$f/dns_servers.conf" ] && return
 
 	# copying files
 	mkdir -p "$f"
-	File.into $f resolved.conf.d/*
+	File.into "$f" resolved.conf.d/*
 
 	# fully activate systemd-resolved
 	cmd systemctl unmask systemd-resolved

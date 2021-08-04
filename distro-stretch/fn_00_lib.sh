@@ -11,7 +11,6 @@ Menu.upgrade() {
 	cmd apt -qy full-upgrade
 }	# end Menu.upgrade
 
-# ------------------------------------------------------------------------------
 
 Repo.php() {
 	# add external repository for updated php
@@ -30,7 +29,6 @@ EOF
 	Pkg.update 'coerce'
 }	# end Repo.php
 
-# ------------------------------------------------------------------------------
 
 sslcert_symlink() {
 	# create the symlink pointing to a real file
@@ -45,7 +43,6 @@ sslcert_symlink() {
 	}
 }	# end sslcert_symlink
 
-# ------------------------------------------------------------------------------
 
 sslcert_paths() {
 	# adjust paths to points to these certificates

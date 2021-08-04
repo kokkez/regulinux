@@ -4,7 +4,7 @@
 
 Menu.deps() {
 	# $1: ssh port number, optional
-	Menu.ssh "$1"
+	Menu.root "$1"
 
 	setup_networking
 	setup_resolv
@@ -14,7 +14,7 @@ Menu.deps() {
 	Install.motd
 	Install.syslogd
 
-	# activating firewall & allowing SSH port
+	# activating firewall, allowing SSH port
 	Install.firewall "$1"
 }	# end Menu.deps
 
