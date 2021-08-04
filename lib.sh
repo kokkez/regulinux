@@ -528,6 +528,8 @@
 			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
 		Cmd.usable "Menu.password" && {
 			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
+		Cmd.usable "Menu.bench" && {
+			s+="   . $(Dye.fg.orange bench)       basic benchmark to get OS info\n"; }
 		Cmd.usable "Menu.iotest" && {
 			s+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the server\n"; }
 		Cmd.usable "Menu.resolv" && {
