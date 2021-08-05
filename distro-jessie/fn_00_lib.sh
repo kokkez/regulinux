@@ -24,3 +24,19 @@ svc_evoke() {
 	[ "${a}" = "reload" ] && a="reload-or-restart"
 	cmd systemctl ${a} ${s}.service
 }	# end svc_evoke
+
+
+SSH.antihangs() {
+	# mitigating ssh hang on reboot on systemd capables OSes
+	# no arguments expected
+	local f='ssh-user-sessions.service'
+
+	# install & enable a custom file
+	[ -s "/etc/systemd/system/$f" ] || {
+		Msg.info "Mitigating the problem of SSH hangs on reboot"
+		File.into '/etc/systemd/system' "ssh/$f"
+		cmd systemctl enable "$f"
+		cmd systemctl start "$f"
+		cmd systemctl daemon-reload
+	}
+}	# end SSH.antihangs

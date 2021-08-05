@@ -8,12 +8,38 @@
 #  - mitigation of "ssh hang on reboot"
 # ------------------------------------------------------------------------------
 
+SSH.antihangs() {
+	# mitigating ssh hang on reboot on systemd capables OSes
+	# no arguments expected
+	local p f='ssh-session-cleanup.service'
+
+	# install & enable a file already present in the OS
+	[ -s "/etc/systemd/system/$f" ] || {
+		p="/usr/share/doc/openssh-client/examples/$f"
+		[ -s "$p" ] && {
+			cmd cp "$p" '/etc/systemd/system/'
+			cmd systemctl enable "$f"
+			cmd systemctl start "$f"
+			cmd systemctl daemon-reload
+		}
+	}
+
+	# edit script to catch all sshd demons: shell & winscp
+	p='/usr/lib/openssh/ssh-session-cleanup'
+	[ -s "$p" ] && {
+		sed -ri "$p" \
+			-e 's|^(ssh_session_pattern=).*|\1"sshd: \\\S.*@\\\w+"|'
+		Msg.info "Mitigation of 'SSH hangs on reboot' completed"
+	}
+}	# end SSH.antihangs
+
+
 Menu.root() {
 	# arrange the system for the root user
 	# $1 - ssh port number, optional
 
 	# stop here if no private key was found
-	local x p=~/.ssh
+	local p=~/.ssh
 	grep -q '^ssh\-rsa' "$p/authorized_keys" || {
 		Msg.error "Missing 'ssh-rsa' private key in '$p/authorized_keys'"
 	}
@@ -41,24 +67,7 @@ Menu.root() {
 		Msg.info "Switch to a customized '~/.bashrc' completed!"
 	}
 
-	# mitigating ssh hang on reboot on systemd capables OSes
-	x='ssh-session-cleanup.service'
-	[ -s "/etc/systemd/system/$x" ] || {
-		p="/usr/share/doc/openssh-client/examples/$x"
-		[ -s "$p" ] && {
-			cmd cp "$p" '/etc/systemd/system/'
-			cmd systemctl enable $x
-			cmd systemctl start $x
-			cmd systemctl daemon-reload
-		}
-	}
-	# edit script to catch all sshd demons: shell & winscp
-	p='/usr/lib/openssh/ssh-session-cleanup'
-	[ -s "$p" ] && {
-		sed -ri "$p" \
-			-e 's|^(ssh_session_pattern=).*|\1"sshd: \\\S.*@\\\w+"|'
-		Msg.info "Mitigation of 'SSH hangs on reboot' completed"
-	}
+	SSH.antihangs
 
 	# configure SSH server parameters
 	p=$( Port.audit ${1:-$SSHD_PORT} )
