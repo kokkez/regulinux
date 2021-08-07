@@ -12,10 +12,10 @@ install_dovecot() {
 
 	# preseed dovecot on jessie
 	[ "$ENV_release" = "debian-8" ] && {
-		debconf-set-selections <<EOF
-dovecot-core dovecot-core/create-ssl-cert boolean true
-dovecot-core dovecot-core/ssl-cert-name string $HOST_FQDN
-EOF
+		debconf-set-selections <<- EOF
+			dovecot-core dovecot-core/create-ssl-cert boolean true
+			dovecot-core dovecot-core/ssl-cert-name string $HOST_FQDN
+			EOF
 	}
 
 	# install required & useful packages

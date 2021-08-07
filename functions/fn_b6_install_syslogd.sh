@@ -21,21 +21,21 @@ Install.syslogd() {
 	done
 
 	# dash before path means to not flush immediately at every logged line
-	cat > /etc/syslog.conf <<EOF
-*.*;auth,authpriv,cron,kern,mail.none	-/var/log/syslog
-auth,authpriv.*							-/var/log/auth.log
-cron.*									-/var/log/cron.log
-kern.=!warning							-/var/log/kern.log
-kern.=warning							-/var/log/iptables.log
-mail.err								-/var/log/mail.err
-mail.*									-/var/log/mail.log
-EOF
+	cat > /etc/syslog.conf <<- EOF
+		*.*;auth,authpriv,cron,kern,mail.none	-/var/log/syslog
+		auth,authpriv.*							-/var/log/auth.log
+		cron.*									-/var/log/cron.log
+		kern.=!warning							-/var/log/kern.log
+		kern.=warning							-/var/log/iptables.log
+		mail.err								-/var/log/mail.err
+		mail.*									-/var/log/mail.log
+		EOF
 
 	# install /etc/logrotate.d/inetutils-syslogd
-	p=/etc/logrotate.d
-	mkdir -p $p
-	rm -f $p/inetutils-syslogd
-	File.into $p inetutils-syslogd
+	p='/etc/logrotate.d'
+	mkdir -p "$p"
+	rm -f "$p/inetutils-syslogd"
+	File.into "$p" inetutils-syslogd
 
 	> /var/log/syslog
 	cmd systemctl restart inetutils-syslogd

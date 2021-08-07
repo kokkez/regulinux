@@ -59,19 +59,11 @@ Menu.root() {
 	cmd dpkg-reconfigure -f 'noninteractive' 'dash'
 	Msg.info "Switch to BASH as default shell completed!"
 
-	# copy our customized version of .bashrc in home folder
-	p=~/.bashrc
-	[ -s "$p" ] && grep -q 'os\.sh' "$p" || {
-		File.into ~ .bashrc
-		source "$p"
-		Msg.info "Switch to a customized '~/.bashrc' completed!"
-	}
-
 	SSH.antihangs
 
 	# configure SSH server parameters
 	p=$( Port.audit ${1:-$SSHD_PORT} )
-	sed -ri /etc/ssh/sshd_config \
+	cmd sed -ri /etc/ssh/sshd_config \
 		-e "s|^#?(Port)\s.*|\1 $p|" \
 		-e 's|^#?(PasswordAuthentication)\s.*|\1 no|' \
 		-e 's|^#?(PermitRootLogin)\s.*|\1 without-password|' \
@@ -79,6 +71,14 @@ Menu.root() {
 		-e 's|^#?(PubkeyAuthentication)\s.*|\1 yes|'
 	cmd systemctl restart ssh
 	Msg.info "SSH server is now listening on port: $p"
+
+	# copy our customized version of .bashrc in home folder
+	p=~/.bashrc
+	[ -s "$p" ] && grep -q 'os\.sh' "$p" || {
+		File.into ~ .bashrc
+		source "$p"
+		Msg.info "Switch to a customized '~/.bashrc' completed!"
+	}
 
 	# copy preferences for htop
 	p=~/.config/htop

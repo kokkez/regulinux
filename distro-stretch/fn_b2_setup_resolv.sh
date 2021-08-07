@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 resolv_via_resolvconf() {
-	local n t r=/etc/resolv.conf
+	local n t r='/etc/resolv.conf'
 	File.backup "$r"
 
 	# set known public dns

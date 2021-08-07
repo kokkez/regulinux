@@ -1,22 +1,22 @@
 # ------------------------------------------------------------------------------
-# customize OS minimalizing the installed packages
+# customize the OS, minimalizing the installed packages
 # ------------------------------------------------------------------------------
 
 OS.minimalize() {
 	# always use --no-install-recommends (also used as a check in "Deps.performed")
-	cat > /etc/apt/apt.conf.d/99norecommend <<EOF
-APT::Install-Recommends "0";
-APT::Install-Suggests "0";
-EOF
+	cat > /etc/apt/apt.conf.d/99norecommend <<- EOF
+		APT::Install-Recommends "0";
+		APT::Install-Suggests "0";
+		EOF
 
 	# preseed libc6 & postfix via debconf-set-selections
-	cmd debconf-set-selections <<EOF
-libc6 libraries/restart-without-asking boolean true
-libc6:amd64 libraries/restart-without-asking boolean true
-postfix postfix/main_mailer_type select Internet Site
-postfix postfix/mailname string $MAIL_NAME
-postfix postfix/destinations string $HOST_FQDN,localhost
-EOF
+	cmd debconf-set-selections <<- EOF
+		libc6 libraries/restart-without-asking boolean true
+		libc6:amd64 libraries/restart-without-asking boolean true
+		postfix postfix/main_mailer_type select Internet Site
+		postfix postfix/mailname string $MAIL_NAME
+		postfix postfix/destinations string $HOST_FQDN,localhost
+		EOF
 
 	# purging foreign architectures (i*86, ...)
 	local x

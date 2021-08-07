@@ -21,20 +21,20 @@ setup_networking() {
 		# backup original file
 		File.backup "$p"
 
-		cmd cat > "$p" <<EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
+		cmd cat > "$p" <<- EOF
+			# This file describes the network interfaces available on your system
+			# and how to activate them. For more information, see interfaces(5).
 
-# loopback interface
-auto lo
-iface lo inet loopback
+			# loopback interface
+			auto lo
+			iface lo inet loopback
 
-# ethernet interface
-auto $i
-iface $i inet static
-  address $a/24
-  gateway $g
-EOF
+			# ethernet interface
+			auto $i
+			iface $i inet static
+			  address $a/24
+			  gateway $g
+			EOF
 	}
 
 	# activating the configuration

@@ -13,10 +13,18 @@ Bench.cmd() {
 }	# end Bench.cmd
 
 
+Bench.newssl() {
+	# Instead of looking for versions greater than or equal to 1.1.1, this looks
+	# for versions less than 1.1.1: versions starting with "0.", "1.0", or "1.1.0"
+	# https://unix.stackexchange.com/questions/555731/how-to-check-if-the-openssl-version-is-ge-1-1-1-in-a-shell-script
+	cmd openssl version | cmd awk '$2 ~ /(^0\.)|(^1\.(0\.|1\.0))/ { exit 1 }'
+}	# end Bench.newssl
+
+
 Menu.bench() {
 	# basic benchmark to get OS info
 	# no arguments expected
-	local ts cpu cor mhz ram swa ker vir hdd ip4 ip6
+	local ts vir cpu cor mhz ram swa ker hdd ip4 ip6
 
 	# current date
 	ts=$(cmd date -u '+%F %T UTC')
@@ -46,7 +54,7 @@ Menu.bench() {
 	ip6=$(printf '  %s\n' $(hostname -I) | cmd grep :)
 	[ -z "$ip6" ] && ip6="  none founds"
 
-	cat <<- EOF
+	cmd cat <<- EOF
 		----------------------- OS Benchmark -- $ts --
 		> Virtualization: $vir
 		> RAM:            $ram
@@ -63,10 +71,11 @@ Menu.bench() {
 		> IPv6:
 		  $ip6
 		------------------------------------------------------------------
-	EOF
+		EOF
 
 	# CPU tests
 	Bench.cmd 'CPU: SHA256-hashing   ' sha256sum
 	Bench.cmd 'CPU: bzip2-compressing' bzip2
-	Bench.cmd 'CPU: AES-encrypting   ' openssl enc -e -aes-256-cbc -pbkdf2 -pass pass:12345678
+	Bench.newssl && ts='-pbkdf2' || ts=''
+	Bench.cmd 'CPU: AES-encrypting   ' openssl enc -e -aes-256-cbc $ts -pass pass:12345678
 }	# end Menu.bench

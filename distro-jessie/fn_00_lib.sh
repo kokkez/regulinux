@@ -33,10 +33,10 @@ SSH.antihangs() {
 
 	# install & enable a custom file
 	[ -s "/etc/systemd/system/$f" ] || {
-		Msg.info "Mitigating the problem of SSH hangs on reboot"
 		File.into '/etc/systemd/system' "ssh/$f"
 		cmd systemctl enable "$f"
 		cmd systemctl start "$f"
 		cmd systemctl daemon-reload
+		Msg.info "Mitigation of 'SSH hangs on reboot' for $ENV_os completed"
 	}
 }	# end SSH.antihangs
