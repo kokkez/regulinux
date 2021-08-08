@@ -4,7 +4,7 @@
 
 Menu.mailserver() {
 	# $1: target system to build, optional
-	TARGET="${1-$TARGET}"
+	TARGET="${1:-$TARGET}"
 
 	# abort if "Menu.deps" was not executed
 	Deps.performed || return
@@ -14,7 +14,7 @@ Menu.mailserver() {
 
 	if [ "$TARGET" = "ispconfig" ]; then
 		config_postfix_ispconfig	# postfix with dovecot for ispconfig
-		install_dovecot
+		Install.dovecot
 
 	elif [ "$TARGET" = "assp" ]; then
 		User.vmail.set

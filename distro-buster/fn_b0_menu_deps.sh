@@ -6,8 +6,8 @@ Menu.deps() {
 	# $1: ssh port number, optional
 	Menu.root "$1"
 
-	setup_networking
-	setup_resolv
+	OS.networking
+	OS.resolvconf
 	setup_tz
 	OS.minimalize
 

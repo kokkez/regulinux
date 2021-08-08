@@ -2,7 +2,7 @@
 # disable and remove netplan networking system in favor of the classic ifupdown
 # ------------------------------------------------------------------------------
 
-setup_networking() {
+OS.networking() {
 	# abort if already using classic networking
 	[ -e '/run/network/ifstate' ] && return
 
@@ -52,5 +52,5 @@ setup_networking() {
 
 	Msg.info "Disabling of netplan configuration is completed"
 	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
-}	# end setup_networking
+}	# end OS.networking
 

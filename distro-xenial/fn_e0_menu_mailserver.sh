@@ -14,7 +14,7 @@ Menu.mailserver() {
 
 	if [ "$TARGET" = "ispconfig" ]; then
 		config_postfix_ispconfig	# postfix with dovecot for ispconfig
-		install_dovecot
+		Install.dovecot
 
 	elif [ "$TARGET" = "assp" ]; then
 		User.vmail.set

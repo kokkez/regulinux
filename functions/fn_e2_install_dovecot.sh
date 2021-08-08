@@ -2,7 +2,7 @@
 # install dovecot
 # ------------------------------------------------------------------------------
 
-install_dovecot() {
+Install.dovecot() {
 	Pkg.installed "dovecot-imapd" && {
 		Msg.warn "Dovecot is already installed..."
 		return
@@ -25,4 +25,4 @@ install_dovecot() {
 	Fw.allow 'mail'
 
 	Msg.info "Installation of dovecot completed!"
-}	# end install_dovecot
+}	# end Install.dovecot

@@ -3,7 +3,7 @@
 # https://wiki.opennic.org/api/geoip
 # ------------------------------------------------------------------------------
 
-resolv_via_resolvconf() {
+Resolv.classic() {
 	local n t r='/etc/resolv.conf'
 	File.backup "$r"
 
@@ -25,21 +25,32 @@ resolv_via_resolvconf() {
 
 	Msg.info "Configuration of $t public dns completed! Now $r has:"
 	sed 's|^|> |' < "$r"
-}	# end resolv_via_resolvconf
+}	# end Resolv.classic
 
 
-resolv_via_systemd() {
-	# simply delete the symlink
-	rm -rf '/etc/resolv.conf'
+Resolv.systemd() {
+	local f='/etc/systemd/resolved.conf.d'
 
-	# then recreate the file
-	resolv_via_resolvconf
-}	# end resolv_via_systemd
+	# if 'dns_servers.conf' already exists, then exit here
+	[ -s "$f/dns_servers.conf" ] && return
+
+	# copying files
+	mkdir -p "$f"
+	File.into "$f" resolved.conf.d/*
+
+	# fully activate systemd-resolved
+	cmd systemctl unmask systemd-resolved
+	cmd systemctl enable systemd-resolved
+	cmd systemctl restart systemd-resolved
+	#cmd systemd-resolve --status
+
+	Msg.info "Configuration of public dns completed via systemd-resolved"
+}	# end Resolv.systemd
 
 
-setup_resolv() {
+OS.resolvconf() {
 	# if resolv.conf is a valid symlink, then setup via systemd
 	File.islink '/etc/resolv.conf' \
-		&& resolv_via_systemd \
-		|| resolv_via_resolvconf
-}	# end setup_resolv
+		&& Resolv.systemd \
+		|| Resolv.classic
+}	# end OS.resolvconf

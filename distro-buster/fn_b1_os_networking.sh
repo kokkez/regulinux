@@ -2,7 +2,7 @@
 # make the ip address static if found to be dynamic, on classic ifupdown
 # ------------------------------------------------------------------------------
 
-setup_networking() {
+OS.networking() {
 	# abort if NOT using classic networking
 	[ -e '/run/network/ifstate' ] || return
 
@@ -44,4 +44,4 @@ EOF
 
 	Msg.info "Networking changed to run with static IP: $a"
 	Msg.warn "Carefully check '$p' before reboot!"
-}	# end setup_networking
+}	# end OS.networking
