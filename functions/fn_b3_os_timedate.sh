@@ -2,7 +2,7 @@
 # customize timezone & localtime
 # ------------------------------------------------------------------------------
 
-setup_tz() {
+OS.timedate() {
 	local t=${1:-$TIME_ZONE}
 
 	[ -f "/usr/share/zoneinfo/$t" ] || {
@@ -17,4 +17,4 @@ setup_tz() {
 
 	Msg.info "Configuration of timezone completed!"
 	cmd timedatectl | cmd sed 's|^|> |'
-}	# end setup_tz
+}	# end OS.timedate

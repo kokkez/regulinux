@@ -8,7 +8,7 @@ Menu.deps() {
 
 	OS.networking
 	OS.resolvconf
-	setup_tz
+	OS.timedate
 	OS.minimalize
 
 	Install.motd
