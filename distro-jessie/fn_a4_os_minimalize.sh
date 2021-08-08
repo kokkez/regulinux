@@ -2,7 +2,7 @@
 # customize the OS, minimalizing the installed packages
 # ------------------------------------------------------------------------------
 
-OS.minimalize() {
+EX.minimalize() {
 	# install sources.list
 	File.into /etc/apt sources.list
 	Msg.info "Installed /etc/apt/sources.list for ${ENV_os}..."

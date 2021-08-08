@@ -1,20 +1,20 @@
 # ------------------------------------------------------------------------------
-# cleanup OS minimizing the installed packages
+# preparing a basic OS, ready to host applications
 # ------------------------------------------------------------------------------
 
 Menu.deps() {
-	# $1: ssh port number
-	Menu.resolv
+	# $1: ssh port number, optional
+	Menu.root "$1"
 
-	shell_bash
-	Menu.tz
+	OS.networking
+	OS.resolvconf
+	OS.timedate
 	OS.minimalize
-	Install.syslogd
-	Install.firewall "$1"
 
 	Install.motd
-	Menu.ssh "$1"
+	Install.syslogd
 
-	Menu.resolv
+	# activating firewall, allowing SSH port
+	Install.firewall "$1"
 }	# end Menu.deps
 
