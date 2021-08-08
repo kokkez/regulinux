@@ -45,14 +45,14 @@ Menu.bench() {
 	ker=$(cmd uname -srm)
 	# disks
 #	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("  %dGB %s\n",$2 / 1024000,$NF)}')
-	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("  %dGiB %s\n",$2 / 1048576,$NF)}')
-	[ -z "$hdd" ] && hdd="  none founds"
+	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("    %dGiB %s\n",$2 / 1048576,$NF)}')
+	[ -z "$hdd" ] && hdd="    none founds"
 	# IPv4
-	ip4=$(printf '  %s\n' $(hostname -I) | cmd grep -v :)
-	[ -z "$ip4" ] && ip4="  none founds"
+	ip4=$(printf '    %s\n' $(hostname -I) | cmd grep -v :)
+	[ -z "$ip4" ] && ip4="    none founds"
 	# IPv6
-	ip6=$(printf '  %s\n' $(hostname -I) | cmd grep :)
-	[ -z "$ip6" ] && ip6="  none founds"
+	ip6=$(printf '    %s\n' $(hostname -I) | cmd grep :)
+	[ -z "$ip6" ] && ip6="    none founds"
 
 	cmd cat <<- EOF
 		----------------------- OS Benchmark -- $ts --
@@ -65,11 +65,11 @@ Menu.bench() {
 		> Kernel:         $ker
 		------------------------------------------------------------------
 		> Disks:
-		  $hdd
+		$hdd
 		> IPv4:
-		  $ip4
+		$ip4
 		> IPv6:
-		  $ip6
+		$ip6
 		------------------------------------------------------------------
 		EOF
 

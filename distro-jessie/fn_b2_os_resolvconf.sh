@@ -19,7 +19,7 @@ Resolv.classic() {
 	Pkg.requires e2fsprogs
 
 	# write to /etc/resolv.conf
-	[ -s "$r" ] && cmd chattr -i "$r"		# allow file modification
+	[ -s "$r" ] && cmd chattr -i "$r"	# allow file modification
 	echo -e "# public dns\n$n" > "$r"
 	cmd chattr +i "$r"					# disallow file modification
 
