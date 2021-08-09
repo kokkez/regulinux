@@ -1,67 +1,81 @@
 # ------------------------------------------------------------------------------
-# customized functions for ubuntu 20.04 focal
+# custom functions specific to ubuntu 20.04 focal
 # ------------------------------------------------------------------------------
 
-OS.menu() {
-	# display the main menu on screen
-	local S O=""
+Menu.upgrade() {
+	Msg.info "Upgrading system packages for ${ENV_os}..."
+	Pkg.update	# update packages lists
 
-	# Basic menu options
-	S=""
-	Cmd.usable "Menu.ssh" && {
-		S+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
-	Cmd.usable "Menu.deps" && {
-		S+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
-	[ -z "$S" ] || {
-		O+=" [ . $(Dye.fg.white Basic menu options) ---------------------------- (in recommended order) -- ]\n$S"; }
+	# do the apt upgrade
+	export DEBIAN_FRONTEND=noninteractive
+	cmd apt -qy full-upgrade
+}	# end Menu.upgrade
 
-	# Standalone utilities
-	S=""
-	Cmd.usable "Menu.upgrade" && {
-		S+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
-	Cmd.usable "Menu.password" && {
-		S+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
-	Cmd.usable "Menu.iotest" && {
-		S+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the VPS\n"; }
-	[ -z "$S" ] || {
-		O+=" [ . $(Dye.fg.white Standalone utilities) ------------------------ (in no particular order) -- ]\n$S"; }
 
-	# Main applications
-	S=""
-	Cmd.usable "Menu.mailserver" && {
-		S+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
-	Cmd.usable "Menu.dbserver" && {
-		S+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw in $(Dye.fg.white ~/.my.cnf)\n"; }
-	Cmd.usable "Menu.webserver" && {
-		S+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
-	[ -z "$S" ] || {
-		O+=" [ . $(Dye.fg.white Main applications) ----------------------------- (in recommended order) -- ]\n$S"; }
+Repo.php() {
+	# add external repository for updated php
+	local p='/etc/apt/sources.list.d/php.list'
+	[ -s "$p" ] && return
 
-	# Target system
-	S=""
-	Cmd.usable "Menu.dns" && {
-		S+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
-	Cmd.usable "Menu.assp1" && {
-		S+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
-	Cmd.usable "Menu.ispconfig" && {
-		S+="   . $(Dye.fg.orange ispconfig)   historical Control Panel with support at $(Dye.fg.white howtoforge.com)\n"; }
-	[ -z "$S" ] || {
-		O+=" [ . $(Dye.fg.white Target system) ------------------------------- (in no particular order) -- ]\n$S"; }
+	# add required software & the repo key
+	Pkg.requires gnupg
+	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
+	cat > "$p" <<EOF
+# Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
+deb http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+EOF
+	# forcing apt update
+	Pkg.update 'coerce'
+}	# end Repo.php
 
-	# Others applications
-	S=""
-	Cmd.usable "Menu.dumpdb" && {
-		S+="   . $(Dye.fg.orange dumpdb)      perform the backup of all databases, or the one given in \$1\n"; }
-	Cmd.usable "Menu.roundcube" && {
-		S+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
-	Cmd.usable "Menu.nextcloud" && {
-		S+="   . $(Dye.fg.orange nextcloud)   on-premises file share and collaboration platform\n"; }
-	Cmd.usable "Menu.espo" && {
-		S+="   . $(Dye.fg.orange espo)        EspoCRM full featured CRM web application\n"; }
-	Cmd.usable "Menu.acme" && {
-		S+="   . $(Dye.fg.orange acme)        shell script for Let's Encrypt free SSL certificates\n"; }
 
-	echo -e " $(Date.fmt '+%F %T %z') :: $(Dye.fg.orange $ENV_os $ENV_arch) :: ${ENV_dir}\n$S
- [ ------------------------------------------------------------------------------------------- ]"
-}	# end OS.menu
+sslcert_symlink() {
+	# create the symlink pointing to a real file
+	# $1 - path to the file to convert to symlink
+	# $2 - path to the target file
+	File.islink "$1" || {
+		[ -s "$1" ] && {
+			mv -f "$1" "${1}.bak"
+			[ "${2:0:1}" = "/" ] || cd $(cmd dirname "$1")
+			[ -s "$2" ] && ln -nfs "$2" "$1"
+		}
+	}
+}	# end sslcert_symlink
 
+
+sslcert_paths() {
+	# adjust paths to points to these certificates
+	# $1 - full path to the key file
+	# $2 - full path to the certificate file
+	Arg.expect "$1" "$2" || return
+
+	# default certificate paths
+	sslcert_symlink '/etc/ssl/private/ssl-cert-snakeoil.key' "$1"
+	sslcert_symlink '/etc/ssl/certs/ssl-cert-snakeoil.pem' "$2"
+
+	# postfix certificate paths
+	sslcert_symlink '/etc/postfix/smtpd.key' "$1"
+	sslcert_symlink '/etc/postfix/smtpd.cert' "$2"
+
+	# ispconfig certificate paths
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.key' "$1"
+	sslcert_symlink '/usr/local/ispconfig/interface/ssl/ispserver.crt' "$2"
+
+	# adjust default-ssl symlink for apache
+	[ -s /etc/apache2/sites-available/default-ssl.conf ] && {
+		cd /etc/apache2/sites-enabled
+		File.islink '0000-default-ssl.conf' || {
+			ln -s ../sites-available/default-ssl.conf '0000-default-ssl.conf'
+			rm -rf default-ssl*
+		}
+		# enable related modules, then restart apache2
+		a2enmod rewrite headers ssl
+		cmd systemctl restart apache2
+	}
+
+	# restart nginx webserver if installed
+	[ "$HTTP_SERVER" = "nginx" ] && cmd systemctl restart nginx
+
+	Msg.info "Symlinks for the given SSL Certificate completed!"
+}	# end sslcert_paths
