@@ -158,7 +158,7 @@ Menu.root() {
 	Arrange.sources			# install sources.list for apt
 	Arrange.shell			# set bash as the default shell
 
-#	Arrange.unhang			# mitigating ssh hang on reboot, via systemd
+	Arrange.unhang			# mitigating ssh hang on reboot, via systemd
 	Arrange.sshd "$1"		# configure SSH server parameters
 #	Install.firewall "$1"	# activating firewall, allowing SSH logins
 

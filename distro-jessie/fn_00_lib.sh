@@ -26,7 +26,7 @@ svc_evoke() {
 }	# end svc_evoke
 
 
-SSH.antihangs() {
+Arrange.unhang() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	# no arguments expected
 	local f='ssh-user-sessions.service'
@@ -39,4 +39,4 @@ SSH.antihangs() {
 		cmd systemctl daemon-reload
 		Msg.info "Mitigation of 'SSH hangs on reboot' for $ENV_os completed"
 	}
-}	# end SSH.antihangs
+}	# end Arrange.unhang
