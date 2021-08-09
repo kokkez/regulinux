@@ -4,13 +4,19 @@
 #  - authorized keys
 #  - apt/sources.list
 #  - bash as default shell
+#  - setup /etc/network/interfaces file
+#  - customize resolv.conf with public dns
+#  - customize timezone & localtime
+#  - minimalizing the installed packages
+#  - customize the "Mot Of The Day" screen
+#  - simple vanilla syslogd to replace rsyslogd
 #  - mitigation of "ssh hang on reboot"
 #  - strong configuration of SSHd
 #  - customized .bashrc
 #  - customized preferences for htop
 # ------------------------------------------------------------------------------
 
-Prepare.authkeys() {
+Arrange.authkeys() {
 	# set authorized_keys to allow comfortable root logins
 	local p=~/.ssh
 
@@ -27,25 +33,25 @@ Prepare.authkeys() {
 	cmd chmod 0700 "$p"
 	cmd chmod 0600 "$p/authorized_keys"
 	Msg.info "Setup of authorized_keys completed!"
-}	# end Prepare.authkeys
+}	# end Arrange.authkeys
 
 
-Prepare.sources() {
+Arrange.sources() {
 	# install sources.list for apt
 	File.into /etc/apt sources.list
 	Msg.info "Installation of 'sources.list' for $ENV_os completed!"
-}	# end Prepare.sources
+}	# end Arrange.sources
 
 
-Prepare.shell() {
+Arrange.shell() {
 	# set bash as the default shell
 	cmd debconf-set-selections <<< 'dash dash/sh boolean false'
 	cmd dpkg-reconfigure -f 'noninteractive' 'dash'
 	Msg.info "Switch to BASH as default shell completed!"
-}	# end Prepare.shell
+}	# end Arrange.shell
 
 
-Prepare.antihangs() {
+Arrange.unhang() {
 	# mitigating ssh hang on reboot on systemd capables OSes
 	# no arguments expected
 	local p f='ssh-session-cleanup.service'
@@ -68,10 +74,10 @@ Prepare.antihangs() {
 			-e 's|^(ssh_session_pattern=).*|\1"sshd: \\\S.*@\\\w+"|'
 		Msg.info "Mitigation of 'SSH hangs on reboot' completed"
 	}
-}	# end Prepare.antihangs
+}	# end Arrange.unhang
 
 
-Prepare.sshd() {
+Arrange.sshd() {
 	# configure SSH server parameters
 	# $1: ssh port number, optional
 	p=$( Port.audit ${1:-$SSHD_PORT} )
@@ -83,10 +89,10 @@ Prepare.sshd() {
 		-e 's|^#?(PubkeyAuthentication)\s.*|\1 yes|'
 	cmd systemctl restart ssh
 	Msg.info "SSH server is now listening on port: $p"
-}	# end Prepare.sshd
+}	# end Arrange.sshd
 
 
-Prepare.bashrc() {
+Arrange.bashrc() {
 	# copy our customized version of .bashrc in home folder
 	local p=~/.bashrc
 	[ -s "$p" ] && grep -q 'os\.sh' "$p" || {
@@ -94,10 +100,10 @@ Prepare.bashrc() {
 		source "$p"
 		Msg.info "Switch to a customized '~/.bashrc' completed!"
 	}
-}	# end Prepare.bashrc
+}	# end Arrange.bashrc
 
 
-Prepare.htop() {
+Arrange.htop() {
 	# copy preferences for htop
 	local p=~/.config/htop
 	[ -d "$p" ] || {
@@ -106,29 +112,56 @@ Prepare.htop() {
 		cmd chmod 0700 "${p%/*}" "$p"
 		Msg.info "Installation of preferences for htop completed!"
 	}
-}	# end Prepare.htop
+}	# end Arrange.htop
 
 
-Menu.prepare() {
+Deps.performed() {
+	# return success if the step "Menu.deps" was already performed 
+	# simply check that 99norecommend exists into apt.conf.d
+	[ -f '/etc/apt/apt.conf.d/99norecommend' ] && return 0
+	# simply check that /etc/apt/apt.conf.d/99norecommend exists
+	Msg.warn "Need to execute the step '$(Dye.fg.white os deps)' before..."
+	return 1
+}	# end Deps.performed
+
+
+Menu.deps() {
 	# preparing a basic OS, ready to host applications
 	# $1: ssh port number, optional
 
-	Prepare.authkeys		# stop here if no private keys found
-	Prepare.sources			# install sources.list for apt
-	Prepare.shell			# set bash as the default shell
+	Arrange.authkeys		# stop here if no private keys found
+	Arrange.sources			# install sources.list for apt
+	Arrange.shell			# set bash as the default shell
 
 	OS.networking			# setup /etc/network/interfaces file
 	OS.resolvconf			# customize resolv.conf with public dns
 	OS.timedate				# customize timezone & localtime
-	OS.minimalize			# minimalizing the installed packages
 
+	OS.minimalize			# minimalizing the installed packages
 	Install.motd			# customize the "Mot Of The Day" screen
 	Install.syslogd			# simple vanilla syslogd to replace rsyslogd
 
-	Prepare.antihangs		# mitigating ssh hang on reboot, via systemd
-	Prepare.sshd "$1"		# configure SSH server parameters
-	Install.firewall "$1"	# activating firewall, allowing SSH port
+	Arrange.unhang			# mitigating ssh hang on reboot, via systemd
+	Arrange.sshd "$1"		# configure SSH server parameters
+	Install.firewall "$1"	# activating firewall, allowing SSH logins
 
-	Prepare.bashrc			# customize .bashrc in home folder
-	Prepare.htop			# customize preferences for htop
-}	# end Menu.prepare
+	Arrange.bashrc			# customize .bashrc in home folder
+	Arrange.htop			# customize preferences for htop
+}	# end Menu.deps
+
+
+Menu.root() {
+	# arrange the OS to comfortably accept root logins
+	# $1: ssh port number, optional
+
+	Arrange.authkeys		# stop here if no private keys found
+	Arrange.sources			# install sources.list for apt
+	Arrange.shell			# set bash as the default shell
+
+#	Arrange.unhang			# mitigating ssh hang on reboot, via systemd
+	Arrange.sshd "$1"		# configure SSH server parameters
+#	Install.firewall "$1"	# activating firewall, allowing SSH logins
+
+	Arrange.bashrc			# customize .bashrc in home folder
+	Arrange.htop			# customize preferences for htop
+}	# end Menu.root

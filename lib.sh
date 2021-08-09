@@ -342,17 +342,6 @@
 	}	# end Menu.iotest
 
 
-	Deps.performed() {
-		# test that the step "Menu.deps" was already executed
-
-		# simply check that /etc/apt/apt.conf.d/99norecommend exists
-		[ -f '/etc/apt/apt.conf.d/99norecommend' ] || {
-			Msg.warn "Need to execute the step 'os deps' before..."
-			return 1
-		}
-	}	# end Deps.performed
-
-
 	Port.audit() {
 		# set port in $1 to be strictly numeric & in a known range
 		# $1 - port number, optional, defaults to 22 (ssh)
@@ -520,7 +509,7 @@
 		Cmd.usable "Menu.prepare" && {
 			s+="   . $(Dye.fg.orange prepare)     setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.deps" && {
-			s+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
+			s+="   . $(Dye.fg.orange deps)        run prepare, check dependencies, update the base system, setup firewall\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
 
