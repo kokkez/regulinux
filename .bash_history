@@ -13,12 +13,12 @@ free -h
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
 #
 # upgrade debian 8 jessie to debian 9 stretch
-command cat <<EOF > /etc/apt/sources.list
-# Debian 8 Jessie :: https://wiki.debian.org/SourcesList
-deb http://deb.debian.org/debian jessie main contrib non-free
-#deb http://deb.debian.org/debian jessie-updates main contrib non-free
-deb http://security.debian.org/ jessie/updates main contrib non-free
-EOF
+command cat > /etc/apt/sources.list <<- EOF
+	# Debian 8 Jessie :: https://wiki.debian.org/SourcesList
+	deb http://deb.debian.org/debian jessie main contrib non-free
+	#deb http://deb.debian.org/debian jessie-updates main contrib non-free
+	deb http://security.debian.org/ jessie/updates main contrib non-free
+	EOF
 apt-get update
 apt-get upgrade
 apt-get dist-upgrade
