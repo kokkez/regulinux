@@ -1,6 +1,7 @@
 #!/bin/bash
 # ==============================================================================
 # forcing full hostname & load iptables rules
+# no tabs allowed in this file, only spaces, or <bionic> complains
 # ==============================================================================
 
 command hostname -f > /etc/hostname

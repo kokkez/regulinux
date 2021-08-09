@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 Install.motd() {
-	local p=/etc/update-motd.d
+	local p='/etc/update-motd.d'
 
 	# abort if MOTD is already installed
 	[ -s "$p/*-footer" ] && return
@@ -14,7 +14,7 @@ Install.motd() {
 	# copying files & make them executables
 	mkdir -p "$p"
 	rm -rf $p/*
-	File.into $p motd/*
+	File.into "$p" motd/*
 	chmod +x $p/*
 
 	# remove /etc/motd on pure debian

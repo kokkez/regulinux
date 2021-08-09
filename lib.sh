@@ -517,6 +517,8 @@
 			s+="   . $(Dye.fg.orange root)        setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.ssh" && {
 			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
+		Cmd.usable "Menu.prepare" && {
+			s+="   . $(Dye.fg.orange prepare)     setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.deps" && {
 			s+="   . $(Dye.fg.orange deps)        check dependencies, update the base system, setup firewall\n"; }
 		[ -z "$s" ] || {

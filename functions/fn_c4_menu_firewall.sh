@@ -242,7 +242,7 @@ Install.firewall() {
 
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
-	# make rules persistent, so can load on every boot
+	# make rules persistent, so they can load at every boot
 	local p=/etc/network/if-pre-up.d
 	rm -rf "$p/iptables"
 	File.into "$p" ssh/iptables
