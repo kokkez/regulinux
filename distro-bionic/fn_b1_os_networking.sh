@@ -50,7 +50,7 @@ OS.networking() {
 	cmd systemctl mask $i
 	cmd apt -y purge nplan netplan.io
 
-	Msg.info "Disabling of netplan configuration is completed"
+	Msg.info "Disabling of netplan configuration, completed"
 	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
 }	# end OS.networking
 
