@@ -6,7 +6,7 @@ ca-certificates       install
 cron                  install
 curl                  install
 dbus                  install
-dmsetup               install
+#dmsetup               install
 dselect               install
 figlet                install
 gawk                  install
@@ -21,6 +21,7 @@ locales               install
 logrotate             install
 lsb-release           install
 lsof                  install
+lvm2                  install
 mawk                  install
 mime-support          install
 #mktemp               install

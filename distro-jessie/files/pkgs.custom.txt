@@ -20,6 +20,7 @@ locales					install
 logrotate				install
 lsb-release				install
 lsof					install
+lvm2					install
 makedev					install
 mime-support			install
 mktemp					install
