@@ -160,7 +160,7 @@ Menu.root() {
 
 	Arrange.unhang			# mitigating ssh hang on reboot, via systemd
 	Arrange.sshd "$1"		# configure SSH server parameters
-#	Install.firewall "$1"	# activating firewall, allowing SSH logins
+	Install.firewall "$1"	# activating firewall, allowing SSH logins
 
 	Arrange.bashrc			# customize .bashrc in home folder
 	Arrange.htop			# customize preferences for htop
