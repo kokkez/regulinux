@@ -58,6 +58,7 @@ openssl s_client -showcerts -connect localhost:465
 fail2ban-client status
 #
 systemctl restart nginx php7.{3,4}-fpm
+update-alternatives --config php
 bash ~/lin*/os.sh deps
 bash ~/lin*/os.sh mailserver ispconfig
 bash ~/lin*/os.sh dbserver ispconfig
