@@ -7,8 +7,9 @@
 
 # Common aliases
 abuse:			postmaster
-spam:			postmaster
+getmail:		postmaster
 nobody:			postmaster
+spam:			postmaster
 www-data:		postmaster
 webmaster:		postmaster
 
