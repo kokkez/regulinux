@@ -16,9 +16,9 @@ install_phpfpm_nginx() {
 	Repo.php
 
 	# now install php packages, + versions 7.4, with some modules
-	Pkg.install php7.3 \
-		php7.3-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
-		php${v} \
+#	Pkg.install php7.3 \
+#		php7.3-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip}
+	Pkg.install	php${v} \
 		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.4-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
