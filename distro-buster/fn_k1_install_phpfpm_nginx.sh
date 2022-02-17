@@ -15,18 +15,18 @@ install_phpfpm_nginx() {
 	# add external repository for updated php
 	Repo.php
 
-	# now install php packages, + versions 7.4, with some modules
-#	Pkg.install php7.3 \
-#		php7.3-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip}
-	Pkg.install	php${v} \
+	# install the default php 7.3, + some versions, with modules
+	Pkg.install php7.3 \
+		php7.3-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
+		php${v} \
 		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php-{gettext,imagick,pear} imagemagick bzip2 mcrypt
 #		php7.4-{cgi,cli,curl,fpm,gd,imap,intl,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 #		php-{memcache,memcached} memcached \
 
-	# set alternative for php in cli mode
-#	cmd update-alternatives --auto php
+	# explicitly set php in cli mode
 	cmd update-alternatives --set php /usr/bin/php${v}
+#	cmd update-alternatives --auto php
 
 	Msg.info "Configuring PHP for nginx..."
 	cd /etc/nginx
