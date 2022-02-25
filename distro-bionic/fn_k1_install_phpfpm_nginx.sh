@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 install_phpfpm_nginx() {
-	local v=7.3
+	local v=7.4
 
 	# abort if package was already installed
 	Pkg.installed "php${v}-fpm" && {
