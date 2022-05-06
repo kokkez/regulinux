@@ -18,7 +18,7 @@ install_phpfpm_apache2() {
 
 	# install php packages with some modules
 	Pkg.install libapache2-mod-fcgid \
-		php7.3 libapache2-mod-php7.3 \
+		php7.3 libapache2-mod-php7.3\
 		php7.3-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,recode,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
 		php$v libapache2-mod-php$v \
 		php${v}-{apcu,apcu-bc,bcmath,bz2,cgi,cli,curl,fpm,gd,gmp,imap,intl,ldap,mbstring,mysql,pspell,soap,sqlite3,tidy,xmlrpc,xsl,zip} \
@@ -31,8 +31,8 @@ install_phpfpm_apache2() {
 	a2enmod proxy_fcgi setenvif fastcgi alias
 
 	# set alternative for php in cli mode (update-alternatives --display php)
-	cmd update-alternatives --auto php
-#	cmd update-alternatives --set php /usr/bin/php${v}
+#	cmd update-alternatives --auto php
+	cmd update-alternatives --set php /usr/bin/php${v}
 
 	# set default php to newest version
 	a2dismod php*
