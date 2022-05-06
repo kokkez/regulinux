@@ -28,5 +28,5 @@ if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
 	DISTRIB_DESCRIPTION=$(lsb_release -sd)
 fi
  
-figlet $(hostname -f) 
+figlet -w 96 -f small $(hostname -f) 
 printf "Welcome to %s %s\n" "$DISTRIB_DESCRIPTION" "$(uname -r)"

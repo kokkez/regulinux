@@ -20,6 +20,8 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  
 proc=$(ps aux | wc -l)
+chss=$(hostnamectl | awk '/Vir/{print $2}')
+chss=${chss:-dedi}
 load=$(awk '{print $1, $2, $3}' /proc/loadavg)
 tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
@@ -36,9 +38,9 @@ uhdd=$(df -h / | awk '/\// {print $(NF-1)}')
 date=$(date +'%F %T %z')
  
 echo
-printf "Processes:\t%s\tSystem load:\t%s\n" "$proc" "$load"
-printf "RAM (%s):\t%s\tIPv4 Address:\t%s [ %s ]\n" "$tram" "$uram" "$ip4n" "$ip4c"
-printf "Swap (%s):\t%s\tSystem uptime:\t%s\n" "$tswa" "$uswa" "$time"
-printf "HD / (%s):\t%s\tCurrent date:\t%s\n" "$disk" "$uhdd" "$date"
+printf "Chassis: %-16s\tSystem load:\t%s\n" "$chss" "$load / $proc proc"
+printf "RAM:     %6s of %-6s\tIPv4: net [cfg]\t%s [ %s ]\n" "$uram" "$tram" "$ip4n" "$ip4c"
+printf "Swap:    %6s of %-6s\tSystem uptime:\t%s\n" "$uswa" "$tswa" "$time"
+printf "Storage: %6s of %-6s\tCurrent date:\t%s\n" "$uhdd" "$disk" "$date"
 echo
 
