@@ -10,7 +10,8 @@ bind-address = 0.0.0.0
 #innodb_read_io_threads   = 2
 #innodb_write_io_threads  = 2
 # nextcloud
-innodb_file_format       = barracuda
-innodb_large_prefix      = true
-innodb_file_per_table    = 1
+innodb_file_format        = barracuda
+innodb_large_prefix       = true
+innodb_file_per_table     = 1
+innodb-default-row-format = dynamic
 
