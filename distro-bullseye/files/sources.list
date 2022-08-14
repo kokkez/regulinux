@@ -1,0 +1,14 @@
+# Debian 11 Bullseye :: https://wiki.debian.org/SourcesList
+
+# main repository
+deb http://deb.debian.org/debian bullseye main contrib non-free
+#deb-src http://deb.debian.org/debian bullseye main contrib non-free
+
+# security repository
+deb http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+#deb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+
+# updates repository
+deb http://deb.debian.org/debian bullseye-updates main contrib non-free
+#deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
+
