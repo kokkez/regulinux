@@ -1,17 +1,17 @@
 # to install
 #acl                   install
-#apt-utils             install
-#bzip2                 install
-#ca-certificates       install
-#cron                  install
-#curl                  install
-#dbus                  install
-##dmsetup               install
+apt-utils             install
+bzip2                 install
+ca-certificates       install
+cron                  install
+curl                  install
+dbus                  install
+dmsetup               install
 #dselect               install
-#figlet                install
-#gawk                  install
-#gettext-base          install
-#htop                  install
+figlet                install
+gawk                  install
+gettext-base          install
+htop                  install
 #iftop                 install
 #inetutils-syslogd     install
 #iotop                 install
@@ -44,11 +44,11 @@
                      
 # to purge           
 #bsdmainutils          purge
-#groff-base            purge
+groff-base            purge
 #info                  purge
 #install-info          purge
-#isc-dhcp-client       purge
-#isc-dhcp-common       purge
+isc-dhcp-client       purge
+isc-dhcp-common       purge
 #man-db                purge
-#rsyslog               purge
+rsyslog               purge
 #traceroute            purge
