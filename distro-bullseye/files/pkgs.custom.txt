@@ -9,6 +9,7 @@ dbus                  install
 dmsetup               install
 #dselect               install
 figlet                install
+firewalld             install
 gawk                  install
 gettext-base          install
 htop                  install
@@ -27,20 +28,20 @@ htop                  install
 ##mktemp               install
 #nano                  install
 #net-tools             install
-#openssh-client        install
-#openssh-server        install
-#openssh-sftp-server   install
+openssh-client        install
+openssh-server        install
+openssh-sftp-server   install
 ##original-awk         install
-#perl                  install
-#perl-modules-5.28     install
-#postfix               install
+perl                  install
+perl-modules-5.32     install
+postfix               install
 #psmisc                install
 #quota                 install
-#rsync                 install
-#screen                install
-#telnet                install
-#unzip                 install
-#wget                  install
+rsync                 install
+screen                install
+telnet                install
+unzip                 install
+wget                  install
                      
 # to purge           
 #bsdmainutils          purge
@@ -49,6 +50,6 @@ groff-base            purge
 #install-info          purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
-#man-db                purge
+man-db                purge
 rsyslog               purge
 #traceroute            purge

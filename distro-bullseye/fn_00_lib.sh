@@ -94,3 +94,60 @@ sslcert_paths() {
 
 	Msg.info "Symlinks for the given SSL Certificate completed!"
 }	# end sslcert_paths
+
+
+Install.firewall() {
+	# setup firewall using firewalld via nftables
+	# https://blog.myhro.info/2021/12/configuring-firewalld-on-debian-bullseye
+	# $1 - ssh port number, optional
+
+	# add required software & purge unwanted
+	Pkg.requires firewalld
+#	Pkg.purge "ufw"
+
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
+
+	# remove default ports, permanently
+	cmd firewall-cmd -q --remove-service={dhcpv6-client,ssh}
+
+	# make our ssh persistent, so that can be loaded at every boot
+	cmd firewall-cmd -q --add-port=$p/tcp
+
+	# set packets to be silently dropped, instead of actively rejected
+#	cmd firewall-cmd -q --set-target DROP
+
+	# reload configuration
+	cmd firewall-cmd -q --runtime-to-permanent
+
+	Msg.info "Firewall installation and setup completed!"
+}	# end Install.firewall
+
+
+Menu.firewall() {
+	# reload configuration
+	cmd firewall-cmd --list-all
+}	# end Menu.firewall
+
+
+Fw.allow() {
+	# enable services on firewalld
+	# $1 - keyword mapped to a Fw.rule.<keyword> function
+	Arg.expect "$1" || return
+
+	# unique-ize valid arguments
+#	local a w
+#	for w in $FW_allowed $@; do
+#		! Element.in $w $a && Cmd.usable "Fw.rule.$w" && a+=" $w"
+#	done
+
+	# save the new value back into the main lib.sh file
+#	Fw.write "$SSHD_PORT" "${a:1}"
+
+	# load configured rules on system
+#	Menu.firewall 'start'
+
+
+
+	# reload configuration
+	cmd firewall-cmd -q --runtime-to-permanent
+};	# end Fw.allow
