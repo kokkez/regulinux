@@ -88,7 +88,7 @@ Install.firewall() {
 
 	# add required software & purge unwanted
 	Pkg.requires firewalld
-	Pkg.purge "ufw"
+#	Pkg.purge "ufw"
 
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 

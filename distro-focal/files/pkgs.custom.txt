@@ -9,13 +9,14 @@ dbus                  install
 #dmsetup               install
 e2fsprogs             install
 figlet                install
+firewalld             install
 gawk                  install
 htop                  install
 iftop                 install
 ifupdown              install
 inetutils-syslogd     install
 iotop                 install
-iptables              install
+#iptables              install
 locales               install
 logrotate             install
 lsb-release           install
@@ -53,3 +54,4 @@ man-db                purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
+ufw                   purge
