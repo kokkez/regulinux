@@ -79,3 +79,30 @@ sslcert_paths() {
 
 	Msg.info "Symlinks for the given SSL Certificate completed!"
 }	# end sslcert_paths
+
+
+Install.firewall() {
+	# setup firewall using firewalld via nftables
+	# $1 - ssh port number, optional
+
+	# add required software & purge unwanted
+	Pkg.requires firewalld
+	Pkg.purge "ufw"
+
+#	Pkg.installed "iptables" || {
+#		Msg.error "Seems that iptables was missing"
+#	}
+
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
+
+	# make rules persistent, so they can load at every boot
+#	local p=/etc/network/if-pre-up.d
+#	rm -rf "$p/iptables"
+#	File.into "$p" ssh/iptables
+#	chmod +x "$p/iptables"						# make it executable
+
+#	Fw.allow 'ssh'								# allow SSH by default
+
+	cmd firewall-cmd --add-port=$p/tcp --permanent	# activate ssh
+	cmd firewall-cmd --reload
+}	# end Install.firewall
