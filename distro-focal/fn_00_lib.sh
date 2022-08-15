@@ -83,26 +83,26 @@ sslcert_paths() {
 
 Install.firewall() {
 	# setup firewall using firewalld via nftables
+	# https://blog.myhro.info/2021/12/configuring-firewalld-on-debian-bullseye
 	# $1 - ssh port number, optional
 
 	# add required software & purge unwanted
 	Pkg.requires firewalld
 	Pkg.purge "ufw"
 
-#	Pkg.installed "iptables" || {
-#		Msg.error "Seems that iptables was missing"
-#	}
-
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
-	# make rules persistent, so they can load at every boot
-#	local p=/etc/network/if-pre-up.d
-#	rm -rf "$p/iptables"
-#	File.into "$p" ssh/iptables
-#	chmod +x "$p/iptables"						# make it executable
+	# remove default ports, permanently
+	cmd firewall-cmd -q --remove-service={dhcpv6-client,ssh}
 
-#	Fw.allow 'ssh'								# allow SSH by default
+	# make our ssh persistent, so that can be loaded at every boot
+	cmd firewall-cmd -q --add-port=$p/tcp
 
-	cmd firewall-cmd --add-port=$p/tcp --permanent	# activate ssh
-	cmd firewall-cmd --reload
+	# set packets to be silently dropped, instead of actively rejected
+#	cmd firewall-cmd -q --set-target DROP
+
+	# reload configuration
+	cmd firewall-cmd -q --runtime-to-permanent
+
+	Msg.info "Firewall installation and setup completed!"
 }	# end Install.firewall
