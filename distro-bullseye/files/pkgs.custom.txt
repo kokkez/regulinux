@@ -6,6 +6,7 @@ ca-certificates       install
 cron                  install
 curl                  install
 dbus                  install
+distro-info-data      install
 dmsetup               install
 #dselect               install
 figlet                install
@@ -17,9 +18,9 @@ iftop                 install
 inetutils-syslogd     install
 iotop                 install
 #iptables              install
-#klibc-utils           install
-#locales               install
-#logrotate             install
+klibc-utils           install
+locales               install
+logrotate             install
 lsb-release           install
 lsof                  install
 lvm2                  install
@@ -39,6 +40,7 @@ psmisc                install
 quota                 install
 rsync                 install
 screen                install
+systemd-timesyncd     install
 telnet                install
 unzip                 install
 wget                  install
