@@ -1,5 +1,5 @@
 # to install
-#acl                   install
+acl                   install
 apt-utils             install
 bzip2                 install
 ca-certificates       install
@@ -13,16 +13,16 @@ firewalld             install
 gawk                  install
 gettext-base          install
 htop                  install
-#iftop                 install
-#inetutils-syslogd     install
-#iotop                 install
+iftop                 install
+inetutils-syslogd     install
+iotop                 install
 #iptables              install
 #klibc-utils           install
 #locales               install
 #logrotate             install
-#lsb-release           install
-#lsof                  install
-#lvm2                  install
+lsb-release           install
+lsof                  install
+lvm2                  install
 #mawk                  install
 #mime-support          install
 ##mktemp               install
@@ -35,8 +35,8 @@ openssh-sftp-server   install
 perl                  install
 perl-modules-5.32     install
 postfix               install
-#psmisc                install
-#quota                 install
+psmisc                install
+quota                 install
 rsync                 install
 screen                install
 telnet                install
@@ -45,6 +45,8 @@ wget                  install
                      
 # to purge           
 #bsdmainutils          purge
+gir1.2-glib-2.0       purge
+gir1.2-nm-1.0         purge
 groff-base            purge
 #info                  purge
 #install-info          purge
@@ -52,4 +54,4 @@ isc-dhcp-client       purge
 isc-dhcp-common       purge
 man-db                purge
 rsyslog               purge
-#traceroute            purge
+traceroute            purge
