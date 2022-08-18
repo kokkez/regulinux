@@ -103,20 +103,20 @@ Install.firewall() {
 
 	# add required software & purge unwanted
 	Pkg.requires firewalld
-#	Pkg.purge "ufw"
 
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
-	# remove default ports, permanently
-	cmd firewall-cmd -q --remove-service={dhcpv6-client,ssh}
-
 	# make our ssh persistent, so that can be loaded at every boot
-	cmd firewall-cmd -q --add-port=$p/tcp
+	cmd firewall-cmd -q --permanent --add-port=$SSHD_PORT/tcp
+
+	# remove default ports, permanently
+	cmd firewall-cmd -q --permanent --remove-service={dhcpv6-client,ssh}
 
 	# set packets to be silently dropped, instead of actively rejected
-#	cmd firewall-cmd -q --set-target DROP
+#	cmd firewall-cmd -q --permanent --set-target DROP
 
-	# reload configuration
+	# apply & save configuration
+	cmd firewall-cmd -q --reload
 	cmd firewall-cmd -q --runtime-to-permanent
 
 	Msg.info "Firewall installation and setup completed!"
@@ -149,5 +149,6 @@ Fw.allow() {
 
 
 	# reload configuration
+	cmd firewall-cmd -q --reload
 	cmd firewall-cmd -q --runtime-to-permanent
 };	# end Fw.allow

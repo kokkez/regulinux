@@ -9,6 +9,7 @@ dbus                  install
 distro-info-data      install
 dmsetup               install
 #dselect               install
+e2fsprogs             install
 figlet                install
 firewalld             install
 gawk                  install
@@ -27,12 +28,12 @@ lvm2                  install
 #mawk                  install
 #mime-support          install
 ##mktemp               install
-#nano                  install
-#net-tools             install
+nano                  install
+net-tools             install
 openssh-client        install
 openssh-server        install
 openssh-sftp-server   install
-##original-awk         install
+original-awk          install
 perl                  install
 perl-modules-5.32     install
 postfix               install
@@ -40,18 +41,14 @@ psmisc                install
 quota                 install
 rsync                 install
 screen                install
+ssl-cert              install
 systemd-timesyncd     install
 telnet                install
 unzip                 install
 wget                  install
                      
 # to purge           
-#bsdmainutils          purge
-gir1.2-glib-2.0       purge
-gir1.2-nm-1.0         purge
 groff-base            purge
-#info                  purge
-#install-info          purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
 man-db                purge

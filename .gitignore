@@ -1,3 +1,4 @@
 # paths relative to this folder
 test-*
 tests/*
+distro-bullseye/files/selections*
