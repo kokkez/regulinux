@@ -27,7 +27,7 @@ lsof                  install
 lvm2                  install
 #mawk                  install
 #mime-support          install
-##mktemp               install
+mktemp                install
 nano                  install
 net-tools             install
 openssh-client        install
@@ -46,8 +46,9 @@ systemd-timesyncd     install
 telnet                install
 unzip                 install
 wget                  install
-                     
-# to purge           
+
+
+# to purge
 groff-base            purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
