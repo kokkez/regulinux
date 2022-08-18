@@ -24,7 +24,6 @@ lsof                  install
 lvm2                  install
 mawk                  install
 mime-support          install
-#mktemp               install
 nano                  install
 net-tools             install
 openssh-client        install

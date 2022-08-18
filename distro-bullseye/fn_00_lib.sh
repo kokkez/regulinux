@@ -109,11 +109,11 @@ Install.firewall() {
 	# make our ssh persistent, so that can be loaded at every boot
 	cmd firewall-cmd -q --permanent --add-port=$SSHD_PORT/tcp
 
+	# set packets to be silently dropped, instead of actively rejected
+	cmd firewall-cmd -q --permanent --set-target DROP
+
 	# remove default ports, permanently
 	cmd firewall-cmd -q --permanent --remove-service={dhcpv6-client,ssh}
-
-	# set packets to be silently dropped, instead of actively rejected
-#	cmd firewall-cmd -q --permanent --set-target DROP
 
 	# apply & save configuration
 	cmd firewall-cmd -q --reload
