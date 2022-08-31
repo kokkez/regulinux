@@ -5,7 +5,7 @@
 acme_get() {
 	# get acme.sh script (https://github.com/Neilpang/acme.sh)
 	cd; wget -O -  https://get.acme.sh | bash
-	bash ~/.acme.sh/acme.sh --registeraccount --accountemail $LENC_MAIL --log --log-level 2
+	bash ~/.acme.sh/acme.sh --register-account -m $LENC_MAIL --log --log-level 2
 }	# end acme_get
 
 

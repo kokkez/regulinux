@@ -6,7 +6,8 @@ ca-certificates       install
 cron                  install
 curl                  install
 dbus                  install
-#dmsetup               install
+dmsetup               install
+distro-info-data      install
 dselect               install
 figlet                install
 gawk                  install
