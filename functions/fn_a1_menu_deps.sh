@@ -99,9 +99,9 @@ Arrange.bashrc() {
 	local p=~/.bashrc
 	[ -s "$p" ] && grep -q 'os\.sh' "$p" || {
 		File.into ~ .bashrc
-		source "$p"
 		Msg.info "Switch to a customized '~/.bashrc' completed!"
 	}
+	source "$p"
 }	# end Arrange.bashrc
 
 
