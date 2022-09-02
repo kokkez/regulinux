@@ -114,17 +114,17 @@ Fw.write() {
 	[ "$1" = "$a" ] || {
 		# write port in /etc/ssh/sshd_config, then restart daemon
 		Fw.notice "writing port '$1', overwriting '$a'"
-		sed -ri '/etc/ssh/sshd_config' -e "s|^#?Port.*|Port $1|"
-		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*SSHD_PORT=).*|\1'$1'|"
+		cmd sed -ri '/etc/ssh/sshd_config' -e "s|^#?Port.*|Port $1|"
+		cmd sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*SSHD_PORT=).*|\1'$1'|"
 		SSHD_PORT="$1"
 		cmd systemctl restart ssh
-		Fw.notice "restarting SSH completed!"
+		Fw.notice "restarting SSH, listening on port $SSHD_PORT, completed!"
 	}
 
 	a=$( cmd awk -F\' '/^\s*FW_allowed=/{print $2}' ~/lin*/lib.sh )
 	[ -z "$2" ] || [ "$2" = "$a" ] || {
 		Fw.notice "writing keywords '$2', overwriting '$a'"
-		sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"
+		cmd sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"
 		FW_allowed="$2"
 	}
 };	# end Fw.write
