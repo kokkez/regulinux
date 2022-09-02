@@ -80,15 +80,17 @@ Arrange.unhang() {
 Arrange.sshd() {
 	# configure SSH server parameters
 	# $1: ssh port number, optional
-	p=$( Port.audit ${1:-$SSHD_PORT} )
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )
+	cmd sed -ri "$ENV_dir/lib.sh" \
+		-e "s|^(\s*SSHD_PORT=).*|\1'$SSHD_PORT'|"
 	cmd sed -ri /etc/ssh/sshd_config \
-		-e "s|^#?(Port)\s.*|\1 $p|" \
+		-e "s|^#?(Port)\s.*|\1 $SSHD_PORT|" \
 		-e 's|^#?(PasswordAuthentication)\s.*|\1 no|' \
 		-e 's|^#?(PermitRootLogin)\s.*|\1 without-password|' \
 		-e 's|^#?(RSAAuthentication)\s.*|\1 yes|' \
 		-e 's|^#?(PubkeyAuthentication)\s.*|\1 yes|'
 	cmd systemctl restart ssh
-	Msg.info "SSH server is now listening on port: $p"
+	Msg.info "SSH server is now listening on port: $SSHD_PORT"
 }	# end Arrange.sshd
 
 
@@ -116,7 +118,7 @@ Arrange.htop() {
 
 
 Deps.performed() {
-	# return success if the step "Menu.deps" was already performed 
+	# return success if the step "Menu.deps" was already performed
 	# simply check that 99norecommend exists into apt.conf.d
 	[ -f '/etc/apt/apt.conf.d/99norecommend' ] && return 0
 	# simply check that /etc/apt/apt.conf.d/99norecommend exists
@@ -128,6 +130,11 @@ Deps.performed() {
 Menu.deps() {
 	# preparing a basic OS, ready to host applications
 	# $1: ssh port number, optional
+
+	# feedback user if called with port number
+	[ -z "$1" ] || {
+		Msg.info "SSH server will listen on port: $1"
+	}
 
 	Arrange.authkeys		# stop here if no private keys found
 	Arrange.sources			# install sources.list for apt

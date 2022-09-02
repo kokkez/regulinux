@@ -236,9 +236,12 @@ Install.firewall() {
 	# setup firewall via iptables
 	# $1 - ssh port number, optional
 
-	Pkg.installed "iptables" || {
-		Msg.error "Seems that iptables was missing"
-	}
+	# add required software
+	Pkg.requires iptables
+
+#	Pkg.installed "iptables" || {
+#		Msg.error "Seems that iptables was missing"
+#	}
 
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
