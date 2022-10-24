@@ -28,8 +28,8 @@ install_assp() {
 		libio-socket-inet6-perl libio-socket-ssl-perl libmail-dkim-perl \
 		libmail-spf-perl libmail-srs-perl libnet-cidr-lite-perl \
 		libnet-ldap-perl libnet-smtp-ssl-perl libsys-syslog-perl \
-		libmail-checkuser-perl libtie-dbi-perl libauthen-sasl-perl \
-		libdevel-size-perl liblwp-protocol-https-perl
+		libmail-checkuser-perl libdbd-mysql-perl libtie-dbi-perl \
+		libauthen-sasl-perl libdevel-size-perl liblwp-protocol-https-perl
 	# libsys-meminfo-perl
 
 	# try unattended
