@@ -249,7 +249,8 @@ Install.firewall() {
 	local p=/etc/network/if-pre-up.d
 	rm -rf "$p/iptables"
 	File.into "$p" ssh/iptables
-	chmod +x "$p/iptables"						# make it executable
+#	chmod +x "$p/iptables"						# make it executable
+	chmod 751 "$p/iptables"						# make it executable
 
 	Fw.allow 'ssh'								# allow SSH by default
 }	# end Install.firewall

@@ -1,6 +1,7 @@
 apt --installed list
 dpkg --get-selections > installed.txt
 lsb_release -sc
+systemd-detect-virt
 curl -LsO bench.monster/speedtest.sh; bash speedtest.sh -Europe
 # add swap 512M
 swapoff /swap.img
