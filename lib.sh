@@ -350,10 +350,10 @@
 			# limit min & max range
 			p=$(( p > 65534 ? 65535 : p < 1025 ? 1024 : p ))
 			# exclude net.ipv4.ip_local_port_range (32768-60999)
-			t=$( cmd sysctl -e -n net.ipv4.ip_local_port_range )
-			l=$( cmd awk '{print int($1)}' <<< $t )
-			t=$( cmd awk '{print int($2)}' <<< $t )
-			p=$(( p < l ? p : p > t ? p : 64128 ))
+			#t=$( cmd sysctl -e -n net.ipv4.ip_local_port_range )
+			#l=$( cmd awk '{print int($1)}' <<< $t )
+			#t=$( cmd awk '{print int($2)}' <<< $t )
+			#p=$(( p < l ? p : p > t ? p : 64128 ))
 		}
 		echo $p
 	}	# end Port.audit

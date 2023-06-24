@@ -13,6 +13,12 @@ swapon --show
 free -h
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
 #
+dpkg --list 'linux-*-*'
+uname -r
+ls -l /lib/modules
+apt purge linux-*-5.10.0-20-*
+update-grub
+#
 # upgrade debian 8 jessie to debian 9 stretch
 command cat > /etc/apt/sources.list <<- EOF
 	# Debian 8 Jessie :: https://wiki.debian.org/SourcesList

@@ -83,8 +83,8 @@ Fw.rule.mail() {
 Fw.rule.mysql() {
 	# accept MYSQL connections from slaves
 	Fw.notice "appending MYSQL rules"
-	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
-	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-e.rete.us,smtp-m.rete.us -j ACCEPT
+	Fw.ip4 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-r.rete.us,smtp-m.rete.us -j ACCEPT
+	Fw.ip6 -A INPUT -p tcp -m state --state NEW --dport 3306 -s smtp-r.rete.us,smtp-m.rete.us -j ACCEPT
 };	# end Fw.rule.mysql
 Fw.rule.assp() {
 	# accept http/smtp connections for ASSP on special ports

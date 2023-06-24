@@ -1,8 +1,11 @@
 # remember to run these commands after every modifications
 #	postmap /etc/postfix/sasl_passwd; postfix reload
 #
-#[smtp-e.rete.us]:587     username:password
-#[smtp-m.rete.us]:587     username:password
-#[smtp-m.rete.us]:58725   username:password
-#[smtp-u.rete.us]:587     username:password
-#[smtp-u.rete.us]:58725   username:password
+#[smtp-e.rete.us]:587    username:password
+#[smtp-u.rete.us]:587    username:password
+#[smtp-u.rete.us]:58725  username:password
+#[smtp-r.rete.us]:587    username:password
+#[smtp-r.rete.us]:58725  username:password
+#[smtp-m.rete.us]:587    username:password
+#[smtp-m.rete.us]:58725  username:password
+
