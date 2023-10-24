@@ -22,6 +22,7 @@
 proc=$(ps aux | wc -l)
 chss=$(hostnamectl | awk '/Vir/{print $2}')
 chss=${chss:-dedi}
+chss="$(hostnamectl | awk '/Cha/{print $2}') ( $chss )"
 load=$(awk '{print $1, $2, $3}' /proc/loadavg)
 tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
