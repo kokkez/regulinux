@@ -387,7 +387,7 @@
 
 	Element.in() {
 		# check that $1 is an argument of this Fn, starting from $2
-		# no arguments can contains spaces 
+		# no arguments can contains spaces
 		# $1 - element to check
 		# $2+ - arguments separated by space, our array of elements
 		local e w="$1"
@@ -397,6 +397,33 @@
 		return 1
 	};	# end of Element.in
 
+
+	Partition.space() {
+		# return the free space of the current partition in kb
+		# $1 - argument to check
+		local k=${1:-free}
+		declare -A w
+		w=([filesystem]=1 [size]=2 [used]=3 [free]=4 [percent]=5 [mount]=6)
+		k=${w[${k,,}]}
+		[ -z "${k}" ] || (( k < 1 )) && k=4		# default index
+		echo $(cmd df -Pk . | cmd awk "NR==2 {print \$$k}")
+	};	# end of Partition.space
+
+
+	Unit.convert() {
+		# convert suffixed units to kilobytes
+		# $1 - value to convert
+		local n u z=$1
+		n=${z%[A-Za-z]*}					# number
+		u=${z//[0-9]}						# unit
+
+		case "$u" in
+			G|g) echo "$((n * 1048576))";;	# from giga (1 GB = 1024 MB)
+			M|m) echo "$((n * 1024))";;		# from mega
+			K|k) echo "$n";;				# from kilo
+			*)   echo "0";;					# unknown or missing
+		esac;
+	};	# end of Unit.convert
 
 
 #	MAIN MENU
@@ -518,6 +545,8 @@
 		s=""
 		Cmd.usable "Menu.upgrade" && {
 			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
+		Cmd.usable "Menu.addswap" && {
+			s+="   . $(Dye.fg.orange addswap)     add a file to be used as SWAP memory\n"; }
 		Cmd.usable "Menu.password" && {
 			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
 		Cmd.usable "Menu.bench" && {
