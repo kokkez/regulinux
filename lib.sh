@@ -546,7 +546,7 @@
 		Cmd.usable "Menu.upgrade" && {
 			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
 		Cmd.usable "Menu.addswap" && {
-			s+="   . $(Dye.fg.orange addswap)     add a file to be used as SWAP memory\n"; }
+			s+="   . $(Dye.fg.orange addswap)     add a file to be used as SWAP memory, default $(Dye.fg.white 512M)\n"; }
 		Cmd.usable "Menu.password" && {
 			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
 		Cmd.usable "Menu.bench" && {
