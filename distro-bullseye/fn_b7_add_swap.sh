@@ -6,12 +6,12 @@ Swap.iscontainer() {
 	# returns 1 (error) if the current system is a virtualized container
 	# container OpenVZ
 	[ -d /proc/vz ] && {
-		Msg.warn "No swap on OpenVZ virtualized containers..."
+		Msg.warn "No swap on OpenVZ containers..."
 		exit 1
 	}
 	# container LXC
 	[ -d /proc/1/root/.local/share/lxc ] && {
-		Msg.warn "No swap on LXC virtualized containers..."
+		Msg.warn "No swap on LXC containers..."
 		exit 1
 	}
 }	# end Swap.iscontainer
