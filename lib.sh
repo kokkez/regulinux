@@ -579,6 +579,8 @@
 			s+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
 		Cmd.usable "Menu.assp1" && {
 			s+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
+		Cmd.usable "Menu.isp3ai" && {
+			s+="   . $(Dye.fg.orange isp3ai)      historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
 		Cmd.usable "Menu.ispconfig" && {
 			s+="   . $(Dye.fg.orange ispconfig)   historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
 		[ -z "$s" ] || {

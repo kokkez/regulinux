@@ -22,6 +22,7 @@ Menu.isp3ai() {
 		--no-dns \
 		--use-unbound \
 		--no-mailman \
+		--no-quota \
 		--use-amavis \
 		--use-nginx \
 		--use-php=5.6,7.4,8.3 \
