@@ -13,6 +13,9 @@ Menu.isp3ai() {
 	# install update-inetd
 	Pkg.requires update-inetd
 
+	# allow file modification to /etc/resolv.conf
+	cmd chattr -i /etc/resolv.conf
+
 	# install webserver (nginx or apache2)
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
 		--debug \
