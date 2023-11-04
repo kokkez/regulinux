@@ -6,6 +6,13 @@ Menu.upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
+	# stopping ubuntu-advantage-tools apt behavior
+	local p='/etc/apt/apt.conf.d/20apt-esm-hook.conf'
+	[ -s "$p.disabled" ] || {
+		[ -s "$p" ] && cmd mv "$p" "$p.disabled"
+		Msg.info "Renaming of the ubuntu-advantage-tools file '${p##*/}' completed!"
+	}
+
 	# do the apt upgrade
 	export DEBIAN_FRONTEND=noninteractive
 	cmd apt -qy full-upgrade
