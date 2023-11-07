@@ -24,8 +24,6 @@ logrotate             install
 lsb-release           install
 lsof                  install
 lvm2                  install
-#mawk                  install
-#mime-support          install
 nano                  install
 net-tools             install
 openssh-client        install
@@ -42,6 +40,7 @@ screen                install
 ssl-cert              install
 systemd-timesyncd     install
 telnet                install
+ufw                   install
 unzip                 install
 wget                  install
 xfsprogs              install
