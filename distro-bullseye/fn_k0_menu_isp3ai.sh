@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install ispconfig3 for debian 10 buster in an automatic fashion
+# install ispconfig3 for debian 11 bullseye in an automatic fashion
 # https://www.howtoforge.com/ispconfig-autoinstall-debian-ubuntu
 # ------------------------------------------------------------------------------
 
@@ -27,9 +27,10 @@ Menu.isp3ai() {
 		--use-nginx \
 		--use-php=5.6,7.4,8.3 \
 		--use-ftp-ports=40110-40210 \
+		--no-pma \
 		--unattended-upgrades \
 		--i-know-what-i-am-doing
 
-#	install_adminer
+	install_adminer
 #	install_sslcert_selfsigned
 }	# end Menu.isp3ai
