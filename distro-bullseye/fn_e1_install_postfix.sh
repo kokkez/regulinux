@@ -43,7 +43,8 @@ install_postfix() {
 	cmd newaliases
 
 	# activating ports on firewall
-	Fw.allow 'smtps'
+	Fw.allow '465/tcp'
+	Fw.allow '587/tcp'
 
 	Msg.info "Installation of postfix & aliases completed!"
 }	# end install_postfix
