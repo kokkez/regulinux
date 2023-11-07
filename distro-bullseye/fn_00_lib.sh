@@ -30,6 +30,22 @@ Repo.php() {
 }	# end Repo.php
 
 
+Arrange.sshd() {
+	# configure SSH server parameters
+	# $1: ssh port number, optional
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )
+	cmd sed -ri /etc/ssh/sshd_config \
+		-e "s|^#?(Port)\s.*|\1 $SSHD_PORT|" \
+		-e 's|^#?(PasswordAuthentication)\s.*|\1 no|' \
+		-e 's|^#?(PermitRootLogin)\s.*|\1 without-password|' \
+		-e 's|^#?(RSAAuthentication)\s.*|\1 yes|' \
+		-e 's|^#?(PubkeyAuthentication)\s.*|\1 yes|'
+	cmd systemctl restart ssh
+	Config.set "SSHD_PORT" "$SSHD_PORT"
+	Msg.info "SSH server is now listening on port: $SSHD_PORT"
+}	# end Arrange.sshd
+
+
 # legacy version of the iptables commands, needed by firewall
 Fw.ip4() {
 	cmd iptables-legacy "$@"
@@ -96,7 +112,7 @@ sslcert_paths() {
 }	# end sslcert_paths
 
 
-Install.firewall() {
+Install.firewalld() {
 	# setup firewall using firewalld via nftables
 	# https://blog.myhro.info/2021/12/configuring-firewalld-on-debian-bullseye
 	# $1 - ssh port number, optional
@@ -119,7 +135,27 @@ Install.firewall() {
 	cmd firewall-cmd -q --reload
 	cmd firewall-cmd -q --runtime-to-permanent
 
-	Msg.info "Firewall installation and setup completed!"
+	Msg.info "Firewall installation and configuration completed!"
+}	# end Install.firewalld
+
+
+Install.firewall() {
+	# installing firewall, using ufw
+	# $1 - ssh port number, optional
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
+
+	# install required software
+	Pkg.requires ufw
+
+	# enable service so it can be loaded at every boot
+	cmd ufw --force enable
+	cmd systemctl enable ufw
+	cmd ufw allow $SSHD_PORT/tcp
+
+	# save back configuration
+	Config.set "SSHD_PORT" "$SSHD_PORT"
+
+	Msg.info "Firewall installation and configuration completed!"
 }	# end Install.firewall
 
 

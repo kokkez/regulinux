@@ -13,11 +13,11 @@ install_postfix() {
 	Msg.info "Installing postfix for ${ENV_os}..."
 
 	# preseed postfix
-	debconf-set-selections <<EOF
-postfix postfix/main_mailer_type select Internet Site
-postfix postfix/mailname string ${MAIL_NAME}
-postfix postfix/destinations string \$myorigin,localhost
-EOF
+	debconf-set-selections <<-EOF
+		postfix postfix/main_mailer_type select Internet Site
+		postfix postfix/mailname string ${MAIL_NAME}
+		postfix postfix/destinations string \$myorigin,localhost
+		EOF
 
 	# install required & useful packages
 	Pkg.install postfix postfix-mysql libsasl2-modules pfqueue swaks

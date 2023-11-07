@@ -429,6 +429,23 @@
 	};	# end of Unit.convert
 
 
+	Config.set() {
+		# save a configuration value into ./settings.conf
+		# $1 config name
+		# $2 config value
+		Arg.expect "$1" || exit
+
+		local p="$ENV_dir/settings.conf"
+
+		# save or append config line
+		if grep -q "^$1=" "$p"; then
+			sed -ri "$p" -e "s|^$1=|$1=\"$2\"|"
+		else
+			echo "$1=\"$2\"" >> "$p"
+		fi;
+	};	# end of Config.set
+
+
 #	MAIN MENU
 #	----------------------------------------------------------------------------
 

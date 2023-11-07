@@ -8,7 +8,7 @@ Resolv.classic() {
 	File.backup "$r"
 
 	# set known public dns
-	t="cloudflare + freenom.world"
+	t="cloudflare + quad9"
 	n="search .\noptions timeout:2 rotate\n"
 	n+="nameserver 9.9.9.9         # quad9\n"
 	n+="nameserver 1.1.1.1         # cloudflare\n"
