@@ -64,7 +64,3 @@ Menu.addswap() {
 
 	Msg.info "A swap file of $z was implemented in '$f' permanently!"
 }	# end Menu.addswap
-
-
-
-
