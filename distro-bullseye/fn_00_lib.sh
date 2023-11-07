@@ -150,6 +150,7 @@ Install.firewall() {
 	# enable service so it can be loaded at every boot
 	cmd ufw --force enable
 	cmd systemctl enable ufw
+	cmd ufw reset
 	cmd ufw allow $SSHD_PORT/tcp
 
 	# save back configuration
@@ -160,31 +161,20 @@ Install.firewall() {
 
 
 Menu.firewall() {
-	# reload configuration
-	cmd firewall-cmd --list-all
+	# show status
+	cmd ufw status verbose
 }	# end Menu.firewall
 
 
 Fw.allow() {
-	# enable services on firewalld
-	# $1 - keyword mapped to a Fw.rule.<keyword> function
+	# enable ports on ufw firewall
+	# $1 - keyword for ufw
 	Arg.expect "$1" || return
 
-	# unique-ize valid arguments
-#	local a w
-#	for w in $FW_allowed $@; do
-#		! Element.in $w $a && Cmd.usable "Fw.rule.$w" && a+=" $w"
-#	done
+	# allow port/type
+	cmd ufw allow "$1"
 
 	# save the new value back into the main lib.sh file
-#	Fw.write "$SSHD_PORT" "${a:1}"
-
-	# load configured rules on system
-#	Menu.firewall 'start'
-
-
-
-	# reload configuration
-	cmd firewall-cmd -q --reload
-	cmd firewall-cmd -q --runtime-to-permanent
+	Config.set "FW_allowed" "$FW_allowed $1"
 };	# end Fw.allow
+

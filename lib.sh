@@ -435,13 +435,15 @@
 		# $2 config value
 		Arg.expect "$1" || exit
 
-		local p="$ENV_dir/settings.conf"
+		local k v p="$ENV_dir/settings.conf"
+		k="$1"								# config name
+		v="$2"								# config name
 
 		# save or append config line
-		if grep -q "^$1=" "$p"; then
-			sed -ri "$p" -e "s|^$1=|$1=\"$2\"|"
+		if grep -q "^$k=" "$p"; then
+			sed -ri "$p" -e "s|^($k=).+|$k=\"$v\"|"
 		else
-			echo "$1=\"$2\"" >> "$p"
+			echo "$k=\"$v\"" >> "$p"
 		fi;
 	};	# end of Config.set
 
