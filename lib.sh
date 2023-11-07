@@ -445,6 +445,7 @@
 		else
 			echo "$k=\"$v\"" >> "$p"
 		fi;
+		cmd source "$p"						# reload configs
 	};	# end of Config.set
 
 
@@ -494,7 +495,7 @@
 				EOF
 			Msg.info "Creation of config file $(Dye.fg.white $p) completed..."
 		}
-		cmd source "$p"
+		cmd source "$p"						# reload configs
 	}	# end ENV.config
 
 
