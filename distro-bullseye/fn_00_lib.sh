@@ -112,33 +112,6 @@ sslcert_paths() {
 }	# end sslcert_paths
 
 
-Install.firewalld() {
-	# setup firewall using firewalld via nftables
-	# https://blog.myhro.info/2021/12/configuring-firewalld-on-debian-bullseye
-	# $1 - ssh port number, optional
-
-	# add required software & purge unwanted
-	Pkg.requires firewalld
-
-	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
-
-	# make our ssh persistent, so that can be loaded at every boot
-	cmd firewall-cmd -q --permanent --add-port=$SSHD_PORT/tcp
-
-	# set packets to be silently dropped, instead of actively rejected
-	cmd firewall-cmd -q --permanent --set-target DROP
-
-	# remove default ports, permanently
-	cmd firewall-cmd -q --permanent --remove-service={dhcpv6-client,ssh}
-
-	# apply & save configuration
-	cmd firewall-cmd -q --reload
-	cmd firewall-cmd -q --runtime-to-permanent
-
-	Msg.info "Firewall installation and configuration completed!"
-}	# end Install.firewalld
-
-
 Install.firewall() {
 	# installing firewall, using ufw
 	# $1 - ssh port number, optional
@@ -147,10 +120,12 @@ Install.firewall() {
 	# install required software
 	Pkg.requires ufw
 
-	# enable service so it can be loaded at every boot
+	# enable firewall so it can be loaded at every boot
+	cmd ufw --force reset
 	cmd ufw --force enable
 	cmd systemctl enable ufw
-	cmd ufw reset
+
+	# allow our SSHD_PORT
 	cmd ufw allow $SSHD_PORT/tcp
 
 	# save back configuration
