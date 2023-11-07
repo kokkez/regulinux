@@ -3,12 +3,12 @@ acl                   install
 apt-utils             install
 bzip2                 install
 ca-certificates       install
+cloud-init            install
 cron                  install
 curl                  install
 dbus                  install
 distro-info-data      install
 dmsetup               install
-#dselect               install
 e2fsprogs             install
 figlet                install
 firewalld             install
@@ -18,7 +18,6 @@ htop                  install
 iftop                 install
 inetutils-syslogd     install
 iotop                 install
-#iptables              install
 klibc-utils           install
 locales               install
 logrotate             install
@@ -45,6 +44,7 @@ systemd-timesyncd     install
 telnet                install
 unzip                 install
 wget                  install
+xfsprogs              install
 
 
 # to purge
