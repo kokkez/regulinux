@@ -12,6 +12,17 @@ Menu.upgrade() {
 }	# end Menu.upgrade
 
 
+Arrange.sources() {
+	# install sources.list for apt
+	File.into /etc/apt sources.list
+	# get pgpkey from freexian
+	File.download \
+		https://deb.freexian.com/extended-lts/archive-key.gpg \
+		/etc/apt/trusted.gpg.d/freexian-archive-extended-lts.gpg
+	Msg.info "Installation of 'sources.list' for $ENV_os completed!"
+}	# end Arrange.sources
+
+
 svc_evoke() {
 	# try to filter the service/init.d calls, for future upgrades
 	local s=${1:-apache2} a=${2:-status}
