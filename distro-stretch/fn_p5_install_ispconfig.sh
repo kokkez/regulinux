@@ -67,7 +67,7 @@ smtp_sasl_auth_enable = yes
 smtp_always_send_ehlo = yes
 smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-relayhost = [smtp-e.rete.us]:587
+relayhost = [smtp-r.rete.us]:587
 smtp_fallback_relay = [smtp-m.rete.us]:587
 ### ----------------------------------------------------------------------------\n"
 		perl -i -pe "s|# TLS|${m}\n# TLS|g" $u
