@@ -21,7 +21,7 @@ Network.ifupdown() {
 		# backup original file
 		File.backup "$p"
 
-		cmd cat > "$p" <<- EOF
+		cmd cat > "$p" <<-EOF
 			# This file describes the network interfaces available on your system
 			# and how to activate them. For more information, see interfaces(5).
 

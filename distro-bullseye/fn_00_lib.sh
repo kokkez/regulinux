@@ -20,7 +20,7 @@ Repo.php() {
 	# add external repository for updated php
 	Pkg.requires apt-transport-https lsb-release ca-certificates
 	File.download https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-	cat > "$p" <<- EOF
+	cat > "$p" <<-EOF
 		# https://www.patreon.com/oerdnj
 		deb http://packages.sury.org/php $ENV_codename main
 		#deb-src http://packages.sury.org/php $ENV_codename main

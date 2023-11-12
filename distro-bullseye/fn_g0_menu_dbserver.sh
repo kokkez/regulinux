@@ -18,10 +18,6 @@ Install.mariadb() {
 
 	Msg.info "Configuring $p"
 
-	# set debian passwords
-	sed -ri /etc/mysql/debian.cnf \
-		-e "s/^pass.*/password = $DB_rootpw/g"
-
 	# higher limits to prevent error: Error in accept: Too many open files
 	d=/etc/security
 	grep -q '^mysql' $d/limits.conf || {
@@ -35,8 +31,7 @@ Install.mariadb() {
 
 	# lite version of mysql_secure_installation
 	cmd mysql <<-EOF
-		UPDATE mysql.user SET Password=PASSWORD('$DB_rootpw') WHERE User='root';
-		UPDATE mysql.user SET plugin='' WHERE User='root';
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_rootpw';
 		DELETE FROM mysql.user WHERE User='';
 		DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost','127.0.0.1','::1');
 		DROP DATABASE IF EXISTS test;
