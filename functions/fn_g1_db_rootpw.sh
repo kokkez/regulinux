@@ -11,5 +11,6 @@ DB.rootpw() {
 		chmod 600 "$p"
 	}
 	# read the root password from ~/.my.cnf
-	DB_rootpw=$(cmd awk -F= '/^pass/{print $2}' "$p")
+#	DB_rootpw=$(cmd awk -F= '/^pass/{print $2}' "$p")
+	Config.set "DB_rootpw" $(cmd awk -F= '/^pass/{print $2}' "$p")
 }	# end DB.rootpw
