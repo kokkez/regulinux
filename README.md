@@ -20,7 +20,7 @@ The development of this software aims to facilitate uniform Debian and Ubuntu se
 
 ## Installation
 
-To install this software, copy both the installation file, `easy-regulinux.sh`, and the `.ssh` folder (containing the private key for subsequent connections) to your server. This can be achieved through any SFTP and FTP software like WinSCP.
+To install this software, copy both the installation file, `easy-regulinux.sh`, and your `.ssh` folder (containing your private key for subsequent connections) to your server. This can be achieved through any SFTP and FTP software like WinSCP.
 
 Run the installation file and wait for the completion of the Regulinux setup process.
 
