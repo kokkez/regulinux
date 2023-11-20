@@ -1,6 +1,6 @@
 # REGULINUX
 
-![Regulinux Logo](/longo.png)
+![Regulinux Logo](/logo.png)
 
 Regulinux is a linux installation standardizer.
 
