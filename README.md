@@ -1,10 +1,6 @@
-- [REGULINUX](#regulinux)
-  - [Introduction](#introduction)
-  - [Features](#features)
-  - [Installation](#installation)
-  - [Usage](#usage)
-
 # REGULINUX
+
+![Regulinux Logo](/longo.png)
 
 Regulinux is a linux installation standardizer.
 
