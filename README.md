@@ -2,7 +2,7 @@
 
 ![Regulinux Logo](/logo.png)
 
-Regulinux is a linux installation standardizer.
+Regulinux is a linux post-installation standardizer.
 
 ## Introduction
 
