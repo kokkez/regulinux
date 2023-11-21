@@ -2,11 +2,11 @@
 
 ![Regulinux Logo](/logo.png)
 
-Regulinux is a linux post-installation standardizer.
+Regulinux is a debian-like linux post-installation standardizer.
 
 ## Introduction
 
-Given the lack of consistency in Debian and Ubuntu installations across various virtual server providers, there emerged a necessity for a standardized Linux installation applicable to all managed servers.
+Given the lack of consistency in Debian and Ubuntu installations across various server providers, there emerged a necessity for a standardized Linux installation applicable to all type of servers, were them dedis, vm or containers.
 
 The development of this software aims to facilitate uniform Debian and Ubuntu server installations, independent of the hosting provider.
 

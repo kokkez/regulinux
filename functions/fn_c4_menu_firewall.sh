@@ -121,7 +121,7 @@ Fw.write() {
 		Fw.notice "restarting SSH, listening on port $SSHD_PORT, completed!"
 	}
 
-	a=$( cmd awk -F\' '/^\s*FW_allowed=/{print $2}' ~/lin*/lib.sh )
+	a=$( cmd awk -F\' '/^\s*FW_allowed=/{print $2}' ~/*/lib.sh )
 	[ -z "$2" ] || [ "$2" = "$a" ] || {
 		Fw.notice "writing keywords '$2', overwriting '$a'"
 		cmd sed -ri "$ENV_dir/lib.sh" -e "s|^(\s*FW_allowed=).*|\1'$2'|"

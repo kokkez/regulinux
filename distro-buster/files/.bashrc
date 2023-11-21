@@ -115,6 +115,6 @@ fi
 # workaround for the buggy xterm related to htop
 export TERM=xterm-color
 
-# aliasizing "os" for ~/linux-*/os.sh
-[ -s ~/lin*/os.sh ] && os() { bash ~/lin*/os.sh "$@"; }
+# aliasing "os" for ~/regulinux-*/os.sh
+OS=$(echo ~/*/os.sh); [ -s "$OS" ] && os() { . "$OS" "$@"; }
 
