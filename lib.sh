@@ -553,9 +553,9 @@
 		}
 
 		# append to parent folder name the discovered infos
-		t=${ENV_dir%/*}/linux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		t=${ENV_dir%/*}/regulinux.${ENV_release}.${ENV_codename}.${ENV_arch}
 		[ -d "$t" ] || {
-			mv ~/linux* "$t"
+			mv ~/regulinux* "$t"
 			ENV_dir="$t"
 		}
 
