@@ -3,7 +3,7 @@ acl                   install
 apt-utils             install
 bzip2                 install
 ca-certificates       install
-cloud-init            install
+#cloud-init            install
 cron                  install
 curl                  install
 dbus                  install
