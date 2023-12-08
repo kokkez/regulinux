@@ -7,17 +7,17 @@ Menu.deploy() {
 	# $1 - numeric debian version: 10, 11, 12
 	local a g v=${1:-11}
 
+	Msg.info "Preparing to install Debian $v..."
+
 	# detect ip address with subnet mask
 	a="$(cmd ip -br -4 addr show scope global)"
-	a=$(cmd grep -oP '\s+UP\s+\K[\w\.]+' <<< "$a")
-	Msg.info "Detected IP $a..."
+	a=$(cmd awk '{print $3}' <<< "$a")
+	Msg.info "Detected IP: $a..."
 
 	# detect gateway
 	g="$(cmd ip route get 1.1.1.1)"
 	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
-	Msg.info "Detected gateway $g..."
-
-	Msg.info "Preparing to install Debian $v..."
+	Msg.info "Detected gateway: $g..."
 
 	# save parameters to use once rebooted
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
