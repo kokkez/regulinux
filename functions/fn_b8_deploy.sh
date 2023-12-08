@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
-# add a swap file on KVM or DEDI systems that dont have one
+# reinstall a debian server, from the server itself
+# https://github.com/bohanyang/debi
 # ------------------------------------------------------------------------------
 
 Menu.deploy() {
@@ -24,9 +25,10 @@ Menu.deploy() {
 	bash debi.sh --version $v \
 		--ip $a --gateway $g \
 		--dns '1.1.1.1 9.9.9.9 2606:4700:4700::1111 2620:fe::fe' \
-		--user root --password bamalama \
+		--user root --password regulinux \
 		--timezone $TIME_ZONE \
-		--ssh-port $SSHD_PORT
+		--ssh-port $SSHD_PORT \
+		--cdn  # https mirror of deb.debian.org
 
 	Msg.info "Now reboot the server and connect via remote shell from provider"
 }	# end Menu.addswap
