@@ -592,10 +592,10 @@
 			s+="   . $(Dye.fg.orange root)        setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 #		Cmd.usable "Menu.ssh" && {
 #			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
-#		Cmd.usable "Menu.prepare" && {
-#			s+="   . $(Dye.fg.orange prepare)     setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.deps" && {
 			s+="   . $(Dye.fg.orange deps)        run prepare, check dependencies, update the base system, setup firewall\n"; }
+		Cmd.usable "Menu.deploy" && {
+			s+="   . $(Dye.fg.orange deploy)      reinstall debian on VM (not containers) default $(Dye.fg.white 11)\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
 
