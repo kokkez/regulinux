@@ -11,7 +11,7 @@ distro-info-data      install
 dmsetup               install
 e2fsprogs             install
 figlet                install
-firewalld             install
+#firewalld             install
 gawk                  install
 gettext-base          install
 htop                  install
