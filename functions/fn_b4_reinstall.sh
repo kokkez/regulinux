@@ -3,19 +3,19 @@
 # https://github.com/bohanyang/debi
 # ------------------------------------------------------------------------------
 
-Reinstall.iscontainer() {
+Host.iscontainer() {
 	# returns 1 (error) if the current system is a virtualized container
 	# container OpenVZ
 	[ -d /proc/vz ] && {
 		Msg.warn "No reinstall on OpenVZ containers..."
-		exit 1
+		return 1
 	}
 	# container LXC
 	[ -d /proc/1/root/.local/share/lxc ] && {
 		Msg.warn "No reinstall on LXC containers..."
-		exit 1
+		return 1
 	}
-}	# end Reinstall.iscontainer
+}	# end Host.iscontainer
 
 
 Menu.reinstall() {
@@ -24,8 +24,9 @@ Menu.reinstall() {
 	local a g v=${1:-11}
 
 	# do checks
-	Reinstall.iscontainer && return
+	Host.iscontainer; (( $? )) && return
 
+	# start procedure
 	Msg.info "Preparing to install Debian $v..."
 
 	# detect ip address with subnet mask

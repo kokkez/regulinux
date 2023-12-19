@@ -7,12 +7,12 @@ Swap.iscontainer() {
 	# container OpenVZ
 	[ -d /proc/vz ] && {
 		Msg.warn "No swap on OpenVZ containers..."
-		exit 1
+		return 1
 	}
 	# container LXC
 	[ -d /proc/1/root/.local/share/lxc ] && {
 		Msg.warn "No swap on LXC containers..."
-		exit 1
+		return 1
 	}
 }	# end Swap.iscontainer
 
@@ -21,7 +21,7 @@ Swap.exists() {
 	# returns 1 (error) if the current system already has a swap
 	[ -n "$(cmd swapon -s)" ] && {
 		Msg.warn "Swap alreay exists..."
-		exit 1
+		return 1
 	}
 }	# end Swap.exists
 
@@ -31,7 +31,7 @@ Swap.havespace() {
 	# $1 - size of the file to compare
 	(( $(Partition.space) > $(Unit.convert "$1") )) || {
 		Msg.warn "Insufficient disk space for a swap file of $1..."
-		exit 1
+		return 1
 	}
 }	# end Swap.havespace
 
@@ -43,9 +43,9 @@ Menu.addswap() {
 	local z=${1:-512M} f=${2:-/swapfile}
 
 	# do checks
-	Swap.iscontainer && return
-	Swap.exists && return
-	Swap.havespace "$z" || return
+	Swap.iscontainer; (( $? )) && return
+	Swap.exists; (( $? )) && return
+	Swap.havespace; (( $? )) || return
 
 	# install swap
 	Msg.info "Implementing a swap file of $z in '$f'..."
