@@ -3,10 +3,28 @@
 # https://github.com/bohanyang/debi
 # ------------------------------------------------------------------------------
 
-Menu.deploy() {
+Reinstall.iscontainer() {
+	# returns 1 (error) if the current system is a virtualized container
+	# container OpenVZ
+	[ -d /proc/vz ] && {
+		Msg.warn "No reinstall on OpenVZ containers..."
+		exit 1
+	}
+	# container LXC
+	[ -d /proc/1/root/.local/share/lxc ] && {
+		Msg.warn "No reinstall on LXC containers..."
+		exit 1
+	}
+}	# end Reinstall.iscontainer
+
+
+Menu.reinstall() {
 	# reinstall a debian distro, defaults debian 11
 	# $1 - numeric debian version: 10, 11, 12
 	local a g v=${1:-11}
+
+	# do checks
+	Reinstall.iscontainer && return
 
 	Msg.info "Preparing to install Debian $v..."
 
@@ -22,7 +40,7 @@ Menu.deploy() {
 
 	# save parameters to use once rebooted
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
-	bash debi.sh --version $v \
+	bash ./debi.sh --version $v \
 		--ip $a --gateway $g \
 		--dns '1.1.1.1 9.9.9.9 2606:4700:4700::1111 2620:fe::fe' \
 		--user root --password regulinux \
@@ -31,4 +49,4 @@ Menu.deploy() {
 		--cdn  # https mirror of deb.debian.org
 
 	Msg.info "Now reboot the server and connect via remote shell from provider"
-}	# end Menu.addswap
+}	# end Menu.reinstall
