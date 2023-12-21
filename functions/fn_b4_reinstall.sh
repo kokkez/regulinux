@@ -15,6 +15,7 @@ Host.iscontainer() {
 		Msg.warn "No reinstall on LXC containers..."
 		return 1
 	}
+	return 0
 }	# end Host.iscontainer
 
 
