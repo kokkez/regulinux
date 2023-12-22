@@ -8,8 +8,8 @@ Menu.upgrade() {
 
 	# stopping ubuntu-advantage-tools apt behavior
 	local p='/etc/apt/apt.conf.d/20apt-esm-hook.conf'
-	[ -s "$p.disabled" ] || {
-		[ -s "$p" ] && cmd mv "$p" "$p.disabled"
+	[ ! -e "$p.disabled" ] && [ -e "$p" ] && {
+		cmd mv "$p" "$p.disabled"
 		Msg.info "Renaming of the ubuntu-advantage-tools file '${p##*/}' completed!"
 	}
 
