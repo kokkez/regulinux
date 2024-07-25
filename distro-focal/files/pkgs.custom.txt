@@ -32,6 +32,7 @@ perl                  install
 perl-modules-5.30     install
 postfix               install
 psmisc                install
+qemu-guest-agent      install
 quota                 install
 rsync                 install
 screen                install
@@ -40,7 +41,7 @@ telnet                install
 ucf                   install
 unzip                 install
 wget                  install
-	
+
 # to be purged
 bsdmainutils          purge
 groff-base            purge
@@ -54,4 +55,5 @@ man-db                purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
+ubuntu-pro-client     purge
 ufw                   purge

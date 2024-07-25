@@ -2,7 +2,7 @@
 # add a swap file on KVM or DEDI systems that dont have one
 # ------------------------------------------------------------------------------
 
-Swap.iscontainer() {
+Swap.notContainer() {
 	# returns 1 (error) if the current system is a virtualized container
 	# container OpenVZ
 	[ -d /proc/vz ] && {
@@ -14,25 +14,33 @@ Swap.iscontainer() {
 		Msg.warn "No swap on LXC containers..."
 		return 1
 	}
-}	# end Swap.iscontainer
+	Msg.info "Not a container, can continue..."
+	return 0
+}	# end Swap.notContainer
 
 
-Swap.exists() {
+Swap.notExists() {
 	# returns 1 (error) if the current system already has a swap
 	[ -n "$(cmd swapon -s)" ] && {
 		Msg.warn "Swap alreay exists..."
 		return 1
 	}
-}	# end Swap.exists
+	Msg.info "The system does not have a swap, can continue..."
+	return 0
+}	# end Swap.notExists
 
 
 Swap.havespace() {
 	# returns 1 (error) if the current system has insufficient disk space
 	# $1 - size of the file to compare
-	(( $(Partition.space) > $(Unit.convert "$1") )) || {
+	local p=$(Partition.space) s=$(Unit.convert "$1")
+	(( p > s )) || {
 		Msg.warn "Insufficient disk space for a swap file of $1..."
 		return 1
 	}
+	p=$(cmd numfmt --to=iec-i --suffix=B $((p * 1024)))
+	Msg.info "The system has enough space, $p, for a swap file of $1, can continue..."
+	return 0
 }	# end Swap.havespace
 
 
@@ -43,9 +51,9 @@ Menu.addswap() {
 	local z=${1:-512M} f=${2:-/swapfile}
 
 	# do checks
-	Swap.iscontainer; (( $? )) && return
-	Swap.exists; (( $? )) && return
-	Swap.havespace; (( $? )) || return
+	Swap.notContainer || return 1
+	Swap.notExists || return 1
+	Swap.havespace "$z" || return 1
 
 	# install swap
 	Msg.info "Implementing a swap file of $z in '$f'..."
