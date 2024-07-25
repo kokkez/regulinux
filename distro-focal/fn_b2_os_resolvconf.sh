@@ -8,12 +8,12 @@ Resolv.classic() {
 	File.backup "$r"
 
 	# set known public dns
-	t="cloudflare + freenom.world"
+	t="cloudflare + quad9"
 	n="search .\noptions timeout:2 rotate\n"
-	n+="nameserver 1.1.1.1      # cloudflare\n"
-	n+="nameserver 80.80.80.80  # freenom.world\n"
-	n+="nameserver 1.0.0.1      # cloudflare\n"
-	n+="nameserver 80.80.81.81  # freenom.world"
+	n+="nameserver 1.1.1.1         # cloudflare\n"
+	n+="nameserver 9.9.9.10        # quad9\n"
+	n+="nameserver 1.0.0.1         # cloudflare\n"
+	n+="nameserver 149.112.112.112 # quad9\n"
 
 	# install needed packages, if missing
 	Pkg.requires e2fsprogs
