@@ -26,7 +26,7 @@ chss="$(hostnamectl | awk '/Cha/{print $2}') ( $chss )"
 load=$(awk '{print $1, $2, $3}' /proc/loadavg)
 tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
-ip4n=$(wget -q4O- ip.rootnet.in)
+ip4n=$(wget --timeout=4 --tries=1 -q4O- ip.rootnet.in)
 ip4c=$(hostname -i)
 tswa=$(awk '/^SwapT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 uswa="-"

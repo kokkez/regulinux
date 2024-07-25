@@ -44,7 +44,7 @@ Menu.reinstall() {
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
 	bash ./debi.sh --version $v \
 		--ip $a --gateway $g \
-		--dns '1.1.1.1 9.9.9.9 2606:4700:4700::1111 2620:fe::fe' \
+		--dns '1.1.1.1 9.9.9.10 2606:4700:4700::1111 2620:fe::fe' \
 		--user root --password regulinux \
 		--timezone $TIME_ZONE \
 		--ssh-port $SSHD_PORT \
