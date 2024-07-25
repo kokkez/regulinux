@@ -1,0 +1,14 @@
+# Debian 12 Bookworm :: https://wiki.debian.org/SourcesList
+
+# main repository
+deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+
+# security repository
+deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+
+# updates repository
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+
