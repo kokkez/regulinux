@@ -2,7 +2,7 @@
 # install and customize the "Mot Of The Day" screen
 # ------------------------------------------------------------------------------
 
-Install.motd() {
+Install.motd.old() {
 	local p='/etc/update-motd.d'
 
 	# abort if MOTD is already installed
@@ -24,4 +24,22 @@ Install.motd() {
 	[ "$ENV_release" = "debian-8" ] && ln -nfs /run/motd /etc/motd
 
 	Msg.info "Customization of MOTD completed!"
+}	# end Install.motd.old
+
+
+Install.motd() {
+	# from 2024 onward we use a single file into /etc/profiles.d/
+	# so only when really connected via terminal we have the nice MOTD screen
+	local p='/etc/profile.d'
+
+	# abort if MOTD is already installed
+	[ -s "$p/motd-console.sh" ] && return
+
+	# install needed packages, if missing
+	Pkg.requires figlet lsb-release
+
+	# simply copying file
+	File.into "$p" motd/motd-console.sh
+
+	Msg.info "Installation of MOTD completed!"
 }	# end Install.motd
