@@ -41,5 +41,9 @@ Install.motd() {
 	# simply copying file
 	File.into "$p" motd/motd-console.sh
 
+	# always empty the motd folder
+	rm -rf /etc/update-motd.d/*
+	cmd rm -f /etc/motd		# remove this on pure debian
+
 	Msg.info "Installation of MOTD completed!"
 }	# end Install.motd
