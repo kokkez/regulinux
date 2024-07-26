@@ -35,6 +35,7 @@ perl                  install
 perl-modules-5.28     install
 postfix               install
 psmisc                install
+qemu-guest-agent      install
 quota                 install
 rsync                 install
 screen                install
