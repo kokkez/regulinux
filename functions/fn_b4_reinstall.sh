@@ -3,7 +3,7 @@
 # https://github.com/bohanyang/debi
 # ------------------------------------------------------------------------------
 
-Server.isContainer() {
+Server.notContainer() {
 	# returns 1 (error) if the current system is a virtualized container
 	# container OpenVZ
 	[ -d /proc/vz ] && {
@@ -16,7 +16,7 @@ Server.isContainer() {
 		return 1
 	}
 	return 0
-}	# end Server.isContainer
+}	# end Server.notContainer
 
 
 Menu.reinstall() {
@@ -25,7 +25,7 @@ Menu.reinstall() {
 	local a g v=${1:-11}
 
 	# do checks
-	Server.isContainer && return 1
+	Server.notContainer || return 1
 
 	# start procedure
 	Msg.info "Preparing to install Debian $v..."
