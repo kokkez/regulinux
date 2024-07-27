@@ -37,7 +37,8 @@ Menu.reinstall() {
 
 	# detect gateway
 	g="$(cmd ip route get 1.1.1.1)"
-	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
+#	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
+	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
 	Msg.info "Detected gateway: $g..."
 
 	# save parameters to use once rebooted

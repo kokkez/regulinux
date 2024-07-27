@@ -6,21 +6,21 @@ OS.networking() {
 	# abort if NOT using classic networking
 	[ -e '/run/network/ifstate' ] || return
 
-	# detect: interface, address, gateway
-	local p i a g="$(cmd ip route get 1.1.1.1)"
-	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
-	a=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
-	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
-	p='/etc/network/interfaces'
-
 	# abort if already using static ip address
+	local g i a p='/etc/network/interfaces'
 	cmd grep -q 'inet static' "$p" && {
 		Msg.info "Network already configured with static IP: $a"
 		return
 	}
-
 	# backup original file
 	File.backup "$p"
+
+	# detect: interface, address, gateway
+	g="$(cmd ip route get 1.1.1.1)"
+#	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
+	i=$(cmd grep -oP 'dev \K\S+' <<< "$g")
+	a=$(cmd grep -oP 'src \K\S+' <<< "$g")
+	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
 
 	# setup /etc/network/interfaces file
 	cmd cat > "$p" <<- EOF
