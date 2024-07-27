@@ -8,9 +8,9 @@ Network.ifupdown() {
 
 	# detect: interface, address, gateway
 	local p i a g="$(cmd ip route get 1.1.1.1)"
-	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
-	a=$(cmd grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
-	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
+	i=$(cmd grep -oP 'dev \K\S+' <<< "$g")
+	a=$(cmd grep -oP 'src \K\S+' <<< "$g")
+	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
 	p='/etc/network/interfaces'
 
 	# install required packages
