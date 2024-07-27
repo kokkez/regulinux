@@ -34,27 +34,29 @@ Menu.bench() {
 	# Processor model
 	cpu=$(cmd awk '/^model n/{$1=$2=$3="";print substr($0,4);exit}' /proc/cpuinfo)
 	# how many CPU cores
-	cor=$(cmd grep -c ^pro /proc/cpuinfo)
+#	cor=$(cmd grep -c ^pro /proc/cpuinfo)
+	cor=$(cmd nproc)
 	# CPU clock
 	mhz=$(cmd awk '/^cpu M/{1*$4 > x && x = 1*$4} END {print x "MHz"}' /proc/cpuinfo)
 	# how many ram in Mb
 	ram=$(cmd awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 	# how many swap in Mb
 	swa=$(cmd awk '/^SwapT/{print int($2 / 1024) "MB"}' /proc/meminfo)
-	# linux kernel
+	# linux distro & kernel
+	dis="$ENV_os $ENV_arch"
 	ker=$(cmd uname -srm)
 	# disks
-#	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("  %dGB %s\n",$2 / 1024000,$NF)}')
-	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("    %dGiB %s\n",$2 / 1048576,$NF)}')
+#	hdd=$(cmd df -kl | cmd awk '/^\/dev/{printf("    %dGiB %s\n",$2 / 1048576,$NF)}')
+	hdd=$(cmd lsblk -o TYPE,NAME,SIZE,MOUNTPOINT -rn | cmd awk '/part|lvm/ && $4 {print "    " $3, $4 " (" $2 ")"}')
 	[ -z "$hdd" ] && hdd="    none founds"
 	# IPv4
-	ip4=$(printf '    %s\n' $(hostname -I) | cmd grep -v :)
+	ip4=$(cmd ip -4 -br addr show | cmd awk '{print "    " $3 " (" $1 ")"}')
 	[ -z "$ip4" ] && ip4="    none founds"
 	# IPv6
-	ip6=$(printf '    %s\n' $(hostname -I) | cmd grep :)
+	ip6=$(cmd ip -6 -br addr show | cmd awk '{print "    " $3 " (" $1 ")"}')
 	[ -z "$ip6" ] && ip6="    none founds"
 
-	cmd cat <<- EOF
+	cmd cat <<-EOF
 		----------------------- OS Benchmark -- $ts --
 		> Virtualization: $vir
 		> RAM:            $ram
@@ -62,12 +64,15 @@ Menu.bench() {
 		> Processor:      $cpu
 		> CPU cores:      $cor
 		> Frequency:      $mhz
+		> Distro:         $dis
 		> Kernel:         $ker
 		------------------------------------------------------------------
-		> Disks:
+		> Mounted partitions:
 		$hdd
+
 		> IPv4:
 		$ip4
+
 		> IPv6:
 		$ip6
 		------------------------------------------------------------------
