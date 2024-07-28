@@ -50,49 +50,40 @@ Fw.rule.vpn() {
 };	# end Fw.rule.vpn
 Fw.rule.dns() {
 	Fw.notice "appending DNS rules"
-	cmd ufw allow dns
+	cmd ufw allow 53
 };	# end Fw.rule.dns
 Fw.rule.ftp() {
 	Fw.notice "appending FTP rules"
-	cmd ufw allow ftp
-	cmd ufw allow 40110:40210/tcp
+	cmd ufw allow 21,40110:40210/tcp
 };	# end Fw.rule.ftp
 Fw.rule.ispconfig() {
 	Fw.notice "appending ISPConfig rules"
-	cmd ufw allow 8080/tcp
-	cmd ufw allow 8081/tcp
+	cmd ufw allow 8080,8081/tcp
 };	# end Fw.rule.ispconfig
 Fw.rule.http() {
 	Fw.notice "appending HTTP and HTTPS rules"
-	cmd ufw allow http
-	cmd ufw allow https
+	cmd ufw allow 80,443/tcp
 };	# end Fw.rule.http
 Fw.rule.smtp() {
 	Fw.notice "appending SMTP rules for port 25"
-	cmd ufw allow smtp
+	cmd ufw allow 25/tcp
 };	# end Fw.rule.smtp
 Fw.rule.smtps() {
 	Fw.notice "appending SMTP rules for SSL/TLS ports"
-	cmd ufw allow smtps
-	cmd ufw allow submission
+	cmd ufw allow 465,587/tcp
 };	# end Fw.rule.smtps
 Fw.rule.mail() {
 	Fw.notice "appending MAIL rules for mail receiving"
-	cmd ufw allow imap
-	cmd ufw allow imaps
-	cmd ufw allow pop3
-	cmd ufw allow pop3s
+	cmd ufw allow 110,143,993,995/tcp
 };	# end Fw.rule.mail
 Fw.rule.mysql() {
 	Fw.notice "appending MYSQL rules"
-    ufw allow from smtp-m.rete.us to 3306/tcp
-    ufw allow from smtp-r.rete.us to 3306/tcp
+    cmd ufw allow from smtp-m.rete.us to 3306/tcp
+    cmd ufw allow from smtp-r.rete.us to 3306/tcp
 };	# end Fw.rule.mysql
 Fw.rule.assp() {
 	Fw.notice "appending ASSP rules"
-	cmd ufw allow 22222/tcp
-	cmd ufw allow 55555/tcp
-	cmd ufw allow 58725/tcp
+	cmd ufw allow 22222,55555,58725/tcp
 };	# end Fw.rule.assp
 Fw.rule.ssh() {
 	Fw.notice "appending SSH rules (Port: $SSHD_PORT)"
@@ -120,9 +111,9 @@ Fw.allow() {
 
 	# allow port/type one by one
 	local w a
-	for w in $(Fw.uniquize $*); do
+	for w in $(Fw.uniquize $*)
+	do
 		Cmd.usable "Fw.rule.$w" && cmd Fw.rule.$w && a+=" $w"
-#		cmd ufw allow "$w"
 	done
 
 	# save the new value back into settings file
@@ -144,8 +135,7 @@ Fw.deny() {
 
 	# save the new value back into settings file
 	Config.set "FW_allowed" "$(Fw.uniquize $c)"
-};	# end Fw.allow
-
+};	# end Fw.deny
 
 
 Install.firewall() {
@@ -174,9 +164,12 @@ Install.firewall() {
 
 Menu.firewall() {
 	# show status
-	cmd ufw status verbose
+	local kw=${1:+numbered}
+	kw=${kw:-verbose}
+	Fw.notice "Show firewall status: $kw"
+	cmd ufw status $kw
 };	# end Menu.firewall
 
-### debug
-Menu.deny() { Fw.deny "$@"; }
-Menu.allow() { Fw.allow "$@"; }
+Menu.deny()  { Fw.deny "$@"; }			# alias fn
+Menu.allow() { Fw.allow "$@"; }			# alias fn
+Menu.fw()    { Menu.firewall "$@"; }	# alias fn

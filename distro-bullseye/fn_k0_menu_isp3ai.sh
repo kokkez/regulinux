@@ -33,7 +33,7 @@ Menu.isp3ai() {
 #		--use-amavis \
 #		--unattended-upgrades \
 
-	# allowing on firewall: web, ftp, mail & ispconfig
+	# allowing on firewall: web, ftp, ispconfig, smtps & mail
 	Fw.allow 'http ftp ispconfig smtps mail'
 
 	install_adminer
