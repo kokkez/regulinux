@@ -437,7 +437,7 @@
 
 		local k v p="$ENV_dir/settings.conf"
 		k="$1"								# config name
-		v="$2"								# config name
+		v="$2"								# config value
 
 		# save or append config line
 		if grep -q "^$k=" "$p"; then

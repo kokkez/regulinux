@@ -31,6 +31,9 @@ Menu.isp3ai() {
 		--unattended-upgrades \
 		--i-know-what-i-am-doing
 
+	# activating firewall ports: http, https & ispconfig
+	Fw.allow 'http https 8080/tcp 8081/tcp 40110:40210/tcp'
+
 	install_adminer
 #	install_sslcert_selfsigned
 }	# end Menu.isp3ai

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install mailserver postfix 3.5.18 for debian 11 bullseye
+# install mailserver postfix 3.5.25 for debian 11 bullseye
 # https://reposcope.com/package/postfix
 # ------------------------------------------------------------------------------
 
@@ -41,10 +41,6 @@ Install.postfix() {
 	File.into /etc postfix/aliases
 	sed -i /etc/aliases -e "s|ROOT_MAIL|$ROOT_MAIL|"
 	cmd newaliases
-
-	# activating ports on firewall: smtps & submission
-	Fw.allow '465/tcp'
-	Fw.allow '587/tcp'
 
 	Msg.info "Installation of postfix & aliases completed!"
 }	# end Install.postfix

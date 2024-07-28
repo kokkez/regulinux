@@ -31,14 +31,45 @@ Menu.firewall() {
 }	# end Menu.firewall
 
 
+Fw.uniquize() {
+	# given a string with "words" it remowes duplicates
+	# $1+ - one or more arguments
+	Arg.expect "$1" || return
+
+	# unique-ize arguments
+	local a w
+	for w in $*; do Element.in $w $a || a+=" $w"; done
+
+	echo "${a:1}"
+}	# end Fw.uniquize
+
+
 Fw.allow() {
+	# enable ports on ufw firewall
+	# $1+ - keyword for ufw
+	Arg.expect "$1" || return
+
+	# allow port/type one by one
+	local w a=$(Fw.uniquize $*)
+	for w in $a; do cmd ufw allow "$w"; done
+
+	# save the new value back into settings file
+	Config.set "FW_allowed" "$(Fw.uniquize $FW_allowed $a)"
+};	# end Fw.allow
+
+
+Fw.deny() {
 	# enable ports on ufw firewall
 	# $1 - keyword for ufw
 	Arg.expect "$1" || return
 
-	# allow port/type
-	cmd ufw allow "$1"
+	# deny port/type one by one
+	local c w a=$(Fw.uniquize $*)
+	for w in $a; do cmd ufw deny "$w"; done
+
+	# cleanup $FW_allowed
+	for w in $FW_allowed; do Element.in $w $a || c+=" $w"; done
 
 	# save the new value back into settings file
-	Config.set "FW_allowed" "$FW_allowed $1"
+	Config.set "FW_allowed" "$(Fw.uniquize $c)"
 };	# end Fw.allow

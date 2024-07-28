@@ -24,7 +24,10 @@ config_postfix_ispconfig() {
 		-e '/#  -o smtpd_sa/a\  -o smtpd_client_restrictions=permit_sasl_authenticated,reject' \
 		-e 's|#(  -o smtpd_sa)|\1|' \
 		-e 's|#(smtps)|\1|'
-
 	cmd systemctl restart postfix
+
+	# activating ports on firewall: smtps & submission
+	Fw.allow 'smtps submission'
+
 	Msg.info "Configuration of Postfix for ISPConfig completed!"
 }	# end config_postfix_ispconfig
