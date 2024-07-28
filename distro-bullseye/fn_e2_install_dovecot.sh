@@ -14,7 +14,7 @@ Install.dovecot() {
 	Pkg.install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd
 
 	# activating ports on firewall
-	Fw.allow 'imap imaps pop3 pop3s'
+	Fw.allow 'mail'
 
 	Msg.info "Installation of Dovecot completed!"
 }	# end Install.dovecot

@@ -30,21 +30,6 @@ Repo.php() {
 }	# end Repo.php
 
 
-# legacy version of the iptables commands, needed by firewall
-Fw.ip4() {
-	cmd iptables-legacy "$@"
-}
-Fw.ip6() {
-	cmd ip6tables-legacy "$@"
-}
-Fw.ip4save() {
-	cmd iptables-legacy-save "$@"
-}
-Fw.ip6save() {
-	cmd ip6tables-legacy-save "$@"
-}
-
-
 Arrange.sshd() {
 	# configure SSH server parameters
 	# $1: ssh port number, optional

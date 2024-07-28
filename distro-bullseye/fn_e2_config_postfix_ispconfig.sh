@@ -27,7 +27,7 @@ config_postfix_ispconfig() {
 	cmd systemctl restart postfix
 
 	# activating ports on firewall: smtps & submission
-	Fw.allow 'smtps submission'
+	Fw.allow 'smtps'
 
 	Msg.info "Configuration of Postfix for ISPConfig completed!"
 }	# end config_postfix_ispconfig

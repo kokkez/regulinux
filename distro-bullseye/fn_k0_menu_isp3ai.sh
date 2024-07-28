@@ -33,9 +33,10 @@ Menu.isp3ai() {
 #		--use-amavis \
 #		--unattended-upgrades \
 
-	# activating firewall ports: web, ftp, mail & ispconfig
-	Fw.allow 'http https 8080/tcp 8081/tcp 40110:40210/tcp imap imaps pop3 pop3s'
+	# allowing on firewall: web, ftp, mail & ispconfig
+	Fw.allow 'http ftp ispconfig smtps mail'
 
 	install_adminer
 #	install_sslcert_selfsigned
+	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 }	# end Menu.isp3ai
