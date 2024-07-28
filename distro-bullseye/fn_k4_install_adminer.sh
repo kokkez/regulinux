@@ -15,7 +15,7 @@ install_adminer() {
 	a=$(cmd systemctl is-active apache2)
 	n=$(cmd systemctl is-active nginx)
 	[ "$a" = "active" ] || [ "$n" = "active" ] || {
-		Msg.warn "No active webservers found..."
+		Msg.warn "No active webservers found for adminer-$v..."
 		return
 	}
 

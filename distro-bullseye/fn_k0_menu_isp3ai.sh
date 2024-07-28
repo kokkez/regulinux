@@ -4,8 +4,8 @@
 # ------------------------------------------------------------------------------
 
 Menu.isp3ai() {
-	# $1: optional webserver type: nginx or apache2
-	HTTP_SERVER="${1:-$HTTP_SERVER}"
+	# $1: optional webserver type: apache2 or nginx (default)
+	HTTP_SERVER="${1:-nginx}"
 
 	# abort if "Menu.deps" was not executed
 	Deps.performed || return
@@ -16,23 +16,25 @@ Menu.isp3ai() {
 	# allow file modification to /etc/resolv.conf
 	cmd chattr -i /etc/resolv.conf
 
-	# install webserver (nginx or apache2)
+	# install ispconfig 3
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
 		--debug \
 		--no-dns \
 		--use-unbound \
 		--no-mailman \
 		--no-quota \
-		--use-amavis \
 		--use-nginx \
 		--use-php=5.6,7.4,8.3 \
 		--use-ftp-ports=40110-40210 \
 		--no-pma \
-		--unattended-upgrades \
+		--no-roundcube \
 		--i-know-what-i-am-doing
 
-	# activating firewall ports: http, https & ispconfig
-	Fw.allow 'http https 8080/tcp 8081/tcp 40110:40210/tcp'
+#		--use-amavis \
+#		--unattended-upgrades \
+
+	# activating firewall ports: web, ftp, mail & ispconfig
+	Fw.allow 'http https 8080/tcp 8081/tcp 40110:40210/tcp imap imaps pop3 pop3s'
 
 	install_adminer
 #	install_sslcert_selfsigned
