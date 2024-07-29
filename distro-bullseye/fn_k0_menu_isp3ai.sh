@@ -36,7 +36,7 @@ Menu.isp3ai() {
 	# allowing on firewall: web, ftp, ispconfig, smtps & mail
 	Fw.allow 'http ftp ispconfig smtps mail'
 
-	install_adminer
+	Menu.adminer
 #	install_sslcert_selfsigned
 	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 }	# end Menu.isp3ai

@@ -109,7 +109,7 @@ Fw.allow() {
 	# $1+ - keyword for ufw
 	Arg.expect "$1" || return
 
-	# allow port/type one by one
+	# allow via keyword one by one
 	local w a
 	for w in $(Fw.uniquize $*)
 	do

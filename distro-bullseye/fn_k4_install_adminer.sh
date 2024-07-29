@@ -2,23 +2,20 @@
 # install adminer, as an alternative to phpmyadmin
 # ------------------------------------------------------------------------------
 
-install_adminer() {
+Install.adminer() {
+	# enable ports on ufw firewall
+	# $1 - version of adminer
+	# $2 - webserver: apache2, nginx
+	Arg.expect "$1" || return
+	Arg.expect "$2" || return
+
 	# set: root directory & version
-	local a n u d=/var/www/myadminer v="4.8.1"
+	local a n u d=/var/www/myadminer v="$1"
 
 	[ -s "$d/index.php" ] && {
 		Msg.warn "adminer-$v is already installed..."
 		return
 	}
-
-	# check what webserver is active
-	a=$(cmd systemctl is-active apache2)
-	n=$(cmd systemctl is-active nginx)
-	[ "$a" = "active" ] || [ "$n" = "active" ] || {
-		Msg.warn "No active webservers found for adminer-$v..."
-		return
-	}
-
 	Msg.info "Installing adminer-${v}..."
 
 	# create directory if it not exists (with -p)
@@ -45,11 +42,11 @@ install_adminer() {
 	File.into plugins adminer/plugins/*
 
 	# install the configuration file for webserver
-	if [ "$n" = "active" ]; then
+	if [ "$2" = "nginx" ]; then
 		File.into /etc/nginx/snippets adminer/adminer-nginx.conf
 		cmd systemctl restart nginx
 
-	elif [ "$a" = "active" ]; then
+	elif [ "$2" = "apache2" ]; then
 		cd /etc/apache2/sites-enabled
 		File.islink '080-adminer.conf' || {
 			File.into ../sites-available adminer/adminer.conf
@@ -59,9 +56,22 @@ install_adminer() {
 	fi;
 
 	Msg.info "Installation of adminer-$v completed!"
-}	# end install_adminer
+}	# end Install.adminer
 
 
 Menu.adminer() {
-	install_adminer
+	# install adminer for webserver: apache2, nginx
+	local w v="4.8.1"
+
+	# check for webserver
+	if [ "$(cmd systemctl is-active apache2)" = "active" ]
+	then
+		Install.adminer "$v" "apache2"
+
+	elif [ "$(cmd systemctl is-active nginx)" = "active" ]
+	then
+		Install.adminer "$v" "nginx"
+	else
+		Msg.warn "No active webservers found for adminer-$v..."
+	fi
 }	# end Menu.adminer
