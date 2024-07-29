@@ -118,6 +118,9 @@ Fw.allow() {
 
 	# save the new value back into settings file
 	Config.set "FW_allowed" "$(Fw.uniquize $FW_allowed $a)"
+
+	cmd ufw enable
+	cmd ufw reload
 };	# end Fw.allow
 
 
