@@ -21,7 +21,7 @@ Server.notContainer() {
 
 Menu.reinstall() {
 	# reinstall a debian distro, defaults debian 11
-	# $1 - numeric debian version: 10, 11, 12
+	# $1 - numeric debian version: 10, 11, 12, 13
 	local a g v=${1:-11}
 
 	# do checks
@@ -30,25 +30,23 @@ Menu.reinstall() {
 	# start procedure
 	Msg.info "Preparing to install Debian $v..."
 
-	# detect ip address with subnet mask
-	a="$(cmd ip -br -4 addr show scope global)"
-	a=$(cmd awk '{print $3}' <<< "$a")
-	Msg.info "Detected IP: $a..."
+	# detect ipv4 address with subnet mask
+	a=$(cmd ip -br -4 addr show scope global | cmd awk '{print $3}')
+	Msg.info "Detected IPv4: $a"
 
-	# detect gateway
-	g="$(cmd ip route get 1.1.1.1)"
-#	g=$(cmd grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
-	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
-	Msg.info "Detected gateway: $g..."
+	# detect ipv4 gateway
+	g=$(cmd ip route get 1.1.1.1 | cmd grep -oP 'via \K\S+')
+	Msg.info "Detected IPv4 gateway: $g"
 
 	# save parameters to use once rebooted
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
-	bash ./debi.sh --version $v \
-		--ip $a --gateway $g \
-		--dns '1.1.1.1 9.9.9.10 2606:4700:4700::1111 2620:fe::fe' \
-		--user root --password regulinux \
-		--timezone $TIME_ZONE \
-		--ssh-port $SSHD_PORT \
+	bash ./debi.sh --version "$v" \
+		--ip "$a" --gateway "$g" \
+		--dns '1.1.1.1 9.9.9.10' \
+		--dns6 '2606:4700:4700::1111 2620:fe::fe' \
+		--user root --password 'regulinux' \
+		--timezone "$TIME_ZONE" \
+		--ssh-port "$SSHD_PORT" \
 		--cdn  # https mirror of deb.debian.org
 
 	Msg.info "Now reboot the server and connect via remote shell from provider"

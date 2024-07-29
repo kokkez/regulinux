@@ -93,6 +93,12 @@
 	};
 
 
+	Cmd.usable() {
+		# test argument $1 for: not empty & callable
+		Arg.expect "$1" && command -v "$1" &> /dev/null
+	}	# end Cmd.usable
+
+
 	cmd() {
 		# try to run the real command, not an aliased version
 		# on missing command, or error, it return silently
@@ -222,12 +228,6 @@
 			done
 		done
 	}	# end File.into
-
-
-	Cmd.usable() {
-		# test argument $1 for: not empty & callable
-		Arg.expect "$1" && command -v "$1" &> /dev/null
-	}	# end Cmd.usable
 
 
 	Pkg.installed() {
@@ -505,7 +505,7 @@
 
 		# user must be root (id == 0)
 		(( $(cmd id -u) )) && {
-			Msg.error "This app must be run as:" $(Dye.fg.white root)
+			Msg.error "This is Regulinux and must be run as:" $(Dye.fg.white root)
 		}
 		local x t
 
