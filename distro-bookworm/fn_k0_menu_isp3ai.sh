@@ -15,6 +15,9 @@ Install.isp3() {
 
 	# allow file modification to /etc/resolv.conf
 	cmd chattr -i /etc/resolv.conf
+	# also append dns-nameservers to network/interfaces
+	w=/etc/network/interfaces
+	cmd grep -q 'dns-' $w || echo "  dns-nameservers 1.1.1.1 9.9.9.10" >> $w
 
 	# install ispconfig 3
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
@@ -29,17 +32,20 @@ Install.isp3() {
 		--no-pma \
 		--no-roundcube \
 		--i-know-what-i-am-doing
+	w=$?	# saving the exit status
 
-	local l=/tmp/ispconfig-ai/var/log/setup-*.log
-	# save ISPConfig admin password
-	cmd grep 'admin pass' $l \
-		| cmd awk {'print "admin\t" $NF'} \
-		> ~/ispconfig.admin
-	# save MySQL root password
-	cmd grep 'root pass' $l \
-		| cmd awk {'print "[client]\nuser=root\npassword=" $NF'} \
-		> ~/.my.cnf
-	chmod 600 ~/.my.cnf
+	# save passwords for ISPConfig admin & MySQL root
+	if [ $w -eq 0 ]; then
+		w=/tmp/ispconfig-ai/var/log/setup-*.log
+		cmd grep 'admin pass' $w \
+			| cmd awk '{print "admin\t" $NF}' \
+			> ~/ispconfig.admin
+		# save MySQL root password
+		cmd grep 'root pass' $w \
+			| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
+			> ~/.my.cnf
+		chmod 600 ~/.my.cnf
+	fi
 }	# end Install.isp3
 
 
