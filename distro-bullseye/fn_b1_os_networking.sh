@@ -3,15 +3,13 @@
 # ------------------------------------------------------------------------------
 
 Network.ifupdown() {
-	# abort if already using classic networking
-	[ -e '/run/network/ifstate' ] && return
+	local g i a p=/etc/network/interfaces
 
-	# detect: interface, address, gateway
-	local p i a g="$(cmd ip route get 1.1.1.1)"
-	i=$(cmd grep -oP 'dev \K\S+' <<< "$g")
-	a=$(cmd grep -oP 'src \K\S+' <<< "$g")
-	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
-	p='/etc/network/interfaces'
+	# detect v4: interface, gateway, address
+	a=$(cmd ip route get $(cmd awk '{print $1}' <<< "$DNS_v4"))
+	i=$(cmd grep -oP 'dev \K\S+' <<< "$a")
+	g=$(cmd grep -oP 'via \K\S+' <<< "$a")
+	a=$(cmd ip -4 -br a s scope global | awk '{print $3}')
 
 	# install required packages
 	Pkg.requires ifupdown
@@ -21,7 +19,7 @@ Network.ifupdown() {
 		# backup original file
 		File.backup "$p"
 
-		cmd cat > "$p" <<-EOF
+		cmd cat > "$p" <<- EOF
 			# This file describes the network interfaces available on your system
 			# and how to activate them. For more information, see interfaces(5).
 
@@ -32,7 +30,7 @@ Network.ifupdown() {
 			# ethernet interface
 			auto $i
 			iface $i inet static
-			  address $a/24
+			  address $a
 			  gateway $g
 			EOF
 	}
@@ -65,4 +63,9 @@ OS.networking() {
 		Msg.info "Network configuration via cloud-init. Nothing to touch..."
 		return
 	}
+
+	# abort if already using classic networking
+	[ -e '/run/network/ifstate' ] && return
+
+	Network.ifupdown
 }	# end OS.networking

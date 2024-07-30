@@ -2,25 +2,23 @@
 # make the ip address static if found to be dynamic, on classic ifupdown
 # ------------------------------------------------------------------------------
 
-OS.networking() {
-	# abort if NOT using classic networking
-	[ -e '/run/network/ifstate' ] || return
+Network.ifupdown() {
+	local g i a p=/etc/network/interfaces
+
+	# detect v4: interface, gateway, address
+	a=$(cmd ip route get $(cmd awk '{print $1}' <<< "$DNS_v4"))
+	i=$(cmd grep -oP 'dev \K\S+' <<< "$a")
+	g=$(cmd grep -oP 'via \K\S+' <<< "$a")
+#	a=$(cmd grep -oP 'src \K\S+' <<< "$a")
+	a=$(cmd ip -4 -br a s scope global | awk '{print $3}')
 
 	# abort if already using static ip address
-	local g i a p='/etc/network/interfaces'
 	cmd grep -q 'inet static' "$p" && {
 		Msg.info "Network already configured with static IP: $a"
 		return
 	}
 	# backup original file
 	File.backup "$p"
-
-	# detect: interface, address, gateway
-	g="$(cmd ip route get 1.1.1.1)"
-#	i=$(cmd grep -oP '\s+dev\s+\K\w+' <<< "$g")
-	i=$(cmd grep -oP 'dev \K\S+' <<< "$g")
-	a=$(cmd grep -oP 'src \K\S+' <<< "$g")
-	g=$(cmd grep -oP 'via \K\S+' <<< "$g")
 
 	# setup /etc/network/interfaces file
 	cmd cat > "$p" <<- EOF
@@ -31,10 +29,10 @@ OS.networking() {
 		auto lo
 		iface lo inet loopback
 
-		# ethernet interface
+		# ethernet interface v4
 		auto $i
 		iface $i inet static
-		  address $a/24
+		  address $a
 		  gateway $g
 		EOF
 
@@ -44,4 +42,13 @@ OS.networking() {
 
 	Msg.info "Networking changed to run with static IP: $a"
 	Msg.warn "Carefully check '$p' before reboot!"
+}	# end Network.ifupdown
+
+
+OS.networking() {
+	# abort if NOT using classic networking
+	[ -e '/run/network/ifstate' ] || return
+	
+	# setup classic networking
+	Network.ifupdown
 }	# end OS.networking

@@ -15,6 +15,8 @@
 	TIME_ZONE='Europe/Rome'
 	SSHD_PORT='64128'
 	FW_allowed='ssh'
+	DNS_v4='1.1.1.1 9.9.9.10 1.0.0.1 149.112.112.112'	# cf q9 cf q9
+	DNS_v6='2606:4700:4700::1111 2620:fe::fe'			# cf q9
 
 	HOST_NICK="$(command hostname -s)"
 	HOST_FQDN="$(command hostname -f)"
@@ -477,6 +479,8 @@
 				TIME_ZONE="$TIME_ZONE"
 				SSHD_PORT="$SSHD_PORT"
 				FW_allowed="$FW_allowed"
+				DNS_v4="$DNS_v4"
+				DNS_v6="$DNS_v6"
 				HOST_NICK="$HOST_NICK"
 				HOST_FQDN="$HOST_FQDN"
 				ROOT_MAIL="$ROOT_MAIL"

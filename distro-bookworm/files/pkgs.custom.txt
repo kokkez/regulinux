@@ -42,6 +42,7 @@ systemd-timesyncd     install
 telnet                install
 ufw                   install
 unzip                 install
+usr-is-merged         install
 wget                  install
 xfsprogs              install
 
