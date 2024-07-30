@@ -22,6 +22,7 @@ lsb-base              install
 lsb-release           install
 lsof                  install
 lvm2                  install
+mime-support          install
 nano                  install
 net-tools             install
 openssh-client        install
