@@ -30,6 +30,16 @@ Install.isp3() {
 		--no-roundcube \
 		--i-know-what-i-am-doing
 
+	local l=/tmp/ispconfig-ai/var/log/setup-*.log
+	# save ISPConfig admin password
+	cmd grep 'admin pass' $l \
+		| cmd awk {'print "admin\t" $NF'} \
+		> ~/ispconfig.admin
+	# save MySQL root password
+	cmd grep 'root pass' $l \
+		| cmd awk {'print "[client]\nuser=root\npassword=" $NF'} \
+		> ~/.my.cnf
+	chmod 600 ~/.my.cnf
 }	# end Install.isp3
 
 
