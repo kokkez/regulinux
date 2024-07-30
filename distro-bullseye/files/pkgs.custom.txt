@@ -12,6 +12,7 @@ e2fsprogs             install
 figlet                install
 gawk                  install
 gettext-base          install
+#gnupg                 install
 htop                  install
 iftop                 install
 inetutils-syslogd     install
@@ -22,7 +23,7 @@ logrotate             install
 lsb-release           install
 lsof                  install
 lvm2                  install
-mailcap               install
+mime-support          install
 nano                  install
 net-tools             install
 openssh-client        install

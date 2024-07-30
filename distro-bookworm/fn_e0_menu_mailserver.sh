@@ -42,10 +42,6 @@ Install.postfix() {
 	sed -i /etc/aliases -e "s|ROOT_MAIL|$ROOT_MAIL|"
 	cmd newaliases
 
-	# activating ports on firewall: smtps & submission
-	Fw.allow '465/tcp'
-	Fw.allow '587/tcp'
-
 	Msg.info "Installation of postfix & aliases completed!"
 }	# end Install.postfix
 

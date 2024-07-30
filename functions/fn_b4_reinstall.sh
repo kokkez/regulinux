@@ -42,7 +42,8 @@ Menu.reinstall() {
 
 	# save parameters to use once rebooted
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
-	bash ./debi.sh --version "$v" \
+	bash ./debi.sh --ethx \
+		--version "$v" \
 		--ip "$a" --gateway "$g" --dns '1.1.1.1 9.9.9.10' \
 		--dns6 '2606:4700:4700::1111 2620:fe::fe' \
 		--user root --password 'regulinux' \
