@@ -1,14 +1,14 @@
 # ------------------------------------------------------------------------------
-# install ispconfig3 for debian 11 bullseye in an automatic fashion
+# install ISPConfig 3 for debian 11 bullseye in an automatic fashion
 # https://www.howtoforge.com/ispconfig-autoinstall-debian-ubuntu
 # ------------------------------------------------------------------------------
 
-Menu.isp3ai() {
-	# $1: optional webserver type: apache2 or nginx (default)
-	HTTP_SERVER="${1:-nginx}"
+Install.isp3() {
+	# install ispconfig 3 via automatic installer
+	Arg.expect "$1" || return
 
-	# abort if "Menu.deps" was not executed
-	Deps.performed || return
+	local w="${1:-nginx}"
+	[ "$w" = 'nginx' ] || w="apache2"
 
 	# install update-inetd
 	Pkg.requires update-inetd
@@ -30,8 +30,15 @@ Menu.isp3ai() {
 		--no-roundcube \
 		--i-know-what-i-am-doing
 
-#		--use-amavis \
-#		--unattended-upgrades \
+}	# end Install.isp3
+
+
+Menu.isp3ai() {
+	# $1: optional webserver type: apache2 or nginx (default)
+	HTTP_SERVER="${1:-nginx}"
+
+	# abort if "Menu.deps" was not executed
+	Install.isp3 'nginx'
 
 	# allowing on firewall: web, ftp, ispconfig, smtps & mail
 	Fw.allow 'http ftp ispconfig smtps mail'
@@ -39,4 +46,6 @@ Menu.isp3ai() {
 	Menu.adminer
 #	install_sslcert_selfsigned
 	Config.set "HTTP_SERVER" "$HTTP_SERVER"
+
+	Msg.info "ISPConfig 3 installation completed!"
 }	# end Menu.isp3ai
