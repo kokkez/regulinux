@@ -55,10 +55,9 @@ Network.ifupdown() {
 
 OS.networking() {
 	# chech for static ip configurations
-	local p
+	local p=/etc/network/interfaces.d/50-cloud-init
 
 	# cloud-init
-	p=/etc/network/interfaces.d/50-cloud-init
 	[ -s "$p" ] && grep -q 'inet static' $p && {
 		Msg.info "Network configuration via cloud-init. Nothing to touch..."
 		return

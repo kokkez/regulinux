@@ -12,6 +12,22 @@ Menu.upgrade() {
 }	# end Menu.upgrade
 
 
+Menu.inet() {
+	# print parameters related to network: ip, gw, interface (default)
+	local v
+	case "$1" in
+		cidr6*) v=$(cmd ip -o -6 a | cmd awk '/global/ {print $4}') ;;
+		cidr*)  v=$(cmd ip -o -4 a | cmd awk '/global/ {print $4}') ;;
+		gw6*)   v=$(cmd ip -6 r | cmd grep -oP 'via \K\S+') ;;
+		gw*)    v=$(cmd ip -4 r | cmd grep -oP 'via \K\S+') ;;
+		ip6*)   v=$(cmd ip -6 r | cmd grep -oP 'src \K\S+') ;;
+		ip*)    v=$(cmd ip -4 r | cmd grep -oP 'src \K\S+') ;;
+		*)      v=$(cmd ip r | cmd awk '/default/ {print $NF}') ;;
+	esac
+	echo "$v";
+}	# Menu.inet
+
+
 Arrange.sources() {
 	# install sources.list for apt
 	File.into /etc/apt sources.list

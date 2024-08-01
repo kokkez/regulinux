@@ -13,7 +13,7 @@ Resolv.classic() {
 	n+="nameserver $(cmd awk '{print $1}' <<< "$DNS_v4")  # cloudflare\n"
 	n+="nameserver $(cmd awk '{print $2}' <<< "$DNS_v4")  # quad9\n"
 	n+="nameserver $(cmd awk '{print $3}' <<< "$DNS_v4")  # cloudflare\n"
-	n+="nameserver $(cmd awk '{print $4}' <<< "$DNS_v4")  # quad9\n"
+	n+="nameserver $(cmd awk '{print $4}' <<< "$DNS_v4")  # quad9"
 
 	# install needed packages, if missing
 	Pkg.requires e2fsprogs

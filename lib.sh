@@ -366,19 +366,23 @@
 
 	Version.numeric() {
 		# return the cleaned numeric version of a program
+		# $1 - given a version like 7a.3b.112f -> 7.3.112
+		Arg.expect "$1" || return
 		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
 	}	# end Version.numeric
 
 
 	Version.php() {
 		# return the dotted number of the cli version of PHP
-		# $1 - word to specify the wanted result like this: given 7.2.24
-		#  major will return 7
-		#  minor will return 7.2
-		#  otherwise 7.2.24
-		local v=$( cmd php -v | grep -oP 'PHP [\d\.]+' | awk '{print $2}' )
-		[ "$1" = "major" ] && v=$( cmd awk -F. '{print $1}' <<< "$v" )
-		[ "$1" = "minor" ] && v=$( cmd awk -F. '{print $1"."$2}' <<< "$v" )
+		# $1 - word to specify the wanted result like this: given 7.4.33
+		#  major -> 7
+		#  minor -> 7.4
+		#  otherwise -> 7.4.33
+		local v=$( cmd php -v | cmd awk 'NR==1 {print $2}' )
+		case "$1" in
+			ma*) v=${v%%.*} ;;	# major
+			mi*) v=${v%.*} ;;	# major.minor
+		esac
 		echo "$v"
 	}	# end Version.php
 
@@ -595,8 +599,6 @@
 		s=""
 		Cmd.usable "Menu.root" && {
 			s+="   . $(Dye.fg.orange root)        setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
-#		Cmd.usable "Menu.ssh" && {
-#			s+="   . $(Dye.fg.orange ssh)         setup private key, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
 		Cmd.usable "Menu.deps" && {
 			s+="   . $(Dye.fg.orange deps)        run prepare, check dependencies, update the base system, setup firewall\n"; }
 		Cmd.usable "Menu.reinstall" && {
