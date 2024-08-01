@@ -21,7 +21,7 @@ Install.syslogd() {
 	done
 
 	# dash before path means to not flush immediately at every logged line
-	cat > /etc/syslog.conf <<- EOF
+	cmd cat > /etc/syslog.conf <<- EOF
 		*.*;auth,authpriv,cron,kern,mail.none	-/var/log/syslog
 		auth,authpriv.*							-/var/log/auth.log
 		cron.*									-/var/log/cron.log
