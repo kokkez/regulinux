@@ -13,8 +13,10 @@ Install.isp3() {
 	# install update-inetd
 	Pkg.requires update-inetd
 
-	# allow file modification to /etc/resolv.conf
-	cmd chattr -i /etc/resolv.conf
+	# inhibit modification to /etc/resolv.conf & hold resolvconf
+	cmd chattr +i /etc/resolv.conf
+	cmd apt -y purge resolvconf
+	cmd apt-mark hold resolvconf
 
 	# install ispconfig 3
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
