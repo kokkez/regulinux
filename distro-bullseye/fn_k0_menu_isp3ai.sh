@@ -20,15 +20,15 @@ Install.isp3() {
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
 		--debug \
 		--no-dns \
-		--use-unbound \
 		--no-mailman \
 		--no-quota \
+		--no-pma \
+		--no-roundcube \
 		--use-nginx \
 		--use-php=5.6,7.4,8.3 \
 		--use-ftp-ports=40110-40210 \
-		--no-pma \
-		--no-roundcube \
 		--i-know-what-i-am-doing
+#		--use-unbound \
 
 	local l=/tmp/ispconfig-ai/var/log/setup-*.log
 	# save ISPConfig admin password
