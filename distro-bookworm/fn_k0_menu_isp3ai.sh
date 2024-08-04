@@ -3,7 +3,36 @@
 # https://www.howtoforge.com/ispconfig-autoinstall-debian-ubuntu
 # ------------------------------------------------------------------------------
 
-Install.isp3() {
+IC3.cleanup() {
+	# remove some memory intensive apps, obsoleted by assp
+	cmd systemctl stop rspamd
+	cmd systemctl disable rspamd
+	cmd apt-get purge --auto-remove -y clamav clamav-daemon postgrey rspamd
+
+	# commenting lines in postfix main.cf file
+	local p=/etc/postfix/main.cf
+	File.backup "$p"
+	sed -i "$p" \
+		-e '/greylisting/s/^/#/' \
+		-e '/milter/s/^/#/'
+};	# end IC3.cleanup
+
+
+IC3.secret() {
+	# save passwords for ISPConfig admin & MySQL root
+	w=/tmp/ispconfig-ai/var/log/setup-*.log
+	cmd grep 'admin pass' $w \
+		| cmd awk '{print "admin\t" $NF}' \
+		> ~/ispconfig.admin
+	# save MySQL root password
+	cmd grep 'root pass' $w \
+		| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
+		> ~/.my.cnf
+	chmod 600 ~/.my.cnf
+};	# end IC3.secret
+
+
+IC3.install() {
 	# install ispconfig 3 via automatic installer
 	Arg.expect "$1" || return
 
@@ -36,17 +65,9 @@ Install.isp3() {
 	# on errors dont continue
 	[ $w -eq 0 ] || return 1
 
-	# save passwords for ISPConfig admin & MySQL root
-	w=/tmp/ispconfig-ai/var/log/setup-*.log
-	cmd grep 'admin pass' $w \
-		| cmd awk '{print "admin\t" $NF}' \
-		> ~/ispconfig.admin
-	# save MySQL root password
-	cmd grep 'root pass' $w \
-		| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
-		> ~/.my.cnf
-	chmod 600 ~/.my.cnf
-}	# end Install.isp3
+	IC3.secret		# save IC3 admin & MySQL root passwords
+	IC3.cleanup		# remove memory hungry apps
+};	# end IC3.install
 
 
 Menu.isp3ai() {
@@ -54,7 +75,7 @@ Menu.isp3ai() {
 	HTTP_SERVER="${1:-nginx}"
 
 	# abort if "Menu.deps" was not executed
-	Install.isp3 'nginx'
+	IC3.install 'nginx'
 
 	# allowing on firewall: web, ftp, ispconfig, smtps & mail
 	Fw.allow 'http ftp ispconfig smtps mail'
@@ -64,4 +85,4 @@ Menu.isp3ai() {
 	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 
 	Msg.info "ISPConfig 3 installation completed!"
-}	# end Menu.isp3ai
+};	# end Menu.isp3ai

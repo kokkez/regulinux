@@ -68,6 +68,10 @@ OS.networking() {
 	# chech for static ip configurations
 	local p=/etc/network/interfaces.d/50-cloud-init
 
+	# debianize /etc/hosts, drop line with ipv4 & add line: 127.0.1.1 hostname
+	Net.hosts
+	cmd hostnamectl hostname "$HOST_FQDN"
+
 	# chech for cloud-init
 	[ -s "$p" ] && grep -q 'inet static' $p && {
 		Msg.info "Network configuration via cloud-init. Nothing to touch..."
@@ -76,7 +80,4 @@ OS.networking() {
 
 	# setup classic networking if not already in use
 	[ -e '/run/network/ifstate' ] || Net.ifupdown
-
-	# debianize /etc/hosts, drop line with ipv4 & add line: 127.0.1.1 hostname
-	Net.hosts
 }	# end OS.networking
