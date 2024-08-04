@@ -13,39 +13,39 @@ Install.isp3() {
 	# install update-inetd
 	Pkg.requires update-inetd
 
-	# allow file modification to /etc/resolv.conf
+	# allow modification of /etc/resolv.conf
 	cmd chattr -i /etc/resolv.conf
-	# also append dns-nameservers to network/interfaces
-	w=/etc/network/interfaces
-	cmd grep -q 'dns-' $w || echo "  dns-nameservers 1.1.1.1 9.9.9.10" >> $w
 
 	# install ispconfig 3
 	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
 		--debug \
+		--no-firewall \
 		--no-dns \
-		--use-unbound \
+		--no-local-dns \
 		--no-mailman \
 		--no-quota \
+		--no-ntp \
+		--no-pma \
+		--no-roundcube \
 		--use-nginx \
 		--use-php=5.6,7.4,8.3 \
 		--use-ftp-ports=40110-40210 \
-		--no-pma \
-		--no-roundcube \
 		--i-know-what-i-am-doing
 	w=$?	# saving the exit status
 
+	# on errors dont continue
+	[ $w -eq 0 ] || return 1
+
 	# save passwords for ISPConfig admin & MySQL root
-	if [ $w -eq 0 ]; then
-		w=/tmp/ispconfig-ai/var/log/setup-*.log
-		cmd grep 'admin pass' $w \
-			| cmd awk '{print "admin\t" $NF}' \
-			> ~/ispconfig.admin
-		# save MySQL root password
-		cmd grep 'root pass' $w \
-			| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
-			> ~/.my.cnf
-		chmod 600 ~/.my.cnf
-	fi
+	w=/tmp/ispconfig-ai/var/log/setup-*.log
+	cmd grep 'admin pass' $w \
+		| cmd awk '{print "admin\t" $NF}' \
+		> ~/ispconfig.admin
+	# save MySQL root password
+	cmd grep 'root pass' $w \
+		| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
+		> ~/.my.cnf
+	chmod 600 ~/.my.cnf
 }	# end Install.isp3
 
 

@@ -68,7 +68,7 @@ OS.resolvconf() {
 		Msg.info "Configuring DNS with resolvconf"
 		DNS.resolvconf "$r"
 
-	elif pgrep -x "systemd-resolved" > /dev/null; then
+	elif pgrep -f "systemd-resolved" > /dev/null; then
 		Msg.info "Configuring DNS with systemd-resolved"
 		DNS.systemd "$r"
 

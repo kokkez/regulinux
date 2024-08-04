@@ -13,7 +13,7 @@ Install.isp3() {
 	# install update-inetd
 	Pkg.requires update-inetd
 
-	# allow modification to /etc/resolv.conf
+	# allow modification of /etc/resolv.conf
 	cmd chattr -i /etc/resolv.conf
 
 	# install ispconfig 3
