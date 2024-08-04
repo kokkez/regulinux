@@ -15,7 +15,7 @@ DNS.classic() {
 	File.backup "$r"
 
 	# set known public dns
-	n="search .\noptions timeout:2 rotate\n"
+	n="search .\noptions timeout:2 rotate"
 
 	# install needed packages, if missing
 	Pkg.requires e2fsprogs
@@ -62,7 +62,7 @@ OS.resolvconf() {
 	local l r='/etc/resolv.conf'
 
 	# if resolv.conf is a valid symlink, get the real path
-	[ File.islink "$r" ] && l=$(cmd readlink -e "$r")
+	File.islink "$r" && l=$(cmd readlink -e "$r")
 
 	if [ "$l" = "/run/resolvconf/resolv.conf" ]; then
 		Msg.info "Configuring DNS with resolvconf"

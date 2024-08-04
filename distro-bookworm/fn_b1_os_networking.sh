@@ -4,20 +4,21 @@
 
 Net.hosts() {
 	# debianize /etc/hosts, dropping public ipv4 & assign hostname to 127.0.1.1
-	local i4 p=/etc/hosts
+	local a="$(Menu.inet ip)" p=/etc/hosts
+
+	# always backup =]
+	File.backup "$p"
 
 	# remove line with current ipv4
-	i4=$(Menu.inet ip)
-	grep -q "$i4" "$p" && {
-		Msg.info "Deleting line with current IPv4 ($i4) from $p ..."
-		cmd sed -i "/$i4/d" "$p"
+	grep -q "$a" "$p" && {
+		Msg.info "Deleting line with current IPv4 ($a) from $p ..."
+		cmd sed -i "/$a/d" "$p"
 	}
 
-	# remove line with current ipv4
-	i4=$(Menu.inet ip)
+	# add line for fqdn hostname
 	grep -q '127.0.1.1' "$p" || {
 		Msg.info "Appending hostname line in $p ..."
-		cmd sed -i "/127.0.0.1/a 127.0.1.1 $HOST_FQDN" "$p"
+		cmd sed -i "/127.0.0.1/a 127.0.1.1\t$HOST_FQDN" "$p"
 	}
 }	# end Net.hosts
 
@@ -67,7 +68,7 @@ OS.networking() {
 	# chech for static ip configurations
 	local p=/etc/network/interfaces.d/50-cloud-init
 
-	# cloud-init
+	# chech for cloud-init
 	[ -s "$p" ] && grep -q 'inet static' $p && {
 		Msg.info "Network configuration via cloud-init. Nothing to touch..."
 		return

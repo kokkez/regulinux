@@ -101,7 +101,7 @@ Arrange.bashrc() {
 		File.into ~ .bashrc
 		Msg.info "Switch to a customized '~/.bashrc' completed!"
 	}
-	source "$p"
+	cmd source "$p"
 }	# end Arrange.bashrc
 
 
