@@ -1,0 +1,6 @@
+# Debian 8 Jessie :: https://wiki.debian.org/SourcesList
+
+# https://www.freexian.com/lts/extended/docs/how-to-use-extended-lts/
+deb http://deb.freexian.com/extended-lts jessie main contrib non-free
+deb http://deb.freexian.com/extended-lts jessie-lts main contrib non-free
+
