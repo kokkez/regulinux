@@ -481,7 +481,7 @@
 			for k in TARGET TIME_ZONE SSHD_PORT FW_allowed DNS_v4 DNS_v6 \
 				HOST_NICK HOST_FQDN ROOT_MAIL LENC_MAIL MAIL_NAME DB_rootpw ASSP_ADMINPW \
 				CERT_C CERT_ST CERT_L CERT_O CERT_OU CERT_CN CERT_E HTTP_SERVER
-			do echo "$k=${!k}"
+			do echo "$k=\"${!k}\""
 			done > "$p"
 			Msg.info "Creation of config file $(Dye.fg.white $p) completed..."
 		}
