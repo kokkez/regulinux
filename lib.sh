@@ -474,36 +474,18 @@
 	ENV.config() {
 		# read configurations for the current installation
 		# the file will be created if missing
-		local p="$ENV_dir/settings.conf"
+		local k p="$ENV_dir/settings.conf"
 
 		# creating file with the default values as defined in ./lib.sh
 		[ -s "$p" ] || {
-			cmd cat > "$p" <<-EOF
-				TARGET="$TARGET"
-				TIME_ZONE="$TIME_ZONE"
-				SSHD_PORT="$SSHD_PORT"
-				FW_allowed="$FW_allowed"
-				DNS_v4="$DNS_v4"
-				DNS_v6="$DNS_v6"
-				HOST_NICK="$HOST_NICK"
-				HOST_FQDN="$HOST_FQDN"
-				ROOT_MAIL="$ROOT_MAIL"
-				LENC_MAIL="$LENC_MAIL"
-				MAIL_NAME="$MAIL_NAME"
-				DB_rootpw=""
-				ASSP_ADMINPW="$ASSP_ADMINPW"
-				CERT_C="$CERT_C"
-				CERT_ST="$CERT_ST"
-				CERT_L="$CERT_L"
-				CERT_O="$CERT_O"
-				CERT_OU="$CERT_OU"
-				CERT_CN="$CERT_CN"
-				CERT_E="$CERT_E"
-				HTTP_SERVER="$HTTP_SERVER"
-				EOF
+			for k in TARGET TIME_ZONE SSHD_PORT FW_allowed DNS_v4 DNS_v6 \
+				HOST_NICK HOST_FQDN ROOT_MAIL LENC_MAIL MAIL_NAME DB_rootpw ASSP_ADMINPW \
+				CERT_C CERT_ST CERT_L CERT_O CERT_OU CERT_CN CERT_E HTTP_SERVER
+			do echo "$k=${!k}"
+			done > "$p"
 			Msg.info "Creation of config file $(Dye.fg.white $p) completed..."
 		}
-		cmd source "$p"						# reload configs
+		source "$p"	# reload configs
 	}	# end ENV.config
 
 

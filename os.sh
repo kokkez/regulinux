@@ -25,7 +25,7 @@
 
 	# check for not empty argument and available command, then exec it
 	if [ -n "$1" ] && Cmd.usable "Menu.$1"; then
-		cmd "Menu.$1" "${@:2}"
+		"Menu.$1" "${@:2}"
 		Msg.debug "Execution of '$1' completed!"
 	else
 		OS.menu
