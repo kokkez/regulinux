@@ -105,7 +105,7 @@
 		# try to run the real command, not an aliased version
 		# on missing command, or error, it return silently
 		Arg.expect "$1" || return
-		local c="$( command -v $1 )"
+		local c="$(type -P "$1")"
 		shift && [ -n "$c" ] && "$c" "$@"
 	}	# end cmd
 

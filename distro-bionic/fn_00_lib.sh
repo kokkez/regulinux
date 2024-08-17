@@ -19,7 +19,7 @@ Menu.upgrade() {
 }	# end Menu.upgrade
 
 
-Menu.inet() {
+Net.info() {
 	# print parameters related to network: ip, gw, interface (default)
 	local v=$(cmd ip a s scope global)
 
@@ -32,12 +32,12 @@ Menu.inet() {
 		cidr*)  v=$( cmd grep -oP 'inet \K\S+' <<< "$v" ) ;;
 		gw6*)   v=$( cmd ip r get :: | cmd grep -oP 'via \K\S+' ) ;;
 		gw*)    v=$( cmd ip r get 1 | cmd grep -oP 'via \K\S+' ) ;;
-		ip6*)   v=$( Menu.inet cidr6 ); v="${v%%/*}" ;;
-		ip*)    v=$( Menu.inet cidr ); v="${v%%/*}" ;;
+		ip6*)   v=$( Net.info cidr6 ); v="${v%%/*}" ;;
+		ip*)    v=$( Net.info cidr ); v="${v%%/*}" ;;
 		*)      v=$( cmd ip r get 1 | cmd grep -oP 'dev \K\S+' ) ;;
 	esac
 	echo "$v";
-}	# Menu.inet
+}	# Net.info
 
 
 Repo.php() {

@@ -4,7 +4,7 @@
 
 Net.hosts() {
 	# debianize /etc/hosts, dropping public ipv4 & assign hostname to 127.0.1.1
-	local a="$(Menu.inet ip)" p=/etc/hosts
+	local a="$(Net.info ip)" p=/etc/hosts
 
 	# always backup =]
 	File.backup "$p"
@@ -27,9 +27,9 @@ Net.ifupdown() {
 	local g i a p=/etc/network/interfaces
 
 	# detect v4: interface, gateway, address
-	i=$(Menu.inet if)
-	g=$(Menu.inet gw)
-	a=$(Menu.inet cidr)
+	i=$(Net.info if)
+	g=$(Net.info gw)
+	a=$(Net.info cidr)
 
 	# abort if already using static ip address
 	cmd grep -q 'inet static' "$p" && {

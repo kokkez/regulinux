@@ -31,8 +31,8 @@ Menu.reinstall() {
 	Msg.info "Preparing to install Debian $v..."
 
 	# ipv4 CIDR with subnet mask, gateway & dns
-	a=$(Menu.inet cidr)
-	g=$(Menu.inet gw)
+	a=$(Net.info cidr)
+	g=$(Net.info gw)
 	d4=$(cmd awk '{print $1, $2}' <<< "$DNS_v4")
 	Msg.info "Detected IPv4 CIDR: $a; gateway $g; DNS $d4"
 
@@ -45,23 +45,23 @@ Menu.reinstall() {
 		--ssh-port "$SSHD_PORT" \
 		--cdn  # https mirror of deb.debian.org
 
-	# append conditional ipv6 parameters: CIDR, gateway & dns
-	a6=$(Menu.inet cidr6)
-	if [ -n "$a6" ]; then
-		g6=$(Menu.inet gw6)
-		d6=$(cmd awk '{print $1, $2}' <<< "$DNS_v6")
-		Msg.info "Detected IPv6 CIDR: $a6; gateway $g6; DNS $d6"
-		cmd cat >> /boot/debian-$ENV_codename/preseed.cfg <<- EOF
-
-			# IPv6 manual config
-			d-i netcfg/disable_dhcpv6 boolean true
-			d-i netcfg/use_autoconfig boolean false
-			d-i netcfg/get_ipaddress_v6 string ${a6%%/*}
-			d-i netcfg/get_gateway_v6 string $g6
-			d-i netcfg/get_prefix_length_v6 string ${a6##*/}
-			d-i netcfg/get_nameservers_v6 string $d6
-			EOF
-	fi
+#	# append conditional ipv6 parameters: CIDR, gateway & dns
+#	a6=$(Net.info cidr6)
+#	if [ -n "$a6" ]; then
+#		g6=$(Net.info gw6)
+#		d6=$(cmd awk '{print $1, $2}' <<< "$DNS_v6")
+#		Msg.info "Detected IPv6 CIDR: $a6; gateway $g6; DNS $d6"
+#		cmd cat >> /boot/debian-$ENV_codename/preseed.cfg <<- EOF
+#
+#			# IPv6 manual config
+#			d-i netcfg/disable_dhcpv6 boolean true
+#			d-i netcfg/use_autoconfig boolean false
+#			d-i netcfg/get_ipaddress_v6 string ${a6%%/*}
+#			d-i netcfg/get_gateway_v6 string $g6
+#			d-i netcfg/get_prefix_length_v6 string ${a6##*/}
+#			d-i netcfg/get_nameservers_v6 string $d6
+#			EOF
+#	fi
 
 	Msg.info "Now reboot the server and connect via remote shell from provider"
 }	# end Menu.reinstall

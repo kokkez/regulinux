@@ -12,7 +12,7 @@ Menu.upgrade() {
 }	# end Menu.upgrade
 
 
-Menu.inet() {
+Net.info() {
 	# print parameters related to network: ip, gw, interface (default)
 	local v
 	case "$1" in
@@ -25,7 +25,7 @@ Menu.inet() {
 		*)      v=$(cmd ip r | cmd awk '/default/ {print $NF}') ;;
 	esac
 	echo "$v";
-}	# Menu.inet
+}	# Net.info
 
 
 Arrange.sources() {

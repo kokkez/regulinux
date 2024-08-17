@@ -33,7 +33,7 @@ DNS.classic() {
 
 DNS.systemd() {
 	# configuring DNS with systemd-resolved
-	local if="$(Menu.inet if)"
+	local if="$(Net.info if)"
 	cmd resolvectl dns $if $(cmd awk '{print $1, $2}' <<< "$DNS_v4")
 	cmd resolvectl dns $if $(cmd awk '{print $1, $2}' <<< "$DNS_v6")
 }	# end DNS.systemd
