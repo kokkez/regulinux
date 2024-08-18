@@ -71,3 +71,22 @@ Arrange.sshd() {
 	Config.set "SSHD_PORT" "$SSHD_PORT"
 	Msg.info "SSH server is now listening on port: $SSHD_PORT"
 }	# end Arrange.sshd
+
+
+Pw.words() {
+	local u="https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt"
+	curl -s "$u" | awk '{ if (length($2) > 3 && length($2) < 7) print $2 }'
+}	# end Pw.words
+
+
+Pw.mnemonic() {
+	local w=($(Pw.words))
+	local p="${w[RANDOM % ${#w[@]}]}-${w[RANDOM % ${#w[@]}]}"
+	echo "${p^}" | perl -pe '
+		BEGIN { @a = split //, "izeasgtbp"; @r = split //, "123456789"; }
+		if (my @m = /[@a]/g) {
+			my $c = $m[rand @m];
+			s/$c/$r[index("izeasgtbp", $c)]/;
+		}
+	'
+}	# end Pw.mnemonic

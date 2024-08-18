@@ -524,7 +524,7 @@
 
 		# setup some environment variables
 		ENV_release="${ENV_product}-$ENV_version"
-		ENV_arch=$( cmd uname -m )
+		ENV_arch=$(cmd uname -m)
 
 		case $ENV_release in
 		#	"debian-7")     ENV_codename="wheezy"   ;;
@@ -551,7 +551,7 @@
 		}
 
 		# setup other environment variables
-		ENV_os="$ENV_release ($ENV_codename)"
+		ENV_os="${ENV_release^} ($ENV_codename)"
 
 		# removing unneeded distros
 		for x in $ENV_dir/distro-*
