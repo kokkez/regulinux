@@ -73,20 +73,40 @@ Arrange.sshd() {
 }	# end Arrange.sshd
 
 
-Pw.words() {
-	local u="https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt"
-	curl -s "$u" | awk '{ if (length($2) > 3 && length($2) < 7) print $2 }'
-}	# end Pw.words
+Menu.distroup() {
+	# upgrade the distro to debian 12 bookworm
+	# no arguments expected
+	if [ "$ENV_codename" = "bookworm" ]; then
+		Msg.warn "Current distro is already $(Dye.fg.white $ENV_os), exiting..."
+		return
+	fi
+
+	# full-upgrading one last time
+	Msg.info "Updating $(Dye.fg.white $ENV_codename) before the upgrade..."
+	cmd apt update && cmd apt upgrade -y && cmd apt full-upgrade -y && cmd apt --purge autoremove -y
+
+	# change sources & upgrading packages
+	Msg.info "Changing repos in $(Dye.fg.white sources.list) and upgrading packages..."
+	cmd sed -i 's/bullseye/bookworm/g' /etc/apt/sources.list /etc/apt/sources.list.d/*
+	cmd apt update && cmd apt upgrade -y && cmd apt full-upgrade -y
+
+	# change sources & upgrading packages
+	Msg.info "Removing obsolete packages and cleaning up..."
+	cmd apt --purge autoremove -y && cmd apt clean
+
+	Msg.warn "Upgrade completed! Reboot to apply changes..."
+}	# end Menu.distroup
 
 
 Pw.mnemonic() {
-	local w=($(Pw.words))
-	local p="${w[RANDOM % ${#w[@]}]}-${w[RANDOM % ${#w[@]}]}"
-	echo "${p^}" | perl -pe '
-		BEGIN { @a = split //, "izeasgtbp"; @r = split //, "123456789"; }
-		if (my @m = /[@a]/g) {
-			my $c = $m[rand @m];
-			s/$c/$r[index("izeasgtbp", $c)]/;
-		}
-	'
+	# return a psedo mnemonic password of 2 words separated by a dash
+	local f p w u="https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt"
+	w=$(cmd curl -s "$u" | cmd awk 'length($2) > 3 && length($2) < 7 { print $2 }')
+	# save a password that have at least 3 substitutions to do
+	while :; do
+		p=$(cmd shuf -n2 <<< "$w" | cmd paste -sd-)
+		[[ $(cmd tr -cd 'lzeasbtbg' <<< "$p" | cmd wc -c) -gt 2 ]] && break
+	done
+	# substitute "lzeasbtbg" with "123456789", then return the password
+	echo "${p^}" | cmd perl -pe '@m=/([lzeasbtbg])/g; s/$m[-2]/index("lzeasbtbg",$m[-2]) + 1/e'
 }	# end Pw.mnemonic

@@ -116,5 +116,5 @@ fi
 export TERM=xterm-color
 
 # aliasing "os" for ~/regulinux-*/os.sh
-OS=$(echo ~/*/os.sh); [ -s "$OS" ] && os() { . "$OS" "$@"; }
+os() { . $(find ~/r* -name os.* -print -quit) "$@"; }
 

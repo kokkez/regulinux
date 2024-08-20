@@ -516,10 +516,11 @@
 			. /etc/os-release
 			ENV_product=${ID,,}					# lowercase debian, ubuntu, ...
 			ENV_version=${VERSION_ID,,}			# lowercase 9, 18.04, ...
-		elif [ -f /etc/issue.net ]; then
+		elif [ -s /etc/issue.net ]; then		# file exists & ! empty
 			t=$(head -1 /etc/issue.net)
-			ENV_product=$(awk '{print $1}' <<< ${t,,})
-			ENV_version=$(perl -pe '($_)=/(\d+([.]\d+)+)/' <<< ${t,,})
+			t=${t,,}							# line lowercased
+			ENV_product=${t%% *}				# keep text before 1st space
+			ENV_version=$(grep -oP '[\d.]+' <<< "$t" | head -1)
 		fi;
 
 		# setup some environment variables
@@ -540,17 +541,17 @@
 
 		# control that release isnt unknown
 		[ "$ENV_codename" = "unknown" ] && {
-			Msg.error "This distribution is not supported: $ENV_release"
+			Msg.error "This distribution is not supported: ${ENV_release^}"
 		}
 
 		# append to parent folder name the discovered infos
-		t=${ENV_dir%/*}/regulinux.${ENV_release}.${ENV_codename}.${ENV_arch}
+		t=${ENV_dir%/*}/regulinux-$ENV_release-$ENV_codename-$ENV_arch
 		[ -d "$t" ] || {
 			mv ~/regulinux* "$t"
 			ENV_dir="$t"
 		}
 
-		# setup other environment variables
+		# setup ENV_os capitalizing the first letter
 		ENV_os="${ENV_release^} ($ENV_codename)"
 
 		# removing unneeded distros
@@ -637,7 +638,7 @@
 		s=""
 		Cmd.usable "Menu.firewall" && {
 			s+="   . $(Dye.fg.orange firewall)    to setup the firewall, via iptables, v4 and v6\n"; }
-		Cmd.usable "Menu.dumpdb" && {
+		Cmd.usable "Menu.dumpdb" && Cmd.usable "mysqldump" && {
 			s+="   . $(Dye.fg.orange dumpdb)      to backup all databases, or the one given in $(Dye.fg.white \$1)\n"; }
 		Cmd.usable "Menu.roundcube" && {
 			s+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
