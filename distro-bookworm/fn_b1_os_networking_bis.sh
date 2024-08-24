@@ -115,13 +115,13 @@ Net.networkd() {
 		Name=$(Net.info if)
 
 		[Network]
-		Address=$(Net.info ip4)
+		Address=$(Net.info cidr4)
 		Gateway=$(Net.info gw4)
 		DNS=$(cmd awk '{print $1, $2}' <<< "$DNS_v4")
 		EOF
 
 	# conditional append IPv6 parameters
-	local a="$(Net.info ip6)" g="$(Net.info gw6)"
+	local a="$(Net.info cidr6)" g="$(Net.info gw6)"
 
 	if [ -n "$a" ] && [ -n "$g" ]; then
 		cmd cat >> /etc/systemd/network/10-static.network <<- EOF

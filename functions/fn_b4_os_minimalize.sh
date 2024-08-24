@@ -65,5 +65,6 @@ OS.minimalize() {
 	apt-get -ufy -o Dpkg::Options::="--force-confnew" dselect-upgrade
 	rm -rf pkg*.txt				# removing temp files
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
+	cd ~
 	dpkg --get-selections > ~/selections.txt
 }	# end OS.minimalize

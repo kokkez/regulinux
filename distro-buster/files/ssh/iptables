@@ -9,9 +9,9 @@ command sysctl -qw kernel.hostname="$(command hostname -f)"
 sed -ri /etc/aliases -e "s/^(root:\s+).*/\1k-$(command hostname -s)@rete.us/"
 command newaliases
 
-if [ -s /etc/iptables.v4.rules ]; then
-    command iptables-legacy-restore < /etc/iptables.v4.rules
-fi
-if [ -s /etc/iptables.v6.rules ]; then
-    command ip6tables-legacy-restore < /etc/iptables.v6.rules
-fi
+#if [ -s /etc/iptables.v4.rules ]; then
+#    command iptables-legacy-restore < /etc/iptables.v4.rules
+#fi
+#if [ -s /etc/iptables.v6.rules ]; then
+#    command ip6tables-legacy-restore < /etc/iptables.v6.rules
+#fi

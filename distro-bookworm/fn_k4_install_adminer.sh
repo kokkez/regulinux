@@ -55,6 +55,7 @@ Install.adminer() {
 		}
 	fi;
 
+	cd ~
 	Msg.info "Installation of adminer-$v completed!"
 }	# end Install.adminer
 
