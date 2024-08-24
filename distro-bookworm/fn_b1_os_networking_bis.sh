@@ -76,7 +76,7 @@ Net.drop.legacy() {
 	# no arguments expected
 
 	# drop ifupdown
-	if cmd systemctl is-active --quiet networking; then
+	if cmd systemctl is-active -q networking; then
 		cmd systemctl stop networking
 		cmd systemctl disable networking
 		cmd apt-get remove --purge -y ifupdown
@@ -85,12 +85,10 @@ Net.drop.legacy() {
 	fi
 
 	# drop netplan
-	if cmd systemctl is-active --quiet netplan-wpa@.service; then
-		cmd systemctl stop netplan-wpa@.service
-		cmd systemctl disable netplan-wpa@.service
-		cmd apt-get remove --purge -y netplan.io
+	if [ "$(ls -A /etc/netplan/ 2>/dev/null)" ]; then
+		cmd apt-get purge -y netplan.io
 		cmd rm -rf /etc/netplan/*
-		Msg.info "Deletion of 'netplan' networking, completed!"
+		Msg.info "Deletion of 'netplan' tool, completed!"
 	fi
 }	# end Net.drop.legacy
 
@@ -98,9 +96,6 @@ Net.drop.legacy() {
 Net.networkd() {
 	# setup networking via systemd-networkd on debian 12
 	# no arguments expected
-
-	# install required packages
-#	Pkg.requires systemd-networkd
 
 	# rename /etc/network/interfaces so it won't be used by systemd-networkd
 	if [ -f /etc/network/interfaces ]; then
@@ -111,8 +106,8 @@ Net.networkd() {
 
 	# enable & start both: networkd & resolved
 	cmd systemctl enable systemd-networkd --now
-	cmd systemctl enable systemd-resolved --now
-	ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+#	cmd systemctl enable systemd-resolved --now
+#	ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 	# configure network with IPv4
 	cmd cat > /etc/systemd/network/10-static.network <<- EOF
@@ -133,7 +128,6 @@ Net.networkd() {
 			Address=$a
 			Gateway=$g
 			EOF
-
 		if [ -n "$DNS_v6" ]; then
 			cmd cat >> /etc/systemd/network/10-static.network <<- EOF
 				DNS=$(cmd awk '{print $1, $2}' <<< "$DNS_v6")
@@ -151,8 +145,8 @@ Net.networkd() {
 OS.networking() {
 	# setup networking in debian 12
 
-	# first enable & start networkd
-	Net.networkd
+	# enable & start networkd, if not already active
+	cmd systemctl is-active -q "systemd-networkd" || Net.networkd
 
 	# then drop legacy stacks
 	Net.drop.legacy

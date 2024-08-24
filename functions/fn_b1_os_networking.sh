@@ -2,7 +2,7 @@
 # make the ip address static if found to be dynamic, on classic ifupdown
 # ------------------------------------------------------------------------------
 
-Network.ifupdown() {
+Net.ifupdown() {
 	local g i a p=/etc/network/interfaces
 
 	# detect v4: interface, gateway, address
@@ -42,7 +42,7 @@ Network.ifupdown() {
 
 	Msg.info "Networking changed to run with static IP: $a"
 	Msg.warn "Carefully check '$p' before reboot!"
-}	# end Network.ifupdown
+}	# end Net.ifupdown
 
 
 OS.networking() {
@@ -50,5 +50,5 @@ OS.networking() {
 	[ -e '/run/network/ifstate' ] || return
 	
 	# setup classic networking
-	Network.ifupdown
+	Net.ifupdown
 }	# end OS.networking

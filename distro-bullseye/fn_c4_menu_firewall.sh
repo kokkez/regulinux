@@ -113,13 +113,13 @@ Fw.allow() {
 	local w a
 	for w in $(Fw.uniquize $*)
 	do
-		Cmd.usable "Fw.rule.$w" && cmd Fw.rule.$w && a+=" $w"
+		Cmd.usable "Fw.rule.$w" && Fw.rule.$w && a+=" $w"
 	done
 
 	# save the new value back into settings file
 	Config.set "FW_allowed" "$(Fw.uniquize $FW_allowed $a)"
 
-	cmd ufw --force enable
+#	cmd ufw --force enable
 	cmd ufw --force reload
 };	# end Fw.allow
 
