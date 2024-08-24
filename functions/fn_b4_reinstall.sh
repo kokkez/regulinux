@@ -63,5 +63,5 @@ Menu.reinstall() {
 #			EOF
 #	fi
 
-	Msg.info "Now reboot the server and connect via remote shell from provider"
+	Msg.warn "Now reboot the server and connect via remote shell from provider"
 }	# end Menu.reinstall

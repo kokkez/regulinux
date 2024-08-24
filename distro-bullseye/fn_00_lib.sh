@@ -86,6 +86,7 @@ Menu.distroup() {
 	cmd apt update && cmd apt upgrade -y && cmd apt full-upgrade -y && cmd apt --purge autoremove -y
 
 	# change sources & upgrading packages
+	cmd debconf-set-selections <<< 'openssh-server openssh-server/sshd_config multiselect /etc/ssh/sshd_config'
 	Msg.info "Changing repos in $(Dye.fg.white sources.list) and upgrading packages..."
 	cmd sed -i 's/bullseye/bookworm/g' /etc/apt/sources.list /etc/apt/sources.list.d/*
 	cmd apt update && cmd apt upgrade -y && cmd apt full-upgrade -y

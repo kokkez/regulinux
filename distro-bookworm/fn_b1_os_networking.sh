@@ -18,7 +18,7 @@ Net.hosts() {
 	# add line for fqdn hostname
 	grep -q '127.0.1.1' "$p" || {
 		Msg.info "Appending hostname line in $p ..."
-		cmd sed -i "/127.0.0.1/a 127.0.1.1\t$HOST_FQDN" "$p"
+		cmd sed -i "/127.0.0.1/a 127.0.1.1\t$HOST_FQDN $HOST_NICK" "$p"
 	}
 }	# end Net.hosts
 
@@ -64,7 +64,7 @@ Net.ifupdown() {
 }	# end Net.ifupdown
 
 
-OS.networking() {
+OS.networking.old() {
 	# chech for static ip configurations
 	local p=/etc/network/interfaces.d/50-cloud-init
 
