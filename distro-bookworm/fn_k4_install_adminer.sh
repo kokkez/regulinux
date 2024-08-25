@@ -44,14 +44,14 @@ Install.adminer() {
 	# install the configuration file for webserver
 	if [ "$2" = "nginx" ]; then
 		File.into /etc/nginx/snippets adminer/adminer-nginx.conf
-		cmd systemctl restart nginx
+		systemctl restart nginx
 
 	elif [ "$2" = "apache2" ]; then
 		cd /etc/apache2/sites-enabled
 		File.islink '080-adminer.conf' || {
 			File.into ../sites-available adminer/adminer.conf
 			ln -nfs ../sites-available/adminer.conf '080-adminer.conf'
-			cmd systemctl restart apache2
+			systemctl restart apache2
 		}
 	fi;
 
@@ -65,11 +65,11 @@ Menu.adminer() {
 	local w v="4.8.1"
 
 	# check for webserver
-	if [ "$(cmd systemctl is-active apache2)" = "active" ]; then
-		Install.adminer "$v" "apache2"
+	if systemctl is-active -q apache2; then
+		Install.adminer "$v" apache2
 
-	elif [ "$(cmd systemctl is-active nginx)" = "active" ]; then
-		Install.adminer "$v" "nginx"
+	elif systemctl is-active -q nginx; then
+		Install.adminer "$v" nginx
 
 	else
 		Msg.warn "No active webservers found for adminer-$v..."

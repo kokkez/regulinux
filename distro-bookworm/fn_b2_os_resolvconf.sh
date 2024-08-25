@@ -34,8 +34,8 @@ DNS.classic() {
 DNS.systemd() {
 	# configuring DNS with systemd-resolved
 	local if="$(Net.info if)"
-	cmd resolvectl dns $if $(cmd awk '{print $1, $2}' <<< "$DNS_v4")
-	cmd resolvectl dns $if $(cmd awk '{print $1, $2}' <<< "$DNS_v6")
+	cmd resolvectl dns $if $(awk '{print $1, $2}' <<< "$DNS_v4")
+	cmd resolvectl dns $if $(awk '{print $1, $2}' <<< "$DNS_v6")
 }	# end DNS.systemd
 
 
@@ -62,7 +62,7 @@ OS.resolvconf() {
 	local l r='/etc/resolv.conf'
 
 	# if resolv.conf is a valid symlink, get the real path
-	File.islink "$r" && l=$(cmd readlink -e "$r")
+	File.islink "$r" && l=$(readlink -e "$r")
 
 	if [ "$l" = "/run/resolvconf/resolv.conf" ]; then
 		Msg.info "Configuring DNS with resolvconf"

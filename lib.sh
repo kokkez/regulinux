@@ -112,7 +112,7 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		echo -e $(cmd date "${@-+'%F %T'}")
+		echo -e $(date "${@-+'%F %T'}")
 	}	# end Date.fmt
 
 
@@ -122,7 +122,7 @@
 		# $2: optional message
 		Arg.expect "$1" && [ -d "$1" ] && {
 			[ -n "$2" ] && echo -e "${@:2}"
-			cmd rm -rf "$1"
+			rm -rf "$1"
 		}
 	}	# end Dir.delete
 
@@ -181,8 +181,8 @@
 		# return an empty string if nothing is found
 		# $1 - relative path to search
 		Arg.expect "$1" || return
-		cmd readlink -e "$ENV_dir/distro-$ENV_codename/files/$1" \
-			|| cmd readlink -e "$ENV_dir/files/$1" \
+		readlink -e "$ENV_dir/distro-$ENV_codename/files/$1" \
+			|| readlink -e "$ENV_dir/files/$1" \
 			|| return 1
 	}	# end File.path
 
@@ -205,8 +205,8 @@
 		# return the full path to all files matching $1
 		# $1 - file path relative to one of the "files" folders
 		Arg.expect "$1" || return
-		local f=$( cmd find $ENV_dir/distro-$ENV_codename/files -wholename "*$1" )
-		[ -z "$f" ] && f=$( cmd find $ENV_dir/files -wholename "*$1" )
+		local f=$(find $ENV_dir/distro-$ENV_codename/files -wholename "*$1")
+		[ -z "$f" ] && f=$(find $ENV_dir/files -wholename "*$1")
 		echo "$f"
 	}	# end File.paths
 
@@ -220,11 +220,11 @@
 		Arg.expect "$1" "$2" || return
 
 		# detect the real destination
-		local a f d=$( cmd readlink -e "$1" )
+		local a f d=$(readlink -e "$1")
 		[ -d "$d" ] || return				# abort if dest. is not a folder
 
 		for a in "${@:2}"; do				# iterating from 2nd arguments
-			for f in $( File.paths "$a" )	# iterating files
+			for f in $(File.paths "$a")		# iterating files
 			do
 				File.recopy "$f" "$d/${f##*/}"
 			done
@@ -255,7 +255,7 @@
 
 	Pkg.update() {
 		# the "apt-get update", to run before install any package
-		cmd dpkg --configure -a	# in case apt is in a bad state
+		dpkg --configure -a		# in case apt is in a bad state
 
 		# if an argument is given then forcing run apt-get
 		[ -z "$1" ] || {
@@ -265,7 +265,7 @@
 
 		[ -z "$DOCLEANAPT" ] && {
 			DOCLEANAPT=1		# signal to do apt cleanup on exit
-			cmd apt -qy update || {
+			apt -qy update || {
 				Msg.error "An errors occurred executing 'apt update'. Try again later..."
 			}
 		}
@@ -317,7 +317,7 @@
 		Arg.expect "$1" "$2" || exit
 
 		Pkg.requires wget
-		cmd wget -nv --no-check-certificate "$1" -O "$2" || {
+		wget -nv --no-check-certificate "$1" -O "$2" || {
 			Msg.info "Download failed ( $2 ), exiting here..."
 			exit
 		}
@@ -328,7 +328,7 @@
 		# generate a random password (min 6 max 32 chars)
 		# $1 number of characters (defaults to 24)
 		# $2 flag for strong password (defaults no)
-		local c="[:alnum:]" n=$(cmd awk '{print int($1)}' <<< ${1:-24})
+		local c="[:alnum:]" n=$(awk '{print int($1)}' <<< ${1:-24})
 
 		# constrain number of characters
 		n=$(( n > 31 ? 32 : n < 7 ? 6 : n ))
@@ -336,7 +336,7 @@
 		# add special chars for strong password
 		[ -n "$2" ] && c="!#\$%&*+\-.:<=>?@[]^~$c"
 
-		echo $( cmd tr -dc "$c" < /dev/urandom | cmd head -c $n )
+		echo $(tr -dc "$c" < /dev/urandom | head -c $n)
 	}	# end Menu.password
 
 
@@ -350,14 +350,14 @@
 	Port.audit() {
 		# set port in $1 to be strictly numeric & in a known range
 		# $1 - port number, optional, defaults to 22 (ssh)
-		local t l p=$( cmd awk '{print int($1)}' <<< ${1:-22} )
+		local t l p=$(awk '{print int($1)}' <<< ${1:-22})
 		(( p == 22 )) || {
 			# limit min & max range
 			p=$(( p > 65534 ? 65535 : p < 1025 ? 1024 : p ))
 			# exclude net.ipv4.ip_local_port_range (32768-60999)
-			#t=$( cmd sysctl -e -n net.ipv4.ip_local_port_range )
-			#l=$( cmd awk '{print int($1)}' <<< $t )
-			#t=$( cmd awk '{print int($2)}' <<< $t )
+			#t=$(cmd sysctl -e -n net.ipv4.ip_local_port_range )
+			#l=$(awk '{print int($1)}' <<< $t)
+			#t=$(awk '{print int($2)}' <<< $t)
 			#p=$(( p < l ? p : p > t ? p : 64128 ))
 		}
 		echo $p
@@ -368,7 +368,7 @@
 		# return the cleaned numeric version of a program
 		# $1 - given a version like 7a.3b.112f -> 7.3.112
 		Arg.expect "$1" || return
-		cmd awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
+		awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3) }' <<< "$@"
 	}	# end Version.numeric
 
 
@@ -378,7 +378,7 @@
 		#  major -> 7
 		#  minor -> 7.4
 		#  otherwise -> 7.4.33
-		local v=$( cmd php -v | cmd awk 'NR==1 {print $2}' )
+		local v=$(cmd php -v | awk 'NR==1 {print $2}')
 		case "$1" in
 			ma*) v=${v%%.*} ;;	# major
 			mi*) v=${v%.*} ;;	# major.minor
@@ -415,7 +415,7 @@
 		w=([filesystem]=1 [size]=2 [used]=3 [free]=4 [percent]=5 [mount]=6)
 		k=${w[${k,,}]}
 		[ -z "${k}" ] || (( k < 1 )) && k=4		# default index
-		echo $(cmd df -Pk . | cmd awk "NR==2 {print \$$k}")
+		echo $(df -Pk . | awk "NR==2 {print \$$k}")
 	};	# end of Partition.space
 
 
@@ -451,7 +451,7 @@
 		else
 			echo "$k=\"$v\"" >> "$p"
 		fi;
-		cmd source "$p"						# reload configs
+		source "$p"							# reload configs
 	};	# end of Config.set
 
 
@@ -494,7 +494,7 @@
 		# no arguments expected
 
 		# user must be root (id == 0)
-		(( $(cmd id -u) )) && {
+		(( $(id -u) )) && {
 			Msg.error "This is Regulinux and must be run as:" $(Dye.fg.white root)
 		}
 		local x t
@@ -525,7 +525,7 @@
 
 		# setup some environment variables
 		ENV_release="${ENV_product}-$ENV_version"
-		ENV_arch=$(cmd uname -m)
+		ENV_arch=$(uname -m)
 
 		case $ENV_release in
 		#	"debian-7")     ENV_codename="wheezy"   ;;

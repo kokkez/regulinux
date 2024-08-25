@@ -5,9 +5,9 @@
 
 IC3.cleanup() {
 	# remove some memory intensive apps, obsoleted by assp
-	cmd systemctl stop rspamd
-	cmd systemctl disable rspamd
-	cmd apt-get purge --auto-remove -y clamav clamav-daemon postgrey rspamd
+	systemctl stop rspamd
+	systemctl disable rspamd
+	apt-get purge --auto-remove -y clamav clamav-daemon postgrey rspamd
 
 	# commenting lines in postfix main.cf file
 	local p=/etc/postfix/main.cf
@@ -21,12 +21,12 @@ IC3.cleanup() {
 IC3.secret() {
 	# save passwords for ISPConfig admin & MySQL root
 	w=/tmp/ispconfig-ai/var/log/setup-*.log
-	cmd grep 'admin pass' $w \
-		| cmd awk '{print "admin\t" $NF}' \
+	grep 'admin pass' $w \
+		| awk '{print "admin\t" $NF}' \
 		> ~/ispconfig.admin
 	# save MySQL root password
-	cmd grep 'root pass' $w \
-		| cmd awk '{print "[client]\nuser=root\npassword=" $NF}' \
+	grep 'root pass' $w \
+		| awk '{print "[client]\nuser=root\npassword=" $NF}' \
 		> ~/.my.cnf
 	chmod 600 ~/.my.cnf
 };	# end IC3.secret
@@ -46,7 +46,7 @@ IC3.install() {
 	cmd chattr -i /etc/resolv.conf
 
 	# install ispconfig 3
-	cmd wget -O - https://get.ispconfig.org | cmd sh -s -- \
+	wget -O - https://get.ispconfig.org | sh -s -- \
 		--debug \
 		--no-firewall \
 		--no-dns \

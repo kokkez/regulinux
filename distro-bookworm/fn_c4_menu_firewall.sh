@@ -11,9 +11,9 @@ Fw.ip6save() { :; }
 
 Fw.notice() {
 	echo -e \
-		$( Dye.fg.green 'FireWall' ) \
-		$( Dye.fg.green.lite '>>' ) \
-		$( Dye.fg.white "$@" )
+		$(Dye.fg.green 'FireWall') \
+		$(Dye.fg.green.lite '>>') \
+		$(Dye.fg.white "$@")
 };	# end Fw.notice
 
 
@@ -23,12 +23,12 @@ Fw.rule.vpn() {
 	Fw.notice "appending VPN rules for port $p"
 
 	# allow VPN traffic on tun0 interface
-	cmd ufw allow in on tun0
+	ufw allow in on tun0
 	# allow forwarding from tun0 to venet0 and vice versa
-	cmd ufw route allow in on tun0 out on venet0
-	cmd ufw route allow in on venet0 out on tun0
+	ufw route allow in on tun0 out on venet0
+	ufw route allow in on venet0 out on tun0
 	# allow VPN UDP traffic on specified port
-	cmd ufw allow in on venet0 proto udp to any port "$p"
+	ufw allow in on venet0 proto udp to any port "$p"
 	# enable NAT for VPN subnet
 	echo 1 > /proc/sys/net/ipv4/ip_forward
 
@@ -46,48 +46,48 @@ Fw.rule.vpn() {
 	fi
 
 	# reload UFW to apply changes
-	cmd ufw reload
+	ufw reload
 };	# end Fw.rule.vpn
 Fw.rule.dns() {
 	Fw.notice "appending DNS rules"
-	cmd ufw allow 53
+	ufw allow 53
 };	# end Fw.rule.dns
 Fw.rule.ftp() {
 	Fw.notice "appending FTP rules"
-	cmd ufw allow 21,40110:40210/tcp
+	ufw allow 21,40110:40210/tcp
 };	# end Fw.rule.ftp
 Fw.rule.ispconfig() {
 	Fw.notice "appending ISPConfig rules"
-	cmd ufw allow 8080,8081/tcp
+	ufw allow 8080,8081/tcp
 };	# end Fw.rule.ispconfig
 Fw.rule.http() {
 	Fw.notice "appending HTTP and HTTPS rules"
-	cmd ufw allow 80,443/tcp
+	ufw allow 80,443/tcp
 };	# end Fw.rule.http
 Fw.rule.smtp() {
 	Fw.notice "appending SMTP rules for port 25"
-	cmd ufw allow 25/tcp
+	ufw allow 25/tcp
 };	# end Fw.rule.smtp
 Fw.rule.smtps() {
 	Fw.notice "appending SMTP rules for SSL/TLS ports"
-	cmd ufw allow 465,587/tcp
+	ufw allow 465,587/tcp
 };	# end Fw.rule.smtps
 Fw.rule.mail() {
 	Fw.notice "appending MAIL rules for mail receiving"
-	cmd ufw allow 110,143,993,995/tcp
+	ufw allow 110,143,993,995/tcp
 };	# end Fw.rule.mail
 Fw.rule.mysql() {
 	Fw.notice "appending MYSQL rules"
-    cmd ufw allow from smtp-m.rete.us to 3306/tcp
-    cmd ufw allow from smtp-r.rete.us to 3306/tcp
+    ufw allow from smtp-m.rete.us to 3306/tcp
+    ufw allow from smtp-r.rete.us to 3306/tcp
 };	# end Fw.rule.mysql
 Fw.rule.assp() {
 	Fw.notice "appending ASSP rules"
-	cmd ufw allow 22222,55555,58725/tcp
+	ufw allow 22222,55555,58725/tcp
 };	# end Fw.rule.assp
 Fw.rule.ssh() {
 	Fw.notice "appending SSH rules (Port: $SSHD_PORT)"
-	cmd ufw allow $SSHD_PORT/tcp
+	ufw allow $SSHD_PORT/tcp
 };	# end Fw.rule.ssh
 
 
@@ -119,8 +119,8 @@ Fw.allow() {
 	# save the new value back into settings file
 	Config.set "FW_allowed" "$(Fw.uniquize $FW_allowed $a)"
 
-#	cmd ufw --force enable
-	cmd ufw --force reload
+#	ufw --force enable
+	ufw --force reload
 };	# end Fw.allow
 
 
@@ -131,7 +131,7 @@ Fw.deny() {
 
 	# deny port/type one by one
 	local c w a=$(Fw.uniquize $*)
-	for w in $a; do cmd ufw deny "$w"; done
+	for w in $a; do ufw deny "$w"; done
 
 	# cleanup $FW_allowed
 	for w in $FW_allowed; do Element.in $w $a || c+=" $w"; done
@@ -150,15 +150,13 @@ Install.firewall() {
 	Pkg.requires ufw
 
 	# enable firewall so it can be loaded at every boot
-	cmd ufw --force reset
-	cmd ufw --force enable
-	cmd systemctl enable ufw
+	ufw --force reset
+	ufw --force enable
+	systemctl enable ufw
+	ufw logging off
 
-	# allow our SSHD_PORT
-#	cmd ufw allow $SSHD_PORT/tcp
+	# allow our SSHD_PORT & save in settings file
 	Fw.allow 'ssh'
-
-	# save into settings file
 	Config.set "SSHD_PORT" "$SSHD_PORT"
 
 	Msg.info "Firewall installation and configuration completed!"
@@ -170,7 +168,7 @@ Menu.firewall() {
 	local kw=${1:+numbered}
 	kw=${kw:-verbose}
 	Fw.notice "Show firewall status: $kw"
-	cmd ufw status $kw
+	ufw status $kw
 };	# end Menu.firewall
 
 Menu.deny()  { Fw.deny "$@"; }			# alias fn
