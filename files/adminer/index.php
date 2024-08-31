@@ -11,9 +11,10 @@ function adminer_object() {
 	$plugins = array(
 		//	specify enabled plugins here
 		new AdminerDatabaseHide(array(
-			"mysql",
 			"information_schema",
+			"mysql",
 			"performance_schema",
+			"sys",
 		)),
 		new AdminerReadableDates(),
 		#new AdminerSqlLog('sql.log'),
