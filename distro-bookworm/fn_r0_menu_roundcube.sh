@@ -11,6 +11,7 @@ RC.grab() {
 	mkdir -p $2
 
 	# download the wanted version
+	Msg.info "Downloading Roundcube $1..."
 	File.download \
 		https://github.com/roundcube/roundcubemail/releases/download/$1/roundcubemail-$1-complete.tar.gz \
 		~/roundcubemail.tar.gz
@@ -110,7 +111,7 @@ RC.database() {
 
 
 Menu.roundcube() {
-	local p d v=1.4.15		# version to install
+	local p d v=1.5.8		# version to install
 	d=/var/www/roundcube	# directory root
 
 	# test if roundcube is already installed
@@ -125,7 +126,6 @@ Menu.roundcube() {
 		return
 	}
 
-	Msg.info "Downloading Roundcube $v..."
 	RC.grab "$v" "$d"
 
 	p=$(Menu.password 32)	# random password
@@ -149,7 +149,7 @@ Menu.roundcube() {
 		systemctl restart apache2
 	fi;
 
-	# finishing, set permissions, remove SQL folder
+	# finishing, set permissions, remove files & folders
 	cd $d
 	chown -R 0:0 .
 	chown -R 33:0 logs temp		# set user www-data
