@@ -3,11 +3,17 @@
 # https://www.howtoforge.com/ispconfig-autoinstall-debian-ubuntu
 # ------------------------------------------------------------------------------
 
-IC3.cleanup() {
+IC3.finishing() {
 	# remove some memory intensive apps, obsoleted by assp
 	systemctl stop rspamd
 	systemctl disable rspamd
-	apt-get purge --auto-remove -y clamav clamav-daemon postgrey rspamd
+	apt-get -qy purge --auto-remove clamav clamav-daemon postgrey rspamd
+
+	# remove apt source for rspamd
+	rm - rf /etc/apt/sources.list.d/rspamd.list
+
+	# install postfix sasl mechanism & some utilities
+	apt-get install libsasl2-modules pfqueue swaks
 
 	# commenting lines in postfix main.cf file
 	local p=/etc/postfix/main.cf
@@ -15,7 +21,7 @@ IC3.cleanup() {
 	sed -i "$p" \
 		-e '/greylisting/s/^/#/' \
 		-e '/milter/s/^/#/'
-};	# end IC3.cleanup
+};	# end IC3.finishing
 
 
 IC3.secret() {
@@ -66,7 +72,7 @@ IC3.install() {
 	[ $w -eq 0 ] || return 1
 
 	IC3.secret		# save IC3 admin & MySQL root passwords
-	IC3.cleanup		# remove memory hungry apps
+	IC3.finishing	# install utilities, remove unused apps
 };	# end IC3.install
 
 

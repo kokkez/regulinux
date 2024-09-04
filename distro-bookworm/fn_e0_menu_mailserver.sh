@@ -13,7 +13,7 @@ Install.postfix() {
 	Msg.info "Installing postfix for ${ENV_os}..."
 
 	# preseed postfix
-	debconf-set-selections <<-EOF
+	debconf-set-selections <<- EOF
 		postfix postfix/main_mailer_type select Internet Site
 		postfix postfix/mailname string ${MAIL_NAME}
 		postfix postfix/destinations string \$myorigin,localhost
