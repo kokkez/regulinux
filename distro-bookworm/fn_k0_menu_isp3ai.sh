@@ -10,7 +10,7 @@ IC3.finishing() {
 	apt-get -qy purge --auto-remove clamav clamav-daemon postgrey rspamd
 
 	# remove apt source for rspamd
-	rm - rf /etc/apt/sources.list.d/rspamd.list
+	rm -rf /etc/apt/sources.list.d/rspamd.list
 
 	# install postfix sasl mechanism & some utilities
 	apt-get install libsasl2-modules pfqueue swaks

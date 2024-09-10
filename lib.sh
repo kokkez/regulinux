@@ -631,6 +631,8 @@
 			s+="   . $(Dye.fg.orange isp3ai)      historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
 		Cmd.usable "Menu.ispconfig" && {
 			s+="   . $(Dye.fg.orange ispconfig)   historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
+		Cmd.usable "Menu.fms" && {
+			s+="   . $(Dye.fg.orange fms)         the full $(Dye.fg.white FileMaker Server), trial version\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white Target system) ----------------------------------------------- (in no particular order) -- ]\n$s"; }
 
