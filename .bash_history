@@ -66,12 +66,10 @@ fail2ban-client status
 #
 systemctl restart nginx php7.{3,4}-fpm
 update-alternatives --config php
-bash ~/lin*/os.sh deps
-bash ~/lin*/os.sh mailserver ispconfig
-bash ~/lin*/os.sh dbserver ispconfig
-bash ~/lin*/os.sh ispconfig nginx
-bash ~/lin*/os.sh resolv
-bash ~/lin*/os.sh ssh
-bash ~/lin*/os.sh
-bash ~/lin*/os.sh upgrade
+os deps
+os mailserver ispconfig
+os dbserver ispconfig
+os ispconfig nginx
+os bench
+os upgrade
 ## namium @ provider [ namium ] ##

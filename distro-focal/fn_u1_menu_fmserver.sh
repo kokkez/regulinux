@@ -2,7 +2,34 @@
 # install filemaker server 20 on ubuntu 20.04 focal
 # ------------------------------------------------------------------------------
 
-fms.cleanup() {
+fms.ssl() {
+	# install letsencrypt ssl certificate
+	local ssl r=/opt/FileMaker	# fm root
+	ln -nfs "$r/FileMaker Server/NginxServer/htdocs/httpsRoot" "$r/webroot"
+
+	# get cert from letsencrypt
+	curl https://get.acme.sh | bash
+	ssl=~/.acme.sh/acme.sh
+	ssl --set-default-ca --server letsencrypt
+	ssl --register-account -m $LENC_MAIL
+	ssl --issue -d $HOST_FQDN -w "$r/webroot"
+	r="/opt/FileMaker/FileMaker Server/CStore"
+	ssl --install-cert -d $HOST_FQDN \
+	  --key-file       "$r/le-keyfile.key"  \
+	  --fullchain-file "$r/le-fullchain.crt"
+
+	# install cert & restart server
+	cd "$r"
+	fmsadmin certificate import ./le-fullchain.crt \
+	  --keyfile ./le-keyfile.key -u admin -p bamalama -y
+	fmsadmin restart adminserver -u admin -p bamalama -y
+	fmsadmin restart server -u admin -p bamalama -y
+	service fmshelper --full-restart
+}	# end fms.ssl
+Menu.acme()  { fms.ssl "$@"; }	# alias fn
+
+
+fms.firewall() {
 	# post installation cleaning
 
 	# stopping & disabling firewalld
@@ -26,7 +53,7 @@ fms.cleanup() {
 	# add symlink to databases folder in root home
 	Msg.info "Creating symlink to databases folder in home..."
 	ln -nfs "/opt/FileMaker/FileMaker Server/Data/Databases" ~/fmdb
-}	# end fms.cleanup
+}	# end fms.firewall
 
 
 fms.install() {
@@ -65,9 +92,9 @@ fms.install() {
 
 Menu.fms() {
 	# install filemaker server
-	local u d v=20.3.2.205	# version to install
+	local u d v=21.0.2.202	# version to install
 	d=/opt/FileMaker		# directory root
-	u="https://cloud.italmedia.net/s/we7yZ3DGBR8srPJ/download/fms_20.3.2.205_Ubuntu20_amd64.zip"	# directory root
+	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"	# directory root
 
 	# test if filemaker server is already installed
 	[ -d "$d" ] && [ "$(ls -A "$d")" ] && {
@@ -76,5 +103,6 @@ Menu.fms() {
 	}
 
 	fms.install "$u"
-	fms.cleanup
+	fms.firewall
+	cd
 }	# end Menu.fms
