@@ -92,7 +92,8 @@ fms.install() {
 
 Menu.fms() {
 	# install filemaker server
-	local u d v=21.0.2.202	# version to install
+#	local u d v=21.0.2.202	# version to install
+	local u d v=21.1.3.305	# version to install
 	d=/opt/FileMaker		# directory root
 	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"	# directory root
 

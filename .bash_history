@@ -2,7 +2,7 @@ apt --installed list
 dpkg --get-selections > installed.txt
 lsb_release -sc
 systemd-detect-virt
-curl -LsO bench.monster/speedtest.sh; bash speedtest.sh -Europe
+curl -sL bench.monster | bash -s -- -eu
 # add swap 512M
 swapoff /swap.img
 fallocate -l 512M /swapfile
