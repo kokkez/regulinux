@@ -8,8 +8,8 @@
 #
 # Copyleft (c) 2024 Luigi Cocconcelli
 
-# stop here if not connected to a terminal or if "~/.hushlogin" exists
-[ ! -t 1 ] || [ -f ~/.hushlogin ] && return
+# stop here if ! interactive, or ! in a terminal or if "~/.hushlogin" exists
+[[ $- != *i* ]] || [ ! -t 1 ] || [ -f ~/.hushlogin ] && return
 
 figlet -w 96 -f small $(hostname -f)
 printf "Welcome to %s Kernel %s\n" \
@@ -31,8 +31,8 @@ uswa="-"
 	uswa=$(awk '/^SwapT/{ t=$2 } /^SwapF/{ f=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
 }
 time=$(uptime | sed -e 's/^[^,]*up *//' -e 's/, *[[:digit:]]* user.*//')
-disk=$(df -kl / | awk '/\//{printf("%dGiB",$2/1048576)}')
-uhdd=$(df -h / | awk '/\// {print $(NF-1)}')
+disk=$(df -P | awk '$NF=="/" {printf("%dGiB", $2/1048576)}')
+uhdd=$(df -P | awk '$NF=="/" {print $(NF-1)}')
 date=$(date +'%F %T %z')
 
 echo

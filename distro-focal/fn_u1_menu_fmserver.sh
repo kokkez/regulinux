@@ -7,6 +7,9 @@ fms.ssl() {
 	local ssl r=/opt/FileMaker	# fm root
 	ln -nfs "$r/FileMaker Server/NginxServer/htdocs/httpsRoot" "$r/webroot"
 
+	# install required packages
+	Pkg.requires cron
+
 	# get cert from letsencrypt
 	curl https://get.acme.sh | bash
 	ssl=~/.acme.sh/acme.sh
@@ -56,6 +59,20 @@ fms.firewall() {
 }	# end fms.firewall
 
 
+fms.download() {
+	# download using wget with progress feedback & resume support
+	# $1 -> URL
+	# $2 -> destination filename
+	Arg.expect "$1" "$2" || exit
+
+	Pkg.requires wget
+	wget -c --quiet --progress=bar:force:noscroll --no-check-certificate "$1" -O "$2" || {
+		Msg.info "Download failed ( $2 ), exiting..."
+		exit
+	}
+} # end fms.download
+
+
 fms.install() {
 	# filemaker server full installation
 	local u="$1" d=$(mktemp -d)	# temporary folder
@@ -66,7 +83,7 @@ fms.install() {
 	# download & unzip filemaker server
 	Msg.info "Downloading FileMaker Server..."
 	cd "$d"
-	File.download "$u" fms.zip
+	fms.download "$u" fms.zip
 	unzip fms.zip
 
 	# populating "Assisted Install"
@@ -87,6 +104,13 @@ fms.install() {
 	Msg.info "Installing FileMaker Server..."
 	apt update
 	FM_ASSISTED_INSTALL="$d" apt -y install ./filemaker-*.deb
+
+	# install microsoft fonts, preseeding license
+	Msg.info "Installing Microsoft fonts..."
+	debconf-set-selections <<- EOF
+		msttcorefonts msttcorefonts/accepted-mscorefonts-eula boolean true
+		EOF
+	apt -y install ttf-mscorefonts-installer
 }	# end fms.install
 
 
@@ -95,8 +119,8 @@ Menu.fms() {
 #	local u d v=21.0.2.202	# version to install
 	local u d v=21.1.3.305	# version to install
 	d=/opt/FileMaker		# directory root
-#	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"	# directory root
-	u="https://cloud.italmedia.net/s/T8Aiqmb9TzgRByq/download/fms_${v}_Ubuntu20_amd64.zip"	# directory root
+#	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"
+	u="https://cloud.italmedia.net/s/T8Aiqmb9TzgRByq/download/fms_${v}_Ubuntu20_amd64.zip"
 
 	# test if filemaker server is already installed
 	[ -d "$d" ] && [ "$(ls -A "$d")" ] && {
