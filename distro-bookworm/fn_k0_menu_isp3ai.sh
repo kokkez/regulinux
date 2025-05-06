@@ -13,7 +13,7 @@ IC3.finishing() {
 	rm -rf /etc/apt/sources.list.d/rspamd.list
 
 	# install postfix sasl mechanism & some utilities
-	apt-get install libsasl2-modules pfqueue swaks
+	apt-get -y install libsasl2-modules pfqueue swaks
 
 	# commenting lines in postfix main.cf file
 	local p=/etc/postfix/main.cf
@@ -25,8 +25,9 @@ IC3.finishing() {
 
 
 IC3.secret() {
+	local w
 	# save passwords for ISPConfig admin & MySQL root
-	w=/tmp/ispconfig-ai/var/log/setup-*.log
+	w=~/ispconfig-install-log/setup-*.log
 	grep 'admin pass' $w \
 		| awk '{print "admin\t" $NF}' \
 		> ~/ispconfig.admin
