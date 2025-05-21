@@ -4,7 +4,9 @@
 
 fms.ssl() {
 	# install letsencrypt ssl certificate
-	local ssl r=/opt/FileMaker	# fm root
+	local ssl r
+
+	r=/opt/FileMaker	# fm root
 	ln -nfs "$r/FileMaker Server/NginxServer/htdocs/httpsRoot" "$r/webroot"
 
 	# install required packages
@@ -117,10 +119,10 @@ fms.install() {
 Menu.fms() {
 	# install filemaker server
 #	local u d v=21.0.2.202	# version to install
-	local u d v=21.1.3.305	# version to install
+	local u d v=21.1.4.400	# version to install
 	d=/opt/FileMaker		# directory root
 #	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"
-	u="https://cloud.italmedia.net/s/T8Aiqmb9TzgRByq/download/fms_${v}_Ubuntu20_amd64.zip"
+	u="https://cloud.italmedia.net/s/fBQgTSgD5fDozKm/download/fms_${v}_Ubuntu20_amd64.zip"
 
 	# test if filemaker server is already installed
 	[ -d "$d" ] && [ "$(ls -A "$d")" ] && {
