@@ -5,15 +5,17 @@
 Net.info() {
 	# return values for the network interface connected to the Internet
 	# $1 - optional, desired result: if, mac, cidr, ip, gw, cidr6, ip6, gw6
-	local if=$(cmd ip r get 1 | grep -oP 'dev \K\S+')
-	local mac=$(cmd ip -br l show "$if" | awk '{print $3}')
-	local c4=$(cmd ip -br -4 a show "$if" | awk '{print $3}')
-	local g4=$(cmd ip r get 1 | grep -oP 'via \K\S+')
-	local a4=${c4%%/*}
+	local if mac c4 g4 a4 g6 a6 c6 v
+
+	if=$(cmd ip r get 1 | grep -oP 'dev \K\S+')
+	mac=$(cmd ip -br l show "$if" | awk '{print $3}')
+	c4=$(cmd ip -br -4 a show "$if" | awk '{print $3}')
+	g4=$(cmd ip r get 1 | grep -oP 'via \K\S+')
+	a4=${c4%%/*}
 
 	# check if IPv6 is enabled
-	local g6 a6 v=$(cmd ip a s scope global)
-	local c6=$(grep -oP 'inet6 \K\S+' <<< "$v")
+	v=$(cmd ip a s scope global)
+	c6=$(grep -oP 'inet6 \K\S+' <<< "$v")
 	if [ -n "$c6" ]; then
 		g6=$(cmd ip r get :: | grep -oP 'via \K\S+')
 		a6=${c6%%/*}
@@ -48,7 +50,10 @@ Menu.net() { Net.info "$@"; }	# alias fn
 
 Net.hostname() {
 	# setup hostname in the modern way of assigning it to 127.0.1.1
-	local a="$(Net.info ip4)" p=/etc/hosts
+	local a p
+
+	a="$(Net.info ip4)"
+	p=/etc/hosts
 
 	# forcing setup hostname, via systemd
 	echo "$HOST_FQDN" > /etc/hostname
@@ -73,8 +78,9 @@ Net.hostname() {
 
 Net.ifupdown() {
 	# install, activate and configure ifupdown, the classing networking stack
+	local g i a4 a6 p
 
-	local g i a4 a6 p=/etc/network/interfaces
+	p=/etc/network/interfaces
 
 	# install required packages
 	Pkg.requires ifupdown
