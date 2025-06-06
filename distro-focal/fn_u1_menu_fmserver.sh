@@ -118,15 +118,15 @@ fms.install() {
 
 Menu.fms() {
 	# install filemaker server
-#	local u d v=21.0.2.202	# version to install
-	local u d v=21.1.4.400	# version to install
+	local v d u
+#	v="21.1.4.400 fBQgTSgD5fDozKm"	# version + nextcloud key
+	v="21.1.5.500 XPnmKS6pm7RBZEk"	# version + nextcloud key
 	d=/opt/FileMaker		# directory root
-#	u="https://cloud.italmedia.net/s/nWKTYQfdJmZzEwk/download/fms_${v}_Ubuntu20_amd64.zip"
-	u="https://cloud.italmedia.net/s/fBQgTSgD5fDozKm/download/fms_${v}_Ubuntu20_amd64.zip"
+	u="https://cloud.italmedia.net/s/${v#* }/download/fms_${v%% *}_Ubuntu20_amd64.zip"
 
 	# test if filemaker server is already installed
 	[ -d "$d" ] && [ "$(ls -A "$d")" ] && {
-		Msg.warn "FileMaker Server $v is already installed in ${d}..."
+		Msg.warn "FileMaker Server ${v%% *} is already installed in ${d}..."
 		return
 	}
 
