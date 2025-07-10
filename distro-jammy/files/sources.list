@@ -1,0 +1,22 @@
+# ubuntu 22.04 lts (jammy jellyfish)
+# https://wiki.ubuntu.com/Releases
+
+# main repository
+deb http://archive.ubuntu.com/ubuntu/ jammy main universe restricted multiverse
+#deb-src http://archive.ubuntu.com/ubuntu/ jammy main universe restricted multiverse
+
+# security repository
+deb http://security.ubuntu.com/ubuntu jammy-security main universe restricted multiverse
+#deb-src http://security.ubuntu.com/ubuntu jammy-security main universe restricted multiverse
+
+# updates repository
+deb http://archive.ubuntu.com/ubuntu/ jammy-updates main universe restricted multiverse
+#deb-src http://archive.ubuntu.com/ubuntu/ jammy-updates main universe restricted multiverse
+
+# backports repository
+#deb http://archive.ubuntu.com/ubuntu jammy-backports main universe restricted multiverse
+#deb-src http://archive.ubuntu.com/ubuntu jammy-backports main universe restricted multiverse
+
+# canonical partner
+deb http://archive.canonical.com/ubuntu jammy partner
+#deb-src http://archive.canonical.com/ubuntu jammy partner
