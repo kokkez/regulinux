@@ -534,9 +534,10 @@
 			"debian-10")    ENV_codename="buster"   ;; # 2020-05
 			"debian-11")    ENV_codename="bullseye" ;; # 2022-08
 			"debian-12")    ENV_codename="bookworm" ;; # 2024-07
-			"ubuntu-16.04") ENV_codename="xenial"   ;;
+#			"ubuntu-16.04") ENV_codename="xenial"   ;;
 			"ubuntu-18.04") ENV_codename="bionic"   ;; # 2020-04
 			"ubuntu-20.04") ENV_codename="focal"    ;; # 2021-01
+			"ubuntu-22.04") ENV_codename="jammy"    ;; # 2025-07
 		esac;
 
 		# control that release isnt unknown

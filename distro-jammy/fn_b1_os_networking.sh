@@ -38,17 +38,17 @@ OS.networking() {
 	}
 
 	# activating the configuration
-	cmd ifdown --force $i lo && cmd ifup -a
-	cmd systemctl unmask networking
-	cmd systemctl enable networking
-	cmd systemctl restart networking
+	ifdown --force $i lo && ifup -a
+	systemctl unmask networking
+	systemctl enable networking
+	systemctl restart networking
 
 	# disable and remove the unwanted services
 	i="systemd-networkd.socket systemd-networkd networkd-dispatcher systemd-networkd-wait-online"
-	cmd systemctl stop $i
-	cmd systemctl disable $i
-	cmd systemctl mask $i
-	cmd apt -y purge nplan netplan.io
+	systemctl stop $i
+	systemctl disable $i
+	systemctl mask $i
+	apt -y purge nplan netplan.io
 
 	Msg.info "Disabling of netplan configuration is completed"
 	Msg.warn "Carefully check /etc/network/interfaces before reboot!"
