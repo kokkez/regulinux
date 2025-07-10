@@ -36,7 +36,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -98,5 +98,8 @@ fi
 #    . /etc/bash_completion
 #fi
 
+# workaround for the buggy xterm related to htop
+export TERM=xterm-256color
+
 # aliasing "os" for ~/regulinux-*/os.sh
-os() { . $(find ~/r* -name os.* -print -quit) "$@"; }
+os() { bash $(find ~/r* -name os.* -print -quit) "$@"; }

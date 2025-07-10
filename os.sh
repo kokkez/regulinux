@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ==============================================================================
 # setup script for install Linux OSes, only Debian like for now...
 # started by kokkez on 2018-01

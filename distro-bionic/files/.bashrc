@@ -99,8 +99,8 @@ fi
 #fi
 
 # workaround for the buggy xterm related to htop
-export TERM=xterm-color
+export TERM=xterm-256color
 
 # aliasing "os" for ~/regulinux-*/os.sh
-os() { . $(find ~/r* -name os.* -print -quit) "$@"; }
+os() { bash $(find ~/r* -name os.* -print -quit) "$@"; }
 
