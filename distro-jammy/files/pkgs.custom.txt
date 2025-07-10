@@ -1,0 +1,59 @@
+# to be installed
+apt-utils             install
+bsdutils              install
+bzip2                 install
+ca-certificates       install
+cron                  install
+curl                  install
+dbus                  install
+#dmsetup               install
+e2fsprogs             install
+figlet                install
+firewalld             install  # requirement of filemaker
+gawk                  install
+htop                  install
+iftop                 install
+ifupdown              install
+inetutils-syslogd     install
+iotop                 install
+iputils-ping          install
+locales               install
+logrotate             install
+lsb-release           install
+lsof                  install
+#lvm2                  install
+mawk                  install
+nano                  install
+net-tools             install
+openssh-client        install
+openssh-server        install
+openssh-sftp-server   install
+perl                  install
+perl-modules-5.34     install  # aggiornato a 5.34 su jammy
+postfix               install
+psmisc                install
+qemu-guest-agent      install
+quota                 install
+rsync                 install
+screen                install
+ssl-cert              install
+telnet                install
+ucf                   install
+unzip                 install
+wget                  install
+
+# to be purged
+bsdmainutils          purge     # obsoleto ? sostituito da util-linux, puoi purgarlo
+groff-base            purge
+info                  purge
+install-info          purge
+isc-dhcp-client       purge     # sostituito da netplan+systemd-networkd, comunque lo rimuovi
+isc-dhcp-common       purge
+man-db                purge
+nplan                 purge     # obsoleto ? in jammy già non più preinstallato
+netplan.io            purge     # presente in jammy ? se usi ifupdown va purgato
+rsyslog               purge     # inetutils-syslogd va bene
+traceroute            purge
+ubuntu-minimal        purge
+ubuntu-pro-client     purge     # snap + commercial crap, rimuovi giustamente
+ufw                   purge
