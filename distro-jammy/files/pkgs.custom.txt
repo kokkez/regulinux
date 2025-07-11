@@ -9,7 +9,8 @@ dbus                  install
 #dmsetup               install
 e2fsprogs             install
 figlet                install
-firewalld             install  # requirement of filemaker
+# requirement of filemaker
+firewalld             install
 gawk                  install
 htop                  install
 iftop                 install
@@ -29,7 +30,7 @@ openssh-client        install
 openssh-server        install
 openssh-sftp-server   install
 perl                  install
-perl-modules-5.34     install  # aggiornato a 5.34 su jammy
+perl-modules-5.34     install
 postfix               install
 psmisc                install
 qemu-guest-agent      install
@@ -43,17 +44,17 @@ unzip                 install
 wget                  install
 
 # to be purged
-bsdmainutils          purge     # obsoleto ? sostituito da util-linux, puoi purgarlo
+bsdmainutils          purge
 groff-base            purge
 info                  purge
 install-info          purge
-isc-dhcp-client       purge     # sostituito da netplan+systemd-networkd, comunque lo rimuovi
+isc-dhcp-client       purge
 isc-dhcp-common       purge
 man-db                purge
-nplan                 purge     # obsoleto ? in jammy già non più preinstallato
-netplan.io            purge     # presente in jammy ? se usi ifupdown va purgato
-rsyslog               purge     # inetutils-syslogd va bene
+nplan                 purge
+netplan.io            purge
+rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
-ubuntu-pro-client     purge     # snap + commercial crap, rimuovi giustamente
+ubuntu-pro-client     purge
 ufw                   purge
