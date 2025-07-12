@@ -4,9 +4,9 @@
 
 fms.ssl() {
 	# install letsencrypt ssl certificate
-	local a r
+	local a r=/opt/FileMaker
 
-	r=/opt/FileMaker	# fm root
+	# fm root
 	ln -nfs "$r/FileMaker Server/NginxServer/htdocs/httpsRoot" "$r/webroot"
 
 	# install required packages
@@ -35,14 +35,17 @@ Menu.acme()  { fms.ssl "$@"; }	# alias fn
 
 
 fms.firewall() {
-	# post installation cleaning
-
 	# stopping & disabling firewalld
-	Msg.info "Stopping and disabling firewalld..."
-	systemctl stop firewalld
-	systemctl disable firewalld
+	if [ -f /usr/sbin/firewalld ]; then
+		Msg.info "Stopping and disabling firewalld..."
+		systemctl stop firewalld
+		systemctl disable firewalld
+		apt-get purge -y firewalld
+		apt-get autoremove -y --purge
+		rm -rf /etc/firewalld /var/lib/firewalld /usr/lib/firewalld
+	fi
 
-	# conditional install ufw firewall
+	# conditional install ufw as firewall
 	Pkg.requires ufw
 
 	# configuring ufw
@@ -132,5 +135,6 @@ Menu.fms() {
 
 	fms.install "$u"
 	fms.firewall
+	fms.ssl
 	cd
 }	# end Menu.fms
