@@ -4,7 +4,7 @@
 
 fms.ssl() {
 	# install letsencrypt ssl certificate
-	local ssl r
+	local a r
 
 	r=/opt/FileMaker	# fm root
 	ln -nfs "$r/FileMaker Server/NginxServer/htdocs/httpsRoot" "$r/webroot"
@@ -14,12 +14,12 @@ fms.ssl() {
 
 	# get cert from letsencrypt
 	curl https://get.acme.sh | bash
-	ssl=~/.acme.sh/acme.sh
-	ssl --set-default-ca --server letsencrypt
-	ssl --register-account -m $LENC_MAIL
-	ssl --issue -d $HOST_FQDN -w "$r/webroot"
+	a=~/.acme.sh/acme.sh
+	$a --set-default-ca --server letsencrypt
+	$a --register-account -m $LENC_MAIL
+	$a --issue -d $HOST_FQDN -w "$r/webroot"
 	r="/opt/FileMaker/FileMaker Server/CStore"
-	ssl --install-cert -d $HOST_FQDN \
+	$a --install-cert -d $HOST_FQDN \
 	  --key-file       "$r/le-keyfile.key"  \
 	  --fullchain-file "$r/le-fullchain.crt"
 
