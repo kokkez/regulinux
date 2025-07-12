@@ -10,7 +10,6 @@ dbus                  install
 e2fsprogs             install
 figlet                install
 # requirement of filemaker
-firewalld             install
 gawk                  install
 htop                  install
 iftop                 install
@@ -40,11 +39,13 @@ screen                install
 ssl-cert              install
 telnet                install
 ucf                   install
+ufw                   install
 unzip                 install
 wget                  install
 
 # to be purged
 bsdmainutils          purge
+firewalld             purge
 groff-base            purge
 info                  purge
 install-info          purge
@@ -57,4 +58,3 @@ rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
 ubuntu-pro-client     purge
-ufw                   purge
