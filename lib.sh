@@ -585,7 +585,7 @@
 		Cmd.usable "Menu.deps" && {
 			s+="   . $(Dye.fg.orange deps)        run prepare, check dependencies, update the base system, setup firewall\n"; }
 		Cmd.usable "Menu.reinstall" && {
-			s+="   . $(Dye.fg.orange reinstall)   reinstall OS on VM (not containers) default $(Dye.fg.white Debian 11)\n"; }
+			s+="   . $(Dye.fg.orange reinstall)   reinstall OS on VM (not containers) default $(Dye.fg.white Debian 12)\n"; }
 		[ -z "$s" ] || {
 			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
 

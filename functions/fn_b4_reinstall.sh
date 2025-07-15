@@ -20,9 +20,9 @@ Server.notContainer() {
 
 
 Menu.reinstall() {
-	# reinstall a debian distro, defaults debian 11
+	# reinstall a debian distro, defaults debian 12
 	# $1 - numeric debian version: 10, 11, 12, 13
-	local a6 g6 d6 a g d4 v=${1:-11}
+	local a6 g6 d6 a g d4 v=${1:-12}
 
 	# do checks
 	Server.notContainer || return 1

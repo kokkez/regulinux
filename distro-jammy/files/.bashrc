@@ -101,9 +101,9 @@ fi
 # workaround for the buggy xterm related to htop
 export TERM=xterm-256color
 
-# aliasing "os" for ~/regulinux-*/os.sh
-os() { bash $(find ~/r* -name os.* -print -quit) "$@"; }
-
 # old readline behavior
 bind 'set enable-bracketed-paste off'
+
+# aliasing "os" for ~/regulinux-*/os.sh
+os() { bash $(find ~/r* -name os.* -print -quit) "$@"; }
 
