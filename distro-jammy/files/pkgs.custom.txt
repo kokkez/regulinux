@@ -44,17 +44,17 @@ unzip                 install
 wget                  install
 
 # to be purged
-bsdmainutils          purge
-firewalld             purge
-groff-base            purge
-info                  purge
-install-info          purge
-isc-dhcp-client       purge
-isc-dhcp-common       purge
-man-db                purge
-nplan                 purge
-netplan.io            purge
-rsyslog               purge
-traceroute            purge
-ubuntu-minimal        purge
-ubuntu-pro-client     purge
+bsdmainutils            purge
+firewalld               purge
+groff-base              purge
+info                    purge
+install-info            purge
+isc-dhcp-client         purge
+isc-dhcp-common         purge
+man-db                  purge
+netplan.io              purge
+rsyslog                 purge
+traceroute              purge
+ubuntu-advantage-tools  purge
+ubuntu-minimal          purge
+ubuntu-pro-client       purge

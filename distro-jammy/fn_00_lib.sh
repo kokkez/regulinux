@@ -6,38 +6,74 @@ Menu.upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
-	# stopping ubuntu-advantage-tools apt behavior
-	local p='/etc/apt/apt.conf.d/20apt-esm-hook.conf'
-	[ -s "$p.disabled" ] || {
-		[ -s "$p" ] && mv "$p" "$p.disabled"
-		Msg.info "Renaming of the ubuntu-advantage-tools file '${p##*/}' completed!"
-	}
-
 	# do the apt upgrade
 	export DEBIAN_FRONTEND=noninteractive
 	apt -qy full-upgrade
+
+	# disable ubuntu-advantage-tools apt hook if present
+	local p='/etc/apt/apt.conf.d/20apt-esm-hook.conf'
+	# skip if already disabled
+	[ -e "$p.disabled" ] || {
+		[ -e "$p" ] && {
+			mv "$p" "$p.disabled"
+			Msg.info "Disabling apt hook: ${p##*/}, completed!"
+		}
+	}
+
+	# remove every file in /etc/update-motd.d
+	shopt -s nullglob
+	p=(/etc/update-motd.d/*)
+	shopt -u nullglob
+	if (( ${#p[@]} )); then
+		rm -f "${p[@]}"
+		Msg.info "Removed ${#p[@]} files in /etc/update-motd.d/"
+	fi
 }	# end Menu.upgrade
 
 
 Net.info() {
-	# print parameters related to network: ip, gw, interface (default)
-	local v=$(ip a s scope global)
+	# return values for the network interface connected to the Internet
+	# $1 - optional, desired result: if, mac, cidr, ip, gw, cidr6, ip6, gw6
+	local if=$(ip r g 1 | grep -oP 'dev \K\S+')
+	local mac=$(cat /sys/class/net/$if/address)
+	mac=${mac:-00:00:00:00:00:00}
+	local c4=$(ip -4 -br a s $if | awk '{print $3; exit}')
+	local g4=$(ip r g 1 | grep -oP 'via \K\S+')
+	g4=${g4:-0.0.0.0}
+	local a4=${c4%%/*}
 
-	if [[ "$1" == *6* ]]; then
-		# check if IPv6 is enabled
-		grep -qP 'inet6 \K\S+' <<< "$v" || return
+	# check if IPv6 is enabled
+	local g6 a6 v=$(ip a s scope global)
+	local c6=$(grep -oP 'inet6 \K\S+' <<< "$v")
+	if [ -n "$c6" ]; then
+		g6=$(ip r get :: | grep -oP 'via \K\S+')
+		a6=${c6%%/*}
 	fi
+
 	case "$1" in
-		cidr6*) v=$( grep -oP 'inet6 \K\S+' <<< "$v" ) ;;
-		cidr*)  v=$( grep -oP 'inet \K\S+' <<< "$v" ) ;;
-		gw6*)   v=$( ip r get :: | grep -oP 'via \K\S+' ) ;;
-		gw*)    v=$( ip r get 1 | grep -oP 'via \K\S+' ) ;;
-		ip6*)   v=$( Net.info cidr6 ); v="${v%%/*}" ;;
-		ip*)    v=$( Net.info cidr ); v="${v%%/*}" ;;
-		*)      v=$( ip r get 1 | grep -oP 'dev \K\S+' ) ;;
+		m*)   echo $mac ;;
+		c*6*) echo $c6 ;;
+		c*)   echo $c4 ;;
+		g*6*) echo $g6 ;;
+		g*)   echo $g4 ;;
+		i*6*) echo $a6 ;;
+		if*)  echo $if ;;
+		i*)   echo $a4 ;;
+		*)    cat <<- EOF
+			> Network Interface : $if
+			> MAC Address       : $mac
+			----------------------------------------------------------
+			> IPv4 CIDR         : $c4
+			> IPv4 Address      : $a4
+			> IPv4 Gateway      : $g4
+			----------------------------------------------------------
+			> IPv6 CIDR         : ${c6:-N/A}
+			> IPv6 Address      : ${a6:-N/A}
+			> IPv6 Gateway      : ${g6:-N/A}
+			----------------------------------------------------------
+			EOF
 	esac
-	echo "$v";
-}	# Net.info
+}	# end Net.info
 
 
 Repo.php() {
