@@ -9,12 +9,10 @@ dbus                  install
 #dmsetup               install
 e2fsprogs             install
 figlet                install
-# requirement of filemaker
 gawk                  install
 htop                  install
 iftop                 install
 ifupdown              install
-inetutils-syslogd     install
 iotop                 install
 iputils-ping          install
 locales               install
@@ -35,6 +33,7 @@ psmisc                install
 qemu-guest-agent      install
 quota                 install
 rsync                 install
+rsyslog               install
 screen                install
 ssl-cert              install
 telnet                install
@@ -47,13 +46,13 @@ wget                  install
 bsdmainutils            purge
 firewalld               purge
 groff-base              purge
+inetutils-syslogd       purge
 info                    purge
 install-info            purge
 isc-dhcp-client         purge
 isc-dhcp-common         purge
 man-db                  purge
 netplan.io              purge
-rsyslog                 purge
 traceroute              purge
 ubuntu-advantage-tools  purge
 ubuntu-minimal          purge

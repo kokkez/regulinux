@@ -2,6 +2,19 @@
 # custom functions specific to ubuntu 22.04 jammy
 # ------------------------------------------------------------------------------
 
+Arrange.unhang() {
+	# mitigating ssh hang on reboot on systemd capables OSes
+	# no more needed on ubuntu jammy
+	Msg.debug "Arrange.unhang(): skipped (not needed on $ENV_os $ENV_arch)"
+}	# end Arrange.unhang
+
+
+Install.syslogd() {
+	# no more needed, rsyslog is modern and default
+	Msg.debug "Install.syslogd: skipped (rsyslog is modern and default)"
+}	# end Install.syslogd
+
+
 Menu.upgrade() {
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
