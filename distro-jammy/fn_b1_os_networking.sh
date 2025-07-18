@@ -7,11 +7,11 @@ OS.networking() {
 	[ -e '/run/network/ifstate' ] && return
 
 	# detect: interface, address, gateway
-	local p i a g="$(ip route get 1.1.1.1)"
-	i=$(grep -oP '\s+dev\s+\K\w+' <<< "$g")
-	a=$(grep -oP '\s+src\s+\K[\w\.]+' <<< "$g")
-	g=$(grep -oP '\s+via\s+\K[\w\.]+' <<< "$g")
+	local p i a g
 	p='/etc/network/interfaces'
+	i=$(Net.info if)
+	a=$(Net.info ip4)
+	g=$(Net.info gw4)
 
 	# install required packages
 	Pkg.requires ifupdown
@@ -38,7 +38,7 @@ OS.networking() {
 	}
 
 	# activating the configuration
-	ifdown --force $i lo && ifup -a
+	ifdown --force "$i" && ifup -a
 	systemctl unmask networking
 	systemctl enable networking
 	systemctl restart networking

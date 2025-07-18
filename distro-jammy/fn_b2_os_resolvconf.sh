@@ -49,8 +49,11 @@ Resolv.systemd() {
 
 
 OS.resolvconf() {
-	# if resolv.conf is a valid symlink, then setup via systemd
-	File.islink '/etc/resolv.conf' \
-		&& Resolv.systemd \
-		|| Resolv.classic
+	# fully deactivate systemd-resolved
+	systemctl stop systemd-resolved
+	systemctl disable systemd-resolved
+	systemctl mask systemd-resolved
+
+	# reactivating the classic /etc/resolv.conf
+	Resolv.classic
 }	# end OS.resolvconf

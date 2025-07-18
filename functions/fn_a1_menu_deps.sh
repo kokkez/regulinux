@@ -18,20 +18,20 @@
 
 Arrange.authkeys() {
 	# set authorized_keys to allow comfortable root logins
-	local p="$HOME/.ssh"
+	local p="$HOME/.ssh/authorized_keys"
 
 	# stop here if no public keys found
-	[ -s "$p/authorized_keys" ] || {
-		Msg.error "The required file '$p/authorized_keys' is missing"
+	[ -s "$p" ] || {
+		Msg.error "The required file '$p' is missing"
 	}
-	grep -q '^ssh\-rsa' "$p/authorized_keys" || {
-		Msg.error "Missing 'ssh-rsa' public key in '$p/authorized_keys'"
+	[[ $(< "$p") =~ (ssh-(rsa|ed25519)|ecdsa-sha2) ]] || {
+		Msg.error "No valid SSH keys found in '$p'"
 	}
 
-	# set correct permissions to .ssh/ & authorized_keys
-	mkdir -p "$p"
-	chmod 0700 "$p"
-	chmod 0600 "$p/authorized_keys"
+	# set correct permissions to ~/.ssh/ & authorized_keys
+	mkdir -p "${p%/*}"
+	chmod 0700 "${p%/*}"
+	chmod 0600 "$p"
 	Msg.info "Setup of authorized_keys completed!"
 }	# end Arrange.authkeys
 
