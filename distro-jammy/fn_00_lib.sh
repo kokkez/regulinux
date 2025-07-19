@@ -48,7 +48,7 @@ Net.info() {
 	# return values for the network interface connected to the Internet
 	# $1 - optional, desired result: if, mac, cidr, ip, gw, cidr6, ip6, gw6
 	local if=$(ip r g 1 | grep -oP 'dev \K\S+')
-	local mac=$(cat /sys/class/net/$if/address)
+	local mac=$(< /sys/class/net/$if/address)
 	mac=${mac:-00:00:00:00:00:00}
 	local c4=$(ip -4 -br a s $if | awk '{print $3; exit}')
 	local g4=$(ip r g 1 | grep -oP 'via \K\S+')

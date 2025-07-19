@@ -10,7 +10,7 @@ OS.networking() {
 	local p i a g
 	p='/etc/network/interfaces'
 	i=$(Net.info if)
-	a=$(Net.info ip4)
+	a=$(Net.info cidr4)
 	g=$(Net.info gw4)
 
 	# install required packages
