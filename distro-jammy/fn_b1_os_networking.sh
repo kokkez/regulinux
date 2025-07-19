@@ -7,11 +7,16 @@ OS.networking() {
 	[ -e '/run/network/ifstate' ] && return
 
 	# detect: interface, address, gateway
-	local p i a g
-	p='/etc/network/interfaces'
+	local i c g m p='/etc/network/interfaces'
 	i=$(Net.info if)
-	a=$(Net.info cidr4)
+	c=$(Net.info cidr4)
 	g=$(Net.info gw4)
+	m=$(Net.info mac)
+
+	# assign fixed interface name eth0 based on MAC address
+	cat > /etc/udev/rules.d/70-persistent-net.rules <<- EOF
+		SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="$m", NAME="eth0"
+		EOF
 
 	# install required packages
 	Pkg.requires ifupdown
@@ -32,7 +37,7 @@ OS.networking() {
 			# ethernet interface
 			auto $i
 			iface $i inet static
-			  address $a/24
+			  address $c
 			  gateway $g
 			EOF
 	}

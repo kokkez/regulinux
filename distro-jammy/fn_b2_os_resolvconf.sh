@@ -6,6 +6,7 @@
 Resolv.classic() {
 	local t r='/etc/resolv.conf'
 	File.backup "$r"
+	[ -L "$r" ] && rm -f "$r"
 
 	# set public dns resolvers
 	t=$(cat <<- EOF
@@ -33,26 +34,6 @@ Resolv.classic() {
 	Msg.info "Configuration of public resolvers completed! Now $r has:"
 	sed 's|^|> |' < "$r"
 }	# end Resolv.classic
-
-
-Resolv.systemd() {
-	local f='/etc/systemd/resolved.conf.d'
-
-	# if 'dns_servers.conf' already exists, then exit here
-	[ -s "$f/dns_servers.conf" ] && return
-
-	# copying files
-	mkdir -p "$f"
-	File.into "$f" resolved.conf.d/*
-
-	# fully activate systemd-resolved
-	cmd systemctl unmask systemd-resolved
-	cmd systemctl enable systemd-resolved
-	cmd systemctl restart systemd-resolved
-	#cmd systemd-resolve --status
-
-	Msg.info "Configuration of public dns completed via systemd-resolved"
-}	# end Resolv.systemd
 
 
 OS.resolvconf() {

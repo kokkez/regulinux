@@ -44,6 +44,7 @@ wget                  install
 
 # to be purged
 bsdmainutils            purge
+distro-info             purge
 firewalld               purge
 groff-base              purge
 inetutils-syslogd       purge
