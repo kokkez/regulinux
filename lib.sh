@@ -111,7 +111,8 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		echo -e $(date "${@-+'%F %T'}")
+		#echo -e $(date "${@-+'%F %T'}")
+		date "${@:-'+%F %T'}"
 	}	# end Date.fmt
 
 

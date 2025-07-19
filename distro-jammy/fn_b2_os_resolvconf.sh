@@ -9,17 +9,18 @@ Resolv.classic() {
 	[ -L "$r" ] && rm -f "$r"
 
 	# set public dns resolvers
+	set -- $DNS_v4
 	t=$(cat <<- EOF
 		# public resolvers
 		options timeout:2 rotate
 
 		# cloudflare
-		nameserver 1.1.1.1
-		nameserver 1.0.0.1
+		nameserver $1
+		nameserver $3
 
 		# quad9 (unfiltered)
-		nameserver 9.9.9.10
-		nameserver 149.112.112.112
+		nameserver $2
+		nameserver $4
 		EOF
 	)
 
