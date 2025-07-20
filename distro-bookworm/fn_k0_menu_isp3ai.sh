@@ -78,6 +78,10 @@ IC3.install() {
 
 
 Menu.isp3ai() {
+	__exclude='[ -f /usr/local/ispconfig/server/server.php ]'
+	__section="Target system"
+	__summary="historical Control Panel, with support at $(Dye.fg.white howtoforge.com)"
+
 	# $1: optional webserver type: apache2 or nginx (default)
 	HTTP_SERVER="${1:-nginx}"
 

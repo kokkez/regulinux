@@ -14,7 +14,7 @@
 	TIME_ZONE='Europe/Rome'
 	SSHD_PORT='64128'
 	FW_allowed='ssh'
-	DNS_v4='1.1.1.1 9.9.9.10 1.0.0.1 149.112.112.112'	# cf q9 cf q9
+	DNS_v4='1.1.1.1 9.9.9.10 1.0.0.1 149.112.112.10'	# cf q9 cf q9
 	DNS_v6='2606:4700:4700::1111 2620:fe::fe'			# cf q9
 
 	HOST_NICK="$(command hostname -s)"
@@ -325,6 +325,9 @@
 
 
 	Menu.password() {
+		__section="Standalone utilities"
+		__summary="print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
+
 		# generate a random password (min 6 max 32 chars)
 		# $1 number of characters (defaults to 24)
 		# $2 flag for strong password (defaults no)
@@ -341,6 +344,9 @@
 
 
 	Menu.iotest() {
+		__section="Standalone utilities"
+		__summary="perform the classic I/O test on the server"
+
 		# classic disk I/O test
 		Msg.info "Performing classic I/O test..."
 		cmd dd if=/dev/zero of=~/tmpf bs=64k count=16k conv=fdatasync && rm -rf ~/tmpf
@@ -598,6 +604,8 @@
 			s+="   . $(Dye.fg.orange addswap)     add a file to be used as SWAP memory, default $(Dye.fg.white 512M)\n"; }
 		Cmd.usable "Menu.password" && {
 			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
+		Cmd.usable "Menu.mnemonic" && {
+			s+="   . $(Dye.fg.orange mnemonic)    mnemonic password of 2 words separated by a dash\n"; }
 		Cmd.usable "Menu.bench" && {
 			s+="   . $(Dye.fg.orange bench)       basic benchmark to get OS info\n"; }
 		Cmd.usable "Menu.iotest" && {

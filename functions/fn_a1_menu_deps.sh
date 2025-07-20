@@ -128,6 +128,8 @@ Deps.performed() {
 
 
 Menu.deps() {
+	__section="One time actions"
+	__summary="run prepare, check dependencies, update the base system, setup firewall"
 	# preparing a basic OS, ready to host applications
 	# $1: ssh port number, optional
 
@@ -158,6 +160,8 @@ Menu.deps() {
 
 
 Menu.root() {
+	__section="One time actions"
+	__summary="setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)"
 	# arrange the OS to comfortably accept root logins
 	# $1: ssh port number, optional
 

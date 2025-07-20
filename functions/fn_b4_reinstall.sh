@@ -20,6 +20,8 @@ Server.notContainer() {
 
 
 Menu.reinstall() {
+	__section="One time actions"
+	__summary="reinstall OS on VM (not containers), default $(Dye.fg.white Debian 12)"
 	# reinstall a debian distro, defaults debian 12
 	# $1 - numeric debian version: 10, 11, 12, 13
 	local a6 g6 d6 a g d4 v=${1:-12}

@@ -77,6 +77,10 @@ acme_ic30() {
 
 
 Menu.acme() {
+	__exclude="[ -d ~/.acme.sh ]"
+	__section="Others applications"
+	__summary="shell script for Let's Encrypt free SSL certificates"
+
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
 		Msg.warn "The acme.sh script is already installed..."

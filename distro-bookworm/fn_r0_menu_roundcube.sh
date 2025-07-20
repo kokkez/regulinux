@@ -112,6 +112,10 @@ RC.database() {
 
 
 Menu.roundcube() {
+	__exclude='[ -s /var/www/roundcube/index.php ]'
+	__section="Others applications"
+	__summary="full featured imap web client"
+
 	local p d v=1.5.11		# version to install
 	d=/var/www/roundcube	# directory root
 

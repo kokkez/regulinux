@@ -7,6 +7,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.dumpdb() {
+	__exclude="! Cmd.usable mysqldump"
+	__section="Others applications"
+	__summary="to backup all databases, or the one given in $(Dye.fg.white \$1)"
+
 	# $1 - db name, optional, if provided will be backed up only that db
 
 	# stop here if mysql cannot be called

@@ -255,6 +255,10 @@ Install.firewall() {
 }	# end Install.firewall
 
 Menu.firewall() {
+	__exclude="Cmd.usable ufw"
+	__section="Others applications"
+	__summary="to setup the firewall, via iptables, v4 and v6"
+
 	case "$1" in
 		'start'|'restart')
 			Fw.notice "Starting up..."
