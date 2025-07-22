@@ -46,6 +46,11 @@ acme_webserver_conf() {
 
 
 Menu.acme() {
+	# metadata for OS.menu entries
+	__exclude='[ -d ~/.acme.sh ]'
+	__section='Others applications'
+	__summary="shell script for $(Dye.fg.white Let\'s Encrypt) free SSL certificates"
+
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {
 		Msg.warn "The acme.sh script is already installed..."

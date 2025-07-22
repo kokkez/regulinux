@@ -4,6 +4,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.dns() {
+	# metadata for OS.menu entries
+	__section='Target system'
+	__summary="bind9 DNS server with some related utilities"
+
 	if Pkg.installed "bind9"; then
 		Msg.warn "DNS server bind9 is already installed..."
 		return

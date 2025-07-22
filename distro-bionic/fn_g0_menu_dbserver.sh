@@ -3,6 +3,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.dbserver() {
+	# metadata for OS.menu entries
+	__section='Main applications'
+	__summary="the DB server MariaDB, root pw stored in $(Dye.fg.white '~/.my.cnf')"
+
 	# $1: target system to build, optional
 	TARGET="${1:-$TARGET}"
 

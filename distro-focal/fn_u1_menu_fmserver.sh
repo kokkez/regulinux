@@ -31,7 +31,7 @@ fms.ssl() {
 	fmsadmin restart server -u admin -p bamalama -y
 	service fmshelper --full-restart
 }	# end fms.ssl
-Menu.acme()  { fms.ssl "$@"; }	# alias fn
+#Menu.acme()  { fms.ssl "$@"; }	# alias fn
 
 
 fms.firewall() {
@@ -117,6 +117,11 @@ fms.install() {
 
 
 Menu.fms() {
+	# metadata for OS.menu entries
+	__exclude='[ -d /opt/FileMaker ]'
+	__section="Target system"
+	__summary="the full $(Dye.fg.white FileMaker Server), trial version"
+
 	# install filemaker server
 	local v d u
 #	v="21.1.4.400 fBQgTSgD5fDozKm"	# version + nextcloud key

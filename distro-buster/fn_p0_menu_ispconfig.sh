@@ -3,6 +3,11 @@
 # ------------------------------------------------------------------------------
 
 Menu.ispconfig() {
+	# metadata for OS.menu entries
+	__exclude='[ -f /usr/local/ispconfig/server/server.php ]'
+	__section='Target system'
+	__summary="historical Control Panel, with support at $(Dye.fg.white howtoforge.com)"
+
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if ispconfig is already installed

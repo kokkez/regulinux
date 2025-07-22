@@ -164,6 +164,10 @@ Install.firewall() {
 
 
 Menu.firewall() {
+	# metadata for OS.menu entries
+	__section='Others applications'
+	__summary="set up the firewall using iptables (v4 and v6)"
+
 	# show status
 	local kw=${1:+numbered}
 	kw=${kw:-verbose}

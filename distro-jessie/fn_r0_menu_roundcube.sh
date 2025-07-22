@@ -13,6 +13,11 @@
 # ------------------------------------------------------------------------------
 
 Menu.roundcube() {
+	# metadata for OS.menu entries
+	__exclude='[ -s /var/www/roundcube/index.php ]'
+	__section='Others applications'
+	__summary="full featured imap web client"
+
 	local p d=/var/www/roundcube v=1.3.15	# version to install
 
 	# test if not already installed

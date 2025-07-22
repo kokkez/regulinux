@@ -3,6 +3,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.upgrade() {
+	# metadata for OS.menu entries
+	__section='Standalone utilities'
+	__summary="perform a full system upgrade via apt"
+
 	Msg.info "Upgrading system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 

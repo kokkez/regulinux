@@ -3,6 +3,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.assp1() {
+	# metadata for OS.menu entries
+	__section='Target system'
+	__summary="the AntiSpam SMTP Proxy version 1 (min 768ram 1core)"
+
 	[ -d /home/assp ] && {
 		Msg.warn "ASSP v1 is already installed..."
 		return

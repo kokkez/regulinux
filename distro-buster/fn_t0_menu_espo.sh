@@ -4,6 +4,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.espo() {
+	# metadata for OS.menu entries
+	__section='Others applications'
+	__summary="EspoCRM full featured CRM web application"
+
 	local u v="5.0.3"						# use with php 5.6 or 7
 
 	Msg.info "Installing EspoCRM ${v}..."

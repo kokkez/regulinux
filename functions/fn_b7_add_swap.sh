@@ -45,6 +45,11 @@ Swap.havespace() {
 
 
 Menu.addswap() {
+	# metadata for OS.menu entries
+	__exclude='read -r _ m _ < <(grep SwapT /proc/meminfo); (( ${m//[^0-9]/} > 0 ))'
+	__section="Standalone utilities"
+	__summary="add a file to be used as SWAP memory, default $(Dye.fg.white 512M)"
+
 	# add a file to be used as SWAP memory
 	# $1 - size of the swap file, optional
 	# $2 - path to the swap file, optional

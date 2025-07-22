@@ -3,6 +3,10 @@
 # ------------------------------------------------------------------------------
 
 Menu.webserver() {
+	# metadata for OS.menu entries
+	__section='Main applications'
+	__summary="webserver apache2 or nginx, with php, selfsigned cert, adminer"
+
 	TARGET="${1-$TARGET}"
 
 	# abort if "Menu.deps" was not executed

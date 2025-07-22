@@ -10,10 +10,14 @@ Arrange.unhang() {
 
 
 Menu.upgrade() {
-	Msg.info "Upgrading system packages for ${ENV_os}..."
+	# metadata for OS.menu entries
+	__section='Standalone utilities'
+	__summary="perform a full system upgrade via apt"
+
+	Msg.info "Updating system packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
 	# do the apt upgrade
-	export DEBIAN_FRONTEND=noninteractive
-	apt -qy full-upgrade
+	Msg.info "Upgrading ${ENV_os}, if needed..."
+	DEBIAN_FRONTEND=noninteractive apt -qy full-upgrade
 }	# end Menu.upgrade

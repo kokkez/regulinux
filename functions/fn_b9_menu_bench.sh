@@ -22,8 +22,10 @@ Bench.newssl() {
 
 
 Menu.bench() {
-	__section="Standalone utilities"
+	# metadata for OS.menu entries
+	__section='Standalone utilities'
 	__summary="basic benchmark to get OS info"
+
 	# basic benchmark to get OS info
 	# no arguments expected
 	local ts vir cpu cor mhz ram swa ker hdd ip4 ip6

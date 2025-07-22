@@ -120,6 +120,7 @@ fms.install() {
 
 
 Menu.fms() {
+	# metadata for OS.menu entries
 	__exclude='[ -d /opt/FileMaker ]'
 	__section="Target system"
 	__summary="the full $(Dye.fg.white FileMaker Server), trial version"

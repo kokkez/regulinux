@@ -255,7 +255,7 @@ Install.firewall() {
 }	# end Install.firewall
 
 Menu.firewall() {
-	__exclude="Cmd.usable ufw"
+	# metadata for OS.menu entries
 	__section="Others applications"
 	__summary="to setup the firewall, via iptables, v4 and v6"
 

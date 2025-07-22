@@ -3,8 +3,6 @@
 # ------------------------------------------------------------------------------
 
 Min.prepare() {
-	Msg.info "Start minimalizing $ENV_os $ENV_arch"
-
 	# always use --no-install-recommends (also used as a check in "Deps.performed")
 	cat > /etc/apt/apt.conf.d/99norecommend <<- EOF
 		APT::Install-Recommends "0";
@@ -81,7 +79,7 @@ Min.apply() {
 Min.loop() {
 	cd /tmp
 	# fix dependencies: loop until no more dependencies were founds
-	x="-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1"
+	x='-suf -o Debug::pkgDepCache::AutoInstall=1 -o Debug::pkgProblemResolver=1'
 	while true; do
 		apt-get $x dselect-upgrade 2> pkgs.log.txt 1>/dev/null
 		# --simulate --show-upgraded --fix-broken
@@ -103,6 +101,9 @@ Min.loop() {
 
 
 Min.finishing() {
+	# this fn is particular for ubuntu 22 jammy
+	Msg.info "Finalizing procedure for $ENV_os $ENV_arch"
+
 	# re purge hards to die
 	apt purge distro-info ubuntu-advantage-tools ubuntu-minimal ubuntu-pro-client
 	# re install wrongly purged

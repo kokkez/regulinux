@@ -324,35 +324,6 @@
 	}	# end File.download
 
 
-	Menu.password() {
-		__section="Standalone utilities"
-		__summary="print a random pw: \$1: length (6 to 32, 24), \$2: flag strong"
-
-		# generate a random password (min 6 max 32 chars)
-		# $1 number of characters (defaults to 24)
-		# $2 flag for strong password (defaults no)
-		local c="[:alnum:]" n=$(awk '{print int($1)}' <<< ${1:-24})
-
-		# constrain number of characters
-		n=$(( n > 31 ? 32 : n < 7 ? 6 : n ))
-
-		# add special chars for strong password
-		[ -n "$2" ] && c="!#\$%&*+\-.:<=>?@[]^~$c"
-
-		echo $(tr -dc "$c" < /dev/urandom | head -c $n)
-	}	# end Menu.password
-
-
-	Menu.iotest() {
-		__section="Standalone utilities"
-		__summary="perform the classic I/O test on the server"
-
-		# classic disk I/O test
-		Msg.info "Performing classic I/O test..."
-		cmd dd if=/dev/zero of=~/tmpf bs=64k count=16k conv=fdatasync && rm -rf ~/tmpf
-	}	# end Menu.iotest
-
-
 	Port.audit() {
 		# set port in $1 to be strictly numeric & in a known range
 		# $1 - port number, optional, defaults to 22 (ssh)
@@ -581,87 +552,68 @@
 	}	# end ENV.init
 
 
+	Mnu.pad() {
+		# return a string to be used as padding
+		# $1 wanted total length
+		# $2 char to use to pad
+		# $3 string to count the length
+		local p d=$(( $1 - ${#3} ))
+		while (( d-- )); do p+=$2; done
+		echo "$p"
+	}	# end Mnu.pad
+
+
+	Mnu.meta() {
+		# extract metadata value for given key from a function body
+		# $1 metadata key (e.g. __section, __summary, __exclude)
+		# $2 function body string to search in
+		# returns the string inside quotes following key=, or empty if not found
+		[[ $2 =~ $1=[\'\"]([^\'\"]*)[\'\"] ]] && echo "${BASH_REMATCH[1]}" || echo ""
+	}	# end Mnu.meta
+
+
 	OS.menu() {
-		# display the main menu on screen
-		local s o=""
+		# it builds the full menu finding conventioned functions
+		local sec=(
+			"One time actions|(in recommended order)"
+			"Standalone utilities|(in no particular order)"
+			"Main applications|(in recommended order)"
+			"Target system|(in no particular order)"
+			"Others applications|(depends on main applications)"
+		)
+		local -A out
+		local f b g d
+		for f in $(compgen -A function Menu.); do
+			b=$(declare -f "$f")
+			g=$(Mnu.meta __exclude "$b")	# check __exclude (interpreted outside)
+			[[ -n $g ]] && eval "$g" && continue
+			g=$(Mnu.meta __section "$b")	# check __section, skip if empty
+			[[ -z $g ]] && continue
+			d=$(Mnu.meta __summary "$b")	# get __summary, expanding variables
+			[[ -n $d ]] && d=$(eval "echo \"$d\"")
+			b="${f#*.}"
+			out[$g]+=$(printf ' : %s %s %s' "$(Dye.fg.orange $b)" "$(Mnu.pad 12 ' ' "$b")" "$d")
+			out[$g]+=$'\n'
+		done
 
-		# One time actions
-		s=""
-		Cmd.usable "Menu.root" && {
-			s+="   . $(Dye.fg.orange root)        setup private key, sources.list, shell, SSH on port $(Dye.fg.white $SSHD_PORT)\n"; }
-		Cmd.usable "Menu.deps" && {
-			s+="   . $(Dye.fg.orange deps)        run prepare, check dependencies, update the base system, setup firewall\n"; }
-		Cmd.usable "Menu.reinstall" && {
-			s+="   . $(Dye.fg.orange reinstall)   reinstall OS on VM (not containers) default $(Dye.fg.white Debian 12)\n"; }
-		[ -z "$s" ] || {
-			o+=" [ . $(Dye.fg.white One time actions) ---------------------------------------------- (in recommended order) -- ]\n$s"; }
+		# output header
+		b="$ENV_os $ENV_arch"
+		d=$(Date.fmt +'%F %T %z')
+		printf '+%s+\n %s%s%s\n %s\n' \
+			"$(Mnu.pad 96 :)" \
+			"$(Dye.fg.orange "$b")" "$(Mnu.pad 96 ' ' "$b$d")" "$d" \
+			"$ENV_dir"
 
-		# Standalone utilities
-		s=""
-		Cmd.usable "Menu.upgrade" && {
-			s+="   . $(Dye.fg.orange upgrade)     apt full upgrading of the system\n"; }
-		Cmd.usable "Menu.addswap" && {
-			s+="   . $(Dye.fg.orange addswap)     add a file to be used as SWAP memory, default $(Dye.fg.white 512M)\n"; }
-		Cmd.usable "Menu.password" && {
-			s+="   . $(Dye.fg.orange password)    print a random pw: \$1: length (6 to 32, 24), \$2: flag strong\n"; }
-		Cmd.usable "Menu.mnemonic" && {
-			s+="   . $(Dye.fg.orange mnemonic)    mnemonic password of 2 words separated by a dash\n"; }
-		Cmd.usable "Menu.bench" && {
-			s+="   . $(Dye.fg.orange bench)       basic benchmark to get OS info\n"; }
-		Cmd.usable "Menu.iotest" && {
-			s+="   . $(Dye.fg.orange iotest)      perform the classic I/O test on the server\n"; }
-		Cmd.usable "Menu.resolv" && {
-			s+="   . $(Dye.fg.orange resolv)      set $(Dye.fg.white /etc/resolv.conf) with public dns\n"; }
-		Cmd.usable "Menu.mykeys" && {
-			s+="   . $(Dye.fg.orange mykeys)      set my authorized_keys, for me & backuppers\n"; }
-		Cmd.usable "Menu.tz" && {
-			s+="   . $(Dye.fg.orange tz)          set the server timezone to $(Dye.fg.white $TIME_ZONE)\n"; }
-		[ -z "$s" ] || {
-			o+=" [ . $(Dye.fg.white Standalone utilities) ---------------------------------------- (in no particular order) -- ]\n$s"; }
+		# output sections
+		for g in "${sec[@]}"; do
+			b=${g%%|*}
+			[[ -z ${out[$b]} ]] && continue
+			g=${g#*|}
+			printf '+- %s %s %s -+\n' \
+				"$(Dye.fg.white $b)" "$(Mnu.pad 90 - "$b$g")" "$g"
+			printf '%s' "${out[$b]}"
+		done
 
-		# Main applications
-		s=""
-		Cmd.usable "Menu.mailserver" && {
-			s+="   . $(Dye.fg.orange mailserver)  full mailserver with postfix, dovecot & aliases\n"; }
-		Cmd.usable "Menu.dbserver" && {
-			s+="   . $(Dye.fg.orange dbserver)    the DB server MariaDB, root pw stored in $(Dye.fg.white '~/.my.cnf')\n"; }
-		Cmd.usable "Menu.webserver" && {
-			s+="   . $(Dye.fg.orange webserver)   webserver apache2 or nginx, with php, selfsigned cert, adminer\n"; }
-		[ -z "$s" ] || {
-			o+=" [ . $(Dye.fg.white Main applications) --------------------------------------------- (in recommended order) -- ]\n$s"; }
-
-		# Target system
-		s=""
-		Cmd.usable "Menu.dns" && {
-			s+="   . $(Dye.fg.orange dns)         bind9 DNS server with some related utilities\n"; }
-		Cmd.usable "Menu.assp1" && {
-			s+="   . $(Dye.fg.orange assp1)       the AntiSpam SMTP Proxy version 1 (min 768ram 1core)\n"; }
-		Cmd.usable "Menu.isp3ai" && {
-			s+="   . $(Dye.fg.orange isp3ai)      historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
-		Cmd.usable "Menu.ispconfig" && {
-			s+="   . $(Dye.fg.orange ispconfig)   historical Control Panel, with support at $(Dye.fg.white howtoforge.com)\n"; }
-		Cmd.usable "Menu.fms" && {
-			s+="   . $(Dye.fg.orange fms)         the full $(Dye.fg.white FileMaker Server), trial version\n"; }
-		[ -z "$s" ] || {
-			o+=" [ . $(Dye.fg.white Target system) ----------------------------------------------- (in no particular order) -- ]\n$s"; }
-
-		# Others applications
-		s=""
-		Cmd.usable "Menu.firewall" && {
-			s+="   . $(Dye.fg.orange firewall)    to setup the firewall, via iptables, v4 and v6\n"; }
-		Cmd.usable "Menu.dumpdb" && Cmd.usable "mysqldump" && {
-			s+="   . $(Dye.fg.orange dumpdb)      to backup all databases, or the one given in $(Dye.fg.white \$1)\n"; }
-		Cmd.usable "Menu.roundcube" && {
-			s+="   . $(Dye.fg.orange roundcube)   full featured imap web client\n"; }
-		Cmd.usable "Menu.nextcloud" && {
-			s+="   . $(Dye.fg.orange nextcloud)   on-premises file share and collaboration platform\n"; }
-		Cmd.usable "Menu.espo" && {
-			s+="   . $(Dye.fg.orange espo)        EspoCRM full featured CRM web application\n"; }
-		Cmd.usable "Menu.acme" && {
-			s+="   . $(Dye.fg.orange acme)        shell script for Let's Encrypt free SSL certificates\n"; }
-		[ -z "$s" ] || {
-			o+=" [ . $(Dye.fg.white Others applications) ----------------------------------- (depends on main applications) -- ]\n$s"; }
-
-		echo -e " $(Date.fmt +'%F %T %z') :: $(Dye.fg.orange $ENV_os $ENV_arch) :: ${ENV_dir}\n$o" \
-			"[ ------------------------------------------------------------------------------------------- ]"
+		# output footer
+		printf '+%s+\n' "$(Mnu.pad 96 : "")"
 	}	# end OS.menu

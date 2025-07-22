@@ -77,7 +77,8 @@ acme_ic30() {
 
 
 Menu.acme() {
-	__exclude="[ -d ~/.acme.sh ]"
+	# metadata for OS.menu entries
+	__exclude='[ -d ~/.acme.sh ]'
 	__section="Others applications"
 	__summary="shell script for Let's Encrypt free SSL certificates"
 

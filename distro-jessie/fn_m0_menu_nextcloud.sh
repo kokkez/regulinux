@@ -3,6 +3,11 @@
 # ------------------------------------------------------------------------------
 
 Menu.nextcloud() {
+	# metadata for OS.menu entries
+	__exclude='[ -s /var/www/nextcloud/config/config.php ]'
+	__section='Others applications'
+	__summary="on-premises file sharing and collaboration platform"
+
 	[ -r /var/www/nextcloud/config/config.php ] && {
 		Msg.warn "Nextcloud is already installed..."
 		return

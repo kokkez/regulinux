@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------------------
 
 Menu.dumpdb() {
+	# metadata for OS.menu entries
 	__exclude="! Cmd.usable mysqldump"
 	__section="Others applications"
 	__summary="to backup all databases, or the one given in $(Dye.fg.white \$1)"

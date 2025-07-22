@@ -3,6 +3,11 @@
 # ------------------------------------------------------------------------------
 
 Menu.nextcloud() {
+	# metadata for OS.menu entries
+	__exclude='[ -s /var/www/nextcloud/config/config.php ]'
+	__section='Others applications'
+	__summary="on-premises file sharing and collaboration platform"
+
 	HTTP_SERVER="${1:-$HTTP_SERVER}"
 
 	# abort if nextcloud is already installed

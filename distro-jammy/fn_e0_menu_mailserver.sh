@@ -47,6 +47,10 @@ Install.postfix() {
 
 
 Menu.mailserver() {
+	# metadata for OS.menu entries
+	__section='Main applications'
+	__summary="full mailserver with postfix, dovecot & aliases"
+
 	# $1: target system to build, optional
 	Config.set "TARGET" "${1:-$TARGET}"
 

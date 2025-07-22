@@ -45,7 +45,13 @@ Net.info() {
 			EOF
 	esac
 }	# end Net.info
-Menu.net() { Net.info "$@"; }	# alias fn
+Menu.net() {
+	# metadata for OS.menu entries
+	__section='Standalone utilities'
+	__summary="retrieve network-related information from the system"
+
+	Net.info "$@";
+}	# alias fn
 
 
 Net.hostname() {
