@@ -5,7 +5,7 @@
 Menu.mnemonic() {
 	# metadata for OS.menu entries
 	__section='Standalone utilities'
-	__summary='mnemonic password of 2 words separated by a dash'
+	__summary='print a mnemonic password of 2 words separated by a dash'
 
 	# return a psedo mnemonic password of 2 words separated by a dash
 	local f p w u="https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt"

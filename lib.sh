@@ -46,10 +46,9 @@
 		# $1 num : type (default 0, dark)
 		# $2 num : color (default 37, gray)
 		# $3 text: message to colorize (replacing default with starting color)
-		local c m t="${1:-0}"
-		c="${2:-37}"
-		m=$(echo -e "${@:3}" | sed "s|\[0m|[$t;${c}m|g")
-		echo -e "\e[$t;${c}m$m\e[0m";
+		local m t="${1:-0}" c="${2:-37}"
+		m=$(sed "s|\[0m|[$t;${c}m|g" <<<"${*:3}")
+		printf '\e[%s;%sm%s\e[0m\n' "$t" "$c" "$m"
 	}
 	Dye.fg.red()         { Dye.as 0 31 "$@"; };
 	Dye.fg.red.lite()    { Dye.as 1 31 "$@"; };
