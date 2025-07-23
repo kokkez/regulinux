@@ -171,17 +171,16 @@ OS.networking() {
 	# ensure ifupdown stack is active; drop others only if needed
 	if systemctl is-enabled -q 'networking'; then
 		Msg.info "ifupdown stack detected and working, skipping setup"
-		return 0
+	else
+		# then drop legacy stacks
+		Net.dropstack
+
+		# activate classic networking
+		Net.ifupdown
+
+		Msg.warn "Carefully check $(Dye.fg.cyan.lite /etc/network/interfaces) before reboot!"
 	fi
-
-	# then drop legacy stacks
-	Net.dropstack
-
-	# activate classic networking
-	Net.ifupdown
 
 	# debianize /etc/hosts
 	Net.hostname
-
-	Msg.warn "Carefully check $(Dye.fg.cyan.lite /etc/network/interfaces) before reboot!"
 }	# end OS.networking

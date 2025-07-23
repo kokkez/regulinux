@@ -2,7 +2,7 @@
 # custom functions specific to debian 11 bullseye
 # ------------------------------------------------------------------------------
 
-Menu.upgrade() {
+Menu.apt() {
 	# metadata for OS.menu entries
 	__section='Standalone utilities'
 	__summary="perform a full system upgrade via apt"
@@ -11,9 +11,8 @@ Menu.upgrade() {
 	Pkg.update	# update packages lists
 
 	# do the apt upgrade
-	export DEBIAN_FRONTEND=noninteractive
-	cmd apt -qy full-upgrade
-}	# end Menu.upgrade
+	DEBIAN_FRONTEND=noninteractive apt -qy full-upgrade
+}	# end Menu.apt
 
 
 Net.if() {

@@ -20,12 +20,12 @@ Menu.upgrade() {
 	__section='Standalone utilities'
 	__summary="perform a full system upgrade via apt"
 
-	Msg.info "Upgrading system packages for ${ENV_os}..."
+	Msg.info "Updating packages for ${ENV_os}..."
 	Pkg.update	# update packages lists
 
 	# do the apt upgrade
-	export DEBIAN_FRONTEND=noninteractive
-	apt -qy full-upgrade
+	Msg.info "Upgrading ${ENV_os}, if needed..."
+	DEBIAN_FRONTEND=noninteractive apt -qy full-upgrade
 
 	# disable ubuntu-advantage-tools apt hook if present
 	local p='/etc/apt/apt.conf.d/20apt-esm-hook.conf'

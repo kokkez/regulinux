@@ -52,11 +52,11 @@ Repo.php() {
 	# add required software & the repo key
 	Pkg.requires gnupg
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
-	cat > "$p" <<EOF
-# Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
-deb http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
-# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
-EOF
+	cat > "$p" <<- EOF
+		# Ondrej Sury Repo for PHP 7.x [ https://www.patreon.com/oerdnj ]
+		deb http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+		# deb-src http://ppa.launchpad.net/ondrej/php/ubuntu $ENV_codename main
+		EOF
 	# forcing apt update
 	Pkg.update 'coerce'
 }	# end Repo.php
