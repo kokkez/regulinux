@@ -3,10 +3,7 @@ apparmor              purge
 groff-base            purge
 isc-dhcp-client       purge
 isc-dhcp-common       purge
-mailcap               purge
 man-db                purge
-media-types           purge
-mime-support          purge
 traceroute            purge
 vim-common            purge
 vim-tiny              purge

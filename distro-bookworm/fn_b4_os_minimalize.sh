@@ -79,7 +79,7 @@ Min.finishing() {
 	Msg.info "Finalizing minimize procedure for $ENV_os $ENV_arch"
 
 	# re purge hards to die
-	#apt purge distro-info ubuntu-advantage-tools ubuntu-minimal ubuntu-pro-client
+	apt purge mailcap media-types mime-support
 	# re install wrongly purged
 	#apt install curl htop rsync screen telnet
 
