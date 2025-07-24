@@ -50,32 +50,6 @@ Min.reset() {
 }	# end Min.reset
 
 
-Min.apply() {
-	# apply the action package by package
-	# $1 - one of: install, deinstall, purge, hold
-	local p s a=$1
-	[ -z "$a" ] && return 1
-
-	# iterating package by package
-	while read -r p s; do
-		case "$s:$a" in
-			purge:purge|deinstall:purge)
-				apt-get -qy purge "$p"
-				Msg.info "Purged: $p completed"
-				;;
-			install:install)
-				apt-get -qy install "$p"
-				Msg.info "Installed: $p completed"
-				;;
-			hold:hold)
-				apt-mark hold "$p"
-				Msg.info "Held: $p completed"
-				;;
-		esac
-	done < <(dpkg --get-selections)
-}	# end Min.apply
-
-
 Min.loop() {
 	cd /tmp
 	# fix dependencies: loop until no more dependencies were founds
