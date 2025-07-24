@@ -12,3 +12,6 @@ deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-fr
 deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
 #deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
 
+# backports repository
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+

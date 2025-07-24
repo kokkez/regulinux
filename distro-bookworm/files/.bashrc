@@ -121,3 +121,8 @@ bind 'set enable-bracketed-paste off'
 # aliasing "os" for ~/regulinux-*/os.sh
 os() { bash $(find ~/r* -name os.* -print -quit) "$@"; }
 
+# replace for netstat commands
+alias netstat='ss -tunap'      # mostra connessioni TCP/UDP attive con PID
+alias netstatl='ss -tulnp'     # ascolto TCP/UDP con PID
+alias netstats='ss -s'         # statistiche simili a netstat -s
+

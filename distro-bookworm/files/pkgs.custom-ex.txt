@@ -1,17 +1,3 @@
-# to purge
-apparmor              purge
-groff-base            purge
-isc-dhcp-client       purge
-isc-dhcp-common       purge
-mailcap               purge
-man-db                purge
-media-types           purge
-mime-support          purge
-traceroute            purge
-vim-common            purge
-vim-tiny              purge
-xfsprogs              purge
-
 # to install
 apt-utils             install
 bzip2                 install
@@ -23,9 +9,11 @@ distro-info-data      install
 dmsetup               install
 e2fsprogs             install
 figlet                install
+gawk                  install
 gettext-base          install
 htop                  install
 iftop                 install
+inetutils-syslogd     install
 iotop                 install
 klibc-utils           install
 locales               install
@@ -33,18 +21,21 @@ logrotate             install
 lsb-base              install
 lsb-release           install
 lsof                  install
-mawk                  install
+lvm2                  install
+mime-support          install
 nano                  install
+net-tools             install
 openssh-client        install
 openssh-server        install
 openssh-sftp-server   install
+original-awk          install
 perl                  install
 perl-modules-5.36     install
 postfix               install
 psmisc                install
 qemu-guest-agent      install
+quota                 install
 rsync                 install
-rsyslog               install
 screen                install
 ssl-cert              install
 systemd-timesyncd     install
@@ -53,4 +44,14 @@ ufw                   install
 unzip                 install
 usr-is-merged         install
 wget                  install
+xfsprogs              install
 
+
+# to purge
+apparmor              purge
+groff-base            purge
+isc-dhcp-client       purge
+isc-dhcp-common       purge
+man-db                purge
+rsyslog               purge
+traceroute            purge
