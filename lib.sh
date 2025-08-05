@@ -81,10 +81,10 @@
 #	companion functions for the entire system
 #	----------------------------------------------------------------------------
 	Arg.expect() {
-		# helper function for verifying args in functions
+		# helper function for verifying arguments for not empty
 		# expects: variable number of arguments ( $1 [, $2 [, $3 ... ]] )
-		local i=1
-		for (( ; i<=$#; i++ )); do
+		local i
+		for (( i = 1; i <= $#; i++ )); do
 			[ -z "${!i}" ] \
 				&& Msg.warn "Missing argument #$i to ${FUNCNAME[1]}()" \
 				&& return 1
@@ -94,8 +94,16 @@
 
 
 	Cmd.usable() {
-		# test argument $1 for: not empty & callable
-		Arg.expect "$1" && command -v "$1" &> /dev/null
+		# test every argument for: not empty & callable
+		Arg.expect "$1" || return 1
+		local c
+		for c; do
+			command -v "$c" &> /dev/null || {
+				Msg.warn "Required command not found: $c"
+				return 1
+			}
+		done
+		return 0
 	}	# end Cmd.usable
 
 

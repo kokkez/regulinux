@@ -61,7 +61,7 @@ Install.adminer() {
 
 
 Menu.adminer() {
-	__exclude='! Cmd.usable mysql || ! pgrep -f "nginx|apache2"'
+	__exclude='! Cmd.usable mysql || ( ! Cmd.usable nginx && ! Cmd.usable apache2 )'
 	__section='Target system'
 	__summary="single-file alternative to phpMyAdmin for full MySQL/MariaDB management"
 

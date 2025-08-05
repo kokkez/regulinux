@@ -107,7 +107,7 @@ Min.finishing() {
 	# re purge hards to die
 	apt purge distro-info ubuntu-advantage-tools ubuntu-minimal ubuntu-pro-client
 	# re install wrongly purged
-	apt install curl htop rsync screen telnet
+	apt install curl htop nano rsync screen telnet
 	apt autoremove
 }	# end Min.finishing
 
