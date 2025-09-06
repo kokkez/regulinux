@@ -17,12 +17,18 @@ Create.database() {
 	}
 
 	u="${2:-$d}"					# username as db name, if not provided
-	p="${3:-$( Menu.password 16 )}"	# random pw length 16, if not provided
+	p="${3:-$( Pw.generate 16 )}"	# random pw length 16, if not provided
 
 	# creating the new database & the user
 #	cmd mysqladmin create "$d"
 	cmd mysql <<< "CREATE DATABASE $d;"
-	cmd mysql <<< "GRANT ALL ON $d.* TO $u@localhost IDENTIFIED BY '$p';"
+#	cmd mysql <<< "GRANT ALL ON $d.* TO $u@localhost IDENTIFIED BY '$p';"
+	cmd mysql <<- EOF
+		CREATE USER IF NOT EXISTS '$u'@'localhost' IDENTIFIED BY '$p';
+		ALTER USER '$u'@'localhost' IDENTIFIED BY '$p';
+		GRANT ALL ON $d.* TO '$u'@'localhost';
+		FLUSH PRIVILEGES;
+		EOF
 #	cmd mysql <<< "REVOKE ALL ON $d.* FROM $u@localhost;"
 #	cmd mysql <<< "DROP USER $u@localhost;"
 

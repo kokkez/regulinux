@@ -99,7 +99,7 @@
 		local c
 		for c; do
 			command -v "$c" &> /dev/null || {
-				Msg.warn "Required command not found: $c"
+				#Msg.warn "Required command not found: $c"
 				return 1
 			}
 		done

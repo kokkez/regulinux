@@ -21,7 +21,7 @@ Menu.roundcube() {
 
 	Msg.info "Installing Roundcube $v..."
 	mkdir -p $d
-	p=$( Menu.password 32 )		# creating a random password
+	p=$( Pw.generate 32 )		# creating a random password
 
 	# download the right version
 	u=https://github.com/roundcube/roundcubemail/releases/download/$v/roundcubemail-$v-complete.tar.gz
@@ -58,7 +58,7 @@ Menu.roundcube() {
 
 	# install the config file
 	cd $d/config
-	u=$( Menu.password 24 1 )	# strong password
+	u=$( Pw.generate 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i config.inc.php -e "s|RPW|$p|;s|DESKEY|$u|"
 

@@ -28,7 +28,7 @@ Menu.roundcube() {
 
 	Msg.info "Installing Roundcube ${v}..."
 	mkdir -p $d
-	p=$( Menu.password 32 )		# random password
+	p=$( Pw.generate 32 )		# random password
 
 	# install requirements
 	#Pkg.requires php5 php-pear php5-mysqlnd php5-mcrypt php5-intl php-mail-mime php-net-smtp php5-ldap
@@ -69,7 +69,7 @@ Menu.roundcube() {
 
 	# install the config file
 	cd $d/config
-	v=$( Menu.password 24 1 )	# strong password
+	v=$( Pw.generate 24 1 )	# strong password
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i config.inc.php -e "s|RPW|$p|;s|DESKEY|$v|"
 

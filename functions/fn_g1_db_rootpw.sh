@@ -7,7 +7,7 @@ DB.rootpw() {
 	local p=~/.my.cnf
 	# create the file generating a random password, if missing
 	[ -s "$p" ] || {
-		echo -e "[client]\nuser=root\npassword=$( Menu.password )" > "$p"
+		echo -e "[client]\nuser=root\npassword=$( Pw.generate )" > "$p"
 		chmod 600 "$p"
 	}
 	# read the root password from ~/.my.cnf

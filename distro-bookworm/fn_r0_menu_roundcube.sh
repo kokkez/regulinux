@@ -68,7 +68,7 @@ RC.plugins() {
 	cd $2/config
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i config.inc.php \
-		-e "s|RPW|$1|;s|DESKEY|$(Menu.password 24 1)|"	# strong password
+		-e "s|RPW|$1|;s|DESKEY|$(Pw.generate 24 1)|"	# strong password
 }	# end RC.plugins
 
 
@@ -133,7 +133,7 @@ Menu.roundcube() {
 
 	RC.grab "$v" "$d"
 
-	p=$(Menu.password 32)	# random password
+	p=$(Pw.generate 32)	# random password
 	RC.plugins "$p" "$d"
 	RC.database "$p"
 
