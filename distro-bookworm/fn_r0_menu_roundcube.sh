@@ -3,6 +3,7 @@
 # Roundcube 1.4.15: 2024-08-31
 # Roundcube 1.5.8:  2024-08-31
 # Roundcube 1.5.11: 2025-06-21
+# Roundcube 1.6.11: 2025-09-06
 # ------------------------------------------------------------------------------
 
 RC.grab() {
@@ -116,7 +117,7 @@ Menu.roundcube() {
 	__section='Others applications'
 	__summary="full featured imap web client"
 
-	local p d v=1.5.11		# version to install
+	local p d v=1.6.11		# version to install
 	d=/var/www/roundcube	# directory root
 
 	# test if roundcube is already installed

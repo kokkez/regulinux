@@ -56,8 +56,7 @@ IC3.install() {
 	wget -O - https://get.ispconfig.org | sh -s -- \
 		--debug \
 		--no-firewall \
-		--no-dns \
-		--no-local-dns \
+		--no-dns --no-local-dns \
 		--no-mailman \
 		--no-quota \
 		--no-ntp \
