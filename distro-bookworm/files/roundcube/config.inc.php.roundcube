@@ -2,10 +2,12 @@
 $config['db_dsnw'] = 'mysqli://roundcube:RPW@localhost/roundcube';
 $config['login_autocomplete'] = 1; # username and host
 $config['default_host'] = 'localhost';
-$config['smtp_server'] = 'localhost';
-$config['smtp_port'] = 25;
+$config['smtp_server'] = 'tls://localhost';
+$config['smtp_auth_type'] = 'LOGIN';
+$config['smtp_port'] = 587;
 $config['smtp_user'] = '%u';
 $config['smtp_pass'] = '%p';
+$config['smtp_conn_options'] = ['ssl' => ['verify_peer' => false,'verify_peer_name' => false]];
 $config['product_name'] = 'La tua webmail personale';
 $config['des_key'] = 'DESKEY';
 $config['plugins'] = array(
@@ -24,6 +26,7 @@ $config['plugins'] = array(
 	'contextmenu',
 	'markasjunk',
 );
+#$config['skins_allowed'] = ['elastic', 'larry'];
 $config['skin'] = 'elastic'; # larry, classic
 $config['language'] = 'it_IT';
 $config['mime_types'] = '/etc/mime.types';

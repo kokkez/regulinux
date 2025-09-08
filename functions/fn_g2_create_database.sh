@@ -32,8 +32,18 @@ Create.database() {
 #	cmd mysql <<< "REVOKE ALL ON $d.* FROM $u@localhost;"
 #	cmd mysql <<< "DROP USER $u@localhost;"
 
-	# appending info in ~
-	echo -e "[$d]\nusername = $u\npassword = $p\n" >> ~/.dbdata.txt
+	# appending info in ~ updating password if section exists
+	k=~/.dbdata.txt
+	if grep -qF "[$d]" "$k"; then
+		awk -v d="[$d]" -v p="$p" '
+			$0==d {f=1; print; next}
+			/^\[.*\]/ {f=0}
+			f && /^password =/ {$0="password = " p}
+			{print}
+		' $k > $k.tmp && mv $k.tmp $k
+	else
+		echo -e "[$d]\nusername = $u\npassword = $p\n" >> $k
+	fi
 
 	Msg.info "Creation of the new database '$d' completed!"
 }	# end Create.database

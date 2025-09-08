@@ -18,14 +18,15 @@ RC.grab() {
 		https://github.com/roundcube/roundcubemail/releases/download/$1/roundcubemail-$1-complete.tar.gz \
 		~/roundcubemail.tar.gz
 	tar xzf roundcubemail.tar.gz
-	cd roundcubemail-*
+	pushd roundcubemail-*
 	mv -ft "$2" bin config logs plugins program skins temp vendor .htaccess index*
+	popd
 
 	# try to instruct search engines to not index our webmail
 	echo -e "User-agent: *\nDisallow: /" > "$2/robots.txt"
 
 	# install crontab to keep the database cleaned
-	[ -s /etc/crontab ] && grep -q 'ROUNDCUBE' /etc/crontab || {
+	grep -q 'ROUNDCUBE' /etc/crontab 2>/dev/null || {
 		File.backup /etc/crontab
 		cat >> /etc/crontab <<- EOF
 
@@ -38,7 +39,7 @@ RC.grab() {
 
 RC.plugins() {
 	# download and install some plugins
-	# $1 - password for roundcube database
+	# $1 - password for roundcube db
 	# $2 - path to roundcube root
 
 	# plugins for ISPConfig3
@@ -47,11 +48,14 @@ RC.plugins() {
 		https://github.com/w2c/ispconfig3_roundcube/archive/master.zip \
 		~/plugins.zip
 	unzip -qo ~/plugins.zip
-	mv -f ispconfig3*/ispconfig3_* "$2/plugins/"
+	pushd ispconfig3*/
+	mv -f ispconfig3_* "$2/plugins/"
 	# install the config file
-	cd $2/plugins/ispconfig3_account/config
+	pushd $2/plugins/ispconfig3_account/config
 	File.place roundcube/config.inc.php.plugin config.inc.php
-	sed -i config.inc.php -e "s|RPW|$1|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|"
+	sed -i config.inc.php \
+		-e "s|RPW|$1|;s|://127.0.0.1/ispconfig|s://127.0.0.1:8080|"
+	popd; popd
 	rm -rf ~/plugins.zip ~/ispconfig3*/
 
 	# contextmenu plugin
@@ -60,16 +64,27 @@ RC.plugins() {
 		https://github.com/JohnDoh/roundcube-contextmenu/archive/master.zip \
 		~/contextmenu.zip
 	unzip -qo ~/contextmenu.zip
-	cd roundcube-contextmenu*
 	mkdir -p $2/plugins/contextmenu
-	mv -ft $2/plugins/contextmenu localization skins contextmenu*
+	pushd roundcube-contextmenu*
+	mv -f {localization,skins,contextmenu*} "$2/plugins/contextmenu/"
+	popd
 	rm -rf ~/contextmenu.zip ~/roundcube-contextmenu*/
 
 	# install the main config file
-	cd $2/config
+	pushd $2/config
 	File.place roundcube/config.inc.php.roundcube config.inc.php
 	sed -i config.inc.php \
-		-e "s|RPW|$1|;s|DESKEY|$(Pw.generate 24 1)|"	# strong password
+		-e "s|RPW|$1|;s|DESKEY|$(Pw.generate 32 1)|"	# strong password
+	popd
+
+	# install skin Larry if missing
+	[ -d $2/skins/larry ] || {
+		Msg.info "Downloading Larry skin..."
+		File.download https://github.com/roundcube/larry/archive/refs/heads/master.zip ~/larry.zip
+		unzip -qo ~/larry.zip
+		mv -f larry-master "$2/skins/larry"
+		rm -rf ~/larry.zip
+	}
 }	# end RC.plugins
 
 
@@ -78,8 +93,10 @@ RC.database() {
 	# $1 - password for roundcube database
 
 	# creating a new database, then populate it from file
-	Create.database "roundcube" "roundcube" "$1"
-	cmd mysql 'roundcube' < ~/roundcubemail-*/SQL/mysql.initial.sql
+	[ -d /var/lib/mysql/roundcube ] || {
+		Create.database "roundcube" "roundcube" "$1"
+		mysql 'roundcube' < ~/roundcubemail-*/SQL/mysql.initial.sql
+	}
 
 	# if ispconfig is installed, add the remote user into the db
 	ISPConfig.installed && {
@@ -125,7 +142,6 @@ Menu.roundcube() {
 		Msg.warn "Roundcube $v is already installed in ${d}..."
 		return
 	}
-
 	# test if running mariadb
 	systemctl is-active -q mariadb || {
 		Msg.warn "Roundcube $v require a running mariadb server..."
@@ -134,7 +150,8 @@ Menu.roundcube() {
 
 	RC.grab "$v" "$d"
 
-	p=$(Pw.generate 32)	# random password
+	p=$(awk -F' = ' '/^password/ {print $2; exit}' ~/.dbdata.txt)
+	[ -z "$p" ] && p=$(Pw.generate 32)	# simple random pw if missing
 	RC.plugins "$p" "$d"
 	RC.database "$p"
 
@@ -156,13 +173,13 @@ Menu.roundcube() {
 	fi;
 
 	# finishing, set permissions, remove files & folders
-	cd $d
+	pushd $d
 	chown -R 0:0 .
 	chown -R 33:0 logs temp		# set user www-data
 	chmod -R 400 .
 	chmod -R u+rwX,go+rX,go-w .
 	rm -rf ~/*roundcube*
-	cd ~
+	popd
 
 	Msg.info "Installation of Roundcube $v completed!"
 }	# end Menu.roundcube
