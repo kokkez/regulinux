@@ -24,7 +24,7 @@ IC3.finishing() {
 
 	# stopping awfful from looking for apache logs
 	local f=/etc/cron.daily/awffull
-	[ -f $f ] && { chmod -x $f; mv $f $f.disabled }
+	[ -f "$f" ] && { chmod -x "$f"; mv "$f" "$f.disabled"; }
 };	# end IC3.finishing
 
 
