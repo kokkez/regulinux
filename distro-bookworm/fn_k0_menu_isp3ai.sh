@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# install ISPConfig 3 for debian 11 bullseye in an automatic fashion
+# install ISPConfig 3 for debian 12 bookworm in an automatic fashion
 # https://www.howtoforge.com/ispconfig-autoinstall-debian-ubuntu
 # ------------------------------------------------------------------------------
 
@@ -21,6 +21,10 @@ IC3.finishing() {
 	sed -i "$p" \
 		-e '/greylisting/s/^/#/' \
 		-e '/milter/s/^/#/'
+
+	# stopping awfful from looking for apache logs
+	local f=/etc/cron.daily/awffull
+	[ -f $f ] && { chmod -x $f; mv $f $f.disabled }
 };	# end IC3.finishing
 
 

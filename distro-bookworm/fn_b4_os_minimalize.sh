@@ -81,7 +81,7 @@ Min.finishing() {
 	# re purge hards to die
 	apt purge mailcap media-types mime-support
 	# re install wrongly purged
-	apt install curl iotop htop rsync screen telnet
+	apt install curl iotop htop rsync screen telnet ufw
 
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
 	apt autoremove
