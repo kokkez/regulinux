@@ -79,7 +79,7 @@ Min.finishing() {
 	Msg.info "Finalizing minimize procedure for $ENV_os $ENV_arch"
 
 	# re purge hards to die
-	apt purge mailcap media-types mime-support
+	apt purge mailcap media-types
 	# re install wrongly purged
 	apt install curl iotop htop rsync screen telnet ufw
 

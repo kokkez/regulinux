@@ -15,7 +15,7 @@ Arrange.unhang() {
 }	# end Arrange.unhang
 
 
-Menu.apt() {
+Menu.advance() {
 	# metadata for OS.menu entries
 	__section='Standalone utilities'
 	__summary="perform a full system upgrade via apt"
@@ -26,4 +26,4 @@ Menu.apt() {
 	# do the apt upgrade
 	Msg.info "Upgrading ${ENV_os}, if needed..."
 	DEBIAN_FRONTEND=noninteractive apt -qy full-upgrade
-}	# end Menu.apt
+}	# end Menu.advance

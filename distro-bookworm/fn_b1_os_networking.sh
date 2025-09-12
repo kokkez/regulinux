@@ -64,13 +64,38 @@ Menu.inet() {
 }	# alias fn
 
 
+Net.interface() {
+	# normalize network interface, adding an alias to eth0 based on MAC
+	local p m if="$(Net.info if)"
+
+	# required checks
+	if [ -z "$if" ]; then
+		Msg.warn "Interface not found ( $if )"
+		return 1
+	elif [ ! -d "/sys/class/net/$if" ]; then
+		Msg.warn "Interface not present ( $if )"
+		return 1
+	elif [ "$if" = "eth0" ]; then
+		return 0    # already eth0, skip
+	fi
+
+	# write udev rule
+	p=/etc/udev/rules.d/10-network.rules
+	grep -q 'NAME="eth0"' "$p" 2>/dev/null && return 0    # already wrote
+
+	m="$(Net.info mac)"
+	printf 'SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="%s", NAME="eth0"\n' "$m" > "$p"
+	Msg.info "New rule written in udev: $if ($m) -> eth0"
+}	# end Net.interface
+
+
 Net.hostname() {
 	# debianize /etc/hosts, drop line with ipv4 & add line: 127.0.1.1 hostname
 	local a p
 
 	# forcing setup hostname, via systemd
 	echo "$HOST_FQDN" > /etc/hostname
-	cmd hostnamectl hostname "$HOST_FQDN"
+	hostnamectl set-hostname "$HOST_FQDN"
 
 	# always backup =]
 	p=/etc/hosts
@@ -181,6 +206,6 @@ OS.networking() {
 		Msg.warn "Carefully check $(Dye.fg.cyan.lite /etc/network/interfaces) before reboot!"
 	fi
 
-	# debianize /etc/hosts
-	Net.hostname
+	Net.interface	# try to normalize eth0
+	Net.hostname	# debianize /etc/hosts
 }	# end OS.networking

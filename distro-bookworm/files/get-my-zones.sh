@@ -1,7 +1,14 @@
 #!/bin/bash
 # ------------------------------------------------------------------------------
 # download and update bind zones if changed
-# version 2.2 ( 2025-09, lock + mktemp + trap cleanup )
+# version 2.3 ( 2025-09, lock + mktemp + trap cleanup )
+
+# --------------------------------------------------------------------- cron ---
+# updating dns zones at 9 thru 23 every 20 minutes from the 12th
+# https://crontab.guru/#12,32,52_9-23_*_*_*
+# m        h     dom mon dow user  command
+#12,32,52  9-23  *   *   *   root  /bin/bash /root/get-my-zones.sh >> /var/log/bind9.log 2>&1
+
 
 # ---------------------------------------------------------------- variables ---
 LCK="${0##*/}"									# script name
@@ -14,7 +21,7 @@ BND="/etc/bind/named.conf.local"				# final file path into bind/
 
 # ---------------------------------------------------------------- functions ---
 # print timestamp + message to stdout
-log() { printf '%s [%d] %s\n' "$(date '+%F %T%:z')" "$$" "$*"; }
+log() { printf '%(%F %T %z)T [%d] %s\n' -1 "$$" "$*"; }
 cleanup() { rm -f "$TMP" "$LCK"; }
 trap cleanup EXIT INT TERM
 
