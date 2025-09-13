@@ -559,24 +559,23 @@
 	}	# end ENV.init
 
 
-	Mnu.pad() {
-		# return a string to be used as padding
-		# $1 wanted total length
-		# $2 char to use to pad
-		# $3 string to count the length
-		local p d=$(( $1 - ${#3} ))
-		while (( d-- )); do p+=$2; done
-		echo "$p"
-	}	# end Mnu.pad
+	Text.pad() {
+		# returns a padding string
+		# $1 = desired final length
+		# $2 = text to repeat (default: space)
+		# $3 = optional string, its length is subtracted from $1
+		local t=${2:- } o=${3:-}
+		printf '%*s' $(( $1 - ${#o} )) '' | tr ' ' "$t"
+	}	# end Text.pad
 
 
-	Mnu.meta() {
+	Meta.get() {
 		# extract metadata value for given key from a function body
-		# $1 metadata key (e.g. __section, __summary, __exclude)
-		# $2 function body string to search in
+		# $1 = metadata key (e.g. __section, __summary, __exclude)
+		# $2 = function body string to search in
 		# returns the string inside quotes following key=, or empty if not found
 		[[ $2 =~ $1=[\'\"]([^\'\"]*)[\'\"] ]] && echo "${BASH_REMATCH[1]}" || echo ""
-	}	# end Mnu.meta
+	}	# end Meta.get
 
 
 	OS.menu() {
@@ -592,14 +591,17 @@
 		local f b g d
 		for f in $(compgen -A function Menu.); do
 			b=$(declare -f "$f")
-			g=$(Mnu.meta __exclude "$b")	# check __exclude (interpreted outside)
+			g=$(Meta.get __exclude "$b")	# check __exclude (interpreted outside)
 			[[ -n $g ]] && eval "$g" && continue
-			g=$(Mnu.meta __section "$b")	# check __section, skip if empty
+			g=$(Meta.get __section "$b")	# check __section, skip if empty
 			[[ -z $g ]] && continue
-			d=$(Mnu.meta __summary "$b")	# get __summary, expanding variables
-			[[ -n $d ]] && d=$(eval "echo \"$d\"")
+			d=$(Meta.get __summary "$b")	# get __summary, expanding variables
+			if [[ -n $d ]]; then
+				d=$(printf '%q' "$d")		# escape string for safe eval
+				d=$(eval "printf '%s' $d")	# expand variables inside
+			fi
 			b="${f#*.}"
-			out[$g]+=$(printf ' : %s %s %s' "$(Dye.fg.orange $b)" "$(Mnu.pad 12 ' ' "$b")" "$d")
+			out[$g]+=$(printf ' : %s %s %s' "$(Dye.fg.orange $b)" "$(Text.pad 12 ' ' "$b")" "$d")
 			out[$g]+=$'\n'
 		done
 
@@ -607,8 +609,8 @@
 		b="$ENV_os $ENV_arch"
 		d=$(Date.fmt +'%F %T %z')
 		printf '+%s+\n %s%s%s\n %s\n' \
-			"$(Mnu.pad 96 :)" \
-			"$(Dye.fg.orange "$b")" "$(Mnu.pad 96 ' ' "$b$d")" "$d" \
+			"$(Text.pad 96 :)" \
+			"$(Dye.fg.orange "$b")" "$(Text.pad 96 ' ' "$b$d")" "$d" \
 			"$ENV_dir"
 
 		# output sections
@@ -617,10 +619,10 @@
 			[[ -z ${out[$b]} ]] && continue
 			g=${g#*|}
 			printf '+- %s %s %s -+\n' \
-				"$(Dye.fg.white $b)" "$(Mnu.pad 90 - "$b$g")" "$g"
+				"$(Dye.fg.white $b)" "$(Text.pad 90 - "$b$g")" "$g"
 			printf '%s' "${out[$b]}"
 		done
 
 		# output footer
-		printf '+%s+\n' "$(Mnu.pad 96 : "")"
+		printf '+%s+\n' "$(Text.pad 96 :)"
 	}	# end OS.menu

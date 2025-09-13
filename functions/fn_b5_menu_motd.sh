@@ -58,7 +58,7 @@ Motd.show() {
 
 	proc=$(echo /proc/[0-9]* | wc -w)
 	chss=$(systemd-detect-virt)
-	chss="$(hostnamectl chassis) ( ${chss:-dedi} )"
+	chss="$(hostnamectl | awk '/Cha/ {print $2}') ( ${chss:-dedi} )"
 	load=$(awk '{print $1, $2, $3}' /proc/loadavg)
 	tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
 	uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)

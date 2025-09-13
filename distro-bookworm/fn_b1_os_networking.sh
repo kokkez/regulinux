@@ -2,6 +2,20 @@
 # make the ip address static if found to be dynamic, on classic ifupdown
 # ------------------------------------------------------------------------------
 
+field.after() {
+	# return the word after a marker in a line/multiline
+	# $1 = marker to search
+	# $2 = default on no result
+	local l w p d="${2:-}"
+	while read -r l; do for w in $l; do
+		[ "$p" = "$1" ] && { echo "${w:-$d}" ; return; }
+		p=$w
+	done; done
+	# if marker not found or no word after it, fallback to default
+	[ -n "$2" ] && echo "$d"
+};	# end of field.after
+
+
 Net.info() {
 	# return values for the network interface connected to the Internet
 	# $1 - optional, desired result: if, mac, cidr, ip, gw, cidr6, ip6, gw6
