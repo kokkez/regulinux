@@ -43,11 +43,12 @@ Menu.reinstall() {
 
 	# save parameters to use once rebooted
 	File.download "https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh" "debi.sh"
-	bash ./debi.sh --ethx --version "$v" \
-		--ip "$a" --gateway "$g" --dns "$d4" \
+	bash ./debi.sh --version "$v" \
+		--ethx --ip "$a" --gateway "$g" --dns "$d4" \
+		--ssh-port "$SSHD_PORT" \
 		--user root --password 'regulinux' \
 		--timezone "$TIME_ZONE" \
-		--ssh-port "$SSHD_PORT" \
+		--network-console \
 		--cdn  # https mirror of deb.debian.org
 
 #	# append conditional ipv6 parameters: CIDR, gateway & dns

@@ -1,0 +1,17 @@
+# Debian 13 Trixie :: https://wiki.debian.org/SourcesList
+
+# main repository
+deb http://deb.debian.org/debian trixie main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian trixie main contrib non-free non-free-firmware
+
+# security repository
+deb http://deb.debian.org/debian-security/ trixie-security main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian-security/ trixie-security main contrib non-free non-free-firmware
+
+# updates repository
+deb http://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
+
+# backports repository
+deb http://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
+#deb-src http://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
