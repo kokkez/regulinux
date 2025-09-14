@@ -9,7 +9,7 @@ Min.finishing() {
 	# re purge hards to die
 #	apt purge mailcap media-types
 	# re install wrongly purged
-#	apt install curl figlet iotop htop rsync screen ufw
+	apt install curl figlet iotop htop rsync screen ufw
 
 	apt-get -qy dist-upgrade	# ends performing dist-upgrade
 	apt autoremove
