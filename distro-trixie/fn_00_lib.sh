@@ -15,6 +15,23 @@ Arrange.unhang() {
 }	# end Arrange.unhang
 
 
+Arrange.sshd() {
+	# configure SSH server parameters
+	# $1: ssh port number, optional
+	Pkg.requires openssh-server		# install if missing
+	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )
+	sed -ri "$ENV_dir/lib.sh" \
+		-e "s|^(\s*SSHD_PORT=).*|\1'$SSHD_PORT'|"
+	sed -ri /etc/ssh/sshd_config \
+		-e "s|^#?(Port)\s.*|\1 $SSHD_PORT|" \
+		-e 's|^#?(PasswordAuthentication)\s.*|\1 no|' \
+		-e 's|^#?(PermitRootLogin)\s.*|\1 without-password|' \
+		-e 's|^#?(PubkeyAuthentication)\s.*|\1 yes|'
+	systemctl restart ssh
+	Msg.info "SSH server is now listening on port: $SSHD_PORT"
+}	# end Arrange.sshd
+
+
 Menu.advance() {
 	# metadata for OS.menu entries
 	__section='Standalone utilities'

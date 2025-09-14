@@ -50,5 +50,5 @@ perl-modules-5.40     install
 ufw                   install
 #unzip                 install
 #usr-is-merged         install
-#wget                  install
+wget                  install
 
