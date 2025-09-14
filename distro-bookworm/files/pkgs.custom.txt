@@ -31,6 +31,7 @@ lsb-base              install
 lsb-release           install
 lsof                  install
 mawk                  install
+media-types           install
 nano                  install
 openssh-client        install
 openssh-server        install
