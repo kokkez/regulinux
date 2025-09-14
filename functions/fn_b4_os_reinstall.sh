@@ -21,6 +21,7 @@ Server.notContainer() {
 
 Menu.reinstall() {
 	# metadata for OS.menu entries
+	__exclude='[[ $(systemd-detect-virt) != kvm ]]'
 	__section='One time actions'
 	__summary="reinstall OS on VM (not containers), default $(Dye.fg.white Debian 12)"
 

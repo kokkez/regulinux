@@ -595,11 +595,7 @@
 			[[ -n $g ]] && eval "$g" && continue
 			g=$(Meta.get __section "$b")	# check __section, skip if empty
 			[[ -z $g ]] && continue
-			d=$(Meta.get __summary "$b")	# get __summary, expanding variables
-			if [[ -n $d ]]; then
-				d=$(printf '%q' "$d")		# escape string for safe eval
-				d=$(eval "printf '%s' $d")	# expand variables inside
-			fi
+			eval "d=\"$(Meta.get __summary "$b")\""	# expanding vars & $()
 			b="${f#*.}"
 			out[$g]+=$(printf ' : %s %s %s' "$(Dye.fg.orange $b)" "$(Text.pad 12 ' ' "$b")" "$d")
 			out[$g]+=$'\n'

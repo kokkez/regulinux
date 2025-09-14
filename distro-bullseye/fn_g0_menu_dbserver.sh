@@ -48,7 +48,7 @@ Install.mariadb() {
 Menu.dbserver() {
 	# metadata for OS.menu entries
 	__section='Main applications'
-	__summary="the DB server MariaDB, root pw stored in $(Dye.fg.white '~/.my.cnf')"
+	__summary="the DB server MariaDB, root pw stored in $(Dye.fg.white \~/.my.cnf)"
 
 	# abort if "Menu.deps" was not executed
 	Deps.performed || return
