@@ -26,7 +26,7 @@
 	# check for not empty argument and available command, then exec it
 	if [ -n "$1" ] && Cmd.usable "Menu.$1"; then
 		"Menu.$1" "${@:2}"
-		Msg.debug "Execution of '$1' completed!"
+		Msg.debug "Execution of '$(Dye.fg.white $1)' completed!"
 	else
 		OS.menu
 	fi;

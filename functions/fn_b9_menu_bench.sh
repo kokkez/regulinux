@@ -17,7 +17,7 @@ Bench.newssl() {
 	# Instead of looking for versions greater than or equal to 1.1.1, this looks
 	# for versions less than 1.1.1: versions starting with "0.", "1.0", or "1.1.0"
 	# https://unix.stackexchange.com/questions/555731/how-to-check-if-the-openssl-version-is-ge-1-1-1-in-a-shell-script
-	cmd openssl version | cmd awk '$2 ~ /(^0\.)|(^1\.(0\.|1\.0))/ { exit 1 }'
+	openssl version | awk '$2 ~ /(^0\.)|(^1\.(0\.|1\.0))/ { exit 1 }'
 }	# end Bench.newssl
 
 
@@ -29,6 +29,7 @@ Menu.bench() {
 	# basic benchmark to get OS info
 	# no arguments expected
 	local ts vir cpu cor mhz ram swa ker hdd ip4 ip6
+	Pkg.requires bzip2 openssl		# install if missing
 
 	# current date
 	ts=$(cmd date -u '+%F %T UTC')

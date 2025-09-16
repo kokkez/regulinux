@@ -11,7 +11,7 @@ IO.extest() {
 
 IO.test() {
 	# run the real test, discovering options to add
-	local t="/tmp/iotest.$$"
+	local t=/root/iotest.$$
 	local o="if=/dev/zero of=$t bs=64k count=16k conv=fdatasync"
 
 	# check if status=progress is supported
