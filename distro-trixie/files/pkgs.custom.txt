@@ -34,6 +34,7 @@ unzip                 install
 wget                  install
 
 # to install (custom)
+bzip2                 install
 curl                  install
 figlet                install
 htop                  install
@@ -42,7 +43,6 @@ rsync                 install
 rsyslog               install
 screen                install
 
-#bzip2                 install
 #ca-certificates       install
 #cron                  install
 #distro-info-data      install

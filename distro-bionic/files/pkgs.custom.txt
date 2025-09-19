@@ -1,47 +1,4 @@
-# to be installed
-apt-utils             install
-bsdutils              install
-bzip2                 install
-ca-certificates       install
-cron                  install
-curl                  install
-dbus                  install
-#dmsetup               install
-e2fsprogs             install
-figlet                install
-gawk                  install
-htop                  install
-iftop                 install
-ifupdown              install
-inetutils-syslogd     install
-iotop                 install
-iptables              install
-locales               install
-logrotate             install
-lsb-release           install
-lsof                  install
-lvm2                  install
-mawk                  install
-nano                  install
-net-tools             install
-openssh-client        install
-openssh-server        install
-openssh-sftp-server   install
-perl                  install
-perl-modules-5.26     install
-postfix               install
-psmisc                install
-qemu-guest-agent      install
-quota                 install
-rsync                 install
-screen                install
-ssl-cert              install
-telnet                install
-ucf                   install
-unzip                 install
-wget                  install
-	
-# to be purged
+# to purge
 bsdmainutils          purge
 groff-base            purge
 info                  purge
@@ -54,3 +11,49 @@ netplan.io            purge
 rsyslog               purge
 traceroute            purge
 ubuntu-minimal        purge
+
+# to install (core)
+apt-utils             install
+dbus                  install
+dmsetup               install
+e2fsprogs             install
+iptables              install
+locales               install
+logrotate             install
+lsb-release           install
+mawk                  install
+nano                  install
+openssh-client        install
+openssh-server        install
+openssh-sftp-server   install
+perl                  install
+perl-modules-5.26     install
+qemu-guest-agent      install
+ufw                   install
+unzip                 install
+wget                  install
+
+# to install (custom)
+bsdutils              install
+bzip2                 install
+ca-certificates       install
+cron                  install
+curl                  install
+figlet                install
+#gawk                  install
+htop                  install
+iftop                 install
+ifupdown              install
+inetutils-syslogd     install
+iotop                 install
+lsof                  install
+lvm2                  install
+net-tools             install
+postfix               install
+psmisc                install
+quota                 install
+rsync                 install
+screen                install
+ssl-cert              install
+telnet                install
+ucf                   install

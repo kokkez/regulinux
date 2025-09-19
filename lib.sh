@@ -385,7 +385,7 @@
 		# $2+ - arguments separated by space, our array of elements
 		local e w="$1"
 		shift
-		for e; do [[ "$e" == "$w" ]] && return 0; done
+		for e; do [ "$e" = "$w" ] && return 0; done
 		# default return falsy
 		return 1
 	};	# end of Element.in
@@ -604,11 +604,11 @@
 
 		# output header
 		b="$ENV_os $ENV_arch"
-		d=$(Date.fmt +'%F %T %z')
-		printf '+%s+\n %s%s%s\n %s\n' \
+		g=$(systemd-detect-virt)
+		printf '+%s+\n %-85s%26s\n %-71s%(%F %T %z)T\n' \
 			"$(Text.pad 96 :)" \
-			"$(Dye.fg.orange "$b")" "$(Text.pad 96 ' ' "$b$d")" "$d" \
-			"$ENV_dir"
+			"$(Dye.fg.orange $b)" "$(hostnamectl | awk '/Cha/ {print $2}') ( ${g:-dedi} )" \
+			"$ENV_dir" "-1"
 
 		# output sections
 		for g in "${sec[@]}"; do

@@ -10,11 +10,11 @@ OS.timedate() {
 	}
 
 	# install needed packages, if missing
-	Pkg.requires dbus
+	Pkg.requires dbus systemd-timesyncd
 
-	cmd timedatectl set-timezone "$t"
-	cmd timedatectl set-ntp true
+	timedatectl set-timezone "$t"
+	timedatectl set-ntp true
 
 	Msg.info "Configuration of timezone completed!"
-	cmd timedatectl | cmd sed 's|^|> |'
+	timedatectl | sed 's|^|> |'
 }	# end OS.timedate

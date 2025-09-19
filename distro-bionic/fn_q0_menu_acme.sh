@@ -49,7 +49,7 @@ Menu.acme() {
 	# metadata for OS.menu entries
 	__exclude='[ -d ~/.acme.sh ]'
 	__section='Others applications'
-	__summary="shell script for $(Dye.fg.white Let\'s Encrypt) free SSL certificates"
+	__summary="shell script for $(Dye.fg.white Let\`s Encrypt) free SSL certificates"
 
 	# do nothing if already installed
 	[ -d ~/.acme.sh ] && {

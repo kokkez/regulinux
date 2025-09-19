@@ -92,14 +92,11 @@ Fw.rule.ssh() {
 
 
 Fw.uniquize() {
-	# given a string with "words" it remowes duplicates
+	# remove duplicates from arguments
 	# $1+ - one or more arguments
 	Arg.expect "$1" || return
-
-	# unique-ize arguments
 	local a w
-	for w in $*; do Element.in $w $a || a+=" $w"; done
-
+	for w; do Element.in "$w" $a || a+=" $w"; done
 	echo "${a:1}"
 };	# end Fw.uniquize
 
@@ -111,15 +108,11 @@ Fw.allow() {
 
 	# allow via keyword one by one
 	local w a
-	for w in $(Fw.uniquize $*)
-	do
+	for w in $(Fw.uniquize $*); do
 		Cmd.usable "Fw.rule.$w" && Fw.rule.$w && a+=" $w"
 	done
-
 	# save the new value back into settings file
 	Config.set "FW_allowed" "$(Fw.uniquize $FW_allowed $a)"
-
-#	ufw --force enable
 	ufw --force reload
 };	# end Fw.allow
 
@@ -146,10 +139,8 @@ Install.firewall() {
 	# $1 - ssh port number, optional
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
 
-	# install required software
-	Pkg.requires ufw
-
 	# enable firewall so it can be loaded at every boot
+	Pkg.requires ufw		# install required software
 	ufw --force reset
 	ufw --force enable
 	systemctl enable ufw
@@ -166,7 +157,7 @@ Install.firewall() {
 Menu.firewall() {
 	# metadata for OS.menu entries
 	__section='Others applications'
-	__summary="set up the firewall using iptables (v4 and v6)"
+	__summary="set up firewall rules (v4 and v6) with ufw"
 
 	# show status
 	local kw=${1:+numbered}
