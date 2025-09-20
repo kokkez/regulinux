@@ -54,7 +54,7 @@ IC3.install() {
 	Pkg.requires update-inetd
 
 	# allow modification of /etc/resolv.conf
-	cmd chattr -i /etc/resolv.conf
+	chattr -i /etc/resolv.conf
 
 	# install ispconfig 3
 	wget -O - https://get.ispconfig.org | sh -s -- \
@@ -86,17 +86,17 @@ Menu.isp3ai() {
 	__summary="historical Control Panel, with support at $(Dye.fg.white howtoforge.com)"
 
 	# $1: optional webserver type: apache2 or nginx (default)
-	HTTP_SERVER="${1:-nginx}"
+	HTTP_SERVER='nginx'
 
 	# abort if "Menu.deps" was not executed
-	IC3.install 'nginx'
+	IC3.install "$HTTP_SERVER"
+	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 
 	# allowing on firewall: web, ftp, ispconfig, smtps & mail
 	Fw.allow 'http ftp ispconfig smtps mail'
 
 	Menu.adminer
 #	install_sslcert_selfsigned
-	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 
 	Msg.info "ISPConfig 3 installation completed!"
 };	# end Menu.isp3ai
