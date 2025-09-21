@@ -239,27 +239,6 @@
 	}	# end File.into
 
 
-	Pkg.installed() {
-		# > /my/file  redirects stdout to /my/file
-		# 1> /my/file redirects stdout to /my/file
-		# 2> /my/file redirects stderr to /my/file
-		# &> /my/file redirects stdout and stderr to /my/file
-
-		# redirects stderr to the black hole
-		[ -n "${1}" ] && dpkg -l "${1}" 2> /dev/null | grep -q ^ii
-	}	# end Pkg.installed
-
-
-	Pkg.install() {
-		Pkg.update	# update packages lists
-		export DEBIAN_FRONTEND=noninteractive
-		apt-get -qy \
-			-o Dpkg::Options::="--force-confdef" \
-			-o Dpkg::Options::="--force-confnew" \
-			install "${@}"
-	}	# end Pkg.install
-
-
 	Pkg.update() {
 		# the "apt-get update", to run before install any package
 		dpkg --configure -a		# in case apt is in a bad state
@@ -279,13 +258,30 @@
 	}	# end Pkg.update
 
 
+	Pkg.install() {
+		Pkg.update	# update packages lists
+		export DEBIAN_FRONTEND=noninteractive
+		apt-get -qy \
+			-o Dpkg::Options::="--force-confdef" \
+			-o Dpkg::Options::="--force-confnew" \
+			install "${@}"
+	}	# end Pkg.install
+
+
+	Pkg.installed() {
+		# return 0 if single package is installed, 1 otherwise
+		# $1 = single package to check
+		[ -n "$1" ] && dpkg -s "$1" &>/dev/null
+	}	# end Pkg.installed
+
+
 	Pkg.requires() {
 		# check that the given packages are installed, if not
 		# then it install all at once
 		Arg.expect "$1" || return
 		local p
-		for p in "$@"
-			do Pkg.installed "$p" || {
+		for p in "$@"; do
+			Pkg.installed "$p" || {
 				Msg.info "Installing required packages: [ $@ ]"
 				Pkg.install "$@"
 				break
