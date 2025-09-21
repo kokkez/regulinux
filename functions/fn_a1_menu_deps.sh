@@ -136,7 +136,7 @@ Menu.deps() {
 	# $1: ssh port number, optional
 
 	# feedback user if called with port number
-	[ -z "$1" ] || {
+	[ -n "$1" ] && {
 		Msg.info "SSH server will listen on port: $1"
 	}
 

@@ -73,7 +73,7 @@ IC3.install() {
 	w=$?	# saving the exit status
 
 	# on errors dont continue
-	[ $w -eq 0 ] || return 1
+	(( w )) && return 1
 
 	IC3.secret		# save IC3 admin & MySQL root passwords
 	IC3.finishing	# install utilities, remove unused apps
@@ -85,10 +85,11 @@ Menu.isp3ai() {
 	__section='Target system'
 	__summary="historical Control Panel, with support at $(Dye.fg.white howtoforge.com)"
 
-	# $1: optional webserver type: apache2 or nginx (default)
-	HTTP_SERVER='nginx'
-
 	# abort if "Menu.deps" was not executed
+	Deps.performed || return
+
+	# install for webserver nginx
+	HTTP_SERVER='nginx'
 	IC3.install "$HTTP_SERVER"
 	Config.set "HTTP_SERVER" "$HTTP_SERVER"
 
@@ -96,7 +97,7 @@ Menu.isp3ai() {
 	Fw.allow 'http ftp ispconfig smtps mail'
 
 	Menu.adminer
-#	install_sslcert_selfsigned
+	Cmd.usable Menu.issue && Menu.issue "$HOST_FQDN"
 
 	Msg.info "ISPConfig 3 installation completed!"
 };	# end Menu.isp3ai
