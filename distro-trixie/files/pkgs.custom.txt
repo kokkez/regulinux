@@ -39,6 +39,7 @@ curl                  install
 figlet                install
 htop                  install
 iotop                 install
+ssl-cert              install
 rsync                 install
 rsyslog               install
 screen                install
@@ -51,7 +52,6 @@ screen                install
 #media-types           install
 #postfix               install
 #psmisc                install
-#ssl-cert              install
 #telnet                install
 #usr-is-merged         install
 

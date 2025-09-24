@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# the OS firewall specific to debian 12 bookworm
+# the OS firewall manager based on ufw package
 # ------------------------------------------------------------------------------
 
 # overwrite commands to make them innocuous
@@ -111,8 +111,7 @@ Fw.allow() {
 
 	# allow via keyword one by one
 	local w a
-	for w in $(Fw.uniquize $*)
-	do
+	for w in $(Fw.uniquize $*); do
 		Cmd.usable "Fw.rule.$w" && Fw.rule.$w && a+=" $w"
 	done
 

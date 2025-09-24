@@ -319,7 +319,7 @@
 		# $2 destination name
 		Arg.expect "$1" "$2" || exit
 
-		Pkg.requires wget
+		Pkg.requires wget ca-certificates
 		wget -nv --no-check-certificate "$1" -O "$2" || {
 			Msg.info "Download failed ( $2 ), exiting here..."
 			exit

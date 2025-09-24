@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# the OS firewall specific to debian 12 bookworm
+# the OS firewall manager based on ufw package
 # ------------------------------------------------------------------------------
 
 # overwrite commands to make them innocuous
@@ -92,7 +92,7 @@ Fw.rule.ssh() {
 
 
 Fw.uniquize() {
-	# remove duplicates from arguments
+	# remove duplicates from arguments maintaining order
 	# $1+ - one or more arguments
 	Arg.expect "$1" || return
 	local a w
@@ -104,7 +104,10 @@ Fw.uniquize() {
 Fw.allow() {
 	# enable ports on ufw firewall
 	# $1+ - keyword for ufw
-	Arg.expect "$1" || return
+	Arg.expect "$1" || {
+		Msg.info "Usage: $(Dye.fg.white os allow 64128/tcp)"
+		return
+	}
 
 	# allow via keyword one by one
 	local w a
@@ -138,9 +141,9 @@ Install.firewall() {
 	# installing firewall, using ufw
 	# $1 - ssh port number, optional
 	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
+	Pkg.requires ufw		# install required software
 
 	# enable firewall so it can be loaded at every boot
-	Pkg.requires ufw		# install required software
 	ufw --force reset
 	ufw --force enable
 	systemctl enable ufw
