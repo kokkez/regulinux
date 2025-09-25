@@ -78,31 +78,6 @@ Menu.inet() {
 }	# alias fn
 
 
-Net.interface() {
-	# normalize network interface, adding an alias to eth0 based on MAC
-	local p m if="$(Net.info if)"
-
-	# required checks
-	if [ -z "$if" ]; then
-		Msg.warn "Interface not found ( $if )"
-		return 1
-	elif [ ! -d "/sys/class/net/$if" ]; then
-		Msg.warn "Interface not present ( $if )"
-		return 1
-	elif [ "$if" = "eth0" ]; then
-		return 0    # already eth0, skip
-	fi
-
-	# write udev rule
-	p=/etc/udev/rules.d/10-network.rules
-	grep -q 'NAME="eth0"' "$p" 2>/dev/null && return 0    # already wrote
-
-	m="$(Net.info mac)"
-	printf 'SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="%s", NAME="eth0"\n' "$m" > "$p"
-	Msg.info "New rule written in udev: $if ($m) -> eth0"
-}	# end Net.interface
-
-
 Net.hostname() {
 	# debianize /etc/hosts, drop line with ipv4 & add line: 127.0.1.1 hostname
 	local a p
@@ -176,8 +151,7 @@ Net.ifupdown() {
 	fi
 	# restart networking
 #	cmd ifdown --force $i lo && cmd ifup -a
-	systemctl restart networking
-
+#	systemctl restart networking
 	Msg.info "Networking changed to run with static IP: $a4"
 }	# end Net.ifupdown
 
@@ -185,7 +159,6 @@ Net.ifupdown() {
 Net.dropstack() {
 	# drop network stacks: systemd-networkd, netplan
 	# no arguments expected
-
 	# nuke systemd-networkd
 	if systemctl is-active -q 'systemd-networkd'; then
 		local i="systemd-networkd.socket systemd-networkd systemd-networkd-wait-online"
@@ -194,7 +167,6 @@ Net.dropstack() {
 		systemctl mask $i
 		Msg.info "Deletion of 'systemd-networkd' stack, completed!"
 	fi
-
 	# purge netplan
 	if [ "$(ls -A /etc/netplan/ 2>/dev/null)" ]; then
 		apt -y purge nplan netplan.io
@@ -204,22 +176,51 @@ Net.dropstack() {
 }	# end Net.dropstack
 
 
+Net.normalize() {
+	# normalize network interface, adding an alias based on MAC address
+	# $1 = interface alias name (default eth0)
+	# $2 = interface mac (optional, auto-detected if empty)
+	local n=${1:-eth0} m=${2:-} if="$(Net.info if)" p=/etc/udev/rules.d/10-network.rules
+	# check current interface
+	if [ -z "$if" ]; then
+		Msg.warn "Interface not found ( $if )"
+		return 1
+	elif [ ! -d "/sys/class/net/$if" ]; then
+		Msg.warn "Interface not present ( $if )"
+		return 1
+	elif [ "$if" = "$n" ]; then
+		return 0    # already done, skip
+	fi
+	# auto-detect mac if not provided
+	[ -z "$m" ] && {
+		m="$(Net.info mac)"
+		[ -z "$m" ] && {
+			Msg.warn "MAC address not found"
+			return 1
+		}
+	}
+	# check rule if already exists
+	grep -q " NAME=\"$n\"" "$p" 2>/dev/null && return 0
+	# write udev rule
+	printf 'SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="%s", NAME="%s"\n' "$m" "$n" > "$p"
+	# apply immediately, similar to reboot
+	udevadm control --reload
+    udevadm trigger --subsystem-match=net
+	Msg.info "New rule written in udev: $if ($m) -> $n"
+}	# end Net.normalize
+
+
 OS.networking() {
-	# setup network stack in debian 12, based on ifupdown
+	# setup network stack based on ifupdown
+	Net.normalize 'eth0'	# try to normalize eth0
 
 	# ensure ifupdown stack is active; drop others only if needed
 	if systemctl is-enabled -q 'networking'; then
 		Msg.info "ifupdown stack detected and working, skipping setup"
 	else
-		# then drop legacy stacks
-		Net.dropstack
-
-		# activate classic networking
-		Net.ifupdown
-
-		Msg.warn "Carefully check $(Dye.fg.cyan.lite /etc/network/interfaces) before reboot!"
+		Net.dropstack		# drop unwanted stacks
 	fi
-
-	Net.interface	# try to normalize eth0
-	Net.hostname	# debianize /etc/hosts
+	Net.ifupdown			# activate classic networking
+	Net.hostname			# debianize /etc/hosts
+	Msg.warn "Carefully check $(Dye.fg.white /etc/network/interfaces) before reboot!"
 }	# end OS.networking

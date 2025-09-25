@@ -2,19 +2,6 @@
 # custom functions specific to ubuntu 22.04 jammy
 # ------------------------------------------------------------------------------
 
-Arrange.unhang() {
-	# mitigating ssh hang on reboot on systemd capables OSes
-	# no more needed on ubuntu jammy
-	Msg.debug "Arrange.unhang(): skipped (not needed on $ENV_os $ENV_arch)"
-}	# end Arrange.unhang
-
-
-Install.syslogd() {
-	# no more needed, rsyslog is modern and default
-	Msg.debug "Install.syslogd: skipped (rsyslog is modern and default)"
-}	# end Install.syslogd
-
-
 Menu.advance() {
 	# metadata for OS.menu entries
 	__section='Standalone utilities'
@@ -64,3 +51,28 @@ EOF
 	# forcing apt update
 	Pkg.update 'coerce'
 }	# end Repo.php
+
+
+Arrange.unhang() {
+	# mitigating ssh hang on reboot on systemd capables OSes
+	# no more needed on ubuntu jammy
+	Msg.debug "Arrange.unhang(): skipped (not needed on $ENV_os $ENV_arch)"
+}	# end Arrange.unhang
+
+
+Install.syslogd() {
+	# no more needed, rsyslog is modern and default
+	Msg.debug "Install.syslogd: skipped (rsyslog is modern and default)"
+}	# end Install.syslogd
+
+
+OS.minimalize() {
+	# placeholder, do nothing
+	Msg.debug "placeholder Fn, provide a real function to minimalize the OS"
+}	# end OS.minimalize
+
+
+Install.firewall() {
+	# placeholder, do nothing
+	Msg.debug "placeholder Fn, provide a real function to manage firewall rules"
+}	# end Install.firewall

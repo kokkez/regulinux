@@ -1,47 +1,3 @@
-# to be installed
-apt-utils             install
-bsdutils              install
-bzip2                 install
-ca-certificates       install
-cron                  install
-curl                  install
-dbus                  install
-#dmsetup               install
-e2fsprogs             install
-figlet                install
-gawk                  install
-htop                  install
-iftop                 install
-ifupdown              install
-iotop                 install
-iputils-ping          install
-locales               install
-logrotate             install
-lsb-release           install
-lsof                  install
-#lvm2                  install
-mawk                  install
-nano                  install
-net-tools             install
-openssh-client        install
-openssh-server        install
-openssh-sftp-server   install
-perl                  install
-perl-modules-5.34     install
-postfix               install
-psmisc                install
-qemu-guest-agent      install
-quota                 install
-rsync                 install
-rsyslog               install
-screen                install
-ssl-cert              install
-telnet                install
-ucf                   install
-ufw                   install
-unzip                 install
-wget                  install
-
 # to be purged
 bsdmainutils            purge
 distro-info             purge
@@ -58,3 +14,51 @@ traceroute              purge
 ubuntu-advantage-tools  purge
 ubuntu-minimal          purge
 ubuntu-pro-client       purge
+
+# to install (core)
+apt-utils             install
+dbus                  install
+e2fsprogs             install
+ifupdown              install
+locales               install
+logrotate             install
+lsb-release           install
+mawk                  install
+nano                  install
+openssh-client        install
+openssh-server        install
+openssh-sftp-server   install
+perl                  install
+perl-modules-5.34     install
+qemu-guest-agent      install
+systemd-timesyncd     install
+ufw                   install
+unzip                 install
+wget                  install
+
+# to be installed
+#bsdutils              install
+#bzip2                 install
+#ca-certificates       install
+#cron                  install
+#curl                  install
+#dmsetup               install
+#figlet                install
+#gawk                  install
+#htop                  install
+#iftop                 install
+#iotop                 install
+#iputils-ping          install
+#lsof                  install
+##lvm2                  install
+#net-tools             install
+#postfix               install
+#psmisc                install
+#quota                 install
+#rsync                 install
+#rsyslog               install
+#screen                install
+#ssl-cert              install
+#telnet                install
+#ucf                   install
+

@@ -5,6 +5,10 @@
 
 Resolv.classic() {
 	local t r='/etc/resolv.conf'
+
+	# skip if already contains first DNS
+	grep -q "^nameserver ${DNS_v4%% *}" "$r" 2>/dev/null && return
+
 	File.backup "$r"
 	[ -L "$r" ] && rm -f "$r"
 
