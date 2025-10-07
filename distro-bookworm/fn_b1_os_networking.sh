@@ -2,71 +2,58 @@
 # make the ip address static if found to be dynamic, on classic ifupdown
 # ------------------------------------------------------------------------------
 
-field.after() {
-	# return the word after a marker in a line/multiline
-	# $1 = marker to search
-	# $2 = default on no result
-	local l w p d="${2:-}"
-	while read -r l; do for w in $l; do
-		[ "$p" = "$1" ] && { echo "${w:-$d}" ; return; }
-		p=$w
-	done; done
-	# if marker not found or no word after it, fallback to default
-	[ -n "$2" ] && echo "$d"
-};	# end of field.after
-
-
 Net.info() {
 	# return values for the network interface connected to the Internet
-	# $1 - optional, desired result: if, mac, cidr, ip, gw, cidr6, ip6, gw6
-
-	# interface name and mac address
-	local if=$(ip r g 1 | grep -oP 'dev \K\S+')
-	local mac=$(< /sys/class/net/$if/address)
-	mac=${mac:-00:00:00:00:00:00}
-
-	# ipv4 cidr, gateway and address
-	local c4=$(ip -4 -br a s $if | awk '{print $3; exit}')
-	local g4=$(ip r g 1 | grep -oP 'via \K\S+')
-	g4=${g4:-0.0.0.0}
-	local a4=${c4%%/*}
-
-	# calculate subnet mask
-	local sm=${c4##*/}	# strip everything until /
-	sm=$((0xffffffff << (32 - sm)))
-	sm=$(printf '%d.%d.%d.%d\n' $((sm >> 24 & 255)) $((sm >> 16 & 255)) $((sm >> 8 & 255)) $((sm & 255)))
-
-	# check if IPv6 is enabled
-	local g6 a6 v=$(ip a s scope global)
-	local c6=$(grep -oP 'inet6 \K\S+' <<< "$v")
-	if [ -n "$c6" ]; then
-		g6=$(ip r get :: | grep -oP 'via \K\S+')
-		a6=${c6%%/*}
-	fi
-
-	case "$1" in
-		m*)   echo $mac ;;
-		c*6*) echo $c6 ;;
-		c*)   echo $c4 ;;
-		g*6*) echo $g6 ;;
-		g*)   echo $g4 ;;
-		i*6*) echo $a6 ;;
-		if*)  echo $if ;;
-		i*)   echo $a4 ;;
-		s*)   echo $sm ;;
-		*)    cat <<- EOF
-			> Network Interface : $( Dye.fg.white $if )
-			> MAC Address       : $( Dye.fg.white $mac )
-			----------------------------------------------------------
-			> IPv4 CIDR         : $( Dye.fg.white $c4 )
-			> IPv4 Address      : $( Dye.fg.white $a4 )
-			> IPv4 Netmask      : $( Dye.fg.white $sm )
-			> IPv4 Gateway      : $( Dye.fg.white $g4 )
-			----------------------------------------------------------
-			> IPv6 CIDR         : $( Dye.fg.white ${c6:-N/A} )
-			> IPv6 Address      : $( Dye.fg.white ${a6:-N/A} )
-			> IPv6 Gateway      : $( Dye.fg.white ${g6:-N/A} )
-			----------------------------------------------------------
+	# $1 - desired result: if, mac, ip, gw... also v6: if6, mac6, ip6, gw6
+	local if4 ma4 ci4 ip4 sm4 gw4 if6 ma6 ci6 ip6 sm6 gw6
+	read _ _ gw4 _ if4 _ < <(ip r s default)
+	ma4=$(< /sys/class/net/$if4/address); ma4=${ma4:-00:00:00:00:00:00}
+	read _ _ ci4 _ < <(ip -4 -br a s $if4 scope global)
+	gw4=${gw4:-0.0.0.0}
+	ip4=${ci4%/*}
+	sm4=${ci4#*/}		# subnet mask, strip everything until "/"
+	sm4=$((0xffffffff << (32 - sm4)))
+	sm4=$([ -n "$sm4" ] && { printf '%d.%d.%d.%d\n' \
+		$((sm4 >> 24 & 255)) \
+		$((sm4 >> 16 & 255)) \
+		$((sm4 >> 8 & 255)) \
+		$((sm4 & 255))
+	})
+	# ipv6
+	read _ _ _ _ gw6 _ if6 _ ip6 _ < <(ip r g 2001:db8::1 2>/dev/null)
+	[ -n "$ip6" ] && {
+		ma6=$(< /sys/class/net/$if6/address); ma6=${ma6:-00:00:00:00:00:00}
+		read _ _ ci6 _ < <(ip -6 -br a s $if6 scope global)
+		sm6=${ci6#*/}	# subnet mask, strip everything until "/"
+	}
+	case "${1:-}" in
+		s*6*)  echo "$sm6" ;;
+		s*)    echo "$sm4" ;;
+		m*6*)  echo "$ma6" ;;
+		m*)    echo "$ma4" ;;
+		if*6*) echo "$if6" ;;
+		if*)   echo "$if4" ;;
+		i*6*)  echo "$ip6" ;;
+		i*)    echo "$ip4" ;;
+		g*6*)  echo "$gw6" ;;
+		g*)    echo "$gw4" ;;
+		c*6*)  echo "$ci6" ;;
+		c*)    echo "$ci4" ;;
+		*) cat <<- EOF
+			> ------------------------------------------------ IPv4 --
+			> Interface   : $( Dye.fg.white $if4 )
+			> MAC Address : $( Dye.fg.white $ma4 )
+			> CIDR        : $( Dye.fg.white $ci4 )
+			> Address     : $( Dye.fg.white $ip4 )
+			> Netmask     : $( Dye.fg.white $sm4 )
+			> Gateway     : $( Dye.fg.white $gw4 )
+			> ------------------------------------------------ IPv6 --
+			> Interface   : $( Dye.fg.white ${if6:-N/A} )
+			> MAC Address : $( Dye.fg.white ${ma6:-N/A} )
+			> CIDR        : $( Dye.fg.white ${ci6:-N/A} )
+			> Address     : $( Dye.fg.white ${ip6:-N/A} )
+			> Netmask     : $( Dye.fg.white ${sm6:-N/A} )
+			> Gateway     : $( Dye.fg.white ${gw6:-N/A} )
 			EOF
 	esac
 }	# end Net.info

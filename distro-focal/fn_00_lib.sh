@@ -62,28 +62,7 @@ Repo.php() {
 }	# end Repo.php
 
 
-Install.firewall() {
-	# setup firewall using firewalld via nftables
-	# https://blog.myhro.info/2021/12/configuring-firewalld-on-debian-bullseye
-	# $1 - ssh port number, optional
-
-	# add required software & purge unwanted
-	Pkg.requires firewalld
-#	Pkg.purge "ufw"
-
-	SSHD_PORT=$( Port.audit ${1:-$SSHD_PORT} )	# strictly numeric port
-
-	# remove default ports, permanently
-	cmd firewall-cmd -q --remove-service={dhcpv6-client,ssh}
-
-	# make our ssh persistent, so that can be loaded at every boot
-	cmd firewall-cmd -q --add-port=$SSHD_PORT/tcp
-
-	# set packets to be silently dropped, instead of actively rejected
-#	cmd firewall-cmd -q --set-target DROP
-
-	# reload configuration
-	cmd firewall-cmd -q --runtime-to-permanent
-
-	Msg.info "Firewall installation and setup completed!"
-}	# end Install.firewall
+Install.syslogd() {
+	# no more needed, rsyslog is modern and default
+	Msg.debug "Install.syslogd: skipped (rsyslog is modern and default)"
+}	# end Install.syslogd
