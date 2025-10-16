@@ -40,14 +40,14 @@ Net.info() {
 		c*6*)  echo "$ci6" ;;
 		c*)    echo "$ci4" ;;
 		*) cat <<- EOF
-			> ------------------------------------------------ IPv4 --
+			> $( Dye.fg.cyan.lite Internet Protocol version 4 )
 			> Interface   : $( Dye.fg.white $if4 )
 			> MAC Address : $( Dye.fg.white $ma4 )
 			> CIDR        : $( Dye.fg.white $ci4 )
 			> Address     : $( Dye.fg.white $ip4 )
 			> Netmask     : $( Dye.fg.white $sm4 )
 			> Gateway     : $( Dye.fg.white $gw4 )
-			> ------------------------------------------------ IPv6 --
+			> $( Dye.fg.cyan.lite Internet Protocol version 6 )
 			> Interface   : $( Dye.fg.white ${if6:-N/A} )
 			> MAC Address : $( Dye.fg.white ${ma6:-N/A} )
 			> CIDR        : $( Dye.fg.white ${ci6:-N/A} )

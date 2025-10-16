@@ -90,7 +90,7 @@ Min.prepare() {
 
 
 OS.minimalize() {
-	Msg.info "Minimizing $ENV_os $ENV_arch"
+	Msg.info "Start minimizing $ENV_os $ENV_arch"
 
 	# prepare & reset
 	Min.prepare

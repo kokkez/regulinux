@@ -127,8 +127,8 @@ Menu.fms() {
 
 	# install filemaker server
 	local v d u
-#	v="21.1.5.500 XPnmKS6pm7RBZEk"	# version + nextcloud key
-	v="22.0.1.66 BRGz9WdjrwzCr3M"	# version + nextcloud key
+#	v="22.0.1.66 BRGz9WdjrwzCr3M"	# version + nextcloud key
+	v="22.0.2.204 Sio6NonkzSadtLQ"	# version + nextcloud key
 	d=/opt/FileMaker		# directory root
 	u="https://cloud.inoc.in/s/${v#* }/download/fms_${v%% *}_Ubuntu22_amd64.zip"
 

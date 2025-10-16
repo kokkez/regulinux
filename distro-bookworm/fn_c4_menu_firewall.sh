@@ -11,7 +11,7 @@ Fw.ip6save() { :; }
 
 Fw.notice() {
 	echo -e \
-		$(Dye.fg.yellow.lite 'FireWall') \
+		$(Dye.fg.cyan.lite 'FireWall') \
 		$(Dye.fg.gray '>>') \
 		$(Dye.fg.white "$*")
 };	# end Fw.notice
