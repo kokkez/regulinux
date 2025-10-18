@@ -130,7 +130,7 @@ Deps.performed() {
 Menu.deps() {
 	# metadata for OS.menu entries
 	__section="One time actions"
-	__summary="run prepare, check dependencies, update the base system, setup firewall"
+	__summary="check dependencies, update the base system, setup firewall"
 
 	# preparing a basic OS, ready to host applications
 	# $1: ssh port number, optional

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# make the ip address static if found to be dynamic, on classic ifupdown
+# disable and remove other networking systems in favor of the classic ifupdown
 # ------------------------------------------------------------------------------
 
 Net.info() {
@@ -68,15 +68,12 @@ Menu.inet() {
 Net.hostname() {
 	# debianize /etc/hosts, drop line with ipv4 & add line: 127.0.1.1 hostname
 	local a p
-
 	# forcing setup hostname, via systemd
 	echo "$HOST_FQDN" > /etc/hostname
 	hostnamectl set-hostname "$HOST_FQDN"
-
 	# always backup =]
 	p=/etc/hosts
 	File.backup "$p"
-
 	# remove line with current ipv4
 	a="$(Net.info ip4)"
 	grep -q "$a" "$p" && {
@@ -90,6 +87,22 @@ Net.hostname() {
 		Msg.info "Appended 127.0.1.1 with $HOST_FQDN $HOST_NICK in $p, completed!"
 	}
 }	# end Net.hostname
+Menu.hostname() {
+	# metadata for OS.menu entries
+	__section='Standalone utilities'
+	__summary="setup the hostname on the current distro"
+
+	# $1 = the fully qualified hostname to set
+	# $2 = optional host part of the hostname
+	[ -z "$1" ] && {
+		Msg.info "it is required a fully qualified hostname!"
+		return 1
+	}
+	perl -pi -e "my (\$f,\$F,\$s,\$S)=('$(hostname -f)','$1','$(hostname -s)','${2:-${1%%.*}}');
+		s/\Q\$f\E/\$F/g; s/\Q\$s\E/\$S/g;" "$ENV_dir/settings.conf"
+	ENV.config
+	Net.hostname
+}	# alias fn
 
 
 Net.ifupdown() {

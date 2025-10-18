@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# discovering static IP assignements
+# disable and remove other networking systems in favor of the classic ifupdown
 # ------------------------------------------------------------------------------
 
 Net.info() {

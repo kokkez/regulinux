@@ -93,12 +93,25 @@
 	};
 
 
+	mute() {
+		# run any command with its args without returning output
+		# $1 = optional: -e to silence stderr; -o to silence stdout
+		# $@ = any command with args
+		case "$1" in
+			-e) shift; "$@" 2>/dev/null ;;
+			-o) shift; "$@" >/dev/null ;;
+			*) "$@" >/dev/null 2>&1 ;;
+		esac
+	}	# end mute
+
+
 	Cmd.usable() {
 		# test every argument for: not empty & callable
 		Arg.expect "$1" || return 1
 		local c
 		for c; do
-			command -v "$c" &> /dev/null || {
+			#command -v "$c" &> /dev/null || {
+			mute command -v "$c" || {
 				#Msg.warn "Required command not found: $c"
 				return 1
 			}
@@ -118,7 +131,6 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		#echo -e $(date "${@-+'%F %T'}")
 		date "${@:-'+%F %T'}"
 	}	# end Date.fmt
 
@@ -271,7 +283,8 @@
 	Pkg.installed() {
 		# return 0 if single package is installed, 1 otherwise
 		# $1 = single package to check
-		[ -n "$1" ] && dpkg -s "$1" &>/dev/null
+		#[ -n "$1" ] && dpkg -s "$1" &>/dev/null
+		[ -n "$1" ] && mute dpkg -s "$1"
 	}	# end Pkg.installed
 
 
@@ -298,7 +311,8 @@
 		local c=$(command -v $1)
 
 		# detect package from command
-		c=${c:+$(dpkg -S "$c" 2> /dev/null)}
+		#c=${c:+$(dpkg -S "$c" 2> /dev/null)}
+		c=${c:+$(mute -e dpkg -S "$c")}
 		c=${c%:*}	# remove optional arch (all char from the last ":")
 
 		# do the real deletion
@@ -358,7 +372,8 @@
 		#  major -> 7
 		#  minor -> 7.4
 		#  otherwise -> 7.4.33
-		local v=$(cmd php -v | awk 'NR==1 {print $2}')
+		#local v=$(cmd php -v | awk 'NR==1 {print $2}')
+		local v=$(mute -e php -r 'echo PHP_VERSION;')
 		case "$1" in
 			ma*) v=${v%%.*} ;;	# major
 			mi*) v=${v%.*} ;;	# major.minor
@@ -601,8 +616,8 @@
 		# output header
 		b="$ENV_os $ENV_arch"
 		g=$(systemd-detect-virt)
-		printf '+%s+\n %-85s%26s\n %-71s%(%F %T %z)T\n' \
-			"$(Text.pad 96 :)" \
+		printf '+%s+\n %-67s%26s\n %-53s%(%F %T %z)T\n' \
+			"$(Text.pad 78 :)" \
 			"$(Dye.fg.orange $b)" "$(hostnamectl | awk '/Cha/ {print $2}') ( ${g:-dedi} )" \
 			"$ENV_dir" "-1"
 
@@ -612,10 +627,10 @@
 			[[ -z ${out[$b]} ]] && continue
 			g=${g#*|}
 			printf '+- %s %s %s -+\n' \
-				"$(Dye.fg.white $b)" "$(Text.pad 90 - "$b$g")" "$g"
+				"$(Dye.fg.white $b)" "$(Text.pad 72 - "$b$g")" "$g"
 			printf '%s' "${out[$b]}"
 		done
 
 		# output footer
-		printf '+%s+\n' "$(Text.pad 96 :)"
+		printf '+%s+\n' "$(Text.pad 78 :)"
 	}	# end OS.menu
