@@ -20,6 +20,7 @@ apt-utils             install
 dbus                  install
 e2fsprogs             install
 ifupdown              install
+iproute2              install
 locales               install
 logrotate             install
 lsb-release           install
@@ -31,6 +32,7 @@ openssh-sftp-server   install
 perl                  install
 perl-modules-5.34     install
 qemu-guest-agent      install
+rsync                 install
 systemd-timesyncd     install
 ufw                   install
 unzip                 install
@@ -55,7 +57,6 @@ wget                  install
 #postfix               install
 #psmisc                install
 #quota                 install
-#rsync                 install
 #rsyslog               install
 #screen                install
 #ssl-cert              install

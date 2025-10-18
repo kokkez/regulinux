@@ -123,7 +123,7 @@ Menu.fms() {
 	# metadata for OS.menu entries
 	__exclude='[ -d /opt/FileMaker ]'
 	__section="Target system"
-	__summary="the full $(Dye.fg.white FileMaker Server), version 22.0.1.66"
+	__summary="the full $(Dye.fg.white FileMaker Server), version 22.0.2.204"
 
 	# install filemaker server
 	local v d u
