@@ -31,7 +31,7 @@ fms.ssl() {
 	fmsadmin restart server -u admin -p bamalama -y
 	service fmshelper --full-restart
 }	# end fms.ssl
-#Menu.acme()  { fms.ssl "$@"; }	# alias fn
+Menu.acme()  { fms.ssl "$@"; }	# alias fn
 
 
 fms.firewall() {
@@ -50,7 +50,7 @@ fms.firewall() {
 
 	# configuring ufw
 	Msg.info "Configuring ufw firewall..."
-	ufw allow $SSHD_PORT/tcp
+#	ufw allow $SSHD_PORT/tcp
 	ufw allow 5003/tcp
 	ufw allow 2399/tcp
 	ufw allow 443/tcp
@@ -115,7 +115,7 @@ fms.install() {
 	debconf-set-selections <<- EOF
 		msttcorefonts msttcorefonts/accepted-mscorefonts-eula boolean true
 		EOF
-	apt -y install ttf-mscorefonts-installer
+#	apt -y install ttf-mscorefonts-installer
 }	# end fms.install
 
 
@@ -123,12 +123,12 @@ Menu.fms() {
 	# metadata for OS.menu entries
 	__exclude='[ -d /opt/FileMaker ]'
 	__section="Target system"
-	__summary="the full $(Dye.fg.white FileMaker Server), version 22.0.2.204"
+	__summary="the full $(Dye.fg.white FileMaker Server), version 22.0.1.66"
 
 	# install filemaker server
 	local v d u
-#	v="22.0.1.66 BRGz9WdjrwzCr3M"	# version + nextcloud key
-	v="22.0.2.204 Sio6NonkzSadtLQ"	# version + nextcloud key
+	v="22.0.1.66 BRGz9WdjrwzCr3M"	# version + nextcloud key
+#	v="22.0.2.204 Sio6NonkzSadtLQ"	# version + nextcloud key
 	d=/opt/FileMaker		# directory root
 	u="https://cloud.inoc.in/s/${v#* }/download/fms_${v%% *}_Ubuntu22_amd64.zip"
 
@@ -140,6 +140,6 @@ Menu.fms() {
 
 	fms.install "$u"
 	fms.firewall
-	fms.ssl
+#	fms.ssl
 	cd
 }	# end Menu.fms

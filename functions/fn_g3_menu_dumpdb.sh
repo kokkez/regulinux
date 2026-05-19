@@ -36,6 +36,6 @@ Menu.dumpdb() {
 		z="$c/$d.sql.gz"
 		cmd mysqldump --single-transaction --routines --quick --force "$d" \
 			| cmd gzip --best --rsyncable > "$z"
-		Msg.info "$( Date.fmt ) database '$d' saved to: '$z'"
+		Msg.info "$(Date.fmt) database '$(Dye.fg.white $d)' saved to: '$z'"
 	done
 }	# end Menu.dumpdb

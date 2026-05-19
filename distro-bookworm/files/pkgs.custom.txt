@@ -44,6 +44,7 @@ htop                  install
 iftop                 install
 iotop                 install
 lsof                  install
+lvm2                  install
 media-types           install
 postfix               install
 psmisc                install

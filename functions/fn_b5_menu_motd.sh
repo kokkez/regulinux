@@ -2,31 +2,6 @@
 # the "Mot Of The Day" screen printed on terminal when an user connect
 # ------------------------------------------------------------------------------
 
-Install.motd.old() {
-	local p='/etc/update-motd.d'
-
-	# abort if MOTD is already installed
-	[ -s "$p/*-footer" ] && return
-
-	# install needed packages, if missing
-	Pkg.requires figlet lsb-release
-
-	# copying files & make them executables
-	mkdir -p "$p"
-	rm -rf $p/*
-	File.into "$p" motd/*
-	chmod +x $p/*
-
-	# remove /etc/motd on pure debian
-	cmd rm -f /etc/motd
-
-	# relink /etc/motd on debian jessie
-	[ "$ENV_release" = "debian-8" ] && ln -nfs /run/motd /etc/motd
-
-	Msg.info "Customization of MOTD completed!"
-}	# end Install.motd.old
-
-
 Install.motd() {
 	# from 2024 onward we use a single file into /etc/profiles.d/
 	# so only when really connected via terminal we have the nice MOTD screen
@@ -53,33 +28,61 @@ Motd.show() {
 	# install needed packages, if missing
 	Pkg.requires figlet lsb-release
 
-	figlet -w 96 -f small $(hostname -f)
-	printf "Driven by the sheer brilliance of %s Kernel %s\n" "$ENV_os $ENV_arch" "$(uname -r)"
+	figlet -w 96 -f small $(hostname -f) | awk '{print "  " $0}'
+	printf "  Driven by %s with kernel %s\n" "$ENV_os $ENV_arch" "$(uname -r)"
+	echo -e "- ---------------------------------------------------------------------------- -"
 
-	proc=$(echo /proc/[0-9]* | wc -w)
-	chss=$(systemd-detect-virt)
-	chss="$(hostnamectl | awk '/Cha/ {print $2}') ( ${chss:-dedi} )"
-	load=$(awk '{print $1, $2, $3}' /proc/loadavg)
-	tram=$(awk '/^MemT/{print int($2 / 1024) "MB"}' /proc/meminfo)
-	uram=$(awk '/^MemT/{ t=$2 } /^MemF/{ f=$2 } /^Cach/{ f+=$2 } /^Buff/{ f+=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
-	ip4n=$(wget --timeout=4 --tries=1 -q4O- https://ip.rootnet.in)
-	ip4c=$(hostname -i)
-	tswa=$(awk '/^SwapT/{print int($2 / 1024) "MB"}' /proc/meminfo)
-	uswa="-"
-	[ "$tswa" != "0MB" ] && {
-		uswa=$(awk '/^SwapT/{ t=$2 } /^SwapF/{ f=$2 } END { printf("%3.1f%%", (t-f)/t*100)}' /proc/meminfo)
-	}
-	time=$(uptime -p);
-	time=${time#up }
-	disk=$(df -P | awk '$NF=="/" {printf("%dGiB", $2/1048576)}')
-	uhdd=$(df -P | awk '$NF=="/" {print $(NF-1)}')
+	proc=$(awk -F': ' '/model n/{print $2; exit}' /proc/cpuinfo)
+	core=$(nproc)
 	date=$(date +'%F %T %z')
+	time=$(uptime -p); time=${time#up }
 
-	echo
-	printf "Chassis: %-16s\tSystem load:\t%s\n"                   "$chss" "$load / $proc proc"
-	printf "RAM:     %6s of %-6s\tIPv4: net [cfg]\t%s [ %s ]\n"   "$uram" "$tram" "$ip4n" "$ip4c"
-	printf "Swap:    %6s of %-6s\tSystem uptime:\t%s\n"           "$uswa" "$tswa" "$time"
-	printf "Storage: %6s of %-6s\tCurrent date:\t%s\n"            "$uhdd" "$disk" "$date"
+	load=$(awk '{printf "%s  %s  %s", $1, $2, $3}' /proc/loadavg)
+	task=$(ps -e --no-headers | wc -l)
+	form=$(systemd-detect-virt)
+	form="$(hostnamectl | awk '/Cha/ {print $2}') ( ${form:-dedi} )"
+
+	bar() { perl -e "printf '[%s%s]', '#' x int($1/4), '-' x (25 - int($1/4))"; }
+	memt=$(free -h | awk '/^Mem:/ {print $2}')
+	memp=$(free | awk '/^Mem:/ {printf "%.0f", $3/$2*100}')
+	memb=$(bar $memp)
+	swpt=$(free -h | awk '/^Swap:/ {print $2}')
+	if [ "$swpt" = "0B" ] || [ -z "$swpt" ]; then
+		swpt="-"
+		swpp=0
+	else
+		swpp=$(free | awk '/^Swap:/ {printf "%.0f", $3/$2*100}')
+	fi
+	swpb=$(bar $swpp)
+
+	ipc4=$(Menu.inet c4)
+	ip4h=$(hostname -i)
+	ifc4=$(Menu.inet if4)
+	mac4=$(Menu.inet ma4)
+	ipc6=$(Menu.inet c6);  ipc6=${ipc6:-"-"}
+	ifc6=$(Menu.inet if6); ifc6=${ifc6:-"-"}
+	mac6=$(Menu.inet ma6); mac6=${mac6:-"-"}
+
+	printf  "  cpu      %s \n"                             "$proc  //  $core core[s]"
+	printf  "  date     %-33s uptime  %s \n"               "$date" "$time"
+	printf  "  load     %-35s form  %s \n"                 "$load  //  $task task[s]" "$form"
+	printf  "  ipv4     %-33s %6s  %s \n"                  "$ipc4  [ $ip4h ]" "$ifc4" "$mac4"
+	printf  "  ipv6     %-33s %6s  %s \n"                  "$ipc6" "$ifc6" "$mac6"
+	echo -e "- TAG ---- SIZE ------------------------------ USED --------- FREE ----------- -"
+	printf  "  ram      %-6s %-27s %4s%% \n"               "$memt" "$memb" "$memp"
+	printf  "  swap     %-6s %-27s %4s%% \n"               "$swpt" "$swpb" "$swpp"
+
+	for moun in / /srv /var; do
+		[ -d "$moun" ] || continue
+		disk=$(df "$moun" | awk 'NR==2 {print $1}')
+		[ "$prev" = "$disk" ] && continue
+		prev=$disk
+		read size used free p <<< $(df -h "$moun" | awk 'NR==2 {print $2, $3, $4, $5}')
+		perc=${p%\%}
+		barp=$(bar $perc)
+		frep=$(( 100 - perc ))
+		printf "  %-8.8s %-6s %s %5s %3s%% %9s %3s%%\n"    "$moun" "$size" "$barp" "$used" "$perc" "$free" "$frep"
+	done
 	echo
 }	# end Motd.show
 

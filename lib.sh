@@ -131,7 +131,7 @@
 
 	Date.fmt() {
 		# return a formatted date/time, providing a custom default
-		date "${@:-'+%F %T'}"
+		date "${@:-+%F %T}"
 	}	# end Date.fmt
 
 
